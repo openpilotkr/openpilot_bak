@@ -98,7 +98,6 @@ def manager_init():
     ("OpkrVariableSteerMax", "0"),
     ("OpkrVariableSteerDelta", "0"),
     ("FingerprintTwoSet", "0"),
-    ("OpkrVariableCruiseProfile", "1"),
     ("OpkrDrivingRecord", "0"),
     ("OpkrTurnSteeringDisable", "0"),
     ("CarModel", ""),

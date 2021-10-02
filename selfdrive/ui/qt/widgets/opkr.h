@@ -352,7 +352,7 @@ class PrebuiltToggle : public ToggleControl {
   Q_OBJECT
 
 public:
-  PrebuiltToggle() : ToggleControl("Prebuilt 파일 생성", "Prebuilt 파일을 생성하며 부팅속도를 단축시킵니다. UI수정을 한 경우 기능을 끄십시오.", "../assets/offroad/icon_shell.png", Params().getBool("PutPrebuiltOn")) {
+  PrebuiltToggle() : ToggleControl("지능형 Prebuilt 생성", "Prebuilt 파일을 생성하며 부팅속도를 단축시킵니다. 이 기능을 켜면 캐시를 사용하여 부팅속도가 빨라지며, 코드 수정 후 메뉴에서 업데이트 버튼을 눌러서 업데이트 하거나, 커맨드창에서 gi 명령어로 실행해서 리부팅한경우는 자동 제거 후 컴파일 합니다.", "../assets/offroad/icon_shell.png", Params().getBool("PutPrebuiltOn")) {
     QObject::connect(this, &PrebuiltToggle::toggleFlipped, [=](int state) {
       bool status = state ? true : false;
       Params().putBool("PutPrebuiltOn", status);

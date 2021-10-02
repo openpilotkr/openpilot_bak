@@ -479,7 +479,6 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new LabelControl("주행설정", ""));
   layout->addWidget(new AutoResumeToggle());
   layout->addWidget(new VariableCruiseToggle());
-  layout->addWidget(new VariableCruiseProfile());
   layout->addWidget(new CruisemodeSelInit());
   layout->addWidget(new LaneChangeSpeed());
   layout->addWidget(new LaneChangeDelay());

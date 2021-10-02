@@ -380,7 +380,8 @@ class CarController():
     elif self.opkr_variablecruise and CS.out.cruiseState.accActive and CS.out.cruiseState.modeSel > 0:
       btn_signal = self.NC.update(CS, path_plan)
       if btn_signal != None:
-        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal ))
+        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal)) if not self.longcontrol \
+         else can_sends.append(create_clu11(self.packer, frame, CS.clu11, btn_signal, clu11_speed, CS.CP.sccBus))
         self.resume_cnt += 1
       else:
         self.resume_cnt = 0

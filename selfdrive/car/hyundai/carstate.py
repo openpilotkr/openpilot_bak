@@ -63,7 +63,7 @@ class CarState(CarStateBase):
     self.prev_acc_set_btn = False
     self.acc_active = False
     self.cruise_set_speed_kph = 0
-    self.cruise_set_mode = 0
+    self.cruise_set_mode = int(Params().get("CruiseStatemodeSelInit", encoding="utf8"))
     self.gasPressed = False
 
   def set_cruise_speed(self, set_speed):
