@@ -349,7 +349,7 @@ class CarInterface(CarInterfaceBase):
       events.add(EventName.needBrake)
     if self.CC.cruise_gap_adjusting:
       events.add(EventName.gapAdjusting)
-    if (self.CS.on_speed_control and not self.CC.map_enabled) or (self.CC.on_speed_control and self.CC.map_enabled):
+    if self.CC.on_speed_control:
       events.add(EventName.camSpeedDown)
     if self.CC.autohold_popup_timer:
       events.add(EventName.brakeHold)
@@ -408,6 +408,6 @@ class CarInterface(CarInterfaceBase):
                                c.cruiseControl.cancel, c.hudControl.visualAlert, c.hudControl.leftLaneVisible,
                                c.hudControl.rightLaneVisible, c.hudControl.leftLaneDepart, c.hudControl.rightLaneDepart,
                                c.hudControl.setSpeed, c.hudControl.leadVisible, c.hudControl.leadDistance,
-                               c.hudControl.leadvRel, c.hudControl.leadyRel, sm)
+                               c.hudControl.leadvRel, c.hudControl.leadyRel, c.hudControl.vFuture, sm)
     self.frame += 1
     return can_sends

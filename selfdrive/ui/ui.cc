@@ -243,15 +243,15 @@ static void update_state(UIState *s) {
     scene.lateralPlan.lanelessModeStatus = lp_data.getLanelessMode();
   }
   // opkr
-  if (sm.updated("liveMapData")) {
-    scene.live_map_data = sm["liveMapData"].getLiveMapData();
-    auto lm_data = sm["liveMapData"].getLiveMapData();
-    scene.liveMapData.opkrspeedlimit = lm_data.getSpeedLimit();
-    scene.liveMapData.opkrspeedlimitdist = lm_data.getSpeedLimitDistance();
-    scene.liveMapData.opkrspeedsign = lm_data.getSafetySign();
-    scene.liveMapData.opkrcurveangle = lm_data.getRoadCurvature();
-    scene.liveMapData.opkrturninfo = lm_data.getTurnInfo();
-    scene.liveMapData.opkrdisttoturn = lm_data.getDistanceToTurn();
+  if (sm.updated("liveNaviData")) {
+    scene.live_navi_data = sm["liveNaviData"].getLiveNaviData();
+    auto lm_data = sm["liveNaviData"].getLiveNaviData();
+    scene.liveNaviData.opkrspeedlimit = lm_data.getSpeedLimit();
+    scene.liveNaviData.opkrspeedlimitdist = lm_data.getSpeedLimitDistance();
+    scene.liveNaviData.opkrspeedsign = lm_data.getSafetySign();
+    scene.liveNaviData.opkrcurveangle = lm_data.getRoadCurvature();
+    scene.liveNaviData.opkrturninfo = lm_data.getTurnInfo();
+    scene.liveNaviData.opkrdisttoturn = lm_data.getDistanceToTurn();
   }
   if (sm.updated("sensorEvents")) {
     for (auto sensor : sm["sensorEvents"].getSensorEvents()) {
@@ -415,7 +415,7 @@ QUIState::QUIState(QObject *parent) : QObject(parent) {
   ui_state.sm = std::make_unique<SubMaster, const std::initializer_list<const char *>>({
     "modelV2", "controlsState", "liveCalibration", "deviceState", "roadCameraState",
     "pandaState", "carParams", "driverMonitoringState", "sensorEvents", "carState", "liveLocationKalman",
-    "ubloxGnss", "gpsLocationExternal", "liveParameters", "lateralPlan", "liveMapData",
+    "ubloxGnss", "gpsLocationExternal", "liveParameters", "lateralPlan", "liveNaviData",
   });
 
   ui_state.wide_camera = Hardware::TICI() ? Params().getBool("EnableWideCamera") : false;

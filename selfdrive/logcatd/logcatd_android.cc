@@ -10,7 +10,7 @@
 
 
 // atom
-typedef struct LiveMapDataResult {
+typedef struct LiveNaviDataResult {
       int speedLimit;  // int;
       float speedLimitDistance;  // Float32;
       int safetySign;    // int;
@@ -21,7 +21,7 @@ typedef struct LiveMapDataResult {
       //int  mapEnable;    // bool;
       long  tv_sec;
       long  tv_nsec;
-} LiveMapDataResult;
+} LiveNaviDataResult;
 
 
 int main() {
@@ -32,8 +32,8 @@ int main() {
   bool  sBump = false;
 
   ExitHandler do_exit;
-  PubMaster pm({"liveMapData"});
-  LiveMapDataResult res;
+  PubMaster pm({"liveNaviData"});
+  LiveNaviDataResult res;
 
   log_time last_log_time = {};
   logger_list *logger_list = android_logger_list_alloc(ANDROID_LOG_RDONLY | ANDROID_LOG_NONBLOCK, 0, 0);
@@ -71,7 +71,7 @@ int main() {
       tv_nsec =  entry.tv_sec * 1000ULL + long(tv_nsec2); // per 1000 = 1s
 
       MessageBuilder msg;
-      auto framed = msg.initEvent().initLiveMapData();
+      auto framed = msg.initEvent().initLiveNaviData();
 
    //  opkrspdlimit, opkrspddist, opkrsigntype, opkrcurvangle
 
@@ -178,7 +178,7 @@ int main() {
    */  
 
 
-      pm.send("liveMapData", msg);
+      pm.send("liveNaviData", msg);
     }
 
     android_logger_list_free(logger_list);

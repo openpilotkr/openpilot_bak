@@ -123,6 +123,9 @@ class LateralPlanner():
     measured_curvature = sm['controlsState'].curvature
 
     md = sm['modelV2']
+    if sm.frame % 2 == 0:
+      self.LP.cal_model_speed( md, v_ego )
+
     self.LP.parse_model(sm['modelV2'], sm)
     if len(md.position.x) == TRAJECTORY_SIZE and len(md.orientation.x) == TRAJECTORY_SIZE:
       self.path_xyz = np.column_stack([md.position.x, md.position.y, md.position.z])
@@ -300,6 +303,7 @@ class LateralPlanner():
     plan_send.lateralPlan.desire = self.desire
     plan_send.lateralPlan.laneChangeState = self.lane_change_state
     plan_send.lateralPlan.laneChangeDirection = self.lane_change_direction
+    plan_send.lateralPlan.modelSpeed = float(self.LP.soft_model_speed)
 
     plan_send.lateralPlan.steerRateCost = float(self.steer_rate_cost)
     plan_send.lateralPlan.outputScale = float(self.output_scale)
