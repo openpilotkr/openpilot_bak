@@ -8,7 +8,7 @@ from common.numpy_fast import clip, interp
 import cereal.messaging as messaging
 from common.params import Params
 
-import common.loger as trace1
+import common.log as trace1
 import common.MoveAvg as mvAvg
 
 class NaviControl():
