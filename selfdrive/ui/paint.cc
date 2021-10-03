@@ -349,6 +349,9 @@ static void ui_draw_debug(UIState *s) {
       if (scene.liveNaviData.opkrspeedlimitdist) ui_print(s, ui_viz_rx, ui_viz_ry+600, "DS:%.0f", scene.liveNaviData.opkrspeedlimitdist);
       if (scene.liveNaviData.opkrturninfo) ui_print(s, ui_viz_rx, ui_viz_ry+640, "TI:%.0f", scene.liveNaviData.opkrturninfo);
       if (scene.liveNaviData.opkrdisttoturn) ui_print(s, ui_viz_rx, ui_viz_ry+680, "DT:%.0f", scene.liveNaviData.opkrdisttoturn);
+    } else if (!scene.map_is_running && (*s->sm)["carState"].getCarState().getSafetySign() > 0) {
+      ui_print(s, ui_viz_rx, ui_viz_ry+520, "SL:%.0f", (*s->sm)["carState"].getCarState().getSafetySign());
+      ui_print(s, ui_viz_rx, ui_viz_ry+560, "DS:%.0f", (*s->sm)["carState"].getCarState().getSafetyDist());
     }
     nvgFontSize(s->vg, 37);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
@@ -584,33 +587,7 @@ static void ui_draw_vision_event(UIState *s) {
   const int viz_event_x = s->fb_w - (viz_event_w + bdr_s);
   const int viz_event_y = bdr_s;
 
-  if (s->scene.limitSpeedCamera > 29 && !s->scene.comma_stock_ui) {
-    int img_speedlimit_growing_size_init = 0;
-    int img_speedlimit_growing_size = 0;
-    int img_speedlimit_size = 0;
-    int img_speedlimit_x = 0;
-    int img_speedlimit_y = 0;
-    img_speedlimit_growing_size_init = (s->scene.limitSpeedCameraDist>600?600:s->scene.limitSpeedCameraDist);
-    img_speedlimit_growing_size = 601 - img_speedlimit_growing_size_init;
-    if (s->scene.limitSpeedCameraDist > 600) {img_speedlimit_growing_size = 300;}
-    img_speedlimit_size = img_speedlimit_growing_size;
-    img_speedlimit_x = s->fb_w/2 - img_speedlimit_size/2;
-    img_speedlimit_y = s->fb_h/2 - img_speedlimit_size/2;
-    float img_speedlimit_alpha = 0.35f;
-    if(s->scene.car_state.getVEgo()*3.6 < 1 || s->scene.limitSpeedCameraDist > 600) {img_speedlimit_alpha = 0.1f;}
-    if (s->scene.limitSpeedCamera < 40) {ui_draw_image(s, {img_speedlimit_x, img_speedlimit_y, img_speedlimit_size, img_speedlimit_size}, "speed_30", img_speedlimit_alpha);}
-    else if (s->scene.limitSpeedCamera < 50) {ui_draw_image(s, {img_speedlimit_x, img_speedlimit_y, img_speedlimit_size, img_speedlimit_size}, "speed_40", img_speedlimit_alpha);}
-    else if (s->scene.limitSpeedCamera < 60) {ui_draw_image(s, {img_speedlimit_x, img_speedlimit_y, img_speedlimit_size, img_speedlimit_size}, "speed_50", img_speedlimit_alpha);}
-    else if (s->scene.limitSpeedCamera < 70) {ui_draw_image(s, {img_speedlimit_x, img_speedlimit_y, img_speedlimit_size, img_speedlimit_size}, "speed_60", img_speedlimit_alpha);}
-    else if (s->scene.limitSpeedCamera < 80) {ui_draw_image(s, {img_speedlimit_x, img_speedlimit_y, img_speedlimit_size, img_speedlimit_size}, "speed_70", img_speedlimit_alpha);}
-    else if (s->scene.limitSpeedCamera < 90) {ui_draw_image(s, {img_speedlimit_x, img_speedlimit_y, img_speedlimit_size, img_speedlimit_size}, "speed_80", img_speedlimit_alpha);}
-    else if (s->scene.limitSpeedCamera < 100) {ui_draw_image(s, {img_speedlimit_x, img_speedlimit_y, img_speedlimit_size, img_speedlimit_size}, "speed_90", img_speedlimit_alpha);}
-    else if (s->scene.limitSpeedCamera < 110) {ui_draw_image(s, {img_speedlimit_x, img_speedlimit_y, img_speedlimit_size, img_speedlimit_size}, "speed_100", img_speedlimit_alpha);}
-    else if (s->scene.limitSpeedCamera < 120) {ui_draw_image(s, {img_speedlimit_x, img_speedlimit_y, img_speedlimit_size, img_speedlimit_size}, "speed_110", img_speedlimit_alpha);}
-  }
-  if ((s->scene.mapSign == 195 || s->scene.mapSign == 197) && s->scene.limitSpeedCamera == 0 && s->scene.limitSpeedCameraDist != 0 && !s->scene.comma_stock_ui) {
-    ui_draw_image(s, {s->fb_w/2 - 500/2, s->fb_h/2 - 500/2, 500, 500}, "speed_var", 0.25f);
-  } else if (s->scene.liveNaviData.opkrspeedsign == 124 && s->scene.limitSpeedCamera == 0 && s->scene.limitSpeedCameraDist == 0 && !s->scene.comma_stock_ui) {
+  if (s->scene.liveNaviData.opkrspeedsign == 124 && s->scene.limitSpeedCamera == 0 && s->scene.limitSpeedCameraDist == 0 && !s->scene.comma_stock_ui) {
     ui_draw_image(s, {s->fb_w/2 - 500/2, s->fb_h/2 - 500/2, 500, 500}, "speed_bump", 0.35f);
   }
   
@@ -992,6 +969,53 @@ static void bb_ui_draw_UI(UIState *s) {
   bb_ui_draw_measures_left(s, bb_dmr_x, bb_dmr_y-20, bb_dmr_w);
 }
 
+static void draw_safetysign(UIState *s) {
+  const int diameter = 200;
+  const int s_center_x = bdr_s + 400;
+  const int s_center_y = bdr_s + 100;
+  
+  const int d_center_x = s_center_x;
+  const int d_center_y = s_center_y + 250;
+  const int d_width = 250;
+  const int d_height = 100;
+  int opacity = 0;
+
+  const Rect rect_s = {s_center_x - diameter/2, s_center_y - diameter/2, diameter, diameter};
+  const Rect rect_d = {d_center_x - d_width/2, d_center_y - d_height/2, d_width, d_height};
+  char safetySpeed[16];
+  char safetyDist[32];
+  //int safety_speed = s->scene.limitSpeedCamera;
+  //float safety_dist = s->scene.limitSpeedCameraDist;
+  int safety_speed = s->scene.liveNaviData.opkrspeedlimit;
+  float safety_dist = s->scene.liveNaviData.opkrspeedlimitdist;
+
+  snprintf(safetySpeed, sizeof(safetySpeed), "%d", safety_speed);
+  snprintf(safetyDist, sizeof(safetyDist), "%.0f", safety_dist);
+  opacity = safety_dist>1020 ? 0 : (1020 - safety_dist) * 0.25;
+
+  if (safety_speed > 29 && !s->scene.comma_stock_ui) {
+    ui_fill_rect(s->vg, rect_s, COLOR_WHITE_ALPHA(200), 30.);
+    ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 20, diameter/2);
+    nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+    ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 90, COLOR_BLACK_ALPHA(200), "sans-bold");
+    
+    ui_fill_rect(s->vg, rect_d, COLOR_ORANGE_ALPHA(opacity), 30.);
+    ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 20, 10);
+    nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 50, COLOR_WHITE_ALPHA(200), "sans-bold");
+  } else if ((s->scene.mapSign == 195 || s->scene.mapSign == 197) && safety_speed == 0 && safety_dist != 0 && !s->scene.comma_stock_ui) {
+    ui_fill_rect(s->vg, rect_s, COLOR_WHITE_ALPHA(200), 30.);
+    ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 20, diameter/2);
+    nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+    ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), "가변\n구간", 80, COLOR_BLACK_ALPHA(200), "sans-bold");
+
+    ui_fill_rect(s->vg, rect_d, COLOR_ORANGE_ALPHA(opacity), 30.);
+    ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 20, 10);
+    nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 50, COLOR_WHITE_ALPHA(200), "sans-bold");
+  }
+}
+
 static void draw_navi_button(UIState *s) {
   int btn_w = 140;
   int btn_h = 140;
@@ -1061,6 +1085,7 @@ static void ui_draw_vision_header(UIState *s) {
     bb_ui_draw_UI(s);
     ui_draw_tpms(s);
     draw_navi_button(s);
+    draw_safetysign(s);
   }
   if (s->scene.end_to_end && !s->scene.comma_stock_ui) {
     draw_laneless_button(s);
@@ -1382,16 +1407,6 @@ void ui_nvg_init(UIState *s) {
   std::vector<std::pair<const char *, const char *>> images = {
     {"wheel", "../assets/img_chffr_wheel.png"},
     {"driver_face", "../assets/img_driver_face.png"},
-    {"speed_30", "../assets/addon/img/img_30_speedahead.png"},
-    {"speed_40", "../assets/addon/img/img_40_speedahead.png"},
-    {"speed_50", "../assets/addon/img/img_50_speedahead.png"},
-    {"speed_60", "../assets/addon/img/img_60_speedahead.png"},
-    {"speed_70", "../assets/addon/img/img_70_speedahead.png"},
-    {"speed_80", "../assets/addon/img/img_80_speedahead.png"},
-    {"speed_90", "../assets/addon/img/img_90_speedahead.png"},
-    {"speed_100", "../assets/addon/img/img_100_speedahead.png"},
-    {"speed_110", "../assets/addon/img/img_110_speedahead.png"},
-    {"speed_var", "../assets/addon/img/img_var_speedahead.png"},
     {"speed_bump", "../assets/addon/img/img_speed_bump.png"},
     {"car_left", "../assets/addon/img/img_car_left.png"},
     {"car_right", "../assets/addon/img/img_car_right.png"},

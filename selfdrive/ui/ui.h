@@ -170,9 +170,9 @@ typedef struct UIScene {
   int lateralControlMethod;
   float radarDistance;
   bool standStill;
-  float limitSpeedCamera;
+  int limitSpeedCamera;
   float limitSpeedCameraDist;
-  float mapSign;
+  int mapSign;
   float vSetDis;
   bool cruiseAccStatus;
   int laneless_mode;
