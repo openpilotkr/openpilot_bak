@@ -28,8 +28,8 @@ class NaviControl():
 
     self.gasPressed_old = 0
 
-    self.map_spdlimit_offset = int(self.params.get("OpkrSpeedLimitOffset", encoding="utf8"))
-    self.safetycam_decel_dist_gain = int(self.params.get("SafetyCamDecelDistGain", encoding="utf8"))
+    self.map_spdlimit_offset = int(Params().get("OpkrSpeedLimitOffset", encoding="utf8"))
+    self.safetycam_decel_dist_gain = int(Params().get("SafetyCamDecelDistGain", encoding="utf8"))
 
     self.map_speed_block = False
     self.map_speed_dist = 0
