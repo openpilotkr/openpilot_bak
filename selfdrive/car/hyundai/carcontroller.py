@@ -175,6 +175,7 @@ class CarController():
 
     self.cc_timer = 0
     self.on_speed_control = False
+    self.vFuture = 0
 
     if CP.lateralTuning.which() == 'pid':
       self.str_log2 = 'T={:0.2f}/{:0.3f}/{:0.2f}/{:0.5f}'.format(CP.lateralTuning.pid.kpV[1], CP.lateralTuning.pid.kiV[1], CP.lateralTuning.pid.kdV[0], CP.lateralTuning.pid.kf)
@@ -203,6 +204,7 @@ class CarController():
 
     param = self.p
 
+    self.vFuture = v_future
     path_plan = self.NC.update_lateralPlan()
     if frame % 10 == 0:
       self.model_speed = path_plan.modelSpeed
