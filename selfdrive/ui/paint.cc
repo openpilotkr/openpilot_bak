@@ -971,11 +971,11 @@ static void bb_ui_draw_UI(UIState *s) {
 
 static void draw_safetysign(UIState *s) {
   const int diameter = 180;
-  const int s_center_x = bdr_s + 500;
+  const int s_center_x = bdr_s + 495;
   const int s_center_y = bdr_s + 105;
   
   const int d_center_x = s_center_x;
-  const int d_center_y = s_center_y + 155;
+  const int d_center_y = s_center_y + 150;
   const int d_width = 220;
   const int d_height = 70;
   int opacity = 0;
@@ -998,20 +998,20 @@ static void draw_safetysign(UIState *s) {
   opacity = safety_dist>1020 ? 0 : (1020 - safety_dist) * 0.25;
 
   if (safety_speed > 29 && !s->scene.comma_stock_ui) {
-    ui_fill_rect(s->vg, rect_s, COLOR_WHITE_ALPHA(200), diameter/2 + 15);
+    ui_fill_rect(s->vg, rect_s, COLOR_WHITE_ALPHA(200), diameter/2 + 30);
     ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 30, diameter/2);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (safety_speed < 100) {
-      ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 120, COLOR_BLACK_ALPHA(200), "sans-bold");
+      ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 130, COLOR_BLACK_ALPHA(200), "sans-bold");
     } else {
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 100, COLOR_BLACK_ALPHA(200), "sans-bold");
     }
     ui_fill_rect(s->vg, rect_d, COLOR_ORANGE_ALPHA(opacity), 20.);
     ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 10, 20);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 70, COLOR_WHITE_ALPHA(200), "sans-bold");
+    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 65, COLOR_WHITE_ALPHA(200), "sans-bold");
   } else if ((s->scene.mapSign == 195 || s->scene.mapSign == 197) && safety_speed == 0 && safety_dist != 0 && !s->scene.comma_stock_ui) {
-    ui_fill_rect(s->vg, rect_s, COLOR_WHITE_ALPHA(200), diameter/2 + 15);
+    ui_fill_rect(s->vg, rect_s, COLOR_WHITE_ALPHA(200), diameter/2 + 30);
     ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 30, diameter/2);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), "가변\n구간", 90, COLOR_BLACK_ALPHA(200), "sans-bold");
@@ -1019,7 +1019,7 @@ static void draw_safetysign(UIState *s) {
     ui_fill_rect(s->vg, rect_d, COLOR_ORANGE_ALPHA(opacity), 20.);
     ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 10, 20);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 70, COLOR_WHITE_ALPHA(200), "sans-bold");
+    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 65, COLOR_WHITE_ALPHA(200), "sans-bold");
   }
 }
 
