@@ -261,10 +261,10 @@ class CarState(CarStateBase):
       ret.tpmsPressureRr = cp.vl["TPMS11"]["PRESSURE_RR"] / 10 * 14.5038
 
     # OPKR
-    # self.cs_timer += 1
-    # if self.cs_timer > 100:
-    #   self.cs_timer = 0
-    #   self.map_enabled = Params().get_bool("OpkrMapEnable")
+    self.cs_timer += 1
+    if self.cs_timer > 100:
+      self.cs_timer = 0
+      self.map_enabled = Params().get_bool("OpkrMapEnable")
     self.safety_dist = cp.vl["NAVI"]["OPKR_S_Dist"] if cp.vl["NAVI"]["OPKR_S_Dist"] < 1023 else 0
     self.safety_sign_check = cp.vl["NAVI"]["OPKR_S_Sign"]
     self.safety_block_remain_dist = cp.vl["NAVI"]["OPKR_SBR_Dist"]
