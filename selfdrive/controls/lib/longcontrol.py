@@ -110,7 +110,7 @@ class LongControl():
     output_gb = self.last_output_gb
 
     if radarState is None:
-      dRel = 150
+      dRel = 200
       vRel = 0
     else:
       dRel = radarState.leadOne.dRel
@@ -165,7 +165,7 @@ class LongControl():
       # Keep applying brakes until the car is stopped
       factor = 1
       if long_plan.hasLead:
-        factor = interp(dRel,[2.0,3.5], [3.0,1.0])
+        factor = interp(dRel,[2.0,3.5], [2.0,1.0])
       if not CS.standstill or output_gb > -BRAKE_STOPPING_TARGET:
         output_gb -= CP.stoppingBrakeRate / RATE * factor
       elif CS.cruiseState.standstill and output_gb < -BRAKE_STOPPING_TARGET:
@@ -212,7 +212,7 @@ class LongControl():
       self.long_plan_source = "---"
 
     if CP.sccBus != 0 and self.long_log:
-      str_log3 = 'LS={:s}  LP={:s}  GS/BK={:01.2f}/{:01.2f}  GB={:+04.2f}  GS={}  ED/RD={:04.1f}/{:04.1f}  VT/AT={:04.2f}/{:+04.2f}'.format(self.long_stat, self.long_plan_source, final_gas, abs(final_brake), output_gb, int(CS.gasPressed), dRel, CS.radarDistance, v_target, a_target)
+      str_log3 = 'LS={:s}  LP={:s}  GS={:01.2f}/{:01.2f}  BK={:01.2f}/{:01.2f}  GB={:+04.2f}  GS={}  RD={:04.1f}  TG={:04.2f}/{:+04.2f}'.format(self.long_stat, self.long_plan_source, final_gas, gas_max, abs(final_brake), abs(brake_max), output_gb, int(CS.gasPressed), CS.radarDistance, v_target, a_target)
       trace1.printf2('{}'.format(str_log3))
 
     return final_gas, final_brake, v_target, a_target

@@ -193,7 +193,7 @@ class CarState(CarStateBase):
     self.is_set_speed_in_mph = bool(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
     ret.isMph = self.is_set_speed_in_mph
 
-    self.acc_active = ret.cruiseState.enabled
+    self.acc_active = (cp_scc.vl["SCC12"]['ACCMode'] != 0)
     self.cruise_active = ret.cruiseState.enabled
     if self.cruise_active:
       self.brake_check = False
