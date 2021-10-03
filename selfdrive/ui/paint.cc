@@ -1105,22 +1105,23 @@ static void ui_draw_vision_header(UIState *s) {
 }
 
 //blind spot warning by OPKR
-static void ui_draw_vision_car(UIState *s) {
+static void ui_draw_blindspot_mon(UIState *s) {
   UIScene &scene = s->scene;
-  const int car_size = 350;
-  const int car_x_left = (s->fb_w/2 - 400);
-  const int car_x_right = (s->fb_w/2 + 400);
-  const int car_y = 500;
-  const int car_img_size_w = (car_size * 1);
-  const int car_img_size_h = (car_size * 1);
-  const int car_img_x_left = (car_x_left - (car_img_size_w / 2));
-  const int car_img_x_right = (car_x_right - (car_img_size_w / 2));
-  const int car_img_y = (car_y - (car_size / 4));
+  const int width = 70;
+  const int height = s->fb_h;
+
+  const int left_x = 0;
+  const int left_y = 0;
+  const int right_x = s->fb_w - width;
+  const int right_y = 0;
+
+  const Rect rect_l = {left_x, left_y, width, height};
+  const Rect rect_r = {right_x, right_y, width, height};
 
   int car_valid_status = 0;
   bool car_valid_left = scene.leftblindspot;
   bool car_valid_right = scene.rightblindspot;
-  float car_img_alpha;
+  int car_valid_alpha;
   if (scene.nOpkrBlindSpotDetect) {
     if (scene.car_valid_status_changed != car_valid_status) {
       scene.blindspot_blinkingrate = 114;
@@ -1139,19 +1140,20 @@ static void ui_draw_vision_car(UIState *s) {
       scene.blindspot_blinkingrate -= 6;
       if(scene.blindspot_blinkingrate<0) scene.blindspot_blinkingrate = 120;
       if (scene.blindspot_blinkingrate>=60) {
-        car_img_alpha = 0.6f;
+        car_valid_alpha = 100;
       } else {
-        car_img_alpha = 0.0f;
+        car_valid_alpha = 0;
       }
     } else {
       scene.blindspot_blinkingrate = 120;
     }
-
-    if(car_valid_left) {
-      ui_draw_image(s, {car_img_x_left, car_img_y, car_img_size_w, car_img_size_h}, "car_left", car_img_alpha);
+    //if(car_valid_left) {
+    if(true) {
+      ui_fill_rect(s->vg, rect_l, COLOR_ORANGE_ALPHA(car_valid_alpha), 0);
     }
-    if(car_valid_right) {
-      ui_draw_image(s, {car_img_x_right, car_img_y, car_img_size_w, car_img_size_h}, "car_right", car_img_alpha);
+    //if(car_valid_right) {
+    if(true) {
+      ui_fill_rect(s->vg, rect_r, COLOR_ORANGE_ALPHA(car_valid_alpha), 0);
     }
   }
 }
@@ -1338,7 +1340,7 @@ static void ui_draw_vision(UIState *s) {
   if ((*s->sm)["controlsState"].getControlsState().getAlertSize() == cereal::ControlsState::AlertSize::NONE) {
     ui_draw_vision_face(s);
     if (!scene->comma_stock_ui) {
-      ui_draw_vision_car(s);
+      ui_draw_blindspot_mon(s);
     }
   }
   if (scene->live_tune_panel_enable) {
