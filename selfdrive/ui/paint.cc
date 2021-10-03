@@ -1017,8 +1017,7 @@ static void draw_safetysign(UIState *s) {
 
 static void draw_compass(UIState *s) {
   //draw compass by opkr
-  //if (s->scene.gpsAccuracyUblox != 0.00) {
-  if (true) {
+  if (s->scene.gpsAccuracyUblox != 0.00) {
     const int compass_size = 140;
     const int compass_x = s->fb_w - compass_size - 35;
     const int compass_y = 1080 - compass_size - 35;
@@ -1030,14 +1029,13 @@ static void draw_compass(UIState *s) {
     ui_draw_text(s, rect.centerX()-from_center, rect.centerY(), "W", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
     ui_draw_text(s, rect.centerX(), rect.centerY()+from_center, "S", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
     ui_draw_text(s, rect.centerX(), rect.centerY()-from_center, "N", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
-    //float niddle_rotation = s->scene.bearingUblox/180*3.141592;
+    float niddle_rotation = s->scene.bearingUblox/180*3.141592;
     nvgSave( s->vg );
     nvgTranslate(s->vg, compass_x+compass_size/2, compass_y+compass_size/2);
-    nvgRotate(s->vg, -1.5708);
+    nvgRotate(s->vg, -niddle_rotation);
     nvgFontFace(s->vg, "sans-bold");
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 80);
     nvgFillColor(s->vg, COLOR_GREEN_ALPHA(200));
-    //nvgRotate(s->vg, -niddle_rotation);
     nvgText(s->vg, 0, 0, "↑", NULL);
     nvgRestore(s->vg);
   }
