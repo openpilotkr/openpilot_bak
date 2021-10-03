@@ -191,7 +191,7 @@ class NaviControl():
       spdTarget = 0
       self.onSpeedControl = False
 
-    if self.map_speed <= 29:
+    if speedLimit <= 29:
       return  cruise_set_speed_kph
     # elif speedLimitDistance >= 50:
     #   if speedLimit <= 60:
