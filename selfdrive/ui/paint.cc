@@ -226,7 +226,7 @@ static void ui_draw_tpms(UIState *s) {
   int viz_tpms_w = 180;
   int viz_tpms_h = 160;
   int viz_tpms_x = s->fb_w - viz_tpms_w - bdr_s;
-  int viz_tpms_y = s->fb_h - bdr_s - 350;
+  int viz_tpms_y = s->fb_h - bdr_s - 300;
   float maxv = 0;
   float minv = 300;
   const Rect rect = {viz_tpms_x, viz_tpms_y, viz_tpms_w, viz_tpms_h};
@@ -1024,13 +1024,15 @@ static void draw_compass(UIState *s) {
     const int compass_y = 1080 - compass_size - 35;
     const int from_center = 55;    
     const Rect rect = {compass_x, compass_y, compass_size, compass_size};
-    //ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(0), 0, 0);
+    ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(0), 0, 0);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     ui_draw_text(s, rect.centerX()+from_center, rect.centerY(), "E", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
     ui_draw_text(s, rect.centerX()-from_center, rect.centerY(), "W", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
     ui_draw_text(s, rect.centerX(), rect.centerY()+from_center, "S", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
     ui_draw_text(s, rect.centerX(), rect.centerY()-from_center, "N", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
     //float niddle_rotation = s->scene.bearingUblox/180*3.141592;
+    nvgSave( s->vg );
+    nvgTranslate(s->vg, compass_x+compass_size/2, compass_y+compass_size/2);
     nvgRotate(s->vg, -1.5708);
     nvgFontFace(s->vg, "sans-bold");
     nvgFontSize(s->vg, 50);
