@@ -88,6 +88,26 @@ class LateralPlanner():
     
     self.output_scale = 0.0
     self.second = 0.0
+    self.model_speed = 255.0
+
+    def curve_speed(self, sm, v_ego):
+      md = sm['modelV2']
+      if md is not None and len(md.position.x) == TRAJECTORY_SIZE and len(md.position.y) == TRAJECTORY_SIZE:
+        x = md.position.x
+        y = md.position.y
+        dy = np.gradient(y, x)
+        d2y = np.gradient(dy, x)
+        curv = d2y / (1 + dy ** 2) ** 1.5
+        curv = curv[5:TRAJECTORY_SIZE-10]
+        a_y_max = 2.975 - v_ego * 0.0375  # ~1.85 @ 75mph, ~2.6 @ 25mph
+        v_curvature = np.sqrt(a_y_max / np.clip(np.abs(curv), 1e-4, None))
+        model_speed = np.mean(v_curvature) * 0.9
+        curve_speed = float(max(model_speed, 30 * CV.KPH_TO_MS))
+        if np.isnan(curve_speed):
+            curve_speed = 255
+      else:
+        curve_speed = 255
+      return min(255, curve_speed * CV.MS_TO_KPH)
 
   def reset_mpc(self, x0=np.zeros(6)):
     self.x0 = x0
@@ -119,13 +139,12 @@ class LateralPlanner():
       pass
   
     v_ego = sm['carState'].vEgo
+    if sm.frame % 2 == 0:
+      self.model_speed = curve_speed(sm, v_ego)
     active = sm['controlsState'].active
     measured_curvature = sm['controlsState'].curvature
 
     md = sm['modelV2']
-    if sm.frame % 2 == 0:
-      self.LP.cal_model_speed( md, v_ego )
-
     self.LP.parse_model(sm['modelV2'], sm)
     if len(md.position.x) == TRAJECTORY_SIZE and len(md.orientation.x) == TRAJECTORY_SIZE:
       self.path_xyz = np.column_stack([md.position.x, md.position.y, md.position.z])
@@ -303,7 +322,7 @@ class LateralPlanner():
     plan_send.lateralPlan.desire = self.desire
     plan_send.lateralPlan.laneChangeState = self.lane_change_state
     plan_send.lateralPlan.laneChangeDirection = self.lane_change_direction
-    plan_send.lateralPlan.modelSpeed = float(self.LP.soft_model_speed)
+    plan_send.lateralPlan.modelSpeed = float(self.model_speed)
 
     plan_send.lateralPlan.steerRateCost = float(self.steer_rate_cost)
     plan_send.lateralPlan.outputScale = float(self.output_scale)
