@@ -223,10 +223,10 @@ static void ui_draw_tpms(UIState *s) {
   char tpmsFr[64];
   char tpmsRl[64];
   char tpmsRr[64];
-  int viz_tpms_w = 230;
+  int viz_tpms_w = 180;
   int viz_tpms_h = 160;
-  int viz_tpms_x = s->fb_w - (bdr_s+425);
-  int viz_tpms_y = bdr_s;
+  int viz_tpms_x = s->fb_w - viz_tpms_w - bdr_s;
+  int viz_tpms_y = s->fb_h - bdr_s - 350;
   float maxv = 0;
   float minv = 300;
   const Rect rect = {viz_tpms_x, viz_tpms_y, viz_tpms_w, viz_tpms_h};
@@ -1019,9 +1019,9 @@ static void draw_compass(UIState *s) {
   //draw compass by opkr
   //if (s->scene.gpsAccuracyUblox != 0.00) {
   if (true) {
-    const int compass_x = s->fb_w - btn_w - 35;
-    const int compass_y = 1080 - btn_h - 35;
     const int compass_size = 140;
+    const int compass_x = s->fb_w - compass_size - 35;
+    const int compass_y = 1080 - compass_size - 35;
     const int from_center = 60;    
     const Rect rect = {compass_x, compass_y, compass_size, compass_size};
     //ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(0), 0, 0);
