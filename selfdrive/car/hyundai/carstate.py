@@ -83,15 +83,15 @@ class CarState(CarStateBase):
           self.cruise_set_mode += 1
           if self.cruise_set_mode > 5:
             self.cruise_set_mode = 0
-      return None
+          return None
+      return self.cruise_set_speed_kph
 
     if not self.prev_acc_set_btn:
       self.prev_acc_set_btn = self.acc_active
       if self.cruise_buttons == Buttons.RES_ACCEL:   # up 
         self.cruise_set_speed_kph = self.VSetDis
       else:
-        self.cruise_set_speed_kph = self.VSetDis
-        #self.cruise_set_speed_kph = self.clu_Vanz
+        self.cruise_set_speed_kph = self.clu_Vanz
       return self.cruise_set_speed_kph
     elif self.prev_acc_set_btn != self.acc_active:
       self.prev_acc_set_btn = self.acc_active
