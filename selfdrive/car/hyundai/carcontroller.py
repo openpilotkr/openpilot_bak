@@ -204,7 +204,6 @@ class CarController():
     param = self.p
 
     path_plan = self.NC.update_lateralPlan()
-    self.on_speed_control = self.NC.onSpeedControl
     if frame % 10 == 0:
       self.model_speed = path_plan.modelSpeed
 
@@ -378,6 +377,7 @@ class CarController():
     elif self.last_lead_distance != 0:
       self.last_lead_distance = 0
     elif self.opkr_variablecruise and CS.out.cruiseState.accActive and CS.out.cruiseState.modeSel > 0:
+      self.on_speed_control = self.NC.onSpeedControl
       btn_signal = self.NC.update(CS, path_plan)
       if btn_signal != None:
         can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal)) if not self.longcontrol \
@@ -401,6 +401,7 @@ class CarController():
         else:
           self.cruise_gap_adjusting = False
     else:
+      self.on_speed_control = False
       self.cruise_gap_adjusting = False
 
     if CS.cruise_buttons == 4:
