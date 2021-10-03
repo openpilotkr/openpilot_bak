@@ -221,6 +221,8 @@ class NaviControl():
     if CS.cruise_set_mode != 3:
       vFuture = CS.CP.vFuture
       ctrl_speed = vFuture
+      if CS.CP.resSpeed:
+        ctrl_speed = CS.CP.resSpeed
     if CS.gasPressed == self.gasPressed_old:
       return ctrl_speed
     elif self.gasPressed_old:
