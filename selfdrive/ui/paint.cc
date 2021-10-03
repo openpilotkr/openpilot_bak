@@ -590,16 +590,6 @@ static void ui_draw_vision_event(UIState *s) {
   if (s->scene.liveNaviData.opkrspeedsign == 124 && s->scene.limitSpeedCamera == 0 && s->scene.limitSpeedCameraDist == 0 && !s->scene.comma_stock_ui) {
     ui_draw_image(s, {s->fb_w/2 - 500/2, s->fb_h/2 - 500/2, 500, 500}, "speed_bump", 0.35f);
   }
-  
-  //draw compass by opkr
-  if (s->scene.gpsAccuracyUblox != 0.00 && !s->scene.comma_stock_ui) {
-    const int compass_x = s->fb_w - 167 - bdr_s;
-    const int compass_y = bdr_s + 713;
-    const int direction_x = compass_x + 74;
-    const int direction_y = compass_y + 74;
-    ui_draw_image(s, {compass_x, compass_y, 150, 150}, "compass", 0.6f);
-    ui_draw_circle_image_rotation(s, direction_x, direction_y - (bdr_s+7), 90, "direction", nvgRGBA(0x0, 0x0, 0x0, 0x0), 0.6f, -(s->scene.bearingUblox));
-  }
 
   // draw steering wheel
   const int bg_wheel_size = 90;
@@ -1025,6 +1015,28 @@ static void draw_safetysign(UIState *s) {
   }
 }
 
+static void draw_compass(UIState *s) {
+  //draw compass by opkr
+  //if (s->scene.gpsAccuracyUblox != 0.00) {
+  if (true) {
+    const int compass_x = s->fb_w - btn_w - 35;
+    const int compass_y = 1080 - btn_h - 35;
+    const int compass_size = 140;
+    const int from_center = 60;    
+    const Rect rect = {compass_x, compass_y, compass_size, compass_size};
+    //ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(0), 0, 0);
+    nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+    ui_draw_text(s, rect.centerX()+from_center, rect.centerY(), "E", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
+    ui_draw_text(s, rect.centerX()-from_center, rect.centerY(), "W", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
+    ui_draw_text(s, rect.centerX(), rect.centerY()+from_center, "S", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
+    ui_draw_text(s, rect.centerX(), rect.centerY()-from_center, "N", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
+    float niddle_rotation = s->scene.bearingUblox/180*3.141592;
+    nvgRotate(s->vg, -1.5708);
+    //nvgRotate(s->vg, -niddle_rotation);
+    nvgText(s->vg, rect.centerX(), rect.centerY(), "↑", NULL);
+  }
+}
+
 static void draw_navi_button(UIState *s) {
   int btn_w = 140;
   int btn_h = 140;
@@ -1095,6 +1107,7 @@ static void ui_draw_vision_header(UIState *s) {
     ui_draw_tpms(s);
     draw_navi_button(s);
     draw_safetysign(s);
+    draw_compass(s);
   }
   if (s->scene.end_to_end && !s->scene.comma_stock_ui) {
     draw_laneless_button(s);
@@ -1147,12 +1160,10 @@ static void ui_draw_blindspot_mon(UIState *s) {
     } else {
       scene.blindspot_blinkingrate = 120;
     }
-    //if(car_valid_left) {
-    if(true) {
+    if(car_valid_left) {
       ui_fill_rect(s->vg, rect_l, COLOR_ORANGE_ALPHA(car_valid_alpha), 0);
     }
-    //if(car_valid_right) {
-    if(true) {
+    if(car_valid_right) {
       ui_fill_rect(s->vg, rect_r, COLOR_ORANGE_ALPHA(car_valid_alpha), 0);
     }
   }
@@ -1419,8 +1430,6 @@ void ui_nvg_init(UIState *s) {
     {"wheel", "../assets/img_chffr_wheel.png"},
     {"driver_face", "../assets/img_driver_face.png"},
     {"speed_bump", "../assets/addon/img/img_speed_bump.png"},
-    {"compass", "../assets/addon/img/img_compass.png"},
-    {"direction", "../assets/addon/img/img_direction.png"},
   };
   for (auto [name, file] : images) {
     s->images[name] = nvgCreateImage(s->vg, file, 1);

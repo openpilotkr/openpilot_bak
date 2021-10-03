@@ -233,7 +233,7 @@ static void screen_draw_button(UIState *s) {
   nvgFontSize(s->vg, 45);
   nvgFontFace(s->vg, "sans-bold");
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-  nvgText(s->vg, btn_xc, btn_yc, "REC", NULL);
+  nvgText(s->vg, btn_xc, btn_yc, "R", NULL);
 
   if (captureState == CAPTURE_STATE_CAPTURING) {
     //draw_date_time(s);
