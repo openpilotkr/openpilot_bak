@@ -997,14 +997,14 @@ static void draw_safetysign(UIState *s) {
   } else {
     snprintf(safetyDist, sizeof(safetyDist), "%.0fm", safety_dist);
   }
-  opacity = safety_dist>1020 ? 0 : (1020 - safety_dist) * 0.25;
+  opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
 
   if (safety_speed > 29 && !s->scene.comma_stock_ui) {
     ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), diameter2/2);
     ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 20, diameter/2);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (safety_speed < 100) {
-      ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 135, COLOR_BLACK_ALPHA(200), "sans-bold");
+      ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 140, COLOR_BLACK_ALPHA(200), "sans-bold");
     } else {
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 100, COLOR_BLACK_ALPHA(200), "sans-bold");
     }
