@@ -235,10 +235,10 @@ class NaviControl():
       kph_set_vEgo = self.get_navi_speed(self.sm , CS, cruiseState_speed) # camspeed
       self.ctrl_speed = min(cruiseState_speed, kph_set_vEgo)
 
+      print('self.ctrl_speed={}  kph_set_vEgo={}  cruiseState_speed={}'.format(self.ctrl_speed, kph_set_vEgo, cruiseState_speed))
+
       if CS.cruise_set_mode not in [2,5] and CS.out.vEgo * CV.MS_TO_KPH > 40 and path_plan.modelSpeed < 90:
         self.ctrl_speed = self.auto_speed_control(CS, self.ctrl_speed, path_plan) # lead, curve speed
-
-      print('{}'.format(self.ctrl_speed))
 
       btn_signal = self.ascc_button_control(CS, self.ctrl_speed)
 
