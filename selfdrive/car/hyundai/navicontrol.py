@@ -35,6 +35,7 @@ class NaviControl():
     self.map_speed_dist = 0
     self.map_speed = 0
     self.onSpeedControl = False
+    self.map_speed_dist_prev = 0
 
   def update_lateralPlan(self):
     self.sm.update(0)
@@ -190,7 +191,7 @@ class NaviControl():
       spdTarget = 0
       self.onSpeedControl = False
 
-    if speedLimit <= 29:
+    if self.map_speed <= 29:
       return  cruise_set_speed_kph
     # elif speedLimitDistance >= 50:
     #   if speedLimit <= 60:
