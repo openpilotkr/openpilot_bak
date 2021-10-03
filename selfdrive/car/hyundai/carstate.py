@@ -90,7 +90,8 @@ class CarState(CarStateBase):
       if self.cruise_buttons == Buttons.RES_ACCEL:   # up 
         self.cruise_set_speed_kph = self.VSetDis
       else:
-        self.cruise_set_speed_kph = self.clu_Vanz
+        self.cruise_set_speed_kph = self.VSetDis
+        #self.cruise_set_speed_kph = self.clu_Vanz
       return self.cruise_set_speed_kph
     elif self.prev_acc_set_btn != self.acc_active:
       self.prev_acc_set_btn = self.acc_active
