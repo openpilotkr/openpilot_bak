@@ -541,7 +541,7 @@ class CarController():
       str_log2 = 'AQ={:+04.2f}  VF={:03.0f}  S={:03.0f}  R=D:{:03.0f}/V:{:03.0f}  CG={:1.0f}'.format(
        self.aq_value if self.longcontrol else CS.scc12["aReqValue"], v_future, set_speed, CS.lead_distance, CS.lead_objspd, CS.cruiseGapSet)
     else:
-      str_log2 = 'MDPS={}  LKAS={:1.0f}  LEAD={}  AQ={:+04.2f}  VF={:03.0f}  CG={:1.0f}'.format(
+      str_log2 = 'MDPS={}  LKAS={}  LEAD={}  AQ={:+04.2f}  VF={:03.0f}  CG={:1.0f}'.format(
        CS.out.steerWarning, CS.lkas_button_on, 0 < CS.lead_distance < 149, self.aq_value if self.longcontrol else CS.scc12["aReqValue"], v_future, CS.cruiseGapSet)
     trace1.printf2( '{}'.format( str_log2 ) )
 
