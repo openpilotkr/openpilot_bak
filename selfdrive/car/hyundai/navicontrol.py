@@ -33,6 +33,7 @@ class NaviControl():
 
     self.map_speed_block = False
     self.map_speed_dist = 0
+    self.map_speed_dist_prev = 0
     self.map_speed = 0
     self.onSpeedControl = False
 
