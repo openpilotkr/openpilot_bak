@@ -241,7 +241,7 @@ static void ui_draw_tpms(UIState *s) {
   if (minv > scene.tpmsPressureRr) {minv = scene.tpmsPressureRr;}
 
   // Draw Border
-  ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(100), 10, 20.);
+  ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(100), 6, 20.);
   // Draw Background
   if ((maxv - minv) > 3) {
     ui_fill_rect(s->vg, rect, COLOR_RED_ALPHA(80), 20);
@@ -1022,7 +1022,7 @@ static void draw_compass(UIState *s) {
     const int compass_size = 140;
     const int compass_x = s->fb_w - compass_size - 35;
     const int compass_y = 1080 - compass_size - 35;
-    const int from_center = 60;    
+    const int from_center = 55;    
     const Rect rect = {compass_x, compass_y, compass_size, compass_size};
     //ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(0), 0, 0);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
@@ -1032,8 +1032,12 @@ static void draw_compass(UIState *s) {
     ui_draw_text(s, rect.centerX(), rect.centerY()-from_center, "N", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
     //float niddle_rotation = s->scene.bearingUblox/180*3.141592;
     nvgRotate(s->vg, -1.5708);
+    nvgFontFace(s->vg, "sans-bold");
+    nvgFontSize(s->vg, 50);
+    nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
     //nvgRotate(s->vg, -niddle_rotation);
     nvgText(s->vg, rect.centerX(), rect.centerY(), "↑", NULL);
+    nvgRestore(s->vg);
   }
 }
 
