@@ -1419,8 +1419,6 @@ void ui_nvg_init(UIState *s) {
     {"wheel", "../assets/img_chffr_wheel.png"},
     {"driver_face", "../assets/img_driver_face.png"},
     {"speed_bump", "../assets/addon/img/img_speed_bump.png"},
-    {"car_left", "../assets/addon/img/img_car_left.png"},
-    {"car_right", "../assets/addon/img/img_car_right.png"},
     {"compass", "../assets/addon/img/img_compass.png"},
     {"direction", "../assets/addon/img/img_direction.png"},
   };
