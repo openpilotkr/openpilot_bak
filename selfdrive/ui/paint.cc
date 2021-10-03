@@ -986,10 +986,10 @@ static void draw_safetysign(UIState *s) {
   const Rect rect_d = {d_center_x - d_width/2, d_center_y - d_height/2, d_width, d_height};
   char safetySpeed[16];
   char safetyDist[32];
-  //int safety_speed = s->scene.limitSpeedCamera;
-  //float safety_dist = s->scene.limitSpeedCameraDist;
-  int safety_speed = s->scene.liveNaviData.opkrspeedlimit;
-  float safety_dist = s->scene.liveNaviData.opkrspeedlimitdist;
+  int safety_speed = s->scene.limitSpeedCamera;
+  float safety_dist = s->scene.limitSpeedCameraDist;
+  //int safety_speed = s->scene.liveNaviData.opkrspeedlimit;
+  //float safety_dist = s->scene.liveNaviData.opkrspeedlimitdist;
 
   snprintf(safetySpeed, sizeof(safetySpeed), "%d", safety_speed);
   if (safety_dist >= 1000) {
@@ -1009,7 +1009,7 @@ static void draw_safetysign(UIState *s) {
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 100, COLOR_BLACK_ALPHA(200), "sans-bold");
     }
     ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity), 20.);
-    ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 10, 20);
+    ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 8, 20);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 65, COLOR_WHITE_ALPHA(200), "sans-bold");
   } else if ((s->scene.mapSign == 195 || s->scene.mapSign == 197) && safety_speed == 0 && safety_dist != 0 && !s->scene.comma_stock_ui) {
@@ -1019,7 +1019,7 @@ static void draw_safetysign(UIState *s) {
     ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), "가변\n구간", 90, COLOR_BLACK_ALPHA(200), "sans-bold");
 
     ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity), 20.);
-    ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 10, 20);
+    ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 8, 20);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 65, COLOR_WHITE_ALPHA(200), "sans-bold");
   }
