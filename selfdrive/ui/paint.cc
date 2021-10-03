@@ -970,8 +970,8 @@ static void bb_ui_draw_UI(UIState *s) {
 }
 
 static void draw_safetysign(UIState *s) {
-  const int diameter = 180;
-  const int diameter2 = 165;
+  const int diameter = 185;
+  const int diameter2 = 170;
   const int s_center_x = bdr_s + 490;
   const int s_center_y = bdr_s + 100;
   
@@ -1001,24 +1001,24 @@ static void draw_safetysign(UIState *s) {
 
   if (safety_speed > 29 && !s->scene.comma_stock_ui) {
     ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), diameter2/2);
-    ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 30, diameter/2);
+    ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 20, diameter/2);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (safety_speed < 100) {
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 135, COLOR_BLACK_ALPHA(200), "sans-bold");
     } else {
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 100, COLOR_BLACK_ALPHA(200), "sans-bold");
     }
-    ui_fill_rect(s->vg, rect_d, COLOR_ORANGE_ALPHA(opacity), 20.);
+    ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity), 20.);
     ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 10, 20);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 65, COLOR_WHITE_ALPHA(200), "sans-bold");
   } else if ((s->scene.mapSign == 195 || s->scene.mapSign == 197) && safety_speed == 0 && safety_dist != 0 && !s->scene.comma_stock_ui) {
     ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), diameter2/2);
-    ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 30, diameter/2);
+    ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 20, diameter/2);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), "가변\n구간", 90, COLOR_BLACK_ALPHA(200), "sans-bold");
 
-    ui_fill_rect(s->vg, rect_d, COLOR_ORANGE_ALPHA(opacity), 20.);
+    ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity), 20.);
     ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 10, 20);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 65, COLOR_WHITE_ALPHA(200), "sans-bold");
