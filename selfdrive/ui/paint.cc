@@ -976,7 +976,7 @@ static void draw_safetysign(UIState *s) {
   const int s_center_y = bdr_s + 100;
   
   const int d_center_x = s_center_x;
-  const int d_center_y = s_center_y + 145;
+  const int d_center_y = s_center_y + 155;
   const int d_width = 220;
   const int d_height = 70;
   int opacity = 0;
