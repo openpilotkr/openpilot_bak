@@ -226,7 +226,7 @@ static void ui_draw_tpms(UIState *s) {
   int viz_tpms_w = 180;
   int viz_tpms_h = 160;
   int viz_tpms_x = s->fb_w - viz_tpms_w - bdr_s;
-  int viz_tpms_y = s->fb_h - bdr_s - 300;
+  int viz_tpms_y = s->fb_h - bdr_s - 310;
   float maxv = 0;
   float minv = 300;
   const Rect rect = {viz_tpms_x, viz_tpms_y, viz_tpms_w, viz_tpms_h};
@@ -241,7 +241,7 @@ static void ui_draw_tpms(UIState *s) {
   if (minv > scene.tpmsPressureRr) {minv = scene.tpmsPressureRr;}
 
   // Draw Border
-  ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(100), 6, 20.);
+  ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(100), 7, 20.);
   // Draw Background
   if ((maxv - minv) > 3) {
     ui_fill_rect(s->vg, rect, COLOR_RED_ALPHA(80), 20);
@@ -1038,7 +1038,7 @@ static void draw_compass(UIState *s) {
     nvgFontSize(s->vg, 50);
     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
     //nvgRotate(s->vg, -niddle_rotation);
-    nvgText(s->vg, rect.centerX(), rect.centerY(), "↑", NULL);
+    nvgText(s->vg, 0, 0, "↑", NULL);
     nvgRestore(s->vg);
   }
 }
