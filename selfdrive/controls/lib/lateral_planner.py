@@ -140,7 +140,7 @@ class LateralPlanner():
   
     v_ego = sm['carState'].vEgo
     if sm.frame % 2 == 0:
-      self.model_speed = curve_speed(sm, v_ego)
+      self.model_speed = self.curve_speed(sm, v_ego)
     active = sm['controlsState'].active
     measured_curvature = sm['controlsState'].curvature
 
