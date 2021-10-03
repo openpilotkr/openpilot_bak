@@ -113,12 +113,18 @@ class LongControl():
       dRel = 150
       vRel = 0
     else:
-      dRel = radarState.leadOne.dRel - 2.5
+      dRel = radarState.leadOne.dRel
       vRel = radarState.leadOne.vRel
     if long_plan.hasLead:
-      stop = True if (dRel < 3.5 and radarState.leadOne.status) else False
+      if CS.radarDistance <= 149:
+        stop = True if (dRel < 4.0 and radarState.leadOne.status) else False
+        radar_target_detected = True
+      else:
+        stop = True if (dRel < 5.5 and radarState.leadOne.status) else False
+        radar_target_detected = False
     else:
       stop = False
+      radar_target_detected = False
     self.long_control_state = long_control_state_trans(active, self.long_control_state, CS.vEgo,
                                                        v_target_future, self.v_pid, output_gb,
                                                        CS.brakePressed, CS.cruiseState.standstill, stop, CS.gasPressed, CP.minSpeedCan)
@@ -165,7 +171,7 @@ class LongControl():
       # Keep applying brakes until the car is stopped
       factor = 1
       if long_plan.hasLead:
-        factor = interp(dRel,[2.0,3.5], [2.0,1.0])
+        factor = interp(dRel,[2.0,5.5], [3.0,1.0]) if not radar_target_detected else 1
       if not CS.standstill or output_gb > -BRAKE_STOPPING_TARGET:
         output_gb -= CP.stoppingBrakeRate / RATE * factor
       elif CS.cruiseState.standstill and output_gb < -BRAKE_STOPPING_TARGET:
@@ -178,7 +184,7 @@ class LongControl():
     elif self.long_control_state == LongCtrlState.starting:
       factor = 1
       if long_plan.hasLead:
-        factor = interp(dRel,[3.5,5.0], [1.0,10.0])
+        factor = interp(dRel,[5.5,6.5], [1.0,10.0]) if not radar_target_detected else 1
       if output_gb < -0.2:
         output_gb += CP.startingBrakeRate / RATE * factor
       self.reset(CS.vEgo)
@@ -212,7 +218,7 @@ class LongControl():
       self.long_plan_source = "---"
 
     if CP.sccBus != 0 and self.long_log:
-      str_log3 = 'LS={:s}  LP={:s}  GS/BK={:01.2f}/{:01.2f}  GB={:+04.2f}  GS={}  ED/RD={:04.1f}/{:04.1f}  VT/AT={:04.2f}/{:+04.2f}'.format(self.long_stat, self.long_plan_source, final_gas, abs(final_brake), output_gb, int(CS.gasPressed), dRel, CS.radarDistance, v_target, a_target)
+      str_log3 = 'LS={:s}  LP={:s}  GS/BK={:01.2f}/{:01.2f}  GB={:+04.2f}  GS={}  ED/RD={:04.1f}/{:04.1f}  VF={:03.0f}'.format(self.long_stat, self.long_plan_source, final_gas, abs(final_brake), output_gb, int(CS.gasPressed), dRel, CS.radarDistance, CS.CP.vFuture)
       trace1.printf2('{}'.format(str_log3))
 
     return final_gas, final_brake, v_target, a_target

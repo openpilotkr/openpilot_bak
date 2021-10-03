@@ -136,7 +136,7 @@ class NaviControl():
       self.wait_timer3 = 0
 
     cruise_set_speed_kph = self.moveAvg.get_avg(cruise_set_speed_kph, 20 if CS.is_set_speed_in_mph else 30)
-    return  cruise_set_speed_kph
+    return cruise_set_speed_kph
 
   def get_navi_speed(self, sm, CS, cruiseState_speed):
     cruise_set_speed_kph = cruiseState_speed
@@ -233,10 +233,9 @@ class NaviControl():
       ctrl_speed = min(ctrl_speed, interp(modelSpeed, [30, 90], [45, 90])) # curve speed ratio
 
     self.gasPressed_old = CS.gasPressed
-    return  ctrl_speed
+    return ctrl_speed
 
   def update(self, CS, path_plan):
-    # send scc to car if longcontrol enabled and SCC not on bus 0 or ont live
     btn_signal = None
     if not self.button_status(CS):
       pass
