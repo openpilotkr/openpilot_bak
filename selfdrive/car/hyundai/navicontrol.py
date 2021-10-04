@@ -120,28 +120,6 @@ class NaviControl():
 
     return btn_signal
 
-  def get_forword_car_speed(self, CS,  cruiseState_speed):
-    self.lead_0 = self.sm['radarState'].leadOne
-    self.lead_1 = self.sm['radarState'].leadTwo
-    cruise_set_speed_kph = cruiseState_speed
-
-    if self.lead_0.status:
-      dRel = self.lead_0.dRel
-      vRel = self.lead_0.vRel
-    else:
-      dRel = 150
-      vRel = 0
-
-    dRelTarget = 110 #interp(CS.clu_Vanz, [30, 90], [ 30, 70 ])
-    if dRel < dRelTarget and CS.clu_Vanz > 20:
-      dGap = interp(CS.clu_Vanz, [30, 40,  70], [ 20, 10, 5 ])
-      cruise_set_speed_kph = CS.clu_Vanz + dGap
-    else:
-      self.wait_timer3 = 0
-
-    cruise_set_speed_kph = self.moveAvg.get_avg(cruise_set_speed_kph, 20 if CS.is_set_speed_in_mph else 30)
-    return cruise_set_speed_kph
-
   def get_navi_speed(self, sm, CS, cruiseState_speed):
     cruise_set_speed_kph = cruiseState_speed
     v_ego_kph = CS.out.vEgo * CV.MS_TO_KPH    
@@ -176,8 +154,8 @@ class NaviControl():
           self.map_speed_block = False
     if self.map_speed > 29:
       cam_distance_calc = 0
-      cam_distance_calc = interp(v_ego_kph, [30, 110], [2.8,4.0])
-      consider_speed = interp((v_ego_kph - self.map_speed), [0,50], [1, 2.25])
+      cam_distance_calc = interp(v_ego_kph, [30, 110], [2.8, 4.0])
+      consider_speed = interp((v_ego_kph - self.map_speed), [0, 50], [1, 2.25])
       min_control_dist = interp(self.map_speed, [30, 110], [40, 250])
       final_cam_decel_start_dist = cam_distance_calc*consider_speed*v_ego_kph * (1 + self.safetycam_decel_dist_gain*0.01)
       if self.map_speed_dist < final_cam_decel_start_dist:
@@ -220,6 +198,23 @@ class NaviControl():
 
     return cruise_set_speed_kph
 
+  def variable_cruise(self, CS, ctrl_speed):
+    cruiseState_speed = CS.out.cruiseState.speed * CV.MS_TO_KPH
+    self.lead_0 = self.sm['radarState'].leadOne
+    self.lead_1 = self.sm['radarState'].leadTwo
+
+    if self.lead_0.status and ctrl_speed > 0:
+      dRel = int(self.lead_0.dRel)
+      vRel = int(self.lead_0.vRel * CV.MS_TO_KPH)
+      if vRel >= -5:
+        ctrl_speed = min(ctrl_speed + max(0, dRel*0.19+vRel), cruiseState_speed)
+      else:
+        ctrl_speed = min(ctrl_speed, cruiseState_speed)
+    else:
+      ctrl_speed = cruiseState_speed
+
+    return ctrl_speed
+
   def auto_speed_control(self, CS, ctrl_speed, path_plan):
     modelSpeed = path_plan.modelSpeed
     min_control_speed = 20 if CS.is_set_speed_in_mph else 30
@@ -232,9 +227,11 @@ class NaviControl():
     elif CS.CP.resSpeed:
       ctrl_speed = max(min_control_speed, CS.CP.resSpeed)
       return ctrl_speed
-    elif CS.cruise_set_mode in [1,2,4] and CS.CP.vFuture >= 30:
-      vFuture = CS.CP.vFuture
-      ctrl_speed = max(min_control_speed, vFuture)
+    elif CS.cruise_set_mode in [1,2,4]:
+      if CS.CP.vFuture > min_control_speed or CS.CP.vFuture <= 0:
+        ctrl_speed = self.variable_cruise(CS, CS.CP.vFuture)
+      elif 0 < CS.CP.vFuture <= min_control_speed:
+        ctrl_speed = min_control_speed
 
     if CS.cruise_set_mode in [1,3,4] and CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and \
      path_plan.laneChangeState == LaneChangeState.off and not (CS.out.leftBlinker or CS.out.rightBlinker):

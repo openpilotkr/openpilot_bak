@@ -342,10 +342,10 @@ static void ui_draw_debug(UIState *s) {
     ui_print(s, ui_viz_rx, ui_viz_ry+480, "%.2f|%.2f", scene.lateralPlan.lProb, scene.lateralPlan.rProb);
     //ui_print(s, ui_viz_rx, ui_viz_ry+800, "A:%.5f", scene.accel_sensor2);
     if (scene.map_is_running) {
-      if (scene.liveNaviData.opkrspeedsign) ui_print(s, ui_viz_rx, ui_viz_ry+520, "SS:%.0f", scene.liveNaviData.opkrspeedsign);
-      if (scene.liveNaviData.opkrspeedlimit) ui_print(s, ui_viz_rx, ui_viz_ry+560, "SL:%.0f", scene.liveNaviData.opkrspeedlimit);
+      if (scene.liveNaviData.opkrspeedsign) ui_print(s, ui_viz_rx, ui_viz_ry+520, "SS:%d", scene.liveNaviData.opkrspeedsign);
+      if (scene.liveNaviData.opkrspeedlimit) ui_print(s, ui_viz_rx, ui_viz_ry+560, "SL:%d", scene.liveNaviData.opkrspeedlimit);
       if (scene.liveNaviData.opkrspeedlimitdist) ui_print(s, ui_viz_rx, ui_viz_ry+600, "DS:%.0f", scene.liveNaviData.opkrspeedlimitdist);
-      if (scene.liveNaviData.opkrturninfo) ui_print(s, ui_viz_rx, ui_viz_ry+640, "TI:%.0f", scene.liveNaviData.opkrturninfo);
+      if (scene.liveNaviData.opkrturninfo) ui_print(s, ui_viz_rx, ui_viz_ry+640, "TI:%d", scene.liveNaviData.opkrturninfo);
       if (scene.liveNaviData.opkrdisttoturn) ui_print(s, ui_viz_rx, ui_viz_ry+680, "DT:%.0f", scene.liveNaviData.opkrdisttoturn);
     } else if (!scene.map_is_running && (*s->sm)["carState"].getCarState().getSafetySign() > 0) {
       ui_print(s, ui_viz_rx, ui_viz_ry+520, "SL:%.0f", (*s->sm)["carState"].getCarState().getSafetySign());
