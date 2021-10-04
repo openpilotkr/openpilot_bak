@@ -969,10 +969,10 @@ static void bb_ui_draw_UI(UIState *s) {
 static void draw_safetysign(UIState *s) {
   const int diameter = 185;
   const int diameter2 = 170;
-  const int s_center_x = bdr_s + 305;
+  int s_center_x = bdr_s + 305 + (s->scene.display_maxspeed_time>0 ? 184 : 0);
   const int s_center_y = bdr_s + 100;
   
-  const int d_center_x = s_center_x;
+  int d_center_x = s_center_x;
   const int d_center_y = s_center_y + 155;
   const int d_width = 220;
   const int d_height = 70;
