@@ -235,7 +235,7 @@ class NaviControl():
 
     if CS.cruise_set_mode in [1,3,4] and CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and \
      path_plan.laneChangeState == LaneChangeState.off and not (CS.out.leftBlinker or CS.out.rightBlinker):
-      ctrl_speed = min(ctrl_speed, interp(modelSpeed, [30, 90], [45, 90])) # curve speed ratio
+      ctrl_speed = min(ctrl_speed, interp(modelSpeed, [30, 40, 50, 60, 70, 80, 90], [40, 45, 50, 55, 65, 75, 85])) # curve speed ratio
 
     # self.gasPressed_old = CS.gasPressed
     return ctrl_speed
