@@ -230,10 +230,12 @@ static void screen_draw_button(UIState *s) {
   else {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   }
-  nvgFontSize(s->vg, 45);
-  nvgFontFace(s->vg, "sans-bold");
-  nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-  nvgText(s->vg, btn_xc, btn_yc, "R", NULL);
+  if (s->scene.gpsAccuracyUblox == 0.00) {
+    nvgFontSize(s->vg, 45);
+    nvgFontFace(s->vg, "sans-bold");
+    nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+    nvgText(s->vg, btn_xc, btn_yc, "REC", NULL);
+  }
 
   if (captureState == CAPTURE_STATE_CAPTURING) {
     //draw_date_time(s);
