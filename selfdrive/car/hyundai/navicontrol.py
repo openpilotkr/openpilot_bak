@@ -232,7 +232,7 @@ class NaviControl():
     elif CS.CP.resSpeed:
       ctrl_speed = max(min_control_speed, CS.CP.resSpeed)
       return ctrl_speed
-    elif CS.cruise_set_mode in [1,2,4]:
+    elif CS.cruise_set_mode in [1,2,4] and CS.CP.vFuture >= 30:
       vFuture = CS.CP.vFuture
       ctrl_speed = max(min_control_speed, vFuture)
 
