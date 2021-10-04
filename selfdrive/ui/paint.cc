@@ -1137,7 +1137,7 @@ static void ui_draw_vision_header(UIState *s) {
 //blind spot warning by OPKR
 static void ui_draw_blindspot_mon(UIState *s) {
   UIScene &scene = s->scene;
-  const int width = 70;
+  const int width = 100;
   const int height = s->fb_h;
 
   const int left_x = 0;
