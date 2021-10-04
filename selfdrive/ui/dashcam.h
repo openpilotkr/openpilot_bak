@@ -222,7 +222,7 @@ static void screen_draw_button(UIState *s) {
   nvgStroke(s->vg);
 
   if (captureState == CAPTURE_STATE_CAPTURING) {
-    NVGcolor fillColor = nvgRGBA(255,0,0,150);
+    NVGcolor fillColor = nvgRGBA(255,0,0,80);
     nvgFillColor(s->vg, fillColor);
     nvgFill(s->vg);
     nvgFillColor(s->vg, nvgRGBA(255,255,255,200));

@@ -1032,17 +1032,17 @@ static void draw_compass(UIState *s) {
     const Rect rect = {compass_x, compass_y, compass_size, compass_size};
     ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(0), 0, 0);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    ui_draw_text(s, rect.centerX()+from_center, rect.centerY(), "E", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
-    ui_draw_text(s, rect.centerX()-from_center, rect.centerY(), "W", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
-    ui_draw_text(s, rect.centerX(), rect.centerY()+from_center, "S", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
-    ui_draw_text(s, rect.centerX(), rect.centerY()-from_center, "N", 40, COLOR_WHITE_ALPHA(150), "sans-bold");
+    ui_draw_text(s, rect.centerX()+from_center, rect.centerY(), "E", 40, COLOR_WHITE_ALPHA(200), "sans-bold");
+    ui_draw_text(s, rect.centerX()-from_center, rect.centerY(), "W", 40, COLOR_WHITE_ALPHA(200), "sans-bold");
+    ui_draw_text(s, rect.centerX(), rect.centerY()+from_center, "S", 40, COLOR_WHITE_ALPHA(200), "sans-bold");
+    ui_draw_text(s, rect.centerX(), rect.centerY()-from_center, "N", 40, COLOR_WHITE_ALPHA(200), "sans-bold");
     float niddle_rotation = s->scene.bearingUblox/180*3.141592;
     nvgSave( s->vg );
     nvgTranslate(s->vg, compass_x+compass_size/2, compass_y+compass_size/2);
     nvgRotate(s->vg, -niddle_rotation);
     nvgFontFace(s->vg, "sans-bold");
     nvgFontSize(s->vg, 80);
-    nvgFillColor(s->vg, COLOR_WHITE_ALPHA(220));
+    nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
     nvgText(s->vg, 0, 0, "Δ", NULL);
     nvgRestore(s->vg);
   }
