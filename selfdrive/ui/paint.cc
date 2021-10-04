@@ -314,7 +314,7 @@ static void ui_draw_debug(UIState *s) {
   const UIScene &scene = s->scene;
 
   int ui_viz_rx = bdr_s + 190;
-  int ui_viz_ry = bdr_s;
+  int ui_viz_ry = bdr_s + 100;
   int ui_viz_rx_center = s->fb_w/2;
   
   nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
@@ -460,6 +460,11 @@ static void ui_draw_vision_maxspeed(UIState *s) {
 }
 
 static void ui_draw_vision_cruise_speed(UIState *s) {
+  const int SET_SPEED_NA = 255;
+  float maxspeed = s->scene.controls_state.getVCruise();
+  const bool is_cruise_set = maxspeed != 0 && maxspeed != SET_SPEED_NA;
+  if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
+
   float cruise_speed = s->scene.vSetDis;
   if (!s->scene.is_metric) { cruise_speed *= 0.621371; }
   s->scene.is_speed_over_limit = s->scene.limitSpeedCamera > 29 && ((s->scene.limitSpeedCamera+round(s->scene.limitSpeedCamera*0.01*s->scene.speed_lim_off))+1 < s->scene.car_state.getVEgo()*3.6);
@@ -481,9 +486,13 @@ static void ui_draw_vision_cruise_speed(UIState *s) {
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   if (s->scene.limitSpeedCamera > 29) {
     ui_draw_text(s, rect.centerX(), bdr_s+65, "제한속도", 26 * 2.2, COLOR_WHITE_ALPHA(s->scene.cruiseAccStatus ? 200 : 100), "sans-regular");
+  } else if (is_cruise_set) {
+    const std::string maxspeed_str = std::to_string((int)std::nearbyint(maxspeed));
+    ui_draw_text(s, rect.centerX(), bdr_s+65, maxspeed_str.c_str(), 26 * 2.8, COLOR_WHITE, "sans-bold");
   } else {
-    ui_draw_text(s, rect.centerX(), bdr_s+65, "크루즈", 26 * 2.2, COLOR_WHITE_ALPHA(s->scene.cruiseAccStatus ? 200 : 100), "sans-regular");
+    ui_draw_text(s, rect.centerX(), bdr_s+65, "-", 26 * 2.8, COLOR_WHITE_ALPHA(100), "sans-semibold");
   }
+
   const std::string cruise_speed_str = std::to_string((int)std::nearbyint(cruise_speed));
   if (cruise_speed >= 30 && s->scene.controls_state.getEnabled()) {
     ui_draw_text(s, rect.centerX(), bdr_s+165, cruise_speed_str.c_str(), 48 * 2.3, COLOR_WHITE, "sans-bold");
@@ -962,7 +971,7 @@ static void bb_ui_draw_UI(UIState *s) {
 static void draw_safetysign(UIState *s) {
   const int diameter = 185;
   const int diameter2 = 170;
-  const int s_center_x = bdr_s + 490;
+  const int s_center_x = bdr_s + 305;
   const int s_center_y = bdr_s + 100;
   
   const int d_center_x = s_center_x;
@@ -1099,7 +1108,13 @@ static void ui_draw_vision_header(UIState *s) {
   ui_fill_rect(s->vg, {0, 0, s->fb_w , header_h}, gradient);
 
   if (!s->scene.comma_stock_ui) {
-    ui_draw_vision_maxspeed(s);
+    if ((*s->sm)["carState"].getCarState().getCruiseButtons() == 1 || (*s->sm)["carState"].getCarState().getCruiseButtons() == 2) {
+      s->scene.display_maxspeed_time = 300;
+      ui_draw_vision_maxspeed(s);
+    } else if (s->scene.display_maxspeed_time > 0) {
+      s->scene.display_maxspeed_time--;
+      ui_draw_vision_maxspeed(s);
+    }
     ui_draw_vision_cruise_speed(s);
   } else {
     ui_draw_vision_maxspeed_org(s);
