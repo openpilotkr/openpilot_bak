@@ -1043,7 +1043,7 @@ static void draw_compass(UIState *s) {
     nvgFontFace(s->vg, "sans-bold");
     nvgFontSize(s->vg, 80);
     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
-    nvgText(s->vg, 0, 0, "Δ", NULL);
+    nvgText(s->vg, 0, 0, "↑", NULL);
     nvgRestore(s->vg);
   }
 }
@@ -1107,7 +1107,7 @@ static void ui_draw_vision_header(UIState *s) {
 
   if (!s->scene.comma_stock_ui) {
     if ((*s->sm)["carState"].getCarState().getCruiseButtons() == 1 || (*s->sm)["carState"].getCarState().getCruiseButtons() == 2) {
-      s->scene.display_maxspeed_time = 300;
+      s->scene.display_maxspeed_time = 100;
       ui_draw_vision_maxspeed(s);
     } else if (s->scene.display_maxspeed_time > 0) {
       s->scene.display_maxspeed_time--;
