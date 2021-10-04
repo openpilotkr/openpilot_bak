@@ -435,6 +435,9 @@ QWidget * network_panel(QWidget * parent) {
 UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   QVBoxLayout *layout = new QVBoxLayout(this);
 
+  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setSpacing(30);
+
   // OPKR
   layout->addWidget(new LabelControl("UI설정", ""));
   layout->addWidget(new AutoShutdown());
@@ -547,6 +550,9 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
 
 TuningPanel::TuningPanel(QWidget* parent) : QWidget(parent) {
   QVBoxLayout *layout = new QVBoxLayout(this);
+
+  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setSpacing(30);
 
   // OPKR
   layout->addWidget(new LabelControl("튜닝메뉴", ""));
