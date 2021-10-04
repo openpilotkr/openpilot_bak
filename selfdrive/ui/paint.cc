@@ -224,9 +224,9 @@ static void ui_draw_tpms(UIState *s) {
   char tpmsRl[64];
   char tpmsRr[64];
   int viz_tpms_w = 180;
-  int viz_tpms_h = 160;
+  int viz_tpms_h = 150;
   int viz_tpms_x = s->fb_w - viz_tpms_w - bdr_s;
-  int viz_tpms_y = s->fb_h - bdr_s - 310;
+  int viz_tpms_y = s->fb_h - bdr_s - 300;
   float maxv = 0;
   float minv = 300;
   const Rect rect = {viz_tpms_x, viz_tpms_y, viz_tpms_w, viz_tpms_h};
@@ -245,45 +245,43 @@ static void ui_draw_tpms(UIState *s) {
   // Draw Background
   if ((maxv - minv) > 3) {
     ui_fill_rect(s->vg, rect, COLOR_RED_ALPHA(80), 20);
-  } else {
-    ui_fill_rect(s->vg, rect, COLOR_BLACK_ALPHA(80), 20);
   }
 
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   const int pos_x = viz_tpms_x + (viz_tpms_w / 2);
-  const int pos_y = viz_tpms_y + 45;
+  const int pos_y = viz_tpms_y + 40;
   ui_draw_text(s, pos_x, pos_y, "TPMS", 40, COLOR_WHITE_ALPHA(180), "sans-regular");
   snprintf(tpmsFl, sizeof(tpmsFl), "%.1f", scene.tpmsPressureFl);
   snprintf(tpmsFr, sizeof(tpmsFr), "%.1f", scene.tpmsPressureFr);
   snprintf(tpmsRl, sizeof(tpmsRl), "%.1f", scene.tpmsPressureRl);
   snprintf(tpmsRr, sizeof(tpmsRr), "%.1f", scene.tpmsPressureRr);
   if (scene.tpmsPressureFl < 34) {
-    ui_draw_text(s, pos_x-45, pos_y+50, tpmsFl, 50, COLOR_RED, "sans-bold");
+    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 50, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureFl > 50) {
-    ui_draw_text(s, pos_x-45, pos_y+50, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+45, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x-45, pos_y+50, tpmsFl, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
   if (scene.tpmsPressureFr < 34) {
-    ui_draw_text(s, pos_x+45, pos_y+50, tpmsFr, 50, COLOR_RED, "sans-bold");
+    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 50, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureFr > 50) {
-    ui_draw_text(s, pos_x+45, pos_y+50, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+45, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x+45, pos_y+50, tpmsFr, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
   if (scene.tpmsPressureRl < 34) {
-    ui_draw_text(s, pos_x-45, pos_y+100, tpmsRl, 50, COLOR_RED, "sans-bold");
+    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 50, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureRl > 50) {
-    ui_draw_text(s, pos_x-45, pos_y+100, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+90, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x-45, pos_y+100, tpmsRl, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
   if (scene.tpmsPressureRr < 34) {
-    ui_draw_text(s, pos_x+45, pos_y+100, tpmsRr, 50, COLOR_RED, "sans-bold");
+    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 50, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureRr > 50) {
-    ui_draw_text(s, pos_x+45, pos_y+100, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+90, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x+45, pos_y+100, tpmsRr, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
 }
 
@@ -356,11 +354,11 @@ static void ui_draw_debug(UIState *s) {
     nvgFontSize(s->vg, 37);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (scene.lateralControlMethod == 0) {
-      ui_print(s, ui_viz_rx_center, bdr_s+205, "PID");
+      ui_print(s, ui_viz_rx_center, bdr_s+305, "PID");
     } else if (scene.lateralControlMethod == 1) {
-      ui_print(s, ui_viz_rx_center, bdr_s+205, "INDI");
+      ui_print(s, ui_viz_rx_center, bdr_s+305, "INDI");
     } else if (scene.lateralControlMethod == 2) {
-      ui_print(s, ui_viz_rx_center, bdr_s+205, "LQR");
+      ui_print(s, ui_viz_rx_center, bdr_s+305, "LQR");
     }
   }
 }
