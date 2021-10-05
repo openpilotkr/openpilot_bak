@@ -367,7 +367,7 @@ class CarInterface(CarInterfaceBase):
       self.CP.resSpeed = self.CC.res_speed
     else:
       self.CP.resSpeed = 0
-    if self.CC.vFuture != 0:
+    if self.CC.vFuture >= 1:
       self.CP.vFuture = self.CC.vFuture
     else:
       self.CP.vFuture = 0
