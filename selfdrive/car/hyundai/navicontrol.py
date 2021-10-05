@@ -115,14 +115,14 @@ class NaviControl():
   def ascc_button_control(self, CS, set_speed):
     self.set_point = max(20 if CS.is_set_speed_in_mph else 30, set_speed)
     self.curr_speed = CS.out.vEgo * CV.MS_TO_KPH
-    self.VSetDis = CS.VSetDis
+    self.VSetDis = round(CS.VSetDis)
     btn_signal = self.switch(self.seq_command)
 
     return btn_signal
 
   def get_navi_speed(self, sm, CS, cruiseState_speed):
     cruise_set_speed_kph = cruiseState_speed
-    v_ego_kph = CS.out.vEgo * CV.MS_TO_KPH    
+    v_ego_kph = CS.out.vEgo * CV.MS_TO_KPH
     self.liveNaviData = sm['liveNaviData']
     # speedLimit = self.liveNaviData.speedLimit
     # speedLimitDistance = self.liveNaviData.speedLimitDistance  #speedLimitDistance
@@ -198,22 +198,24 @@ class NaviControl():
 
     return cruise_set_speed_kph
 
-  def variable_cruise(self, CS, ctrl_speed):
-    cruiseState_speed = CS.out.cruiseState.speed * CV.MS_TO_KPH
+  def variable_cruise(self, CS, var_cruise_speed):
+    cruiseState_speed = round(CS.out.cruiseState.speed * CV.MS_TO_KPH)
     self.lead_0 = self.sm['radarState'].leadOne
     self.lead_1 = self.sm['radarState'].leadTwo
 
-    if self.lead_0.status and ctrl_speed > 0:
+    if self.lead_0.status:
       dRel = int(self.lead_0.dRel)
       vRel = int(self.lead_0.vRel * CV.MS_TO_KPH)
       if vRel >= -5:
-        ctrl_speed = min(ctrl_speed + max(0, dRel*0.19+vRel), cruiseState_speed)
+        var_speed = min(var_cruise_speed + max(0, dRel*0.19+vRel), cruiseState_speed)
       else:
-        ctrl_speed = min(ctrl_speed, cruiseState_speed)
+        var_speed = min(var_cruise_speed, cruiseState_speed)
     else:
-      ctrl_speed = cruiseState_speed
+      var_speed = cruiseState_speed
 
-    return ctrl_speed
+    print('status={}  dRel={}  vRel={}  var_speed={}  cruiseState_speed={}'.format(self.lead_0.status, int(self.lead_0.dRel), int(self.lead_0.vRel * CV.MS_TO_KPH)), var_speed, cruiseState_speed)
+
+    return var_speed
 
   def auto_speed_control(self, CS, ctrl_speed, path_plan):
     modelSpeed = path_plan.modelSpeed
@@ -224,13 +226,15 @@ class NaviControl():
     #   clu_Vanz = CS.clu_Vanz
     #   ctrl_speed = max(min_control_speed, ctrl_speed, clu_Vanz)
     #   CS.set_cruise_speed(ctrl_speed)
-    elif CS.CP.resSpeed:
+    elif CS.CP.resSpeed > 30:
       ctrl_speed = max(min_control_speed, CS.CP.resSpeed)
+      print('CS.CP.resSpeed={}'.format(CS.CP.resSpeed))
       return ctrl_speed
     elif CS.cruise_set_mode in [1,2,4]:
       if CS.CP.vFuture > min_control_speed or CS.CP.vFuture <= 0:
         ctrl_speed = self.variable_cruise(CS, CS.CP.vFuture)
-      elif 0 < CS.CP.vFuture <= min_control_speed:
+        print('CS.CP.vFuture={}'.format(CS.CP.vFuture))
+      elif 0 < CS.CP.vFuture < min_control_speed:
         ctrl_speed = min_control_speed
 
     if CS.cruise_set_mode in [1,3,4] and CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and \
@@ -245,8 +249,8 @@ class NaviControl():
     if not self.button_status(CS):
       pass
     elif CS.cruise_active:
-      cruiseState_speed = CS.out.cruiseState.speed * CV.MS_TO_KPH
-      kph_set_vEgo = self.get_navi_speed(self.sm , CS, cruiseState_speed) # camspeed
+      cruiseState_speed = round(CS.out.cruiseState.speed * CV.MS_TO_KPH)
+      kph_set_vEgo = round(self.get_navi_speed(self.sm, CS, cruiseState_speed)) # camspeed
       self.ctrl_speed = min(cruiseState_speed, kph_set_vEgo)
 
       if CS.cruise_set_mode != 5:
