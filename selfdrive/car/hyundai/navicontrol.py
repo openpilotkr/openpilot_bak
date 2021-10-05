@@ -207,7 +207,7 @@ class NaviControl():
       dRel = int(self.lead_0.dRel)
       vRel = int(self.lead_0.vRel * CV.MS_TO_KPH)
       if vRel >= -5:
-        var_speed = min(var_cruise_speed + max(0, dRel*0.19+vRel), cruiseState_speed)
+        var_speed = min(var_cruise_speed + max(0, dRel*0.2+vRel), cruiseState_speed)
       else:
         var_speed = min(var_cruise_speed, cruiseState_speed)
     else:
@@ -216,7 +216,7 @@ class NaviControl():
     print('status={}  dRel={}  vRel={}  var_speed={}  cruiseState_speed={}'.format(
       self.lead_0.status, int(self.lead_0.dRel), int(self.lead_0.vRel * CV.MS_TO_KPH), var_speed, cruiseState_speed))
 
-    return var_speed
+    return round(var_speed)
 
   def auto_speed_control(self, CS, ctrl_speed, path_plan):
     modelSpeed = path_plan.modelSpeed
@@ -229,13 +229,11 @@ class NaviControl():
     #   CS.set_cruise_speed(ctrl_speed)
     elif CS.CP.resSpeed > 30:
       ctrl_speed = max(min_control_speed, CS.CP.resSpeed)
-      print('CS.CP.resSpeed={}'.format(CS.CP.resSpeed))
       return ctrl_speed
     elif CS.cruise_set_mode in [1,2,4]:
-      if CS.CP.vFuture > min_control_speed or CS.CP.vFuture <= 0:
+      if CS.CP.vFuture > min_control_speed or CS.CP.vFuture <= 1:
         ctrl_speed = self.variable_cruise(CS, CS.CP.vFuture)
-        print('CS.CP.vFuture={}'.format(CS.CP.vFuture))
-      elif 0 < CS.CP.vFuture < min_control_speed:
+      elif 1 < CS.CP.vFuture < min_control_speed:
         ctrl_speed = min_control_speed
 
     if CS.cruise_set_mode in [1,3,4] and CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and \
