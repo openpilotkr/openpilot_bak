@@ -73,10 +73,10 @@ class NaviControl():
   def case_0(self):
       self.btn_cnt = 0
       self.target_speed = self.set_point
-      delta_speed = self.target_speed - self.VSetDis
-      if delta_speed > 1:
+      delta_speed = round(self.target_speed - self.VSetDis)
+      if delta_speed > 0:
         self.seq_command = 1
-      elif delta_speed < -1:
+      elif delta_speed < 0:
         self.seq_command = 2
       return None
 
