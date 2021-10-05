@@ -213,7 +213,7 @@ class NaviControl():
     else:
       var_speed = cruiseState_speed
 
-    print('status={}  dRel={}  vRel={}  var_speed={}  cruiseState_speed={}'.format(self.lead_0.status, int(self.lead_0.dRel), int(self.lead_0.vRel * CV.MS_TO_KPH)), var_speed, cruiseState_speed)
+    print('status={}  dRel={}  vRel={}  var_speed={}  cruiseState_speed={}'.format(self.lead_0.status, int(self.lead_0.dRel), int(self.lead_0.vRel * CV.MS_TO_KPH), var_speed, cruiseState_speed)
 
     return var_speed
 
