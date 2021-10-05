@@ -48,7 +48,7 @@ class NaviControl():
 
   def button_status(self, CS):
     if not CS.cruise_active or CS.cruise_buttons != Buttons.NONE: 
-      self.wait_timer2 = 70 
+      self.wait_timer2 = 80 
     elif self.wait_timer2: 
       self.wait_timer2 -= 1
     else:
@@ -85,7 +85,7 @@ class NaviControl():
       if self.target_speed == self.VSetDis:
         self.btn_cnt = 0
         self.seq_command = 3            
-      elif self.btn_cnt > 10:
+      elif self.btn_cnt > 5:
         self.btn_cnt = 0
         self.seq_command = 3
       return btn_signal
@@ -96,7 +96,7 @@ class NaviControl():
       if self.target_speed == self.VSetDis:
         self.btn_cnt = 0
         self.seq_command = 3            
-      elif self.btn_cnt > 10:
+      elif self.btn_cnt > 5:
         self.btn_cnt = 0
         self.seq_command = 3
       return btn_signal
@@ -244,6 +244,8 @@ class NaviControl():
           var_speed = min(CS.CP.vFuture + max(0, dRel*0.2+vRel), navi_speed)
         else:
           var_speed = min(CS.CP.vFuture, navi_speed)
+      elif self.lead_0.status and CS.CP.vFuture < min_control_speed:
+        var_speed = min(CS.CP.vFuture, navi_speed)
       else:
         var_speed = navi_speed
     else:
