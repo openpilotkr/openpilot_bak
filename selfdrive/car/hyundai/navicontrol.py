@@ -234,7 +234,7 @@ class NaviControl():
     # if v_ego_kph < speedLimit:
     #   v_ego_kph = speedLimit
 
-    print('cruise_set_speed_kph={}'.format(cruise_set_speed_kph))
+    # print('cruise_set_speed_kph={}'.format(cruise_set_speed_kph))
 
     return cruise_set_speed_kph
 
@@ -253,8 +253,8 @@ class NaviControl():
     else:
       var_speed = cruiseState_speed
 
-    print('status={}  dRel={}  vRel={}  var_speed={}  cruiseState_speed={}'.format(
-      self.lead_0.status, int(self.lead_0.dRel), int(self.lead_0.vRel * CV.MS_TO_KPH), var_speed, cruiseState_speed))
+    # print('status={}  dRel={}  vRel={}  var_speed={}  cruiseState_speed={}'.format(
+    #   self.lead_0.status, int(self.lead_0.dRel), int(self.lead_0.vRel * CV.MS_TO_KPH), var_speed, cruiseState_speed))
 
     return round(var_speed)
 
@@ -289,11 +289,13 @@ class NaviControl():
       pass
     elif CS.cruise_active:
       cruiseState_speed = round(CS.out.cruiseState.speed * CV.MS_TO_KPH)
-      kph_set_vEgo = round(self.get_navi_speed(self.sm, CS, cruiseState_speed)) # camspeed
+      kph_set_vEgo = self.get_navi_speed(self.sm, CS, cruiseState_speed) # camspeed
       self.ctrl_speed = min(cruiseState_speed, kph_set_vEgo)
 
-      if CS.cruise_set_mode != 5:
-        self.ctrl_speed = self.auto_speed_control(CS, self.ctrl_speed, path_plan) # lead, curve speed
+      print('self.ctrl_speed={}  kph_set_vEgo={}  cruiseState_speed={}'.format(self.ctrl_speed, kph_set_vEgo, cruiseState_speed))
+
+      # if CS.cruise_set_mode != 5:
+      #   self.ctrl_speed = self.auto_speed_control(CS, self.ctrl_speed, path_plan) # lead, curve speed
 
       btn_signal = self.ascc_button_control(CS, self.ctrl_speed)
 
