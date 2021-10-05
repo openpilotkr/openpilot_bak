@@ -66,7 +66,7 @@ class CarInterface(CarInterfaceBase):
     ret.brakeMaxV = [3.0]   # max brake allowed
 
     ret.longitudinalTuning.kpBP = [0., 4., 9., 17., 23., 31.]
-    ret.longitudinalTuning.kpV = [1.2, 1.0, 0.8, 0.65, 0.5, 0.4]
+    ret.longitudinalTuning.kpV = [1.2, 0.95, 0.8, 0.65, 0.5, 0.4]
     ret.longitudinalTuning.kiBP = [0., 4., 9., 17., 23., 31.]
     ret.longitudinalTuning.kiV = [0.3, 0.24, 0.22, 0.18, 0.15, 0.13]
 
