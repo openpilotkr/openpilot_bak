@@ -80,26 +80,32 @@ class NaviControl():
       return None
 
   def case_1(self):  # acc
-      btn_signal = Buttons.RES_ACCEL
+      # btn_signal = Buttons.RES_ACCEL
       self.btn_cnt += 1
       if self.target_speed == self.VSetDis:
         self.btn_cnt = 0
         self.seq_command = 3            
-      elif self.btn_cnt > 5:
+      elif self.btn_cnt >= 10:
         self.btn_cnt = 0
-        self.seq_command = 3
-      return btn_signal
+        return Buttons.RES_ACCEL
+        # self.btn_cnt = 0
+        # self.seq_command = 3
+      # return btn_signal
+      return None
 
   def case_2(self):  # dec
-      btn_signal = Buttons.SET_DECEL
+      # btn_signal = Buttons.SET_DECEL
       self.btn_cnt += 1
       if self.target_speed == self.VSetDis:
         self.btn_cnt = 0
         self.seq_command = 3            
-      elif self.btn_cnt > 5:
+      elif self.btn_cnt >= 10:
         self.btn_cnt = 0
-        self.seq_command = 3
-      return btn_signal
+        return Buttons.SET_DECEL
+        # self.btn_cnt = 0
+        # self.seq_command = 3
+      # return btn_signal
+      return None
 
   def case_3(self):  # None
       btn_signal = None  # Buttons.NONE
@@ -107,7 +113,7 @@ class NaviControl():
       self.btn_cnt += 1
       #if self.btn_cnt == 1:
       #  btn_signal = Buttons.NONE
-      if self.btn_cnt > 5: 
+      if self.btn_cnt >= 10: 
         self.seq_command = 0
       return btn_signal
 
