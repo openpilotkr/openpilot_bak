@@ -271,7 +271,7 @@ class NaviControl():
       ctrl_speed = max(min_control_speed, CS.CP.resSpeed)
       return ctrl_speed
     elif CS.cruise_set_mode in [1,2,4]:
-      if CS.CP.vFuture > min_control_speed or CS.CP.vFuture <= 1:
+      if CS.CP.vFuture >= min_control_speed:
         ctrl_speed = self.variable_cruise(CS, CS.CP.vFuture)
       elif 1 < CS.CP.vFuture < min_control_speed:
         ctrl_speed = min_control_speed
