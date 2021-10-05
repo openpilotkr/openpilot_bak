@@ -237,7 +237,7 @@ class NaviControl():
       res_speed = max(min_control_speed, CS.CP.resSpeed)
       return min(res_speed, navi_speed)
     elif CS.cruise_set_mode in [1,2,4]:
-      if self.lead_0.status and CS.CP.vFuture >= min_control_speed:
+      if self.lead_0.status and CS.CP.vFuture >= min_control_speed-5:
         dRel = int(self.lead_0.dRel)
         vRel = int(self.lead_0.vRel * CV.MS_TO_KPH)
         if vRel >= -5:
