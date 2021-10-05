@@ -258,37 +258,37 @@ class NaviControl():
 
     return round(var_speed)
 
-  def auto_speed_control(self, CS, cruiseState_speed, path_plan):
+  def auto_speed_control(self, CS, navi_speed, path_plan):
     modelSpeed = path_plan.modelSpeed
     min_control_speed = 20 if CS.is_set_speed_in_mph else 30
     self.lead_0 = self.sm['radarState'].leadOne
     self.lead_1 = self.sm['radarState'].leadTwo
 
     if CS.driverAcc_time:
-      return CS.clu_Vanz + 3
+      return min(CS.clu_Vanz + 3, navi_speed)
     # elif self.gasPressed_old:
     #   clu_Vanz = CS.clu_Vanz
     #   ctrl_speed = max(min_control_speed, ctrl_speed, clu_Vanz)
     #   CS.set_cruise_speed(ctrl_speed)
     elif CS.CP.resSpeed > 30:
       res_speed = max(min_control_speed, CS.CP.resSpeed)
-      return res_speed
+      return min(res_speed, navi_speed)
     elif CS.cruise_set_mode in [1,2,4]:
       if self.lead_0.status and CS.CP.vFuture >= min_control_speed:
         dRel = int(self.lead_0.dRel)
         vRel = int(self.lead_0.vRel * CV.MS_TO_KPH)
         if vRel >= -5:
-          var_speed = min(CS.CP.vFuture + max(0, dRel*0.2+vRel), cruiseState_speed)
+          var_speed = min(CS.CP.vFuture + max(0, dRel*0.2+vRel), navi_speed)
         else:
-          var_speed = min(CS.CP.vFuture, cruiseState_speed)
+          var_speed = min(CS.CP.vFuture, navi_speed)
       else:
-        var_speed = cruiseState_speed
+        var_speed = navi_speed
 
     if CS.cruise_set_mode in [1,3,4] and CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and \
      path_plan.laneChangeState == LaneChangeState.off and not (CS.out.leftBlinker or CS.out.rightBlinker):
       curv_speed = min(var_speed, interp(modelSpeed, [30, 40, 50, 60, 70, 80, 90], [40, 45, 50, 55, 65, 75, 85])) # curve speed ratio
     else:
-      curv_speed = cruiseState_speed
+      curv_speed = navi_speed
 
     # self.gasPressed_old = CS.gasPressed
     return min(var_speed, curv_speed)
@@ -299,14 +299,15 @@ class NaviControl():
       pass
     elif CS.cruise_active:
       cruiseState_speed = round(CS.out.cruiseState.speed * CV.MS_TO_KPH)
-      # kph_set_vEgo = self.get_navi_speed(self.sm, CS, cruiseState_speed) # camspeed
-      # self.ctrl_speed = min(cruiseState_speed, kph_set_vEgo)
+      kph_set_vEgo = self.get_navi_speed(self.sm, CS, cruiseState_speed) # camspeed
+      navi_speed = min(cruiseState_speed, kph_set_vEgo)
 
       if CS.cruise_set_mode != 5:
-        self.ctrl_speed = self.auto_speed_control(CS, cruiseState_speed, path_plan) # lead, curve speed
+        self.ctrl_speed = self.auto_speed_control(CS, navi_speed, path_plan) # lead, curve speed
+      else:
+        self.ctrl_speed = navi_speed # navi speed
 
-      print('self.ctrl_speed={}  cruiseState_speed={}'.format(self.ctrl_speed, cruiseState_speed))
-      
+      # print('self.ctrl_speed={}  cruiseState_speed={}'.format(self.ctrl_speed, cruiseState_speed))      
 
       btn_signal = self.ascc_button_control(CS, self.ctrl_speed)
 
