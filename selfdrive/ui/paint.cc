@@ -1041,7 +1041,7 @@ static void draw_compass(UIState *s) {
     nvgTranslate(s->vg, compass_x+compass_size/2, compass_y+compass_size/2);
     nvgRotate(s->vg, -niddle_rotation);
     nvgFontFace(s->vg, "sans-bold");
-    nvgFontSize(s->vg, 70);
+    nvgFontSize(s->vg, 60);
     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
     nvgText(s->vg, 0, 0, "↑", NULL);
     nvgRestore(s->vg);
@@ -1170,7 +1170,7 @@ static void ui_draw_blindspot_mon(UIState *s) {
       scene.blindspot_blinkingrate -= 6;
       if(scene.blindspot_blinkingrate<0) scene.blindspot_blinkingrate = 120;
       if (scene.blindspot_blinkingrate>=60) {
-        car_valid_alpha = 100;
+        car_valid_alpha = 150;
       } else {
         car_valid_alpha = 0;
       }
