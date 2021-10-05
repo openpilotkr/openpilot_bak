@@ -18,7 +18,7 @@ class NaviControl():
   def __init__(self, p=None):
     self.p = p
     
-    self.sm = messaging.SubMaster(['liveNaviData', 'lateralPlan', 'radarState']) 
+    self.sm = messaging.SubMaster(['liveNaviData', 'lateralPlan', 'radarState', 'controlsState']) 
 
     self.btn_cnt = 0
     self.seq_command = 0
@@ -48,7 +48,7 @@ class NaviControl():
 
   def button_status(self, CS):
     if not CS.cruise_active or CS.cruise_buttons != Buttons.NONE: 
-      self.wait_timer2 = 50 
+      self.wait_timer2 = 70 
     elif self.wait_timer2: 
       self.wait_timer2 -= 1
     else:
@@ -264,7 +264,7 @@ class NaviControl():
     if not self.button_status(CS):
       pass
     elif CS.cruise_active:
-      cruiseState_speed = round(CS.out.cruiseState.speed * CV.MS_TO_KPH)
+      cruiseState_speed = self.sm['controlsState'].vCruise
       kph_set_vEgo = self.get_navi_speed(self.sm, CS, cruiseState_speed) # camspeed
       navi_speed = min(cruiseState_speed, kph_set_vEgo)
 
