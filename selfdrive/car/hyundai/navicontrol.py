@@ -37,7 +37,6 @@ class NaviControl():
     self.map_speed_block = False
     self.map_speed_dist = 0
     self.map_speed = 0
-    self.map_speed_control_start = False
     self.onSpeedControl = False
     self.map_speed_dist_prev = 0
     self.ctrl_speed = 0
@@ -150,26 +149,18 @@ class NaviControl():
         final_cam_decel_start_dist = cam_distance_calc*consider_speed*v_ego_kph * (1 + self.safetycam_decel_dist_gain*0.01)
         if self.map_speed_dist < final_cam_decel_start_dist:
           spdTarget = self.map_speed
-          self.map_speed_control_start = True
           self.onSpeedControl = True
         elif self.map_speed_dist >= final_cam_decel_start_dist and self.map_speed_block:
-          self.map_speed_control_start = True
           spdTarget = self.map_speed
           self.onSpeedControl = True
         elif self.map_speed_dist < min_control_dist:
-          self.map_speed_control_start = True
-          spdTarget = self.map_speed
-          self.onSpeedControl = True
-        elif self.map_speed_control_start:
           spdTarget = self.map_speed
           self.onSpeedControl = True
         else:
-          self.map_speed_control_start = False
           self.onSpeedControl = False
           return cruise_set_speed_kph
         cruise_set_speed_kph = spdTarget + round(spdTarget*0.01*self.map_spdlimit_offset)
       else:
-        self.map_speed_control_start = False
         spdTarget = cruise_set_speed_kph
         self.onSpeedControl = False
         self.map_speed = 0
@@ -194,26 +185,18 @@ class NaviControl():
         final_cam_decel_start_dist = cam_distance_calc*consider_speed*v_ego_kph * (1 + self.safetycam_decel_dist_gain*0.01)
         if self.map_speed_dist < final_cam_decel_start_dist:
           spdTarget = self.map_speed
-          self.map_speed_control_start = True
           self.onSpeedControl = True
         elif self.map_speed_dist >= final_cam_decel_start_dist and self.map_speed_block:
-          self.map_speed_control_start = True
           spdTarget = self.map_speed
           self.onSpeedControl = True
         elif self.map_speed_dist < min_control_dist:
-          self.map_speed_control_start = True
-          spdTarget = self.map_speed
-          self.onSpeedControl = True
-        elif self.map_speed_control_start:
           spdTarget = self.map_speed
           self.onSpeedControl = True
         else:
-          self.map_speed_control_start = False
           self.onSpeedControl = False
           return cruise_set_speed_kph
         cruise_set_speed_kph = spdTarget + round(spdTarget*0.01*self.map_spdlimit_offset)
       else:
-        self.map_speed_control_start = False
         spdTarget = cruise_set_speed_kph
         self.onSpeedControl = False
         self.map_speed = 0
@@ -237,26 +220,6 @@ class NaviControl():
     # print('cruise_set_speed_kph={}'.format(cruise_set_speed_kph))
 
     return cruise_set_speed_kph
-
-  def variable_cruise(self, CS, var_cruise_speed):
-    cruiseState_speed = round(CS.out.cruiseState.speed * CV.MS_TO_KPH)
-    self.lead_0 = self.sm['radarState'].leadOne
-    self.lead_1 = self.sm['radarState'].leadTwo
-
-    if self.lead_0.status:
-      dRel = int(self.lead_0.dRel)
-      vRel = int(self.lead_0.vRel * CV.MS_TO_KPH)
-      if vRel >= -5:
-        var_speed = min(var_cruise_speed + max(0, dRel*0.2+vRel), cruiseState_speed)
-      else:
-        var_speed = min(var_cruise_speed, cruiseState_speed)
-    else:
-      var_speed = cruiseState_speed
-
-    # print('status={}  dRel={}  vRel={}  var_speed={}  cruiseState_speed={}'.format(
-    #   self.lead_0.status, int(self.lead_0.dRel), int(self.lead_0.vRel * CV.MS_TO_KPH), var_speed, cruiseState_speed))
-
-    return round(var_speed)
 
   def auto_speed_control(self, CS, navi_speed, path_plan):
     modelSpeed = path_plan.modelSpeed
@@ -283,6 +246,9 @@ class NaviControl():
           var_speed = min(CS.CP.vFuture, navi_speed)
       else:
         var_speed = navi_speed
+    else:
+      var_speed = navi_speed
+
 
     if CS.cruise_set_mode in [1,3,4] and CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and \
      path_plan.laneChangeState == LaneChangeState.off and not (CS.out.leftBlinker or CS.out.rightBlinker):
