@@ -378,7 +378,7 @@ class CarController():
     # reset lead distnce after the car starts moving
     elif self.last_lead_distance != 0:
       self.last_lead_distance = 0
-    elif self.opkr_variablecruise and CS.out.cruiseState.accActive and CS.out.cruiseState.modeSel > 0:
+    elif self.opkr_variablecruise and CS.acc_active and CS.out.cruiseState.modeSel > 0:
       self.on_speed_control = self.NC.onSpeedControl
       btn_signal = self.NC.update(CS, path_plan)
       if btn_signal != None:

@@ -234,6 +234,8 @@ class NaviControl():
     # if v_ego_kph < speedLimit:
     #   v_ego_kph = speedLimit
 
+    print('cruise_set_speed_kph={}'.format(cruise_set_speed_kph))
+
     return cruise_set_speed_kph
 
   def variable_cruise(self, CS, var_cruise_speed):
