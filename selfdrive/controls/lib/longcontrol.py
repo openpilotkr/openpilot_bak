@@ -117,7 +117,7 @@ class LongControl():
       vRel = radarState.leadOne.vRel
     if long_plan.hasLead:
       if CS.radarDistance <= 149:
-        stop = True if (dRel < 4.0 and radarState.leadOne.status) else False
+        stop = True if (dRel <= 3.5 and radarState.leadOne.status) else False
         radar_target_detected = True
       else:
         stop = True if (dRel < 5.5 and radarState.leadOne.status) else False
