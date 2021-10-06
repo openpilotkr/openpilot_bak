@@ -459,10 +459,10 @@ class CarController():
       elif self.opkr_cruise_auto_res_option == 2:
         if not self.longcontrol:
           can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)) if 1 < CS.lead_distance < 149 \
-           can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL))
+           else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL))
         else:
           can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus)) if 1 < CS.lead_distance < 149 \
-           can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL, clu11_speed, CS.CP.sccBus))
+           else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL, clu11_speed, CS.CP.sccBus))
         self.auto_res_starting = True
         self.v_cruise_kph_auto_res = int(CS.clu_Vanz)
         self.res_speed_timer = 50
