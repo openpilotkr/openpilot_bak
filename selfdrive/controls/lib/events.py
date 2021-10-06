@@ -699,7 +699,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "크루즈 갭 조정 중",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, .5, .5, alert_rate=0.75),
   },
 
   EventName.resCruise: {
@@ -707,7 +707,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "자동 RES 작동 중",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, 1., 1., 1.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, .5, .5),
   },
 
   EventName.outOfSpace: {

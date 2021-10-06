@@ -408,9 +408,11 @@ class CarController():
     else:
       self.on_speed_control = False
       self.cruise_gap_adjusting = False
+      self.auto_res_starting = False
 
     if CS.cruise_buttons == 4:
       self.cancel_counter += 1
+      self.auto_res_starting = False
     elif CS.cruise_active:
       self.cancel_counter = 0
       self.auto_res_limit_timer = 0
