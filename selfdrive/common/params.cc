@@ -327,6 +327,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"StoppingDistAdj", PERSISTENT},
     {"ShowError", PERSISTENT},
     {"CommaLong", PERSISTENT},
+    {"AutoResLimitTime", PERSISTENT},
 };
 
 } // namespace

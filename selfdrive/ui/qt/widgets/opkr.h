@@ -1588,6 +1588,21 @@ private:
   void refresh();
 };
 
+class AutoResLimitTime : public AbstractControl {
+  Q_OBJECT
+
+public:
+  AutoResLimitTime();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+  Params params;
+  
+  void refresh();
+};
+
 class AutoEnableSpeed : public AbstractControl {
   Q_OBJECT
 

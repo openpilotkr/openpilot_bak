@@ -151,6 +151,7 @@ class CarController():
     self.switch_timer = 0
     self.auto_res_timer = 0
     self.auto_res_limit_timer = 0
+    self.auto_res_limit_sec = int(self.params.get("AutoResLimitTime", encoding="utf8")) * 100
     self.auto_res_starting = False
     self.res_speed = 0
     self.res_speed_timer = 0
@@ -436,7 +437,7 @@ class CarController():
       self.auto_res_timer -= 1
     elif self.model_speed > 95 and self.cancel_counter == 0 and not CS.cruise_active and not CS.out.brakeLights and int(CS.VSetDis) > t_speed and \
      (1 < CS.lead_distance < 149 or int(CS.clu_Vanz) > t_speed) and int(CS.clu_Vanz) >= 3 and \
-     self.opkr_cruise_auto_res and opkr_cruise_auto_res_condition and self.auto_res_limit_timer < 600:
+     self.opkr_cruise_auto_res and opkr_cruise_auto_res_condition and (self.auto_res_limit_sec == 0 or self.auto_res_limit_timer < self.auto_res_limit_sec):
       if self.opkr_cruise_auto_res_option == 0:
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)) if not self.longcontrol \
          else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus))  # auto res
@@ -471,7 +472,7 @@ class CarController():
         if self.resume_cnt > 5:
           self.resume_cnt = 0
           self.auto_res_timer = randint(10, 15)
-    elif self.auto_res_limit_timer < 700:
+    elif self.auto_res_limit_timer < self.auto_res_limit_sec:
       self.auto_res_limit_timer += 1
 
     if CS.out.brakeLights and CS.out.vEgo == 0 and not CS.cruise_active:
