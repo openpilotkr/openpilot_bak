@@ -372,6 +372,7 @@ class CarController():
             self.switch_timer = randint(10, 15)
           self.cruise_gap_adjusting = True
         elif self.opkr_autoresume:
+          self.cruise_gap_adjusting = False
           self.standstill_fault_reduce_timer += 1
     # reset lead distnce after the car starts moving
     elif self.last_lead_distance != 0:
