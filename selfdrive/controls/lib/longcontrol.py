@@ -82,6 +82,7 @@ class LongControl():
     self.decel_damping = 1.0
     self.decel_damping2 = 1.0
     self.damping_timer = 0
+    self.loc_timer = 0 
 
   def reset(self, v_pid):
     """Reset PID controller and change setpoint"""
@@ -89,6 +90,10 @@ class LongControl():
     self.v_pid = v_pid
 
   def update(self, active, CS, CP, long_plan, radarState):
+    self.loc_timer += 1
+    if self.loc_timer > 100:
+      self.loc_timer = 0
+      self.long_log = Params().get_bool("LongLogDisplay")
     """Update longitudinal control. This updates the state machine and runs a PID loop"""
     # Interp control trajectory
     # TODO estimate car specific lag, use .15s for now
