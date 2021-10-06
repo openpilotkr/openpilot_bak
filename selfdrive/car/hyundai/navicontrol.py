@@ -101,7 +101,7 @@ class NaviControl():
         self.seq_command = 3# case_3 번으로 이동.
       return btn_signal
 
-  def case_3(self):  # None
+  def case_3(self):  # None  버튼 off 유지시간. 크르즈 속도제어오류 발생시 아래의 수치를 조금 변경하여 보십시오. 수치가 크면 속도변경이 느려지고, 작으면 빨라집니다.
       btn_signal = None  # Buttons.NONE
       
       self.btn_cnt += 1
