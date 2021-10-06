@@ -263,7 +263,7 @@ class NaviControl():
 
   def update(self, CS, path_plan):
     btn_signal = None
-    if not self.button_status(CS):
+    if not self.button_status(CS):  # 사용자가 버튼클릭하면 일정시간 기다린다.
       pass
     elif CS.cruise_active:
       cruiseState_speed = self.sm['controlsState'].vCruise
