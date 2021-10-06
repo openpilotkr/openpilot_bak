@@ -74,9 +74,9 @@ class NaviControl():
       self.target_speed = self.set_point
       delta_speed = round(self.target_speed - self.VSetDis)
       if delta_speed > 0:
-        self.seq_command = 1
+        self.seq_command = 1  # case_1 번으로 이동.
       elif delta_speed < 0:
-        self.seq_command = 2
+        self.seq_command = 2  # case_2 번으로 이동.
       return None
 
   def case_1(self):  # acc
@@ -84,10 +84,10 @@ class NaviControl():
       self.btn_cnt += 1
       if self.target_speed == self.VSetDis:
         self.btn_cnt = 0
-        self.seq_command = 3            
+        self.seq_command = 3        # case_3 번으로 이동.    
       elif self.btn_cnt > 5:
         self.btn_cnt = 0
-        self.seq_command = 3
+        self.seq_command = 3        # case_3 번으로 이동.
       return btn_signal
 
   def case_2(self):  # dec
@@ -95,10 +95,10 @@ class NaviControl():
       self.btn_cnt += 1
       if self.target_speed == self.VSetDis:
         self.btn_cnt = 0
-        self.seq_command = 3            
+        self.seq_command = 3      # case_3 번으로 이동.      
       elif self.btn_cnt > 5:
         self.btn_cnt = 0
-        self.seq_command = 3
+        self.seq_command = 3# case_3 번으로 이동.
       return btn_signal
 
   def case_3(self):  # None
@@ -107,8 +107,8 @@ class NaviControl():
       self.btn_cnt += 1
       #if self.btn_cnt == 1:
       #  btn_signal = Buttons.NONE
-      if self.btn_cnt > 5: 
-        self.seq_command = 0
+      if self.btn_cnt > 5:    # 버튼 클릭후 일정시간 기다린다.  (반드시 필요함)
+        self.seq_command = 0   # case_0 번으로 이동.  (다음 명령을 실행) 
       return btn_signal
 
   def ascc_button_control(self, CS, set_speed):
