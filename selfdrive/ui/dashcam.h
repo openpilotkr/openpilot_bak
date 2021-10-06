@@ -283,15 +283,15 @@ void dashcam(UIState *s) {
     }
   }
 
-  if (!s->scene.ignition) {
+  if (!s->scene.ignition || !s->scene.controls_state.getEnabled()) {
     // Assume car is not in drive so stop recording
     stop_capture();
   }
 
   if (s->scene.driving_record) {
-    if (s->scene.car_state.getVEgo() > 1 && captureState == CAPTURE_STATE_NOT_CAPTURING && s->scene.controls_state.getEnabled()) {
+    if ((*s->sm)["carState"].getCarState().getVEgo() > 1 && captureState == CAPTURE_STATE_NOT_CAPTURING) {
       start_capture(s);
-    } else if (s->scene.standStill && captureState == CAPTURE_STATE_CAPTURING && s->scene.controls_state.getEnabled()) {
+    } else if (s->scene.standStill && captureState == CAPTURE_STATE_CAPTURING) {
       stop_capture();
     }
   }
