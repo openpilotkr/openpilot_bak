@@ -141,19 +141,16 @@ class CarController():
     self.dRel = 0
     self.vRel = 0
 
-    self.cruise_gap = 0.0
     self.cruise_gap_prev = 0
     self.cruise_gap_set_init = 0
-    self.cruise_gap_switch_timer = 0
     self.cruise_gap_adjusting = False
     self.standstill_fault_reduce_timer = 0
-    self.cruise_gap_prev2 = 0
-    self.cruise_gap_switch_timer2 = 0
-    self.cruise_gap_switch_timer3 = 0
+
     self.standstill_status = 0
     self.standstill_status_timer = 0
-    self.res_switch_timer = 0
+    self.switch_timer = 0
     self.auto_res_timer = 0
+    self.auto_res_limit_timer = 0
     self.auto_res_starting = False
     self.res_speed = 0
     self.res_speed_timer = 0
@@ -345,10 +342,10 @@ class CarController():
           # get the lead distance from the Radar
           self.last_lead_distance = CS.lead_distance
           self.resume_cnt = 0
-          self.res_switch_timer = 0
+          self.switch_timer = 0
           self.standstill_fault_reduce_timer += 1
-        elif self.res_switch_timer > 0:
-          self.res_switch_timer -= 1
+        elif self.switch_timer > 0:
+          self.switch_timer -= 1
           self.standstill_fault_reduce_timer += 1
         # at least 1 sec delay after entering the standstill
         elif 100 < self.standstill_fault_reduce_timer and CS.lead_distance != self.last_lead_distance:
@@ -359,7 +356,7 @@ class CarController():
           self.resume_cnt += 1
           if self.resume_cnt > 5:
             self.resume_cnt = 0
-            self.res_switch_timer = randint(10, 15)
+            self.switch_timer = randint(10, 15)
           self.standstill_fault_reduce_timer += 1
         # gap save
         elif 160 < self.standstill_fault_reduce_timer and self.cruise_gap_prev == 0 and self.opkr_autoresume and self.opkr_cruisegap_auto_adj: 
@@ -367,15 +364,15 @@ class CarController():
           self.cruise_gap_set_init = 1
         # gap adjust to 1 for fast start
         elif 160 < self.standstill_fault_reduce_timer and CS.cruiseGapSet != 1.0 and self.opkr_autoresume and self.opkr_cruisegap_auto_adj:
-          self.cruise_gap_switch_timer += 1
-          if self.cruise_gap_switch_timer > 100:
-            can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
-             else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
-            self.cruise_gap_switch_timer = 0
-            self.cruise_gap_adjusting = True
+          can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
+            else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
+          self.resume_cnt += 1
+          if self.resume_cnt > 5:
+            self.resume_cnt = 0
+            self.switch_timer = randint(10, 15)
+          self.cruise_gap_adjusting = True
         elif self.opkr_autoresume:
           self.standstill_fault_reduce_timer += 1
-          self.cruise_gap_adjusting = False
     # reset lead distnce after the car starts moving
     elif self.last_lead_distance != 0:
       self.last_lead_distance = 0
@@ -390,12 +387,15 @@ class CarController():
         self.resume_cnt = 0
       if self.opkr_cruisegap_auto_adj:
         # gap restore
-        if self.dRel > 17 and self.vRel < 5 and self.cruise_gap_prev != CS.cruiseGapSet and self.cruise_gap_set_init == 1 and self.opkr_autoresume:
-          self.cruise_gap_switch_timer += 1
-          if self.cruise_gap_switch_timer > 50:
-            can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
-             else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
-            self.cruise_gap_switch_timer = 0
+        if self.switch_timer > 0:
+          self.switch_timer -= 1
+        elif self.dRel > 17 and self.vRel < 5 and self.cruise_gap_prev != CS.cruiseGapSet and self.cruise_gap_set_init == 1 and self.opkr_autoresume:
+          can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
+            else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
+          self.resume_cnt += 1
+          if self.resume_cnt > 5:
+            self.resume_cnt = 0
+            self.switch_timer = randint(10, 15)
             self.cruise_gap_adjusting = True
         elif self.cruise_gap_prev == CS.cruiseGapSet and self.opkr_autoresume:
           self.cruise_gap_set_init = 0
@@ -411,6 +411,7 @@ class CarController():
       self.cancel_counter += 1
     elif CS.cruise_active:
       self.cancel_counter = 0
+      self.auto_res_limit_timer = 0
       if self.res_speed_timer > 0:
         self.res_speed_timer -= 1
         self.auto_res_starting = False
@@ -430,24 +431,33 @@ class CarController():
     opkr_cruise_auto_res_condition = False
     opkr_cruise_auto_res_condition = not self.opkr_cruise_auto_res_condition or CS.out.gasPressed
     t_speed = 20 if CS.is_set_speed_in_mph else 30
-    if self.model_speed > 95 and self.cancel_counter == 0 and not CS.cruise_active and not CS.out.brakeLights and int(CS.VSetDis) > t_speed and \
-     (CS.lead_distance < 149 or int(CS.clu_Vanz) > t_speed) and int(CS.clu_Vanz) >= 3 and self.auto_res_timer <= 0 and self.opkr_cruise_auto_res and opkr_cruise_auto_res_condition:
+    if self.auto_res_timer > 0:
+      self.auto_res_timer -= 1
+    elif self.model_speed > 95 and self.cancel_counter == 0 and not CS.cruise_active and not CS.out.brakeLights and int(CS.VSetDis) > t_speed and \
+     (CS.lead_distance < 149 or int(CS.clu_Vanz) > t_speed) and int(CS.clu_Vanz) >= 3 and \
+     self.opkr_cruise_auto_res and opkr_cruise_auto_res_condition and self.auto_res_limit_timer < 600:
       if self.opkr_cruise_auto_res_option == 0:
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)) if not self.longcontrol \
          else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus))  # auto res
         self.auto_res_starting = True
         self.res_speed = int(CS.clu_Vanz*1.1)
         self.res_speed_timer = 300
+        self.resume_cnt += 1
+        if self.resume_cnt > 5:
+          self.resume_cnt = 0
+          self.auto_res_timer = randint(10, 15)
       elif self.opkr_cruise_auto_res_option == 1:
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL)) if not self.longcontrol \
          else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL, clu11_speed, CS.CP.sccBus)) # auto res but set_decel to set current speed
         self.auto_res_starting = True
         self.v_cruise_kph_auto_res = int(CS.clu_Vanz)
         self.res_speed_timer = 50
-      if self.auto_res_timer <= 0:
-        self.auto_res_timer = randint(10, 15)
-    elif self.auto_res_timer > 0 and self.opkr_cruise_auto_res:
-      self.auto_res_timer -= 1
+        self.resume_cnt += 1
+        if self.resume_cnt > 5:
+          self.resume_cnt = 0
+          self.auto_res_timer = randint(10, 15)
+    elif self.auto_res_limit_timer < 700:
+      self.auto_res_limit_timer += 1
 
     if CS.out.brakeLights and CS.out.vEgo == 0 and not CS.cruise_active:
       self.standstill_status_timer += 1
