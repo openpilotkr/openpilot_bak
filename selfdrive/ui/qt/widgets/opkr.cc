@@ -1979,7 +1979,7 @@ void SpeedLimitOffset::refresh() {
   btnplus.setText("＋");
 }
 
-RESChoice::RESChoice() : AbstractControl("자동RES 옵션", "자동RES옵션을 설정합니다. 1. 일시적 크루즈속도 조정, 2. 설정속도 자체를 조정  ※자동 RES는 조건에 따라 동작이 잘 되지 않을 수도 있으니 참고하시고 사용바랍니다.", "../assets/offroad/icon_shell.png") {
+RESChoice::RESChoice() : AbstractControl("자동RES 옵션", "자동RES옵션을 설정합니다. 1. 일시적 크루즈속도 조정, 2. 설정속도 자체를 조정, 3. 선행차유무에따라 조정(선행차 있을 시 크루즈속도조정, 선행차 없을 시 설정속도조정)  ※자동 RES는 조건에 따라 동작이 잘 되지 않을 수도 있으니 참고하시고 사용바랍니다.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2022,8 +2022,8 @@ RESChoice::RESChoice() : AbstractControl("자동RES 옵션", "자동RES옵션을
     auto str = QString::fromStdString(params.get("AutoResOption"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 1 ) {
-      value = 1;
+    if (value >= 2 ) {
+      value = 2;
     }
     QString values = QString::number(value);
     params.put("AutoResOption", values.toStdString());
@@ -2036,8 +2036,10 @@ void RESChoice::refresh() {
   QString option = QString::fromStdString(params.get("AutoResOption"));
   if (option == "0") {
     label.setText(QString::fromStdString("크루즈속도조정"));
-  } else {
+  } else if (option == "1") {
     label.setText(QString::fromStdString("설정속도조정"));
+  } else {
+    label.setText(QString::fromStdString("자동모드(선행차)"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");

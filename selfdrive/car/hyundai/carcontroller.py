@@ -434,7 +434,7 @@ class CarController():
     if self.auto_res_timer > 0:
       self.auto_res_timer -= 1
     elif self.model_speed > 95 and self.cancel_counter == 0 and not CS.cruise_active and not CS.out.brakeLights and int(CS.VSetDis) > t_speed and \
-     (CS.lead_distance < 149 or int(CS.clu_Vanz) > t_speed) and int(CS.clu_Vanz) >= 3 and \
+     (1 < CS.lead_distance < 149 or int(CS.clu_Vanz) > t_speed) and int(CS.clu_Vanz) >= 3 and \
      self.opkr_cruise_auto_res and opkr_cruise_auto_res_condition and self.auto_res_limit_timer < 600:
       if self.opkr_cruise_auto_res_option == 0:
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)) if not self.longcontrol \
@@ -449,6 +449,20 @@ class CarController():
       elif self.opkr_cruise_auto_res_option == 1:
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL)) if not self.longcontrol \
          else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL, clu11_speed, CS.CP.sccBus)) # auto res but set_decel to set current speed
+        self.auto_res_starting = True
+        self.v_cruise_kph_auto_res = int(CS.clu_Vanz)
+        self.res_speed_timer = 50
+        self.resume_cnt += 1
+        if self.resume_cnt > 5:
+          self.resume_cnt = 0
+          self.auto_res_timer = randint(10, 15)
+      elif self.opkr_cruise_auto_res_option == 2:
+        if not self.longcontrol:
+          can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)) if 1 < CS.lead_distance < 149 \
+           can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL))
+        else:
+          can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus)) if 1 < CS.lead_distance < 149 \
+           can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL, clu11_speed, CS.CP.sccBus))
         self.auto_res_starting = True
         self.v_cruise_kph_auto_res = int(CS.clu_Vanz)
         self.res_speed_timer = 50
