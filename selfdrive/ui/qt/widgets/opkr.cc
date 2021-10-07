@@ -169,13 +169,8 @@ OpenpilotView::OpenpilotView() : AbstractControl("오픈파일럿 주행화면 �
     bool stat = params.getBool("IsOpenpilotViewEnabled");
     if (stat) {
       params.putBool("IsOpenpilotViewEnabled", false);
-      if (QUIState::ui_state.scene.recording) {
-        QUIState::ui_state.scene.recording = false;
-        QProcess::execute("killall -SIGINT screenrecord");
-      }
     } else {
       params.putBool("IsOpenpilotViewEnabled", true);
-      QUIState::ui_state.scene.recording = false;
     }
     refresh();
   });
