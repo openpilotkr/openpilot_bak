@@ -283,6 +283,7 @@ void dashcam(UIState *s) {
       s->scene.touched = false;
     }
   } else if (s->scene.touched) {
+    printf("touched=%d,  click_elapsed_time=%d", s->scene.touched, click_elapsed_time);
     s->scene.touched = false;
   }
 
@@ -298,5 +299,4 @@ void dashcam(UIState *s) {
       stop_capture();
     }
   }
-  s->scene.recording = (captureState != CAPTURE_STATE_NOT_CAPTURING);
 }
