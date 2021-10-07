@@ -159,12 +159,12 @@ void start_capture(UIState *s) {
   files_created++;
 }
 
-bool screen_button_clicked(UIState *s) {
-  if (s->scene.recording) {
-    return true;
-  }
-  return false;
-}
+// bool screen_button_clicked(UIState *s) {
+//   if (s->scene.recording) {
+//     return true;
+//   }
+//   return false;
+// }
 
 void draw_date_time(UIState *s) {
   if (captureState == CAPTURE_STATE_NOT_CAPTURING) {
@@ -273,17 +273,13 @@ void dashcam(UIState *s) {
   if (!s->scene.comma_stock_ui) {
     screen_draw_button(s);
   }
-  if (s->scene.touched && screen_button_clicked(s)) {
+  if (s->scene.touched) {
     click_elapsed_time = get_time() - click_time;
-
     if (click_elapsed_time > 0) {
       click_time = get_time() + 1;
       screen_toggle_record_state(s);
-      printf("touched=%d,  clicktime=%d", s->scene.touched, click_time);
-      s->scene.touched = false;
+      printf("touched=%d,  click_elapsed_time=%d,  clicktime=%d", s->scene.touched, click_elapsed_time, click_time);
     }
-  } else if (s->scene.touched) {
-    printf("touched=%d,  click_elapsed_time=%d", s->scene.touched, click_elapsed_time);
     s->scene.touched = false;
   }
 

@@ -139,7 +139,6 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
   }
   // OPKR REC
   if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && !QUIState::ui_state.scene.comma_stock_ui && rec_btn.ptInRect(e->x(), e->y())) {
-    QUIState::ui_state.scene.recording = !QUIState::ui_state.scene.recording;
     QUIState::ui_state.scene.touched = true;
     return;
   }
