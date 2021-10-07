@@ -221,7 +221,7 @@ static void screen_draw_button(UIState *s) {
   nvgStrokeWidth(s->vg, 6);
   nvgStroke(s->vg);
 
-  if (captureState == CAPTURE_STATE_CAPTURING) {
+  if (s->scene.recording) {
     NVGcolor fillColor = nvgRGBA(255,0,0,80);
     nvgFillColor(s->vg, fillColor);
     nvgFill(s->vg);
@@ -237,7 +237,7 @@ static void screen_draw_button(UIState *s) {
     nvgText(s->vg, btn_xc, btn_yc, "REC", NULL);
   }
 
-  if (captureState == CAPTURE_STATE_CAPTURING) {
+  if (s->scene.recording) {
     //draw_date_time(s);
 
     elapsed_time = get_time() - start_time;
