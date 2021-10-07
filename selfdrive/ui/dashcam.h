@@ -281,6 +281,8 @@ void dashcam(UIState *s) {
       screen_toggle_record_state(s);
       s->scene.touched = false;
     }
+  } else if (s->scene.touched) {
+    s->scene.touched = false;
   }
 
   if (!s->scene.ignition && captureState == CAPTURE_STATE_CAPTURING && !s->scene.is_OpenpilotViewEnabled) {
