@@ -283,7 +283,7 @@ void dashcam(UIState *s) {
     }
   }
 
-  if (!s->scene.ignition || !s->scene.controls_state.getEnabled()) {
+  if (!s->scene.ignition) {
     // Assume car is not in drive so stop recording
     stop_capture();
   }
