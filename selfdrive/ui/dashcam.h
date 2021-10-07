@@ -273,17 +273,17 @@ void dashcam(UIState *s) {
   if (!s->scene.comma_stock_ui) {
     screen_draw_button(s);
   }
-  if (s->scene.touched && screen_button_clicked(s) && !s->sidebar_view) {
+  if (s->scene.touched && screen_button_clicked(s)) {
     click_elapsed_time = get_time() - click_time;
 
     if (click_elapsed_time > 0) {
       click_time = get_time() + 1;
       screen_toggle_record_state(s);
-      s->scene.touched = !s->scene.touched;
+      s->scene.touched = false;
     }
   }
 
-  if (!s->scene.ignition) {
+  if (!s->scene.ignition && captureState == CAPTURE_STATE_CAPTURING && !s->scene.is_OpenpilotViewEnabled) {
     // Assume car is not in drive so stop recording
     stop_capture();
   }
