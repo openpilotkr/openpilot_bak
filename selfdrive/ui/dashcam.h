@@ -279,7 +279,7 @@ void dashcam(UIState *s) {
     if (click_elapsed_time > 0) {
       click_time = get_time() + 1;
       screen_toggle_record_state(s);
-      print("%d", s->scene.touched);
+      printf("touched=%d,  clicktime=%d", s->scene.touched, click_time);
       s->scene.touched = false;
     }
   } else if (s->scene.touched) {
