@@ -172,6 +172,7 @@ OpenpilotView::OpenpilotView() : AbstractControl("오픈파일럿 주행화면 �
       QUIState::ui_state.scene.touched = true;
     } else {
       params.putBool("IsOpenpilotViewEnabled", true);
+      QUIState::ui_state.scene.touched = true;
     }
     refresh();
   });
