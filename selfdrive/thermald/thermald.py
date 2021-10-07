@@ -293,8 +293,9 @@ def thermald_thread():
         network_type = HARDWARE.get_network_type()
         network_strength, wifi_ssid = HARDWARE.get_network_strength(network_type)
         network_info = HARDWARE.get_network_info()  # pylint: disable=assignment-from-none
-        nvme_temps = HARDWARE.get_nvme_temps()
-        modem_temps = HARDWARE.get_modem_temperatures()
+        if TICI:
+          nvme_temps = HARDWARE.get_nvme_temps()
+          modem_temps = HARDWARE.get_modem_temperatures()
 
         # Log modem version once
         if modem_version is None:
