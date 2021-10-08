@@ -297,7 +297,7 @@ class CarState(CarStateBase):
     elif self.safety_sign_check in [24., 25., 26.] and self.is_highway and 29 < ret.cruiseState.speed*CV.MS_TO_KPH:
       self.safety_sign = 110.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_block_remaian_dist < 255. and self.safety_sign_prev:
+    elif self.safety_block_remain_dist < 255. and self.safety_sign_prev:
       self.safety_sign = self.safety_sign_prev
     elif self.safety_block_remain_dist < 255.:
       self.safety_sign = self.safety_sign_last
