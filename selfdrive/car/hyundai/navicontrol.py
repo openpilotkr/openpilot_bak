@@ -166,6 +166,7 @@ class NaviControl():
         self.map_speed = 0
         self.map_speed_dist = 0
         self.map_speed_dist_prev = 0
+        self.map_speed_block = False
         return cruise_set_speed_kph
     elif CS.safety_dist:
       self.map_speed_dist = CS.safety_dist
@@ -202,6 +203,7 @@ class NaviControl():
         self.map_speed = 0
         self.map_speed_dist = 0
         self.map_speed_dist_prev = 0
+        self.map_speed_block = False
         return cruise_set_speed_kph
     else:
       self.onSpeedControl = False
