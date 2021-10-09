@@ -347,7 +347,7 @@ static void ui_draw_debug(UIState *s) {
       if (scene.liveNaviData.opkrspeedlimitdist) ui_print(s, ui_viz_rx, ui_viz_ry+600, "DS:%.0f", scene.liveNaviData.opkrspeedlimitdist);
       if (scene.liveNaviData.opkrturninfo) ui_print(s, ui_viz_rx, ui_viz_ry+640, "TI:%d", scene.liveNaviData.opkrturninfo);
       if (scene.liveNaviData.opkrdisttoturn) ui_print(s, ui_viz_rx, ui_viz_ry+680, "DT:%.0f", scene.liveNaviData.opkrdisttoturn);
-    } else if (!scene.map_is_running && (*s->sm)["carState"].getCarState().getSafetySign() > 0) {
+    } else if (!scene.map_is_running && (*s->sm)["carState"].getCarState().getSafetySign() > 29) {
       ui_print(s, ui_viz_rx, ui_viz_ry+520, "SL:%.0f", (*s->sm)["carState"].getCarState().getSafetySign());
       ui_print(s, ui_viz_rx, ui_viz_ry+560, "DS:%.0f", (*s->sm)["carState"].getCarState().getSafetyDist());
     }

@@ -44,7 +44,7 @@ class CarState(CarStateBase):
     self.safety_sign_prev = 0
     self.safety_sign_last = 0
     self.safety_dist = 0
-    self.safety_block_remain_dist = 0
+    self.safety_block_remain_dist = 255
     self.is_highway = False
     self.is_set_speed_in_mph = False
     self.map_enabled = False
@@ -266,8 +266,13 @@ class CarState(CarStateBase):
     if self.cs_timer > 100:
       self.cs_timer = 0
       self.map_enabled = Params().get_bool("OpkrMapEnable")
-    self.safety_dist = cp.vl["NAVI"]["OPKR_S_Dist"] if cp.vl["NAVI"]["OPKR_S_Dist"] < 1023 else 0
     self.safety_sign_check = cp.vl["NAVI"]["OPKR_S_Sign"]
+    if cp.vl["NAVI"]["OPKR_S_Dist"] < 1023:
+      self.safety_dist = cp.vl["NAVI"]["OPKR_S_Dist"]
+    elif cp.vl["NAVI"]["OPKR_SBR_Dist"] < 255:
+      self.safety_dist = cp.vl["NAVI"]["OPKR_SBR_Dist"]
+    else:
+      self.safety_dist = 0
     self.safety_block_remain_dist = cp.vl["NAVI"]["OPKR_SBR_Dist"]
     self.is_highway = cp_scc.vl["SCC11"]["Navi_SCC_Camera_Act"] != 0.
     if self.safety_sign_check in [24., 25., 26.] and not self.is_highway and 29 < ret.cruiseState.speed*CV.MS_TO_KPH < 69:
