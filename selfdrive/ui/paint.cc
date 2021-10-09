@@ -1039,7 +1039,7 @@ static void draw_compass(UIState *s) {
     float niddle_rotation = s->scene.bearingUblox/180*3.141592;
     nvgSave( s->vg );
     nvgTranslate(s->vg, compass_x+compass_size/2, compass_y+compass_size/2);
-    nvgRotate(s->vg, -niddle_rotation);
+    nvgRotate(s->vg, niddle_rotation);
     nvgFontFace(s->vg, "sans-bold");
     nvgFontSize(s->vg, 60);
     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
