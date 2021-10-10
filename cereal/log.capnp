@@ -1365,6 +1365,22 @@ struct LiveMapDataDEPRECATED {
   mapValid @11 :Bool;
 }
 
+struct LiveMapData {
+  speedLimitValid @0 :Bool;
+  speedLimit @1 :Float32;
+  speedLimitAheadValid @2 :Bool;
+  speedLimitAhead @3 :Float32;
+  speedLimitAheadDistance @4 :Float32;
+  turnSpeedLimitValid @5 :Bool;
+  turnSpeedLimit @6 :Float32;
+  turnSpeedLimitEndDistance @7 :Float32;
+  turnSpeedLimitSign @8 :Int16;
+  turnSpeedLimitsAhead @9 :List(Float32);
+  turnSpeedLimitsAheadDistances @10 :List(Float32);
+  turnSpeedLimitsAheadSigns @11 :List(Int16);
+  lastGpsTimestamp @12 :Int64;  # Milliseconds since January 1, 1970.
+}
+
 struct CameraOdometry {
   frameId @4 :UInt32;
   timestampEof @5 :UInt64;
@@ -1467,6 +1483,7 @@ struct Event {
 
     # OPKR Navi
     liveNaviData @80 :LiveNaviData;
+    liveMapData @81: LiveMapData;
 
     # *********** debug ***********
     testJoystick @52 :Joystick;
