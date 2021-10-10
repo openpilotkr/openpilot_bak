@@ -253,6 +253,16 @@ static void update_state(UIState *s) {
     scene.liveNaviData.opkrturninfo = lm_data.getTurnInfo();
     scene.liveNaviData.opkrdisttoturn = lm_data.getDistanceToTurn();
   }
+  if (sm.updated("liveMapData")) {
+    scene.live_map_data = sm["liveMapData"].getLiveMapData();
+    auto lmap_data = sm["liveMapData"].getLiveMapData();
+    scene.liveMapData.ospeedLimit = lmap_data.getSpeedLimit();
+    scene.liveMapData.ospeedLimitAhead = lmap_data.getSpeedLimitAhead();
+    scene.liveMapData.ospeedLimitAheadDistance = lmap_data.getSpeedLimitAheadDistance();
+    scene.liveMapData.oturnSpeedLimit = lmap_data.getTurnSpeedLimit();
+    scene.liveMapData.oturnSpeedLimitEndDistance = lmap_data.getTurnSpeedLimitEndDistance();
+    scene.liveMapData.oturnSpeedLimitSign = lmap_data.getTurnSpeedLimitSign();
+  }
   if (sm.updated("sensorEvents")) {
     for (auto sensor : sm["sensorEvents"].getSensorEvents()) {
       if (!scene.started && sensor.which() == cereal::SensorEventData::ACCELERATION) {
@@ -415,7 +425,7 @@ QUIState::QUIState(QObject *parent) : QObject(parent) {
   ui_state.sm = std::make_unique<SubMaster, const std::initializer_list<const char *>>({
     "modelV2", "controlsState", "liveCalibration", "deviceState", "roadCameraState",
     "pandaState", "carParams", "driverMonitoringState", "sensorEvents", "carState", "liveLocationKalman",
-    "ubloxGnss", "gpsLocationExternal", "liveParameters", "lateralPlan", "liveNaviData",
+    "ubloxGnss", "gpsLocationExternal", "liveParameters", "lateralPlan", "liveNaviData", "liveMapData",
   });
 
   ui_state.wide_camera = Hardware::TICI() ? Params().getBool("EnableWideCamera") : false;
