@@ -38,6 +38,7 @@ class NaviControl():
     self.map_speed_dist = 0
     self.map_speed = 0
     self.onSpeedControl = False
+    self.curvSpeedControl = False
     self.ctrl_speed = 0
 
   def update_lateralPlan(self):
@@ -237,7 +238,7 @@ class NaviControl():
       var_speed = navi_speed
 
     if CS.cruise_set_mode in [1,3,4] and CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and \
-     path_plan.laneChangeState == LaneChangeState.off and not (CS.out.leftBlinker or CS.out.rightBlinker):
+     path_plan.laneChangeState == LaneChangeState.off and not (CS.out.leftBlinker or CS.out.rightBlinker) and not abs(CS.out.steeringTorque) > 170:
       v_curv_speed = min(var_speed, interp(modelSpeed, [30, 40, 50, 60, 70, 80, 90], [40, 45, 50, 55, 65, 75, 85])) # curve speed ratio
     else:
       v_curv_speed = navi_speed
@@ -251,6 +252,10 @@ class NaviControl():
       o_curv_speed = 255    
 
     # self.gasPressed_old = CS.gasPressed
+    if var_speed > min(v_curv_speed, o_curv_speed):
+      self.curvSpeedControl = True
+    else:
+      self.curvSpeedControl = False
     return min(var_speed, v_curv_speed, o_curv_speed)
 
   def update(self, CS, path_plan):

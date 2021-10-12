@@ -710,6 +710,14 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, .5, .5),
   },
 
+  EventName.curvSpeedDown: {
+    ET.WARNING: Alert(
+      "커브구간 속도 제어 중",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, .5, .5),
+  },
+
   EventName.outOfSpace: {
     ET.PERMANENT: Alert(
       "저장공간 부족",

@@ -142,6 +142,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     camSpeedDown @119;
     gapAdjusting @120;
     resCruise @121;
+    curvSpeedDown @122;
   }
 }
 
