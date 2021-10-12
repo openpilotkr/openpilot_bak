@@ -340,16 +340,18 @@ static void ui_draw_debug(UIState *s) {
     ui_print(s, ui_viz_rx, ui_viz_ry+400, "SC:%.2f", scene.lateralPlan.steerRateCost);
     ui_print(s, ui_viz_rx, ui_viz_ry+440, "OS:%.2f", abs(scene.output_scale));
     ui_print(s, ui_viz_rx, ui_viz_ry+480, "%.2f|%.2f", scene.lateralPlan.lProb, scene.lateralPlan.rProb);
+    static char* stateStrings[] = {"disabled", "preEnabled", "enabled", "softDisabling"};
+    ui_print(s, ui_viz_rx, ui_viz_ry+520, "%s", stateStrings[(int)(*s->sm)["controlsState"].getControlsState().getState()]);
     //ui_print(s, ui_viz_rx, ui_viz_ry+800, "A:%.5f", scene.accel_sensor2);
     if (scene.map_is_running) {
-      if (scene.liveNaviData.opkrspeedsign) ui_print(s, ui_viz_rx, ui_viz_ry+520, "SS:%d", scene.liveNaviData.opkrspeedsign);
-      if (scene.liveNaviData.opkrspeedlimit) ui_print(s, ui_viz_rx, ui_viz_ry+560, "SL:%d", scene.liveNaviData.opkrspeedlimit);
-      if (scene.liveNaviData.opkrspeedlimitdist) ui_print(s, ui_viz_rx, ui_viz_ry+600, "DS:%.0f", scene.liveNaviData.opkrspeedlimitdist);
-      if (scene.liveNaviData.opkrturninfo) ui_print(s, ui_viz_rx, ui_viz_ry+640, "TI:%d", scene.liveNaviData.opkrturninfo);
-      if (scene.liveNaviData.opkrdisttoturn) ui_print(s, ui_viz_rx, ui_viz_ry+680, "DT:%.0f", scene.liveNaviData.opkrdisttoturn);
+      if (scene.liveNaviData.opkrspeedsign) ui_print(s, ui_viz_rx, ui_viz_ry+560, "SS:%d", scene.liveNaviData.opkrspeedsign);
+      if (scene.liveNaviData.opkrspeedlimit) ui_print(s, ui_viz_rx, ui_viz_ry+600, "SL:%d", scene.liveNaviData.opkrspeedlimit);
+      if (scene.liveNaviData.opkrspeedlimitdist) ui_print(s, ui_viz_rx, ui_viz_ry+640, "DS:%.0f", scene.liveNaviData.opkrspeedlimitdist);
+      if (scene.liveNaviData.opkrturninfo) ui_print(s, ui_viz_rx, ui_viz_ry+680, "TI:%d", scene.liveNaviData.opkrturninfo);
+      if (scene.liveNaviData.opkrdisttoturn) ui_print(s, ui_viz_rx, ui_viz_ry+720, "DT:%.0f", scene.liveNaviData.opkrdisttoturn);
     } else if (!scene.map_is_running && (*s->sm)["carState"].getCarState().getSafetySign() > 29) {
-      ui_print(s, ui_viz_rx, ui_viz_ry+520, "SL:%.0f", (*s->sm)["carState"].getCarState().getSafetySign());
-      ui_print(s, ui_viz_rx, ui_viz_ry+560, "DS:%.0f", (*s->sm)["carState"].getCarState().getSafetyDist());
+      ui_print(s, ui_viz_rx, ui_viz_ry+560, "SL:%.0f", (*s->sm)["carState"].getCarState().getSafetySign());
+      ui_print(s, ui_viz_rx, ui_viz_ry+600, "DS:%.0f", (*s->sm)["carState"].getCarState().getSafetyDist());
     }
     ui_print(s, ui_viz_rx+200, ui_viz_ry+240, "SL:%.0f", scene.liveMapData.ospeedLimit);
     ui_print(s, ui_viz_rx+200, ui_viz_ry+280, "SLA:%.0f", scene.liveMapData.ospeedLimitAhead);
