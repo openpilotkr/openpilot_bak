@@ -251,7 +251,7 @@ class NaviControl():
       o_curv_speed = 255    
 
     # self.gasPressed_old = CS.gasPressed
-    return min(var_speed, curv_speed, o_curv_speed)
+    return min(var_speed, v_curv_speed, o_curv_speed)
 
   def update(self, CS, path_plan):
     btn_signal = None
