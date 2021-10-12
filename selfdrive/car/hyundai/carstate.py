@@ -275,36 +275,36 @@ class CarState(CarStateBase):
       self.safety_dist = 0
     self.safety_block_remain_dist = cp.vl["NAVI"]["OPKR_SBR_Dist"]
     self.is_highway = cp_scc.vl["SCC11"]["Navi_SCC_Camera_Act"] != 0.
-    if self.safety_sign_check in [24., 25., 26.] and not self.is_highway and 29 < ret.cruiseState.speed*CV.MS_TO_KPH < 69:
+    if self.safety_sign_check in [24., 25., 26.] and not self.is_highway and 29 < round(ret.cruiseState.speed*CV.MS_TO_KPH) <= 69:
       self.safety_sign = 30.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [0., 1., 2.] and 29 < ret.cruiseState.speed*CV.MS_TO_KPH < 79:
+    elif self.safety_sign_check in [0., 1., 2.] and 29 < round(ret.cruiseState.speed*CV.MS_TO_KPH) <= 79:
       self.safety_sign = 40.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [8., 9., 10.] and 29 < ret.cruiseState.speed*CV.MS_TO_KPH < 89:
+    elif self.safety_sign_check in [8., 9., 10.] and 29 < round(ret.cruiseState.speed*CV.MS_TO_KPH) <= 89:
       self.safety_sign = 50.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [16., 17., 18.] and not self.is_highway and 29 < ret.cruiseState.speed*CV.MS_TO_KPH:
+    elif self.safety_sign_check in [16., 17., 18.] and not self.is_highway and 29 < round(ret.cruiseState.speed*CV.MS_TO_KPH):
       self.safety_sign = 60.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [24., 25., 26.] and not self.is_highway and 29 < ret.cruiseState.speed*CV.MS_TO_KPH:
+    elif self.safety_sign_check in [24., 25., 26.] and not self.is_highway and 29 < round(ret.cruiseState.speed*CV.MS_TO_KPH):
       self.safety_sign = 70.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [0., 1., 2.] and 29 < ret.cruiseState.speed*CV.MS_TO_KPH:
+    elif self.safety_sign_check in [0., 1., 2.] and 29 < round(ret.cruiseState.speed*CV.MS_TO_KPH):
       self.safety_sign = 80.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [8., 9., 10.] and 29 < ret.cruiseState.speed*CV.MS_TO_KPH:
+    elif self.safety_sign_check in [8., 9., 10.] and 29 < round(ret.cruiseState.speed*CV.MS_TO_KPH):
       self.safety_sign = 90.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [16., 17., 18.] and self.is_highway and 29 < ret.cruiseState.speed*CV.MS_TO_KPH:
+    elif self.safety_sign_check in [16., 17., 18.] and self.is_highway and 29 < round(ret.cruiseState.speed*CV.MS_TO_KPH):
       self.safety_sign = 100.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [24., 25., 26.] and self.is_highway and 29 < ret.cruiseState.speed*CV.MS_TO_KPH:
+    elif self.safety_sign_check in [24., 25., 26.] and self.is_highway and 29 < round(ret.cruiseState.speed*CV.MS_TO_KPH):
       self.safety_sign = 110.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_block_remain_dist < 255. and self.safety_sign_prev:
+    elif round(self.safety_block_remain_dist) < 255. and self.safety_sign_prev:
       self.safety_sign = self.safety_sign_prev
-    elif self.safety_block_remain_dist < 255.:
+    elif round(self.safety_block_remain_dist) < 255.:
       self.safety_sign = self.safety_sign_last
       self.safety_sign_prev = self.safety_sign_last
     else:

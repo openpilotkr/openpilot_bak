@@ -201,15 +201,15 @@ class MapD():
 
     map_data_msg.liveMapData.lastGpsTimestamp = self.last_gps.timestamp
     map_data_msg.liveMapData.speedLimitValid = bool(speed_limit is not None)
-    map_data_msg.liveMapData.speedLimit = float(speed_limit if speed_limit is not None else 0.0)
+    map_data_msg.liveMapData.speedLimit = float(speed_limit*3.6 if speed_limit is not None else 0.0)
     map_data_msg.liveMapData.speedLimitAheadValid = bool(next_speed_limit_section is not None)
-    map_data_msg.liveMapData.speedLimitAhead = float(next_speed_limit_section.value
+    map_data_msg.liveMapData.speedLimitAhead = float(next_speed_limit_section.value*3.6
                                                      if next_speed_limit_section is not None else 0.0)
     map_data_msg.liveMapData.speedLimitAheadDistance = float(next_speed_limit_section.start
                                                              if next_speed_limit_section is not None else 0.0)
 
     map_data_msg.liveMapData.turnSpeedLimitValid = bool(turn_speed_limit_section is not None)
-    map_data_msg.liveMapData.turnSpeedLimit = float(turn_speed_limit_section.value
+    map_data_msg.liveMapData.turnSpeedLimit = float(turn_speed_limit_section.value*3.6
                                                     if turn_speed_limit_section is not None else 0.0)
     map_data_msg.liveMapData.turnSpeedLimitSign = int(turn_speed_limit_section.curv_sign
                                                       if turn_speed_limit_section is not None else 0)
