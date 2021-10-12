@@ -18,7 +18,7 @@ class NaviControl():
   def __init__(self, p=None):
     self.p = p
     
-    self.sm = messaging.SubMaster(['liveNaviData', 'lateralPlan', 'radarState', 'controlsState']) 
+    self.sm = messaging.SubMaster(['liveNaviData', 'lateralPlan', 'radarState', 'controlsState', 'liveMapData']) 
 
     self.btn_cnt = 0
     self.seq_command = 0
@@ -236,15 +236,22 @@ class NaviControl():
     else:
       var_speed = navi_speed
 
-
     if CS.cruise_set_mode in [1,3,4] and CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and \
      path_plan.laneChangeState == LaneChangeState.off and not (CS.out.leftBlinker or CS.out.rightBlinker):
-      curv_speed = min(var_speed, interp(modelSpeed, [30, 40, 50, 60, 70, 80, 90], [40, 45, 50, 55, 65, 75, 85])) # curve speed ratio
+      v_curv_speed = min(var_speed, interp(modelSpeed, [30, 40, 50, 60, 70, 80, 90], [40, 45, 50, 55, 65, 75, 85])) # curve speed ratio
     else:
-      curv_speed = navi_speed
+      v_curv_speed = navi_speed
+
+    if CS.cruise_set_mode in [1,3,4]:
+      if self.sm['liveMapData'].turnSpeedLimitEndDistance > 30:
+        o_curv_speed = self.sm['liveMapData'].turnSpeedLimit
+      else:
+        o_curv_speed = 255
+    else:
+      o_curv_speed = 255    
 
     # self.gasPressed_old = CS.gasPressed
-    return min(var_speed, curv_speed)
+    return min(var_speed, curv_speed, o_curv_speed)
 
   def update(self, CS, path_plan):
     btn_signal = None
