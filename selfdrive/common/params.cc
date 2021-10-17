@@ -334,6 +334,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"VCurvSpeed90", PERSISTENT},
     {"VCurvSpeedUD", PERSISTENT},
     {"OCurvOffset", PERSISTENT},
+    {"StockNaviSpeedEnabled", PERSISTENT},
 };
 
 } // namespace

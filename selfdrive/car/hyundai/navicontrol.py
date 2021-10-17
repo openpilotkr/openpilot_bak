@@ -44,6 +44,7 @@ class NaviControl():
      int(Params().get("VCurvSpeed70", encoding="utf8")), int(Params().get("VCurvSpeed90", encoding="utf8"))]
     self.osm_curv_speed_offset = int(Params().get("OCurvOffset", encoding="utf8"))
     self.osm_wait_timer = 0
+    self.stock_navi_info_enabled = Params().get_bool("StockNaviSpeedEnabled")
 
   def update_lateralPlan(self):
     self.sm.update(0)
@@ -162,7 +163,7 @@ class NaviControl():
         self.onSpeedControl = False
         return cruise_set_speed_kph
       cruise_set_speed_kph = spdTarget + round(spdTarget*0.01*self.map_spdlimit_offset)
-    elif CS.safety_sign > 29:
+    elif CS.safety_sign > 29 and self.stock_navi_info_enabled:
       self.map_speed_dist = max(0, CS.safety_dist - 30)
       self.map_speed = CS.safety_sign
       if CS.safety_block_remain_dist < 255:

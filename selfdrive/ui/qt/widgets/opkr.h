@@ -550,6 +550,18 @@ public:
   }
 };
 
+class StockNaviSpeedToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+  StockNaviSpeedToggle() : ToggleControl("차량 안전구간 네비정보 사용", "안전구간 감속시 차량 네비에서 나오는 안전속도를 사용합니다.(해당 데이터가 나오는 일부차량 한정)", "../assets/offroad/icon_shell.png", Params().getBool("StockNaviSpeedEnabled")) {
+    QObject::connect(this, &StockNaviSpeedToggle::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("StockNaviSpeedEnabled", status);
+    });
+  }
+};
+
 // 오픈파일럿 미리보기
 class OpenpilotView : public AbstractControl {
   Q_OBJECT

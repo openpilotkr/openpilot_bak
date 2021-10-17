@@ -157,6 +157,7 @@ def manager_init():
     ("VCurvSpeed90", "85"),
     ("VCurvSpeedUD", "1"),
     ("OCurvOffset", "0"),
+    ("StockNaviSpeedEnabled", "0"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))
