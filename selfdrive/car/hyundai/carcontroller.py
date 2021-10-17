@@ -440,7 +440,7 @@ class CarController():
     t_speed = 20 if CS.is_set_speed_in_mph else 30
     if self.auto_res_timer > 0:
       self.auto_res_timer -= 1
-    elif self.model_speed > 95 and self.cancel_counter == 0 and not CS.cruise_active and not CS.out.brakeLights and int(CS.VSetDis) > t_speed and \
+    elif self.model_speed > 95 and self.cancel_counter == 0 and not CS.cruise_active and not CS.out.brakeLights and int(CS.VSetDis) >= t_speed and \
      (1 < CS.lead_distance < 149 or int(CS.clu_Vanz) > t_speed) and int(CS.clu_Vanz) >= 3 and \
      self.opkr_cruise_auto_res and opkr_cruise_auto_res_condition and (self.auto_res_limit_sec == 0 or self.auto_res_limit_timer < self.auto_res_limit_sec):
       if self.opkr_cruise_auto_res_option == 0:
