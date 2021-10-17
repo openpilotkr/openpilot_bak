@@ -151,6 +151,12 @@ def manager_init():
     ("StoppingDistAdj", "0"),
     ("ShowError", "0"),
     ("AutoResLimitTime", "0"),
+    ("VCurvSpeed30", "40"),
+    ("VCurvSpeed50", "50"),
+    ("VCurvSpeed70", "65"),
+    ("VCurvSpeed90", "85"),
+    ("VCurvSpeedUD", "1"),
+    ("OCurvOffset", "0"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))

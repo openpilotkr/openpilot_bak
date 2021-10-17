@@ -328,6 +328,12 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"ShowError", PERSISTENT},
     {"CommaLong", PERSISTENT},
     {"AutoResLimitTime", PERSISTENT},
+    {"VCurvSpeed30", PERSISTENT},
+    {"VCurvSpeed50", PERSISTENT},
+    {"VCurvSpeed70", PERSISTENT},
+    {"VCurvSpeed90", PERSISTENT},
+    {"VCurvSpeedUD", PERSISTENT},
+    {"OCurvOffset", PERSISTENT},
 };
 
 } // namespace
