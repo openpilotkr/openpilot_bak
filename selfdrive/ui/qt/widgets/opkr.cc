@@ -5228,7 +5228,7 @@ void VCurvSpeed::refresh4() {
   btn4.setText("↕");
 }
 
-VCurvSpeedUD::VCurvSpeedUD() : AbstractControl("커브감속정도 조정(km/h)", "모델스피드에 따른 커브감속 속도를 조정합니다.(보간값)", "../assets/offroad/icon_shell.png") {
+VCurvSpeedUD::VCurvSpeedUD() : AbstractControl("커브감속정도 조정(모델속도: km/h)", "모델속도에 따른 커브감속 속도를 조정합니다.(보간값)", "../assets/offroad/icon_shell.png") {
 
   btn.setStyleSheet(R"(
     padding: 0;
