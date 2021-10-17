@@ -250,7 +250,7 @@ class NaviControl():
     if CS.cruise_set_mode in [1,3,4]:
       if self.sm['liveMapData'].turnSpeedLimitEndDistance > 30:
         o_curv_speed = self.sm['liveMapData'].turnSpeedLimit * (1 + (self.osm_curv_speed_offset*0.01))
-        self.osm_wait_timer += 1 if modelSpeed > 90 else self.osm_wait_timer = 0
+        self.osm_wait_timer += 1 if modelSpeed > 90 else 0
         if self.osm_wait_timer > 100:
           o_curv_speed = 255
       else:
