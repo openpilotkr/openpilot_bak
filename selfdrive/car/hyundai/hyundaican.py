@@ -48,7 +48,7 @@ def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
     # Note: the warning is hidden while the blinkers are on
     values["CF_Lkas_SysWarning"] = 4 if sys_warning else 0
 
-  elif car_fingerprint in [CAR.GENESIS, CAR.SONATA_LF_TURBO]:
+  elif car_fingerprint in [CAR.GENESIS]:
     values["CF_Lkas_LdwsActivemode"] = 2
 
   if ldws:

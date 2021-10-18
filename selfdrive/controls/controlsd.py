@@ -179,8 +179,8 @@ class Controls:
       self.events.add(EventName.communityFeatureDisallowed, static=True)
     if not car_recognized:
       self.events.add(EventName.carUnrecognized, static=True)
-    #elif self.read_only:
-    #  self.events.add(EventName.dashcamMode, static=True)
+    elif self.read_only:
+      self.events.add(EventName.dashcamMode, static=True)
     elif self.joystick_mode:
       self.events.add(EventName.joystickDebug, static=True)
       self.startup_event = None
@@ -189,7 +189,8 @@ class Controls:
     self.rk = Ratekeeper(100, print_delay_threshold=None)
     self.prof = Profiler(False)  # off by default
 
-    self.hyundai_lkas = self.read_only  #read_only
+    self.hkg_stock_lkas = True
+    self.hkg_stock_lkas_timer = 0
 
     self.mpc_frame = 0
     self.mpc_frame_sr = 0
@@ -392,7 +393,8 @@ class Controls:
 
     all_valid = CS.canValid and self.sm.all_alive_and_valid()
     if not self.initialized and (all_valid or self.sm.frame * DT_CTRL > 3.5 or SIMULATION):
-      self.CI.init(self.CP, self.can_sock, self.pm.sock['sendcan'])
+      if not self.read_only:
+        self.CI.init(self.CP, self.can_sock, self.pm.sock['sendcan'])
       self.initialized = True
       Params().put_bool("ControlsReady", True)
 
@@ -692,9 +694,18 @@ class Controls:
     self.AM.process_alerts(self.sm.frame, clear_event)
     CC.hudControl.visualAlert = self.AM.visual_alert
 
-    if not self.hyundai_lkas and self.enabled:
+    if self.enabled:
+      self.hkg_stock_lkas = False
+      self.hkg_stock_lkas_timer = 0
+    elif not self.enabled and not self.hkg_stock_lkas:
+      self.hkg_stock_lkas_timer += 1
+      if self.hkg_stock_lkas_timer > 50:
+        self.hkg_stock_lkas_timer = 0
+        self.hkg_stock_lkas = True
+
+    if not self.hkg_stock_lkas:
       # send car controls over can
-      can_sends = self.CI.apply(CC, self.sm)
+      can_sends = self.CI.apply(CC)
       self.pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
 
     force_decel = (self.sm['driverMonitoringState'].awarenessStatus < 0.) or \
@@ -798,14 +809,9 @@ class Controls:
     CS = self.data_sample()
     self.prof.checkpoint("Sample")
 
-    if self.read_only:
-      self.hyundai_lkas = self.read_only
-    elif CS.cruiseState.enabled and self.hyundai_lkas:
-      self.hyundai_lkas = False
-
     self.update_events(CS)
 
-    if not self.hyundai_lkas:
+    if not self.read_only and self.initialized:
       # Update control state
       self.state_transition(CS)
       self.prof.checkpoint("State transition")
@@ -818,9 +824,6 @@ class Controls:
     # Publish data
     self.publish_logs(CS, start_time, actuators, lac_log)
     self.prof.checkpoint("Sent")
-
-    if not CS.cruiseState.enabled and not self.hyundai_lkas and not self.soft_disable_timer:
-      self.hyundai_lkas = True
 
   def controlsd_thread(self):
     while True:

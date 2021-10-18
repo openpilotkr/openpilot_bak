@@ -185,7 +185,7 @@ class CarController():
     elif CP.lateralTuning.which() == 'lqr':
       self.str_log2 = 'T={:04.0f}/{:05.3f}/{:07.5f}'.format(CP.lateralTuning.lqr.scale, CP.lateralTuning.lqr.ki, CP.lateralTuning.lqr.dcGain)
 
-    self.sm = messaging.SubMaster(['controlsState'])
+    self.sm = messaging.SubMaster(['controlsState', 'radarState'])
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
              left_lane, right_lane, left_lane_depart, right_lane_depart, set_speed, lead_visible, lead_dist, lead_vrel, lead_yrel, v_future, sm):
@@ -209,8 +209,8 @@ class CarController():
     if frame % 10 == 0:
       self.model_speed = path_plan.modelSpeed
 
-    self.dRel = int(sm['radarState'].leadOne.dRel) #EON Lead
-    self.vRel = int(sm['radarState'].leadOne.vRel * 3.6 + 0.5) #EON Lead
+    self.dRel = int(self.sm['radarState'].leadOne.dRel) #EON Lead
+    self.vRel = int(self.sm['radarState'].leadOne.vRel * 3.6 + 0.5) #EON Lead
 
     if CS.out.vEgo > 8:
       if self.variable_steer_max:
