@@ -68,7 +68,7 @@ const int bdr_s = 30;
 const int header_h = 420;
 const int footer_h = 280;
 
-const Rect rec_btn = {1745, 905, 140, 140};
+const Rect rec_btn = {1705, 865, 150, 150};
 
 const int UI_FREQ = 20;   // Hz
 

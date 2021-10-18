@@ -88,7 +88,7 @@ void CarSelectCombo::refresh() {
   }
 }
 
-OpenpilotView::OpenpilotView() : AbstractControl("Openpilot Camera", "", "") {
+OpenpilotView::OpenpilotView() : AbstractControl("Openpilot Camera", "This will preview openpilot onroad camera.", "") {
 
   // setup widget
   hlayout->addStretch(1);

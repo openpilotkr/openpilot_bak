@@ -38,7 +38,7 @@ class PrebuiltToggle : public ToggleControl {
   Q_OBJECT
 
 public:
-  PrebuiltToggle() : ToggleControl("Use Prebuilt", "", "", Params().getBool("PutPrebuiltOn")) {
+  PrebuiltToggle() : ToggleControl("Use Smart Prebuilt ON", "When this function is turned on, quick boot is enabled using the cache. And if you press the update button in the menu after modifying the code, or if you rebooted with the gi command in the command window, it will remove the prebuilt file before reboot and recreate after compile.", "", Params().getBool("PutPrebuiltOn")) {
     QObject::connect(this, &PrebuiltToggle::toggleFlipped, [=](int state) {
       bool status = state ? true : false;
       Params().putBool("PutPrebuiltOn", status);

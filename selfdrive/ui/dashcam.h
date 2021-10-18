@@ -194,10 +194,10 @@ static void rotate_video(UIState *s) {
 static void screen_draw_button(UIState *s) {
   // Set button to bottom left of screen
 //  if (s->vision_connected && s->plus_state == 0) {
-  int btn_w = 140;
-  int btn_h = 140;
-  int btn_x = s->fb_w - btn_w - 35;
-  int btn_y = 1080 - btn_h - 35;
+  int btn_w = 150;
+  int btn_h = 150;
+  int btn_x = s->fb_w - btn_w - 65;
+  int btn_y = s->fb_h - btn_h - 65;
   int btn_xc = btn_x + (btn_w/2);
   int btn_yc = btn_y + (btn_h/2);
   nvgBeginPath(s->vg);
@@ -215,7 +215,7 @@ static void screen_draw_button(UIState *s) {
   else {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   }
-  nvgFontSize(s->vg, 45);
+  nvgFontSize(s->vg, 60);
   nvgFontFace(s->vg, "sans-bold");
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
   nvgText(s->vg, btn_xc, btn_yc, "REC", NULL);
