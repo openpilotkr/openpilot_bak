@@ -699,7 +699,7 @@ class Controls:
       self.hkg_stock_lkas_timer = 0
     elif not self.enabled and not self.hkg_stock_lkas:
       self.hkg_stock_lkas_timer += 1
-      if self.hkg_stock_lkas_timer > 50:
+      if self.hkg_stock_lkas_timer > 100:
         self.hkg_stock_lkas_timer = 0
         self.hkg_stock_lkas = True
 
