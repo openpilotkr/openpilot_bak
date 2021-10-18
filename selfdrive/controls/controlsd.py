@@ -52,6 +52,7 @@ Desire = log.LateralPlan.Desire
 LaneChangeState = log.LateralPlan.LaneChangeState
 LaneChangeDirection = log.LateralPlan.LaneChangeDirection
 EventName = car.CarEvent.EventName
+GearShifter = car.CarState.GearShifter
 
 
 class Controls:
@@ -210,7 +211,7 @@ class Controls:
     self.auto_enable_speed = max(1, int(Params().get("AutoEnableSpeed", encoding="utf8")))
 
   def auto_enable(self, CS):
-    if CS.cruiseState.available and CS.vEgo >= self.auto_enable_speed * CV.KPH_TO_MS and CS.gearShifter == 2 and self.sm['liveCalibration'].calStatus != Calibration.UNCALIBRATED:
+    if CS.cruiseState.available and CS.vEgo >= self.auto_enable_speed * CV.KPH_TO_MS and CS.gearShifter == GearShifter.drive and self.sm['liveCalibration'].calStatus != Calibration.UNCALIBRATED:
       if self.sm.all_alive_and_valid() and self.state != State.enabled and self.enabled != self.controlsAllowed:
         self.events.add( EventName.pcmEnable )
 
@@ -702,9 +703,9 @@ class Controls:
       if self.hkg_stock_lkas_timer > 300:
         self.hkg_stock_lkas_timer = 0
         self.hkg_stock_lkas = True
-    elif CS.gearShifter != 2:
-      self.hkg_stock_lkas_timer = 0
-      self.hkg_stock_lkas = True
+      elif CS.gearShifter != GearShifter.drive and self.hkg_stock_lkas_timer > 150:
+        self.hkg_stock_lkas_timer = 0
+        self.hkg_stock_lkas = True
 
     if not self.hkg_stock_lkas:
       # send car controls over can
