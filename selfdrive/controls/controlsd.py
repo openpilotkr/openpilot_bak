@@ -370,7 +370,6 @@ class Controls:
     for pandaState in self.sm['pandaStates']:
       if pandaState.safetyModel != SafetyModel.silent and not pandaState.controlsAllowed and self.enabled:
         self.mismatch_counter += 1
-        print('safetyModel={}   controls={}   enabled={}'.format(pandaState.safetyModel != SafetyModel.silent, pandaState.controlsAllowed, self.enabled))
 
     self.distance_traveled += CS.vEgo * DT_CTRL
 
