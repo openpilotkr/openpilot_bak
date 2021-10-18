@@ -251,7 +251,6 @@ class Controls:
         safety_mismatch = pandaState.safetyModel != SafetyModel.silent
       if safety_mismatch or self.mismatch_counter >= 200:
         self.events.add(EventName.controlsMismatch)
-        print('safety_mismatch={}    self.mismatch_counter={}'.format(safety_mismatch, self.mismatch_counter))
 
     if not self.sm['liveParameters'].valid:
       self.events.add(EventName.vehicleModelInvalid)
@@ -371,6 +370,7 @@ class Controls:
     for pandaState in self.sm['pandaStates']:
       if pandaState.safetyModel != SafetyModel.silent and not pandaState.controlsAllowed and self.enabled:
         self.mismatch_counter += 1
+        print('safetyModel={}   controls={}   enabled={}'.format(pandaState.safetyModel != SafetyModel.silent, pandaState.controlsAllowed, self.enabled))
 
     self.distance_traveled += CS.vEgo * DT_CTRL
 
