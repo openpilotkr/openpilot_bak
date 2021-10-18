@@ -182,7 +182,11 @@ static void update_state(UIState *s) {
 
     scene.light_sensor = std::clamp<float>(1.0 - (ev / max_ev), 0.0, 1.0);
   }
-  scene.started = sm["deviceState"].getDeviceState().getStarted() && scene.ignition;
+  if (!scene.is_OpenpilotViewEnabled) {
+    scene.started = sm["deviceState"].getDeviceState().getStarted() && scene.ignition;
+  } else {
+    scene.started = sm["deviceState"].getDeviceState().getStarted();
+  }
 }
 
 static void update_params(UIState *s) {
@@ -190,6 +194,7 @@ static void update_params(UIState *s) {
   UIScene &scene = s->scene;
   if (frame % (5*UI_FREQ) == 0) {
     scene.is_metric = Params().getBool("IsMetric");
+    scene.is_OpenpilotViewEnabled = Params().getBool("IsOpenpilotViewEnabled");
   }
 }
 

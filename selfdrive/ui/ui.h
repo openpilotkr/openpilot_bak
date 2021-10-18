@@ -103,6 +103,7 @@ typedef struct UIScene {
   cereal::PandaState::PandaType pandaType;
 
   bool touched = false;
+  bool is_OpenpilotViewEnabled = false;
 
   // modelV2
   float lane_line_probs[4];

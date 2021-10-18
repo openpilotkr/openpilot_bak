@@ -258,8 +258,6 @@ def thermald_thread():
       is_openpilot_view_enabled = 1
       startup_conditions["ignition"] = True
     elif not params.get_bool("IsOpenpilotViewEnabled") and not params.get_bool("IsDriverViewEnabled") and is_openpilot_view_enabled == 1:
-      shutdown_trigger = 0
-      sound_trigger == 0
       is_openpilot_view_enabled = 0
       startup_conditions["ignition"] = False
 

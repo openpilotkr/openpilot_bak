@@ -57,20 +57,37 @@ void OnroadWindow::updateState(const UIState &s) {
     // Handle controls timeout
     if (sm.rcv_frame("controlsState") < s.scene.started_frame) {
       // car is started, but controlsState hasn't been seen at all
-      alerts->updateAlert(CONTROLS_WAITING_ALERT, bgColor);
-      if (QFileInfo::exists("/data/log/error.txt")) {
-        QFileInfo fileInfo;
-        fileInfo.setFile("/data/log/error.txt");
-        QDateTime modifiedtime = fileInfo.lastModified();
-        QString modified_time = modifiedtime.toString("yyyy-MM-dd hh:mm:ss ");
-        const std::string txt = util::read_file("/data/log/error.txt");
-        RichTextDialog::alert(modified_time + QString::fromStdString(txt), this);
-        std::system("rm -f /data/log/error_bak.txt; mv /data/log/error.txt /data/log/error_bak.txt");
+      if (!s.scene.is_OpenpilotViewEnabled) {
+        alerts->updateAlert(CONTROLS_WAITING_ALERT, bgColor);
+        if (QFileInfo::exists("/data/log/error.txt")) {
+          QFileInfo fileInfo;
+          fileInfo.setFile("/data/log/error.txt");
+          QDateTime modifiedtime = fileInfo.lastModified();
+          QString modified_time = modifiedtime.toString("yyyy-MM-dd hh:mm:ss ");
+          const std::string txt = util::read_file("/data/log/error.txt");
+          RichTextDialog::alert(modified_time + QString::fromStdString(txt), this);
+          std::system("rm -f /data/log/error_bak.txt; mv /data/log/error.txt /data/log/error_bak.txt");
+        }
       }
     } else if ((nanos_since_boot() - sm.rcv_time("controlsState")) / 1e9 > CONTROLS_TIMEOUT) {
       // car is started, but controls is lagging or died
-      bgColor = bg_colors[STATUS_ALERT];
-      alerts->updateAlert(CONTROLS_UNRESPONSIVE_ALERT, bgColor);
+      if (!s.scene.is_OpenpilotViewEnabled) {
+        bgColor = bg_colors[STATUS_ALERT];
+        alerts->updateAlert(CONTROLS_UNRESPONSIVE_ALERT, bgColor);
+        if (QFileInfo::exists("/data/log/error.txt")) {
+          QFileInfo fileInfo;
+          fileInfo.setFile("/data/log/error.txt");
+          QDateTime modifiedtime = fileInfo.lastModified();
+          QString modified_time = modifiedtime.toString("yyyy-MM-dd hh:mm:ss ");
+          const std::string txt = util::read_file("/data/log/error.txt");
+          RichTextDialog::alert(modified_time + QString::fromStdString(txt), this);
+          std::system("rm -f /data/log/error_bak.txt; mv /data/log/error.txt /data/log/error_bak.txt");
+        }
+      }
+    }
+  }
+  if (!s.scene.is_OpenpilotViewEnabled) {
+    if (sm.frame % (10*UI_FREQ) == 0 && Params().getBool("ShowError")) {
       if (QFileInfo::exists("/data/log/error.txt")) {
         QFileInfo fileInfo;
         fileInfo.setFile("/data/log/error.txt");
@@ -80,17 +97,6 @@ void OnroadWindow::updateState(const UIState &s) {
         RichTextDialog::alert(modified_time + QString::fromStdString(txt), this);
         std::system("rm -f /data/log/error_bak.txt; mv /data/log/error.txt /data/log/error_bak.txt");
       }
-    }
-  }
-  if (sm.frame % (10*UI_FREQ) == 0 && Params().getBool("ShowError")) {
-    if (QFileInfo::exists("/data/log/error.txt")) {
-      QFileInfo fileInfo;
-      fileInfo.setFile("/data/log/error.txt");
-      QDateTime modifiedtime = fileInfo.lastModified();
-      QString modified_time = modifiedtime.toString("yyyy-MM-dd hh:mm:ss ");
-      const std::string txt = util::read_file("/data/log/error.txt");
-      RichTextDialog::alert(modified_time + QString::fromStdString(txt), this);
-      std::system("rm -f /data/log/error_bak.txt; mv /data/log/error.txt /data/log/error_bak.txt");
     }
   }
   if (bg != bgColor) {
