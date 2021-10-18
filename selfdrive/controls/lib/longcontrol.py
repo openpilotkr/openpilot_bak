@@ -176,7 +176,7 @@ class LongControl():
       # Keep applying brakes until the car is stopped
       factor = 1
       if long_plan.hasLead:
-        factor = interp(dRel,[2.0,5.5], [8.0,1.0]) if not radar_target_detected else 1
+        factor = interp(dRel,[2.0,5.5], [6.0,1.0]) if not radar_target_detected else 1
       if not CS.standstill or output_gb > -BRAKE_STOPPING_TARGET:
         output_gb -= CP.stoppingBrakeRate / RATE * factor
       elif CS.cruiseState.standstill and output_gb < -BRAKE_STOPPING_TARGET:
