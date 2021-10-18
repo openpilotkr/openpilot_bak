@@ -251,6 +251,7 @@ class Controls:
         safety_mismatch = pandaState.safetyModel != SafetyModel.silent
       if safety_mismatch or self.mismatch_counter >= 200:
         self.events.add(EventName.controlsMismatch)
+        print('safety_mismatch={}    self.mismatch_counter={}'.format(safety_mismatch, self.mismatch_counter))
 
     if not self.sm['liveParameters'].valid:
       self.events.add(EventName.vehicleModelInvalid)

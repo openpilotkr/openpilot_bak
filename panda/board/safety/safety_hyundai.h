@@ -176,17 +176,14 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
       }
     } else {
       // enter controls on rising edge of ACC, exit controls on ACC off
-      if (addr == 1265) {
-        int button = GET_BYTE(to_push, 0) & 0x7;
-        switch (button) {
-          case 2:  // set
-            controls_allowed = 1;
-            break;
-          case 4:  // cancel
-            controls_allowed = 0;
-            break;
-          default:
-            break;  // any other button is irrelevant
+      if (addr == 1057) {
+        // 2 bits: 13-14
+        int cruise_engaged = (GET_BYTES_04(to_push) >> 13) & 0x3;
+        if (cruise_engaged && !cruise_engaged_prev) {
+          controls_allowed = 1;
+        }
+        if (!cruise_engaged) {
+          controls_allowed = 0;
         }
       }
     }
