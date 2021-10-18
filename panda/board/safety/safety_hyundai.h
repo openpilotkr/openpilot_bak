@@ -179,7 +179,6 @@ static int hyundai_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
       if (addr == 1265) {
         int button = GET_BYTE(to_push, 0) & 0x7;
         switch (button) {
-          case 1:  // resume
           case 2:  // set
             controls_allowed = 1;
             break;
