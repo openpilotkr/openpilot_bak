@@ -153,6 +153,8 @@ DevicePanel::DevicePanel(QWidget* parent) : ListWidget(parent) {
     });
   }
 
+  addItem(new OpenpilotView());
+
   for (auto btn : {dcamBtn, resetCalibBtn, retrainingBtn, regulatoryBtn}) {
     if (btn) {
       connect(parent, SIGNAL(offroadTransition(bool)), btn, SLOT(setEnabled(bool)));

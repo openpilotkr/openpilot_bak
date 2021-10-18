@@ -206,6 +206,7 @@ def thermald_thread():
     params.put_bool("BootedOnroad", True)
 
   is_openpilot_dir = True
+  is_openpilot_view_enabled = 0
 
   while True:
     pandaStates = messaging.recv_sock(pandaState_sock, wait=True)
@@ -253,6 +254,14 @@ def thermald_thread():
           pandaState_prev.pandaType != log.PandaState.PandaType.unknown:
           params.clear_all(ParamKeyType.CLEAR_ON_PANDA_DISCONNECT)
       pandaState_prev = pandaState
+    elif params.get_bool("IsOpenpilotViewEnabled") and not params.get_bool("IsDriverViewEnabled") and is_openpilot_view_enabled == 0:
+      is_openpilot_view_enabled = 1
+      startup_conditions["ignition"] = True
+    elif not params.get_bool("IsOpenpilotViewEnabled") and not params.get_bool("IsDriverViewEnabled") and is_openpilot_view_enabled == 1:
+      shutdown_trigger = 0
+      sound_trigger == 0
+      is_openpilot_view_enabled = 0
+      startup_conditions["ignition"] = False
 
     # these are expensive calls. update every 10s
     if (count % int(10. / DT_TRML)) == 0:
