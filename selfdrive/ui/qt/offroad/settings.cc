@@ -439,7 +439,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->setSpacing(30);
 
   // OPKR
-  layout->addWidget(new LabelControl("〓〓〓〓〓【 U I 설정 】〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 UI 설정 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new AutoShutdown());
   layout->addWidget(new ForceShutdown());
   //layout->addWidget(new AutoScreenDimmingToggle());
@@ -479,7 +479,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new KRTimeToggle());
 
   layout->addWidget(horizontal_line());
-  layout->addWidget(new LabelControl("〓〓〓〓〓【 주행설정 】〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 주행설정 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new AutoResumeToggle());
   layout->addWidget(new VariableCruiseToggle());
   layout->addWidget(new CruisemodeSelInit());
@@ -511,7 +511,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new MadModeEnabledToggle());
 
   layout->addWidget(horizontal_line());
-  layout->addWidget(new LabelControl("〓〓〓〓〓【 개 발 자 】〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 개 발 자 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new DebugUiOneToggle());
   layout->addWidget(new DebugUiTwoToggle());
   layout->addWidget(new ShowErrorToggle());
@@ -540,7 +540,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   //layout->addWidget(new LabelControl(car_model, ""));
 
   layout->addWidget(horizontal_line());
-  layout->addWidget(new LabelControl("〓〓〓〓〓【 판 다 값 】〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 판 다 값 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new MaxSteer());
   layout->addWidget(new MaxRTDelta());
   layout->addWidget(new MaxRateUp());
@@ -562,7 +562,7 @@ TuningPanel::TuningPanel(QWidget* parent) : QWidget(parent) {
   layout->setSpacing(30);
 
   // OPKR
-  layout->addWidget(new LabelControl("〓〓〓〓〓【 튜닝메뉴 】〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 튜닝메뉴 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new CameraOffset());
   layout->addWidget(new PathOffset());
   layout->addWidget(new LiveSteerRatioToggle());
@@ -586,7 +586,7 @@ TuningPanel::TuningPanel(QWidget* parent) : QWidget(parent) {
 
   layout->addWidget(horizontal_line());
 
-  layout->addWidget(new LabelControl("〓〓〓〓〓【 제어메뉴 】〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 제어메뉴 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new LateralControl());
   layout->addWidget(new LiveTunePanelToggle());
   QString lat_control = QString::fromStdString(Params().get("LateralControlMethod", false));
@@ -608,7 +608,7 @@ TuningPanel::TuningPanel(QWidget* parent) : QWidget(parent) {
 
   layout->addWidget(horizontal_line());
 
-  layout->addWidget(new LabelControl("〓〓〓〓〓【 롱컨메뉴 】〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 롱컨메뉴 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new DynamicTR());
   layout->addWidget(new CruiseGapTR());
   layout->addWidget(new RadarLongHelperToggle());
