@@ -288,9 +288,9 @@ typedef struct UIScene {
     float oturnSpeedLimit;
     float oturnSpeedLimitEndDistance;
     int oturnSpeedLimitSign;
-    //float turnSpeedLimitsAhead[16]; // List
-    //float turnSpeedLimitsAheadDistances[16]; // List
-    //int turnSpeedLimitsAheadSigns[16]; // List
+    float oturnSpeedLimitsAhead[4]; // List
+    //float oturnSpeedLimitsAheadDistances[4]; // List
+    //int oturnSpeedLimitsAheadSigns[4]; // List
   } liveMapData;
 } UIScene;
 

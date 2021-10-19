@@ -262,6 +262,10 @@ static void update_state(UIState *s) {
     scene.liveMapData.oturnSpeedLimit = lmap_data.getTurnSpeedLimit();
     scene.liveMapData.oturnSpeedLimitEndDistance = lmap_data.getTurnSpeedLimitEndDistance();
     scene.liveMapData.oturnSpeedLimitSign = lmap_data.getTurnSpeedLimitSign();
+    auto turn_speed_ahead = lmap_data.getTurnSpeedLimitsAhead();
+    for (int i = 0; i < std::size(scene.liveMapData.oturnSpeedLimitsAhead); i++) {
+      scene.liveMapData.oturnSpeedLimitsAhead[i] = turn_speed_ahead[i];
+    }
   }
   if (sm.updated("sensorEvents")) {
     for (auto sensor : sm["sensorEvents"].getSensorEvents()) {

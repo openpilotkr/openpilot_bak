@@ -359,6 +359,10 @@ static void ui_draw_debug(UIState *s) {
     ui_print(s, ui_viz_rx+200, ui_viz_ry+360, "TSL:%.0f", scene.liveMapData.oturnSpeedLimit);
     ui_print(s, ui_viz_rx+200, ui_viz_ry+400, "TSLED:%.0f", scene.liveMapData.oturnSpeedLimitEndDistance);
     ui_print(s, ui_viz_rx+200, ui_viz_ry+440, "TSLS:%d", scene.liveMapData.oturnSpeedLimitSign);
+    ui_print(s, ui_viz_rx+200, ui_viz_ry+480, "TSL0:%.0f", scene.liveMapData.oturnSpeedLimitsAhead[0]);
+    ui_print(s, ui_viz_rx+200, ui_viz_ry+520, "TSL1:%.0f", scene.liveMapData.oturnSpeedLimitsAhead[1]);
+    ui_print(s, ui_viz_rx+200, ui_viz_ry+560, "TSL2:%.0f", scene.liveMapData.oturnSpeedLimitsAhead[2]);
+    ui_print(s, ui_viz_rx+200, ui_viz_ry+600, "TSL3:%.0f", scene.liveMapData.oturnSpeedLimitsAhead[3]);
     nvgFontSize(s->vg, 37);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (scene.lateralControlMethod == 0) {
