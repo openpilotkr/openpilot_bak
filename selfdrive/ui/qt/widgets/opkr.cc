@@ -1704,8 +1704,8 @@ LeftCurvOffset::LeftCurvOffset() : AbstractControl("오프셋조정(왼쪽 커�
     auto str = QString::fromStdString(params.get("LeftCurvOffsetAdj"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= -30 ) {
-      value = -30;
+    if (value <= -50 ) {
+      value = -50;
     }
     QString values = QString::number(value);
     params.put("LeftCurvOffsetAdj", values.toStdString());
@@ -1716,8 +1716,8 @@ LeftCurvOffset::LeftCurvOffset() : AbstractControl("오프셋조정(왼쪽 커�
     auto str = QString::fromStdString(params.get("LeftCurvOffsetAdj"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 30 ) {
-      value = 30;
+    if (value >= 50 ) {
+      value = 50;
     }
     QString values = QString::number(value);
     params.put("LeftCurvOffsetAdj", values.toStdString());
@@ -1763,8 +1763,8 @@ RightCurvOffset::RightCurvOffset() : AbstractControl("오프셋조정(오른쪽 
     auto str = QString::fromStdString(params.get("RightCurvOffsetAdj"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= -30 ) {
-      value = -30;
+    if (value <= -50 ) {
+      value = -50;
     }
     QString values = QString::number(value);
     params.put("RightCurvOffsetAdj", values.toStdString());
@@ -1775,8 +1775,8 @@ RightCurvOffset::RightCurvOffset() : AbstractControl("오프셋조정(오른쪽 
     auto str = QString::fromStdString(params.get("RightCurvOffsetAdj"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 30 ) {
-      value = 30;
+    if (value >= 50 ) {
+      value = 50;
     }
     QString values = QString::number(value);
     params.put("RightCurvOffsetAdj", values.toStdString());

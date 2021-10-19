@@ -258,6 +258,8 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrBatteryChargingControl", PERSISTENT},
     {"OpkrBatteryChargingMin", PERSISTENT},
     {"OpkrBatteryChargingMax", PERSISTENT},
+    {"LeftCurvOffsetAdj", PERSISTENT},
+    {"RightCurvOffsetAdj", PERSISTENT},
     {"DebugUi1", PERSISTENT},
     {"DebugUi2", PERSISTENT},
     {"LongLogDisplay", PERSISTENT},

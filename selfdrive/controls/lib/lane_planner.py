@@ -45,15 +45,43 @@ class LanePlanner:
     self.camera_offset = -CAMERA_OFFSET if wide_camera else CAMERA_OFFSET
     self.path_offset = -PATH_OFFSET if wide_camera else PATH_OFFSET
 
+    self.left_curv_offset = int(Params().get("LeftCurvOffsetAdj", encoding="utf8"))
+    self.right_curv_offset = int(Params().get("RightCurvOffsetAdj", encoding="utf8"))
+
     self.lp_timer = 0
     self.lp_timer2 = 0
 
-  def parse_model(self, md, sm):
+  def parse_model(self, md, sm, v_ego):
+    curvature = sm['controlsState'].curvature
     mode_select = sm['carState'].cruiseState.modeSel
+    Curv = round(curvature, 4)
+    # right lane is minus
+    lane_differ = round(abs(self.lll_y[0] + self.rll_y[0]), 2)
+    lean_offset = 0
     if mode_select == 4:
       lean_offset = -0.2
     else:
       lean_offset = 0
+
+    if (self.left_curv_offset != 0 or self.left_curv_offset != 0) and v_ego > 8:
+      if curvature > 0.0008 and self.left_curv_offset < 0 and lane_differ >= 0: # left curve
+        if lane_differ > 0.6:
+          lane_differ = 0.6          
+        lean_offset = +round(abs(self.left_curv_offset) * lane_differ * 0.05, 3) # move to left
+      elif curvature > 0.0008 and self.left_curv_offset > 0 and lane_differ <= 0:
+        if lane_differ > 0.6:
+          lane_differ = 0.6
+        lean_offset = -round(abs(self.left_curv_offset) * lane_differ * 0.05, 3) # move to right
+      elif curvature < -0.0008 and self.right_curv_offset < 0 and lane_differ >= 0: # right curve
+        if lane_differ > 0.6:
+          lane_differ = 0.6    
+        lean_offset = +round(abs(self.right_curv_offset) * lane_differ * 0.05, 3) # move to left
+      elif curvature < -0.0008 and self.right_curv_offset > 0 and lane_differ <= 0:
+        if lane_differ > 0.6:
+          lane_differ = 0.6    
+        lean_offset = -round(abs(self.right_curv_offset) * lane_differ * 0.05, 3) # move to right
+      else:
+        lean_offset = 0
 
     self.lp_timer += DT_MDL
     if self.lp_timer > 1.0:

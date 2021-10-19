@@ -88,6 +88,8 @@ def manager_init():
     ("OpkrBatteryChargingControl", "1"),
     ("OpkrBatteryChargingMin", "70"),
     ("OpkrBatteryChargingMax", "80"),
+    ("LeftCurvOffsetAdj", "0"),
+    ("RightCurvOffsetAdj", "0"),
     ("DebugUi1", "0"),
     ("DebugUi2", "0"),
     ("LongLogDisplay", "0"),
