@@ -703,6 +703,9 @@ class Controls:
       if self.hkg_stock_lkas_timer > 300:
         self.hkg_stock_lkas_timer = 0
         self.hkg_stock_lkas = True
+      elif CS.gearShifter != GearShifter.drive and self.hkg_stock_lkas_timer > 150:
+        self.hkg_stock_lkas_timer = 0
+        self.hkg_stock_lkas = True
 
     if not self.hkg_stock_lkas:
       # send car controls over can
