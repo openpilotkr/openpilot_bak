@@ -698,7 +698,7 @@ class Controls:
     if self.enabled:
       self.hkg_stock_lkas = False
       self.hkg_stock_lkas_timer = 0
-    elif not self.enabled and CS.gearShifter != GearShifter.drive:
+    elif not self.enabled and CS.cruiseState.available and CS.gearShifter != GearShifter.drive:
       self.hkg_stock_lkas = False
       self.hkg_stock_lkas_timer = 0
     elif not self.enabled and not self.hkg_stock_lkas:
