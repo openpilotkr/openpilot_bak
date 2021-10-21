@@ -192,6 +192,7 @@ class Controls:
 
     self.hkg_stock_lkas = True
     self.hkg_stock_lkas_timer = 0
+    self.hkg_parking = False
 
     self.mpc_frame = 0
     self.mpc_frame_sr = 0
@@ -698,10 +699,12 @@ class Controls:
     if self.enabled:
       self.hkg_stock_lkas = False
       self.hkg_stock_lkas_timer = 0
-    elif not self.enabled and CS.cruiseState.available and CS.gearShifter != GearShifter.drive:
+      self.hkg_parking = False
+    elif not self.enabled and not self.hkg_stock_lkas and self.CP.sccBus == 2 and CS.gearShifter == GearShifter.reverse:
+      self.hkg_parking = True
       self.hkg_stock_lkas = False
       self.hkg_stock_lkas_timer = 0
-    elif not self.enabled and not self.hkg_stock_lkas:
+    elif not self.enabled and not self.hkg_stock_lkas and not self.hkg_parking:
       self.hkg_stock_lkas_timer += 1
       if self.hkg_stock_lkas_timer > 300:
         self.hkg_stock_lkas_timer = 0
