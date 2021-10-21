@@ -106,7 +106,6 @@ class Controls:
     self.batt_less = params.get_bool("OpkrBattLess")
     self.variable_cruise = params.get_bool('OpkrVariableCruise')
     self.cruise_over_maxspeed = params.get_bool('CruiseOverMaxSpeed')
-    self.stock_lkas_enabled = params.get_bool('StockLkasEnabled')
 
     # detect sound card presence and ensure successful init
     sounds_available = HARDWARE.get_sound_card_online()
@@ -301,7 +300,6 @@ class Controls:
       self.map_enabled = Params().get_bool("OpkrMapEnable")
       self.live_sr = Params().get_bool("OpkrLiveSteerRatio")
       self.live_sr_percent = int(Params().get("LiveSteerRatioPercent", encoding="utf8"))
-      self.stock_lkas_enabled = Params().get_bool("StockLkasEnabled")
       self.second = 0.0
     if len(self.sm['radarState'].radarErrors):
       self.events.add(EventName.radarFault)
@@ -709,7 +707,7 @@ class Controls:
         self.hkg_stock_lkas_timer = 0
         self.hkg_stock_lkas = True
 
-    if not self.hkg_stock_lkas or not self.stock_lkas_enabled:
+    if not self.hkg_stock_lkas:
       # send car controls over can
       can_sends = self.CI.apply(CC)
       self.pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
