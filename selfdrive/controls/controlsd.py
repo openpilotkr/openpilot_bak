@@ -301,6 +301,7 @@ class Controls:
       self.map_enabled = Params().get_bool("OpkrMapEnable")
       self.live_sr = Params().get_bool("OpkrLiveSteerRatio")
       self.live_sr_percent = int(Params().get("LiveSteerRatioPercent", encoding="utf8"))
+      self.stock_lkas_enabled = Params().get_bool("StockLkasEnabled")
       self.second = 0.0
     if len(self.sm['radarState'].radarErrors):
       self.events.add(EventName.radarFault)

@@ -566,7 +566,7 @@ class StockLkasToggle : public ToggleControl {
   Q_OBJECT
 
 public:
-  StockLkasToggle() : ToggleControl("차량 Stock LKAS 기능 활성화", "디스인게이지 상태에서 차량의 Stock LKAS 기능을 활성화 합니다. 일부차량 혹은 롱컨 차량은 인게이지-디스인게이지 전환시 LKAS 오류가 잠깐 나타날 수 있습니다.", "../assets/offroad/icon_shell.png", Params().getBool("StockLkasEnabled")) {
+  StockLkasToggle() : ToggleControl("차량 Stock LKAS 기능 활성화", "디스인게이지 상태에서 차량의 Stock LKAS 기능을 활성화 합니다.(실시간 적용) 일부차량 혹은 롱컨 차량은 인게이지-디스인게이지 전환시 LKAS 오류가 잠깐 나타날 수 있습니다.", "../assets/offroad/icon_shell.png", Params().getBool("StockLkasEnabled")) {
     QObject::connect(this, &StockLkasToggle::toggleFlipped, [=](int state) {
       bool status = state ? true : false;
       Params().putBool("StockLkasEnabled", status);
