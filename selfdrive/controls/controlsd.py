@@ -695,10 +695,10 @@ class Controls:
     self.AM.process_alerts(self.sm.frame, clear_event)
     CC.hudControl.visualAlert = self.AM.visual_alert
 
-    if self.enabled:
+    if self.enabled and CS.cruiseState.enabled:
       self.hkg_stock_lkas = False
       self.hkg_stock_lkas_timer = 0
-    elif not self.enabled and not self.hkg_stock_lkas:
+    elif not self.enabled and not CS.cruiseState.enabled and not self.hkg_stock_lkas:
       self.hkg_stock_lkas_timer += 1
       if self.hkg_stock_lkas_timer > 300:
         self.hkg_stock_lkas_timer = 0

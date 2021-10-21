@@ -765,11 +765,8 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   },
 
   EventName.wrongGear: {
-    ET.WARNING: Alert(
-      "기어가 드라이브 모드가 아닙니다",
-      "",
-      AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, 1., 1., 1.),
+    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),
+    ET.NO_ENTRY: NoEntryAlert("기어가 드라이브모드가 아닙니다"),
   },
 
   # This alert is thrown when the calibration angles are outside of the acceptable range.
@@ -947,6 +944,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "",
       AlertStatus.normal, AlertSize.full,
       Priority.LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2, creation_delay=0.5),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("후진 기어"),
     ET.NO_ENTRY: NoEntryAlert("후진 기어"),
   },
 

@@ -176,6 +176,7 @@ class CarController():
     self.on_speed_control = False
     self.curv_speed_control = False
     self.vFuture = 0
+    self.cruise_init = False
 
     if CP.lateralTuning.which() == 'pid':
       self.str_log2 = 'T={:0.2f}/{:0.3f}/{:0.2f}/{:0.5f}'.format(CP.lateralTuning.pid.kpV[1], CP.lateralTuning.pid.kiV[1], CP.lateralTuning.pid.kdV[0], CP.lateralTuning.pid.kf)
@@ -413,10 +414,13 @@ class CarController():
       self.cruise_gap_adjusting = False
       self.auto_res_starting = False
 
+    if not enabled:
+      self.cruise_init = False
     if CS.cruise_buttons == 4:
       self.cancel_counter += 1
       self.auto_res_starting = False
     elif CS.cruise_active:
+      self.cruise_init = True
       self.cancel_counter = 0
       self.auto_res_limit_timer = 0
       if self.res_speed_timer > 0:
@@ -441,7 +445,7 @@ class CarController():
     if self.auto_res_timer > 0:
       self.auto_res_timer -= 1
     elif self.model_speed > 95 and self.cancel_counter == 0 and not CS.cruise_active and not CS.out.brakeLights and int(CS.VSetDis) >= t_speed and \
-     (1 < CS.lead_distance < 149 or int(CS.clu_Vanz) > t_speed) and int(CS.clu_Vanz) >= 3 and \
+     (1 < CS.lead_distance < 149 or int(CS.clu_Vanz) > t_speed) and int(CS.clu_Vanz) >= 3 and self.cruise_init and \
      self.opkr_cruise_auto_res and opkr_cruise_auto_res_condition and (self.auto_res_limit_sec == 0 or self.auto_res_limit_timer < self.auto_res_limit_sec):
       if self.opkr_cruise_auto_res_option == 0:
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)) if not self.longcontrol \
