@@ -509,6 +509,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new AutoResLimitTime());
   layout->addWidget(new SteerWindDownToggle());
   layout->addWidget(new MadModeEnabledToggle());
+  layout->addWidget(new StockLkasToggle());
 
   layout->addWidget(horizontal_line());
   layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓〓【 개 발 자 】〓〓〓〓〓〓〓〓〓", ""));
