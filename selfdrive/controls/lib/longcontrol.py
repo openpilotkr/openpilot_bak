@@ -157,13 +157,13 @@ class LongControl():
 
       # opkr
       if self.vRel_prev != vRel and vRel <= 0 and CS.vEgo > 13. and self.damping_timer <= 0: # decel mitigation for a while
-        if (vRel - self.vRel_prev)*3.6 < -5:
-          self.damping_timer = 45
-          self.decel_damping2 = interp(abs((vRel - self.vRel_prev)*3.6), [0, 10], [1, 0.1])
+        if (vRel - self.vRel_prev)*3.6 <= -5:
+          self.damping_timer = 50
+          self.decel_damping2 = interp(abs((vRel - self.vRel_prev)*3.6), [0, 5], [1, 0.1])
         self.vRel_prev = vRel
       elif self.damping_timer > 0:
         self.damping_timer -= 1
-        self.decel_damping = interp(self.damping_timer, [0, 45], [1, self.decel_damping2])
+        self.decel_damping = interp(self.damping_timer, [0, 50], [1, self.decel_damping2])
 
       output_gb = self.pid.update(self.v_pid, v_ego_pid, speed=v_ego_pid, deadzone=deadzone, feedforward=a_target, freeze_integrator=prevent_overshoot)
       output_gb *= self.decel_damping
