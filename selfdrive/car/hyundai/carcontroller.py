@@ -176,6 +176,7 @@ class CarController():
     self.on_speed_control = False
     self.curv_speed_control = False
     self.vFuture = 0
+    self.cruise_init = False
 
     if CP.lateralTuning.which() == 'pid':
       self.str_log2 = 'T={:0.2f}/{:0.3f}/{:0.2f}/{:0.5f}'.format(CP.lateralTuning.pid.kpV[1], CP.lateralTuning.pid.kiV[1], CP.lateralTuning.pid.kdV[0], CP.lateralTuning.pid.kf)
@@ -413,10 +414,13 @@ class CarController():
       self.cruise_gap_adjusting = False
       self.auto_res_starting = False
 
+    if not enabled:
+      self.cruise_init = False
     if CS.cruise_buttons == 4:
       self.cancel_counter += 1
       self.auto_res_starting = False
     elif CS.cruise_active:
+      self.cruise_init = True
       self.cancel_counter = 0
       self.auto_res_limit_timer = 0
       if self.res_speed_timer > 0:
@@ -441,7 +445,7 @@ class CarController():
     if self.auto_res_timer > 0:
       self.auto_res_timer -= 1
     elif self.model_speed > 95 and self.cancel_counter == 0 and not CS.cruise_active and not CS.out.brakeLights and int(CS.VSetDis) >= t_speed and \
-     (1 < CS.lead_distance < 149 or int(CS.clu_Vanz) > t_speed) and int(CS.clu_Vanz) >= 3 and \
+     (1 < CS.lead_distance < 149 or int(CS.clu_Vanz) > t_speed) and int(CS.clu_Vanz) >= 3 and self.cruise_init and \
      self.opkr_cruise_auto_res and opkr_cruise_auto_res_condition and (self.auto_res_limit_sec == 0 or self.auto_res_limit_timer < self.auto_res_limit_sec):
       if self.opkr_cruise_auto_res_option == 0:
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)) if not self.longcontrol \
@@ -578,8 +582,8 @@ class CarController():
     str_log1 = 'MD={}  BS={:1.0f}/{:1.0f}  CV={:03.0f}  TQ={:03.0f}  ST={:03.0f}/{:01.0f}/{:01.0f}  FR={:03.0f}'.format(
       CS.out.cruiseState.modeSel, CS.CP.mdpsBus, CS.CP.sccBus, self.model_speed, abs(new_steer), self.p.STEER_MAX, self.p.STEER_DELTA_UP, self.p.STEER_DELTA_DOWN, self.timer1.sampleTime())
     if CS.out.cruiseState.accActive:
-      str_log2 = 'AQ={:+04.2f}  VF={:03.0f}  TS={:03.0f}  SS={:03.0f}  CS={:03.0f}  RD/RV={:04.1f}/{:03.1f}  CG={:1.0f}  FR={:03.0f}'.format(
-       self.aq_value if self.longcontrol else CS.scc12["aReqValue"], v_future, self.NC.ctrl_speed , setSpeed, round(CS.out.cruiseState.speed*CV.MS_TO_KPH), CS.lead_distance, CS.lead_objspd, CS.cruiseGapSet, self.timer1.sampleTime())
+      str_log2 = 'AQ={:+04.2f}  VF={:03.0f}  TS={:03.0f}  SS={:03.0f}  RD/RV={:04.1f}/{:03.1f}  CG={:1.0f}  FR={:03.0f}'.format(
+       self.aq_value if self.longcontrol else CS.scc12["aReqValue"], v_future, self.NC.ctrl_speed , setSpeed, CS.lead_distance, CS.lead_objspd, CS.cruiseGapSet, self.timer1.sampleTime())
     else:
       str_log2 = 'MDPS={}  LKAS={}  LEAD={}  AQ={:+04.2f}  VF={:03.0f}  CG={:1.0f}  FR={:03.0f}'.format(
        CS.out.steerWarning, CS.lkas_button_on, 0 < CS.lead_distance < 149, self.aq_value if self.longcontrol else CS.scc12["aReqValue"], v_future, CS.cruiseGapSet, self.timer1.sampleTime())
