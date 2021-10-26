@@ -13,7 +13,9 @@ from common.numpy_fast import clip
 from selfdrive.locationd.models.car_kf import CarKalman, ObservationKind, States
 from selfdrive.locationd.models.constants import GENERATED_DIR
 from selfdrive.swaglog import cloudlog
+from decimal import Decimal
 
+STIFFNESS_FACTOR = float(Decimal(Params().get("TireStiffnessFactorAdj", encoding="utf8")) * Decimal('0.01'))
 
 MAX_ANGLE_OFFSET_DELTA = 20 * DT_MDL  # Max 20 deg/s
 
@@ -122,21 +124,23 @@ def main(sm=None, pm=None):
 
   # When driving in wet conditions the stiffness can go down, and then be too low on the next drive
   # Without a way to detect this we have to reset the stiffness every drive
-  params['stiffnessFactor'] = 1.0
+  params['stiffnessFactor'] = STIFFNESS_FACTOR
+
   learner = ParamsLearner(CP, params['steerRatio'], params['stiffnessFactor'], math.radians(params['angleOffsetAverageDeg']))
+
   angle_offset_average = params['angleOffsetAverageDeg']
   angle_offset = angle_offset_average
 
   while True:
     sm.update()
-    for which in sorted(sm.updated.keys(), key=lambda x: sm.logMonoTime[x]):
-      if sm.updated[which]:
+
+    for which, updated in sm.updated.items():
+      if updated:
         t = sm.logMonoTime[which] * 1e-9
         learner.handle_log(t, which, sm[which])
 
     if sm.updated['liveLocationKalman']:
       x = learner.kf.x
-      P = np.sqrt(learner.kf.P.diagonal())
       if not all(map(math.isfinite, x)):
         cloudlog.error("NaN in liveParameters estimate. Resetting to default values")
         learner = ParamsLearner(CP, CP.steerRatio, 1.0, 0.0)
@@ -160,10 +164,6 @@ def main(sm=None, pm=None):
         0.2 <= msg.liveParameters.stiffnessFactor <= 5.0,
         min_sr <= msg.liveParameters.steerRatio <= max_sr,
       ))
-      msg.liveParameters.steerRatioStd = float(P[States.STEER_RATIO])
-      msg.liveParameters.stiffnessFactorStd = float(P[States.STIFFNESS])
-      msg.liveParameters.angleOffsetAverageStd = float(P[States.ANGLE_OFFSET])
-      msg.liveParameters.angleOffsetFastStd = float(P[States.ANGLE_OFFSET_FAST])
 
       if sm.frame % 1200 == 0:  # once a minute
         params = {

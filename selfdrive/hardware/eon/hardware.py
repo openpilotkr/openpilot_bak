@@ -287,12 +287,17 @@ class Android(HardwareBase):
     if network_type == NetworkType.wifi:
       out = subprocess.check_output('dumpsys connectivity', shell=True).decode('utf-8')
       network_strength = NetworkStrength.unknown
+      wifi_ssid = "---"
       for line in out.split('\n'):
         signal_str = "SignalStrength: "
+        ssid_str = "extra: "
         if signal_str in line:
           lvl_idx_start = line.find(signal_str) + len(signal_str)
           lvl_idx_end = line.find(']', lvl_idx_start)
           lvl = int(line[lvl_idx_start : lvl_idx_end])
+          ssid_idx_start = line.find(ssid_str) + len(ssid_str) + 1
+          ssid_idx_end = line.find('"', ssid_idx_start)
+          wifi_ssid = line[ssid_idx_start : ssid_idx_end]
           if lvl >= -50:
             network_strength = NetworkStrength.great
           elif lvl >= -60:
@@ -301,7 +306,7 @@ class Android(HardwareBase):
             network_strength = NetworkStrength.moderate
           else:
             network_strength = NetworkStrength.poor
-      return network_strength
+      return network_strength, wifi_ssid
     else:
       # check cell strength
       out = subprocess.check_output('dumpsys telephony.registry', shell=True).decode('utf-8')
@@ -375,13 +380,6 @@ class Android(HardwareBase):
     with open("/sys/class/leds/lcd-backlight/brightness", "w") as f:
       f.write(str(int(percentage * 2.55)))
 
-  def get_screen_brightness(self):
-    try:
-      with open("/sys/class/leds/lcd-backlight/brightness") as f:
-        return int(float(f.read()) / 2.55)
-    except Exception:
-      return 0
-
   def set_power_save(self, powersave_enabled):
     pass
 
@@ -400,11 +398,16 @@ class Android(HardwareBase):
     # Not sure if we can get this on the LeEco
     return []
 
-  def get_nvme_temperatures(self):
-    return []
-
   def initialize_hardware(self):
     pass
 
   def get_networks(self):
     return None
+
+  def get_ip_address(self):
+    try:
+      wlan = subprocess.check_output(["ifconfig", "wlan0"], encoding='utf8').strip()
+      pattern = re.compile(r'inet addr:(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
+      return pattern.search(wlan).group(1)
+    except Exception:
+      return "--"

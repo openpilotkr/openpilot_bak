@@ -380,7 +380,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "Vehicle Parameter Identification Failed",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOWEST, VisualAlert.steerRequired, AudibleAlert.none, .0, .0, .1),
+      Priority.LOWEST, VisualAlert.none, AudibleAlert.none, .0, .0, .1),
   },
 
   EventName.steerTempUnavailableSilent: {
@@ -396,7 +396,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "KEEP EYES ON ROAD: Driver Distracted",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
   },
 
   EventName.promptDriverDistracted: {
@@ -420,7 +420,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "TOUCH STEERING WHEEL: No Face Detected",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
   },
 
   EventName.promptDriverUnresponsive: {
@@ -428,7 +428,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "TOUCH STEERING WHEEL",
       "Driver Unresponsive",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2Repeat, .1, .1, .1),
+      Priority.MID, VisualAlert.none, AudibleAlert.none, .1, .1, .1),
   },
 
   EventName.driverUnresponsive: {
@@ -436,7 +436,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "DISENGAGE IMMEDIATELY",
       "Driver Unresponsive",
       AlertStatus.critical, AlertSize.full,
-      Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
+      Priority.HIGH, VisualAlert.none, AudibleAlert.none, .1, .1, .1),
   },
 
   EventName.manualRestart: {
@@ -490,6 +490,30 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1),
   },
+  
+  EventName.laneChangeManual: {
+    ET.WARNING: Alert(
+      "Turning Blinker On at Low Speed",
+      "Steering Assist is temporarily disabled. Please steer yourself.",
+      AlertStatus.userPrompt, AlertSize.mid,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+  },
+
+  EventName.emgButtonManual: {
+    ET.WARNING: Alert(
+      "Hazard flahser On",
+      "",
+      AlertStatus.userPrompt, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+  },
+
+  EventName.driverSteering: {
+    ET.WARNING: Alert(
+      "Driver is Steering",
+      "Steer Assist is temporarily weakened.",
+      AlertStatus.userPrompt, AlertSize.mid,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1),
+  },
 
   EventName.steerSaturated: {
     ET.WARNING: Alert(
@@ -521,6 +545,57 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
     ET.PERMANENT: NormalPermanentAlert("Sensor Malfunction", "Contact Support"),
   },
 
+  EventName.modeChangeOpenpilot: {
+    ET.WARNING: Alert(
+      "Openpilot Stock",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, 1., 0, 1.),
+  },
+  
+  EventName.modeChangeDistcurv: {
+    ET.WARNING: Alert(
+      "Distance and Curve Mode",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, 1., 0, 1.),
+  },
+  EventName.modeChangeDistance: {
+    ET.WARNING: Alert(
+      "Distance only Mode",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, 1., 0, 1.),
+  },
+  EventName.modeChangeCurv: {
+    ET.WARNING: Alert(
+      "Curve only Mode",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, 1., 0, 1.),
+  },
+  EventName.modeChangeOneway: {
+    ET.WARNING: Alert(
+      "Oneway Mode",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, 1., 0, 1.),
+  },
+  EventName.modeChangeMaponly: {
+    ET.WARNING: Alert(
+      "Speedlimit only Mode",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, 1., 0, 1.),
+  },
+  EventName.needBrake: {
+    ET.WARNING: Alert(
+      "Brake!",
+      "Risk of Collision",
+      AlertStatus.normal, AlertSize.full,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning2Repeat, .1, .1, .1),
+  },
+
   # ********** events that affect controls state transitions **********
 
   EventName.pcmEnable: {
@@ -540,17 +615,20 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   },
 
   EventName.brakeHold: {
-    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),
-    ET.NO_ENTRY: NoEntryAlert("Brake Hold Active"),
+    ET.WARNING: Alert(
+      "AUTO HOLD",
+      "",
+      AlertStatus.normal, AlertSize.full,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, 1., 1., 1.),
   },
 
   EventName.parkBrake: {
-    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),
+    ET.USER_DISABLE: EngagementAlert(AudibleAlert.none),
     ET.NO_ENTRY: NoEntryAlert("Park Brake Engaged"),
   },
 
   EventName.pedalPressed: {
-    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),
+    ET.USER_DISABLE: EngagementAlert(AudibleAlert.none),
     ET.NO_ENTRY: NoEntryAlert("Pedal Pressed During Attempt",
                               visual_alert=VisualAlert.brakePressed),
   },
@@ -561,7 +639,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   },
 
   EventName.wrongCruiseMode: {
-    ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),
+    ET.USER_DISABLE: EngagementAlert(AudibleAlert.none),
     ET.NO_ENTRY: NoEntryAlert("Enable Adaptive Cruise"),
   },
 
@@ -569,6 +647,46 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
     ET.SOFT_DISABLE: SoftDisableAlert("Steering Temporarily Unavailable"),
     ET.NO_ENTRY: NoEntryAlert("Steering Temporarily Unavailable",
                               duration_hud_alert=0.),
+  },
+  
+  EventName.isgActive: {
+    ET.WARNING: Alert(
+      "Steering paused, ISG is working",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+  },
+
+  EventName.camSpeedDown: {
+    ET.WARNING: Alert(
+      "Slow Down on Speed Limit",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, .5, .5, alert_rate=0.75),
+  },
+
+  EventName.gapAdjusting: {
+    ET.WARNING: Alert(
+      "Adjusting Cruise Gap",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, .5, .5, alert_rate=0.75),
+  },
+
+  EventName.resCruise: {
+    ET.WARNING: Alert(
+      "Auto RES triggered",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, .5, .5),
+  },
+
+  EventName.curvSpeedDown: {
+    ET.WARNING: Alert(
+      "Slow Down On Curve",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, .5, .5),
   },
 
   EventName.outOfSpace: {
@@ -664,15 +782,17 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   # is thrown. This can mean a service crashed, did not broadcast a message for
   # ten times the regular interval, or the average interval is more than 10% too high.
   EventName.commIssue: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Communication Issue between Processes"),
-    ET.NO_ENTRY: NoEntryAlert("Communication Issue between Processes",
-                              audible_alert=AudibleAlert.chimeDisengage),
+    ET.WARNING: Alert(
+      "TAKE CONTROL",
+      "Communication Issue between Processes",
+      AlertStatus.userPrompt, AlertSize.mid,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimePrompt, 1., 1., 1.),
   },
 
   # Thrown when manager detects a service exited unexpectedly while driving
   EventName.processNotRunning: {
     ET.NO_ENTRY: NoEntryAlert("System Malfunction: Reboot Your Device",
-                              audible_alert=AudibleAlert.chimeDisengage),
+                              audible_alert=AudibleAlert.none),
   },
 
   EventName.radarFault: {
@@ -709,7 +829,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
     ET.SOFT_DISABLE: SoftDisableAlert("Low Memory: Reboot Your Device"),
     ET.PERMANENT: NormalPermanentAlert("Low Memory", "Reboot your Device"),
     ET.NO_ENTRY: NoEntryAlert("Low Memory: Reboot Your Device",
-                              audible_alert=AudibleAlert.chimeDisengage),
+                              audible_alert=AudibleAlert.none),
   },
 
   EventName.highCpuUsage: {
@@ -825,7 +945,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "openpilot Canceled",
       "No close lead car",
       AlertStatus.normal, AlertSize.mid,
-      Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
+      Priority.HIGH, VisualAlert.none, AudibleAlert.none, .4, 2., 3.),
     ET.NO_ENTRY: NoEntryAlert("No Close Lead Car"),
   },
 
@@ -834,7 +954,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "openpilot Canceled",
       "Speed too low",
       AlertStatus.normal, AlertSize.mid,
-      Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
+      Priority.HIGH, VisualAlert.none, AudibleAlert.none, .4, 2., 3.),
   },
 
   # When the car is driving faster than most cars in the training data the model outputs can be unpredictable

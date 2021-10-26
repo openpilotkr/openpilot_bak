@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import datetime
 import os
+import subprocess
 import time
 from pathlib import Path
 from typing import Dict, Optional, Tuple
@@ -12,7 +13,7 @@ from smbus2 import SMBus
 import cereal.messaging as messaging
 from cereal import log
 from common.filter_simple import FirstOrderFilter
-from common.numpy_fast import interp
+from common.numpy_fast import clip, interp
 from common.params import Params, ParamKeyType
 from common.realtime import DT_TRML, sec_since_boot
 from common.dict_helpers import strip_deprecated_keys
@@ -32,9 +33,9 @@ NetworkType = log.DeviceState.NetworkType
 NetworkStrength = log.DeviceState.NetworkStrength
 CURRENT_TAU = 15.   # 15s time constant
 TEMP_TAU = 5.   # 5s time constant
-DAYS_NO_CONNECTIVITY_MAX = 14     # do not allow to engage after this many days
-DAYS_NO_CONNECTIVITY_PROMPT = 10  # send an offroad prompt after this many days
-DISCONNECT_TIMEOUT = 5.  # wait 5 seconds before going offroad after disconnect so you get an alert
+DAYS_NO_CONNECTIVITY_MAX = 7  # do not allow to engage after a week without internet
+DAYS_NO_CONNECTIVITY_PROMPT = 4  # send an offroad prompt after 4 days with no internet
+DISCONNECT_TIMEOUT = 3.  # wait 5 seconds before going offroad after disconnect so you get an alert
 
 ThermalBand = namedtuple("ThermalBand", ['min_temp', 'max_temp'])
 
@@ -48,9 +49,14 @@ THERMAL_BANDS = OrderedDict({
 })
 
 # Override to highest thermal band when offroad and above this temp
-OFFROAD_DANGER_TEMP = 79.5 if TICI else 70.0
+OFFROAD_DANGER_TEMP = 70.0
 
 prev_offroad_states: Dict[str, Tuple[bool, Optional[str]]] = {}
+
+mediaplayer = '/data/openpilot/selfdrive/assets/addon/mediaplayer/'
+prebuiltfile = '/data/openpilot/prebuilt'
+sshkeyfile = '/data/public_key'
+pandaflash_ongoing = '/data/openpilot/pandaflash_ongoing'
 
 def read_tz(x):
   if x is None:
@@ -69,6 +75,7 @@ def read_thermal(thermal_config):
   dat.deviceState.gpuTempC = [read_tz(z) / thermal_config.gpu[1] for z in thermal_config.gpu[0]]
   dat.deviceState.memoryTempC = read_tz(thermal_config.mem[0]) / thermal_config.mem[1]
   dat.deviceState.ambientTempC = read_tz(thermal_config.ambient[0]) / thermal_config.ambient[1]
+  dat.deviceState.batteryTempC = read_tz(thermal_config.bat[0]) / thermal_config.bat[1]
   return dat
 
 
@@ -154,8 +161,9 @@ def thermald_thread():
   pm = messaging.PubMaster(['deviceState'])
 
   pandaState_timeout = int(1000 * 2.5 * DT_TRML)  # 2.5x the expected pandaState frequency
-  pandaState_sock = messaging.sub_sock('pandaStates', timeout=pandaState_timeout)
-  sm = messaging.SubMaster(["peripheralState", "gpsLocationExternal", "managerState"])
+  pandaState_sock = messaging.sub_sock('pandaState', timeout=pandaState_timeout)
+  location_sock = messaging.sub_sock('gpsLocationExternal')
+  managerState_sock = messaging.sub_sock('managerState', conflate=True)
 
   fan_speed = 0
   count = 0
@@ -178,12 +186,13 @@ def thermald_thread():
   registered_count = 0
   nvme_temps = None
   modem_temps = None
+  wifiIpAddress = "N/A"
+  wifi_ssid = "---"
 
   current_filter = FirstOrderFilter(0., CURRENT_TAU, DT_TRML)
   temp_filter = FirstOrderFilter(0., TEMP_TAU, DT_TRML)
   pandaState_prev = None
   should_start_prev = False
-  in_car = False
   handle_fan = None
   is_uno = False
   ui_running_prev = False
@@ -202,34 +211,55 @@ def thermald_thread():
   if params.get_bool("IsOnroad"):
     params.put_bool("BootedOnroad", True)
 
-  while True:
-    pandaStates = messaging.recv_sock(pandaState_sock, wait=True)
+  # sound trigger
+  sound_trigger = 1
+  opkrAutoShutdown = 0
 
-    sm.update(0)
-    peripheralState = sm['peripheralState']
+  shutdown_trigger = 1
+  is_openpilot_view_enabled = 0
 
+  env = dict(os.environ)
+  env['LD_LIBRARY_PATH'] = mediaplayer
+
+  getoff_alert = params.get_bool("OpkrEnableGetoffAlert")
+
+  hotspot_on_boot = params.get_bool("OpkrHotspotOnBoot")
+  hotspot_run = False
+
+  opkrAutoShutdown = interp(int(params.get("OpkrAutoShutdown", encoding="utf8")), [0,1,2,3,4,5,6,7,8,9], [0,5,30,60,180,300,600,1800,3600,10800])
+  battery_charging_control = params.get_bool("OpkrBatteryChargingControl")
+  battery_charging_min = int(params.get("OpkrBatteryChargingMin", encoding="utf8"))
+  battery_charging_max = int(params.get("OpkrBatteryChargingMax", encoding="utf8"))
+
+  is_openpilot_dir = True
+
+  while 1:
+    ts = sec_since_boot()
+    pandaState = messaging.recv_sock(pandaState_sock, wait=True)
     msg = read_thermal(thermal_config)
 
-    if pandaStates is not None and len(pandaStates.pandaStates) > 0:
-      pandaState = pandaStates.pandaStates[0]
+    if pandaState is not None:
+      usb_power = pandaState.pandaState.usbPowerMode != log.PandaState.UsbPowerMode.client
 
       # If we lose connection to the panda, wait 5 seconds before going offroad
-      if pandaState.pandaType == log.PandaState.PandaType.unknown:
+      if pandaState.pandaState.pandaType == log.PandaState.PandaType.unknown:
         no_panda_cnt += 1
         if no_panda_cnt > DISCONNECT_TIMEOUT / DT_TRML:
           if startup_conditions["ignition"]:
             cloudlog.error("Lost panda connection while onroad")
           startup_conditions["ignition"] = False
+          shutdown_trigger = 1
       else:
         no_panda_cnt = 0
-        startup_conditions["ignition"] = pandaState.ignitionLine or pandaState.ignitionCan
-
-      in_car = pandaState.harnessStatus != log.PandaState.HarnessStatus.notConnected
-      usb_power = peripheralState.usbPowerMode != log.PeripheralState.UsbPowerMode.client
+        startup_conditions["ignition"] = pandaState.pandaState.ignitionLine or pandaState.pandaState.ignitionCan
+        sound_trigger == 1
+      #startup_conditions["hardware_supported"] = pandaState.pandaState.pandaType not in [log.PandaState.PandaType.whitePanda,
+      #                                                                                   log.PandaState.PandaType.greyPanda]
+      #set_offroad_alert_if_changed("Offroad_HardwareUnsupported", not startup_conditions["hardware_supported"])
 
       # Setup fan handler on first connect to panda
-      if handle_fan is None and peripheralState.pandaType != log.PandaState.PandaType.unknown:
-        is_uno = peripheralState.pandaType == log.PandaState.PandaType.uno
+      if handle_fan is None and pandaState.pandaState.pandaType != log.PandaState.PandaType.unknown:
+        is_uno = pandaState.pandaState.pandaType == log.PandaState.PandaType.uno
 
         if TICI:
           cloudlog.info("Setting up TICI fan handler")
@@ -244,19 +274,28 @@ def thermald_thread():
 
       # Handle disconnect
       if pandaState_prev is not None:
-        if pandaState.pandaType == log.PandaState.PandaType.unknown and \
-          pandaState_prev.pandaType != log.PandaState.PandaType.unknown:
+        if pandaState.pandaState.pandaType == log.PandaState.PandaType.unknown and \
+          pandaState_prev.pandaState.pandaType != log.PandaState.PandaType.unknown:
           params.clear_all(ParamKeyType.CLEAR_ON_PANDA_DISCONNECT)
       pandaState_prev = pandaState
+    elif params.get_bool("IsOpenpilotViewEnabled") and not params.get_bool("IsDriverViewEnabled") and is_openpilot_view_enabled == 0:
+      is_openpilot_view_enabled = 1
+      startup_conditions["ignition"] = True
+    elif not params.get_bool("IsOpenpilotViewEnabled") and not params.get_bool("IsDriverViewEnabled") and is_openpilot_view_enabled == 1:
+      shutdown_trigger = 0
+      sound_trigger == 0
+      is_openpilot_view_enabled = 0
+      startup_conditions["ignition"] = False
 
     # these are expensive calls. update every 10s
     if (count % int(10. / DT_TRML)) == 0:
       try:
         network_type = HARDWARE.get_network_type()
-        network_strength = HARDWARE.get_network_strength(network_type)
+        network_strength, wifi_ssid = HARDWARE.get_network_strength(network_type)
         network_info = HARDWARE.get_network_info()  # pylint: disable=assignment-from-none
-        nvme_temps = HARDWARE.get_nvme_temperatures()
-        modem_temps = HARDWARE.get_modem_temperatures()
+        if TICI:
+          nvme_temps = HARDWARE.get_nvme_temps()
+          modem_temps = HARDWARE.get_modem_temperatures()
 
         # Log modem version once
         if modem_version is None:
@@ -274,6 +313,12 @@ def thermald_thread():
           os.system("nmcli conn up lte")
           registered_count = 0
 
+        wifiIpAddress = HARDWARE.get_ip_address()
+        try:
+          ping_test = subprocess.check_output(["ping", "-c", "1", "-W", "1", "google.com"])
+          Params().put("LastAthenaPingTime", str(int(sec_since_boot() * 1e9))) if ping_test else False
+        except Exception:
+          Params().delete("LastAthenaPingTime")
       except Exception:
         cloudlog.exception("Error getting network status")
 
@@ -283,22 +328,27 @@ def thermald_thread():
     msg.deviceState.gpuUsagePercent = int(round(HARDWARE.get_gpu_usage_percent()))
     msg.deviceState.networkType = network_type
     msg.deviceState.networkStrength = network_strength
+    msg.deviceState.wifiSSID = wifi_ssid
     if network_info is not None:
       msg.deviceState.networkInfo = network_info
+    msg.deviceState.wifiIpAddress = wifiIpAddress
     if nvme_temps is not None:
       msg.deviceState.nvmeTempC = nvme_temps
     if modem_temps is not None:
       msg.deviceState.modemTempC = modem_temps
 
-    msg.deviceState.screenBrightnessPercent = HARDWARE.get_screen_brightness()
     msg.deviceState.batteryPercent = HARDWARE.get_battery_capacity()
+    msg.deviceState.batteryStatus = HARDWARE.get_battery_status()
     msg.deviceState.batteryCurrent = HARDWARE.get_battery_current()
+    msg.deviceState.batteryVoltage = HARDWARE.get_battery_voltage()
     msg.deviceState.usbOnline = HARDWARE.get_usb_present()
     current_filter.update(msg.deviceState.batteryCurrent / 1e6)
 
     max_comp_temp = temp_filter.update(
       max(max(msg.deviceState.cpuTempC), msg.deviceState.memoryTempC, max(msg.deviceState.gpuTempC))
     )
+
+    bat_temp = msg.deviceState.batteryTempC
 
     if handle_fan is not None:
       fan_speed = handle_fan(controller, max_comp_temp, fan_speed, startup_conditions["ignition"])
@@ -323,44 +373,44 @@ def thermald_thread():
     now = datetime.datetime.utcnow()
 
     # show invalid date/time alert
-    startup_conditions["time_valid"] = (now.year > 2020) or (now.year == 2020 and now.month >= 10)
+    startup_conditions["time_valid"] = True if ((now.year > 2020) or (now.year == 2020 and now.month >= 10)) else True # set True for battery less EON otherwise, set False.
     set_offroad_alert_if_changed("Offroad_InvalidTime", (not startup_conditions["time_valid"]))
 
     # Show update prompt
-    try:
-      last_update = datetime.datetime.fromisoformat(params.get("LastUpdateTime", encoding='utf8'))
-    except (TypeError, ValueError):
-      last_update = now
-    dt = now - last_update
+    # try:
+    #   last_update = datetime.datetime.fromisoformat(params.get("LastUpdateTime", encoding='utf8'))
+    # except (TypeError, ValueError):
+    #   last_update = now
+    # dt = now - last_update
 
-    update_failed_count = params.get("UpdateFailedCount")
-    update_failed_count = 0 if update_failed_count is None else int(update_failed_count)
-    last_update_exception = params.get("LastUpdateException", encoding='utf8')
+    # update_failed_count = params.get("UpdateFailedCount")
+    # update_failed_count = 0 if update_failed_count is None else int(update_failed_count)
+    # last_update_exception = params.get("LastUpdateException", encoding='utf8')
 
-    if update_failed_count > 15 and last_update_exception is not None:
-      if tested_branch:
-        extra_text = "Ensure the software is correctly installed"
-      else:
-        extra_text = last_update_exception
+    # if update_failed_count > 15 and last_update_exception is not None:
+    #   if current_branch in ["release2", "dashcam"]:
+    #     extra_text = "Ensure the software is correctly installed"
+    #   else:
+    #     extra_text = last_update_exception
 
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", False)
-      set_offroad_alert_if_changed("Offroad_UpdateFailed", True, extra_text=extra_text)
-    elif dt.days > DAYS_NO_CONNECTIVITY_MAX and update_failed_count > 1:
-      set_offroad_alert_if_changed("Offroad_UpdateFailed", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", True)
-    elif dt.days > DAYS_NO_CONNECTIVITY_PROMPT:
-      remaining_time = str(max(DAYS_NO_CONNECTIVITY_MAX - dt.days, 0))
-      set_offroad_alert_if_changed("Offroad_UpdateFailed", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", True, extra_text=f"{remaining_time} days.")
-    else:
-      set_offroad_alert_if_changed("Offroad_UpdateFailed", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", False)
+    #   set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", False)
+    #   set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", False)
+    #   set_offroad_alert_if_changed("Offroad_UpdateFailed", True, extra_text=extra_text)
+    # elif dt.days > DAYS_NO_CONNECTIVITY_MAX and update_failed_count > 1:
+    #   set_offroad_alert_if_changed("Offroad_UpdateFailed", False)
+    #   set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", False)
+    #   set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", True)
+    # elif dt.days > DAYS_NO_CONNECTIVITY_PROMPT:
+    #   remaining_time = str(max(DAYS_NO_CONNECTIVITY_MAX - dt.days, 0))
+    #   set_offroad_alert_if_changed("Offroad_UpdateFailed", False)
+    #   set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", False)
+    #   set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", True, extra_text=f"{remaining_time} days.")
+    # else:
+    #   set_offroad_alert_if_changed("Offroad_UpdateFailed", False)
+    #   set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", False)
+    #   set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", False)
 
-    startup_conditions["up_to_date"] = params.get("Offroad_ConnectivityNeeded") is None or params.get_bool("DisableUpdates")
+    #startup_conditions["up_to_date"] = params.get("Offroad_ConnectivityNeeded") is None or params.get_bool("DisableUpdates")
     startup_conditions["not_uninstalling"] = not params.get_bool("DoUninstall")
     startup_conditions["accepted_terms"] = params.get("HasAcceptedTerms") == terms_version
 
@@ -402,26 +452,71 @@ def thermald_thread():
       if off_ts is None:
         off_ts = sec_since_boot()
 
+      if shutdown_trigger == 1 and sound_trigger == 1 and msg.deviceState.batteryStatus == "Discharging" and started_seen and (sec_since_boot() - off_ts) > 1 and getoff_alert:
+        subprocess.Popen([mediaplayer + 'mediaplayer', '/data/openpilot/selfdrive/assets/addon/sound/eondetach.wav'], shell = False, stdin=None, stdout=None, stderr=None, env = env, close_fds=True)
+        sound_trigger = 0
+      # shutdown if the battery gets lower than 3%, it's discharging, we aren't running for
+      # more than a minute but we were running
+      if shutdown_trigger == 1 and msg.deviceState.batteryStatus == "Discharging" and \
+         started_seen and opkrAutoShutdown and (sec_since_boot() - off_ts) > opkrAutoShutdown and not os.path.isfile(pandaflash_ongoing):
+        os.system('LD_LIBRARY_PATH="" svc power shutdown')
+
+      if (count % int(1. / DT_TRML)) == 0:
+        if int(params.get("OpkrForceShutdown", encoding="utf8")) != 0 and not started_seen and msg.deviceState.batteryStatus == "Discharging":
+          opkrForceShutdown = interp(int(params.get("OpkrForceShutdown", encoding="utf8")), [0,1,2,3,4,5], [0,60,180,300,600,1800])
+          if (sec_since_boot() - off_ts) > opkrForceShutdown and opkrForceShutdown and params.get_bool("OpkrForceShutdownTrigger"):
+            os.system('LD_LIBRARY_PATH="" svc power shutdown')
+          elif not params.get_bool("OpkrForceShutdownTrigger"):
+            off_ts = sec_since_boot()
+        elif msg.deviceState.batteryPercent < 10 and not started_seen and msg.deviceState.batteryStatus == "Discharging":
+          os.system('LD_LIBRARY_PATH="" svc power shutdown')
+
+
+    # opkr
+    prebuiltlet = params.get_bool("PutPrebuiltOn")
+    if not os.path.isdir("/data/openpilot"):
+      if is_openpilot_dir:
+        os.system("cd /data/params/d; rm -f DongleId") # Delete DongleID if the Openpilot directory disappears, Seems you want to switch fork/branch.
+      is_openpilot_dir = False
+    elif not os.path.isfile(prebuiltfile) and prebuiltlet and is_openpilot_dir:
+      os.system("cd /data/openpilot; touch prebuilt")
+    elif os.path.isfile(prebuiltfile) and not prebuiltlet:
+      os.system("cd /data/openpilot; rm -f prebuilt")
+
+    # opkr
+    sshkeylet = params.get_bool("OpkrSSHLegacy")
+    if not os.path.isfile(sshkeyfile) and sshkeylet:
+      os.system("cp -f /data/openpilot/selfdrive/assets/addon/key/GithubSshKeys_legacy /data/params/d/GithubSshKeys; chmod 600 /data/params/d/GithubSshKeys; touch /data/public_key")
+    elif os.path.isfile(sshkeyfile) and not sshkeylet:
+      os.system("cp -f /data/openpilot/selfdrive/assets/addon/key/GithubSshKeys_new /data/params/d/GithubSshKeys; chmod 600 /data/params/d/GithubSshKeys; rm -f /data/public_key")
+
+    # opkr hotspot
+    if hotspot_on_boot and not hotspot_run and sec_since_boot() > 80:
+      os.system("service call wifi 37 i32 0 i32 1 &")
+      hotspot_run = True
+
     # Offroad power monitoring
-    power_monitor.calculate(peripheralState, startup_conditions["ignition"])
+    power_monitor.calculate(pandaState)
     msg.deviceState.offroadPowerUsageUwh = power_monitor.get_power_used()
     msg.deviceState.carBatteryCapacityUwh = max(0, power_monitor.get_car_battery_capacity())
 
-    # Check if we need to disable charging (handled by boardd)
-    msg.deviceState.chargingDisabled = power_monitor.should_disable_charging(startup_conditions["ignition"], in_car, off_ts)
-
-    # Check if we need to shut down
-    if power_monitor.should_shutdown(peripheralState, startup_conditions["ignition"], in_car, off_ts, started_seen):
-      cloudlog.info(f"shutting device down, offroad since {off_ts}")
-      # TODO: add function for blocking cloudlog instead of sleep
-      time.sleep(10)
-      HARDWARE.shutdown()
+#    # Check if we need to disable charging (handled by boardd)
+#    msg.deviceState.chargingDisabled = power_monitor.should_disable_charging(pandaState, off_ts)
+#
+#    # Check if we need to shut down
+#    if power_monitor.should_shutdown(pandaState, off_ts, started_seen):
+#      cloudlog.info(f"shutting device down, offroad since {off_ts}")
+#      # TODO: add function for blocking cloudlog instead of sleep
+#      time.sleep(10)
+#      HARDWARE.shutdown()
 
     # If UI has crashed, set the brightness to reasonable non-zero value
-    ui_running = "ui" in (p.name for p in sm["managerState"].processes if p.running)
-    if ui_running_prev and not ui_running:
-      HARDWARE.set_screen_brightness(20)
-    ui_running_prev = ui_running
+    manager_state = messaging.recv_one_or_none(managerState_sock)
+    if manager_state is not None:
+      ui_running = "ui" in (p.name for p in manager_state.managerState.processes if p.running)
+      if ui_running_prev and not ui_running:
+        HARDWARE.set_screen_brightness(20)
+      ui_running_prev = ui_running
 
     msg.deviceState.chargingError = current_filter.x > 0. and msg.deviceState.batteryPercent < 90  # if current is positive, then battery is being discharged
     msg.deviceState.started = started_ts is not None
@@ -440,16 +535,20 @@ def thermald_thread():
     should_start_prev = should_start
     startup_conditions_prev = startup_conditions.copy()
 
+    # atom
+    if usb_power and battery_charging_control:
+      power_monitor.charging_ctrl( msg, ts, battery_charging_max, battery_charging_min )
+
     # report to server once every 10 minutes
     if (count % int(600. / DT_TRML)) == 0:
       if EON and started_ts is None and msg.deviceState.memoryUsagePercent > 40:
         cloudlog.event("High offroad memory usage", mem=msg.deviceState.memoryUsagePercent)
 
+      location = messaging.recv_sock(location_sock)
       cloudlog.event("STATUS_PACKET",
                      count=count,
-                     pandaStates=(strip_deprecated_keys(pandaStates.to_dict()) if pandaStates else None),
-                     peripheralState=strip_deprecated_keys(peripheralState.to_dict()),
-                     location=(strip_deprecated_keys(sm["gpsLocationExternal"].to_dict()) if sm.alive["gpsLocationExternal"] else None),
+                     pandaState=(strip_deprecated_keys(pandaState.to_dict()) if pandaState else None),
+                     location=(strip_deprecated_keys(location.gpsLocationExternal.to_dict()) if location else None),
                      deviceState=strip_deprecated_keys(msg.to_dict()))
 
     count += 1

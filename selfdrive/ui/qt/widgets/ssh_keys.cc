@@ -20,6 +20,7 @@ SshControl::SshControl() : ButtonControl("SSH Keys", "", "Warning: This grants S
     } else {
       params.remove("GithubUsername");
       params.remove("GithubSshKeys");
+      params.put("OpkrSSHLegacy", "0", 1);
       refresh();
     }
   });
@@ -29,8 +30,14 @@ SshControl::SshControl() : ButtonControl("SSH Keys", "", "Warning: This grants S
 
 void SshControl::refresh() {
   QString param = QString::fromStdString(params.get("GithubSshKeys"));
+  QString isUsername = QString::fromStdString(params.get("GithubUsername"));
+  bool legacy_stat = params.getBool("OpkrSSHLegacy");
   if (param.length()) {
-    username_label.setText(QString::fromStdString(params.get("GithubUsername")));
+    if (isUsername.length()) {
+      username_label.setText(QString::fromStdString(params.get("GithubUsername")));
+    } else if (legacy_stat) {
+      username_label.setText("Legacy Key");
+    }
     setText("REMOVE");
   } else {
     username_label.setText("");

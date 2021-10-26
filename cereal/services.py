@@ -62,6 +62,8 @@ services = {
   "modelV2": (True, 20., 40),
   "managerState": (True, 2., 1),
   "uploaderState": (True, 0., 1),
+  "liveNaviData": (False, 0.),
+  "liveMapData": (True, 0.),
 
   # debug
   "testJoystick": (False, 0.),

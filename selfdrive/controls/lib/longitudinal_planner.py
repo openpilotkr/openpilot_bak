@@ -4,12 +4,15 @@ import numpy as np
 from common.numpy_fast import interp
 
 import cereal.messaging as messaging
+from cereal import log
 from common.realtime import DT_MDL
+from common.realtime import sec_since_boot
 from selfdrive.modeld.constants import T_IDXS
 from selfdrive.config import Conversions as CV
+from selfdrive.controls.lib.fcw import FCWChecker
 from selfdrive.controls.lib.longcontrol import LongCtrlState
-from selfdrive.controls.lib.longitudinal_mpc_lib.long_mpc import LongitudinalMpc
-from selfdrive.controls.lib.longitudinal_mpc_lib.long_mpc import T_IDXS as T_IDXS_MPC
+from selfdrive.controls.lib.lead_mpc import LeadMpc
+from selfdrive.controls.lib.long_mpc import LongitudinalMpc
 from selfdrive.controls.lib.drive_helpers import V_CRUISE_MAX, CONTROL_N
 from selfdrive.swaglog import cloudlog
 
@@ -42,31 +45,45 @@ def limit_accel_in_turns(v_ego, angle_steers, a_target, CP):
 
 
 class Planner():
-  def __init__(self, CP, init_v=0.0, init_a=0.0):
+  def __init__(self, CP):
     self.CP = CP
-    self.mpc = LongitudinalMpc()
+    self.mpcs = {}
+    self.mpcs['lead0'] = LeadMpc(0)
+    self.mpcs['lead1'] = LeadMpc(1)
+    self.mpcs['cruise'] = LongitudinalMpc()
 
     self.fcw = False
+    self.fcw_checker = FCWChecker()
 
-    self.v_desired = init_v
-    self.a_desired = init_a
+    self.v_desired = 0.0
+    self.a_desired = 0.0
+    self.longitudinalPlanSource = 'cruise'
     self.alpha = np.exp(-DT_MDL/2.0)
+    self.lead_0 = log.ModelDataV2.LeadDataV3.new_message()
+    self.lead_1 = log.ModelDataV2.LeadDataV3.new_message()
 
     self.v_desired_trajectory = np.zeros(CONTROL_N)
     self.a_desired_trajectory = np.zeros(CONTROL_N)
-    self.j_desired_trajectory = np.zeros(CONTROL_N)
 
 
   def update(self, sm, CP):
+    cur_time = sec_since_boot()
     v_ego = sm['carState'].vEgo
     a_ego = sm['carState'].aEgo
+    self.vego = v_ego
 
-    v_cruise_kph = sm['controlsState'].vCruise
+    if CP.sccBus != 0:
+      v_cruise_kph = sm['carState'].vSetDis
+    else:
+      v_cruise_kph = sm['controlsState'].vCruise
     v_cruise_kph = min(v_cruise_kph, V_CRUISE_MAX)
     v_cruise = v_cruise_kph * CV.KPH_TO_MS
 
     long_control_state = sm['controlsState'].longControlState
     force_slow_decel = sm['controlsState'].forceDecel
+
+    self.lead_0 = sm['radarState'].leadOne
+    self.lead_1 = sm['radarState'].leadTwo
 
     enabled = (long_control_state == LongCtrlState.pid) or (long_control_state == LongCtrlState.stopping)
     if not enabled or sm['carState'].gasPressed:
@@ -79,24 +96,38 @@ class Planner():
 
     accel_limits = [A_CRUISE_MIN, get_max_accel(v_ego)]
     accel_limits_turns = limit_accel_in_turns(v_ego, sm['carState'].steeringAngleDeg, accel_limits, self.CP)
-    if force_slow_decel:
+    if force_slow_decel and False: # awareness decel is disabled for now:
       # if required so, force a smooth deceleration
       accel_limits_turns[1] = min(accel_limits_turns[1], AWARENESS_DECEL)
       accel_limits_turns[0] = min(accel_limits_turns[0], accel_limits_turns[1])
     # clip limits, cannot init MPC outside of bounds
-    accel_limits_turns[0] = min(accel_limits_turns[0], self.a_desired + 0.05)
-    accel_limits_turns[1] = max(accel_limits_turns[1], self.a_desired - 0.05)
-    self.mpc.set_accel_limits(accel_limits_turns[0], accel_limits_turns[1])
-    self.mpc.set_cur_state(self.v_desired, self.a_desired)
-    self.mpc.update(sm['carState'], sm['radarState'], v_cruise)
-    self.v_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC, self.mpc.v_solution)
-    self.a_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC, self.mpc.a_solution)
-    self.j_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC[:-1], self.mpc.j_solution)
+    accel_limits_turns[0] = min(accel_limits_turns[0], self.a_desired)
+    accel_limits_turns[1] = max(accel_limits_turns[1], self.a_desired)
+    self.mpcs['cruise'].set_accel_limits(accel_limits_turns[0], accel_limits_turns[1])
 
-    #TODO counter is only needed because radar is glitchy, remove once radar is gone
-    self.fcw = self.mpc.crash_cnt > 5
+    next_a = np.inf
+    for key in self.mpcs:
+      self.mpcs[key].set_cur_state(self.v_desired, self.a_desired)
+      self.mpcs[key].update(sm['carState'], sm['radarState'], v_cruise)
+      if self.mpcs[key].status and self.mpcs[key].a_solution[5] < next_a:  # picks slowest solution from accel in ~0.2 seconds
+        self.longitudinalPlanSource = key
+        self.v_desired_trajectory = self.mpcs[key].v_solution[:CONTROL_N]
+        self.a_desired_trajectory = self.mpcs[key].a_solution[:CONTROL_N]
+        self.j_desired_trajectory = self.mpcs[key].j_solution[:CONTROL_N]
+        next_a = self.mpcs[key].a_solution[5]
+
+    # determine fcw
+    if self.mpcs['lead0'].new_lead:
+      self.fcw_checker.reset_lead(cur_time)
+    blinkers = sm['carState'].leftBlinker or sm['carState'].rightBlinker
+    self.fcw = self.fcw_checker.update(self.mpcs['lead0'].mpc_solution, cur_time,
+                                       sm['controlsState'].active,
+                                       v_ego, sm['carState'].aEgo,
+                                       self.lead_1.dRel, self.lead_1.vLead, self.lead_1.aLeadK,
+                                       self.lead_1.yRel, self.lead_1.vLat,
+                                       self.lead_1.fcw, blinkers) and not sm['carState'].brakePressed
     if self.fcw:
-      cloudlog.info("FCW triggered")
+      cloudlog.info("FCW triggered %s", self.fcw_checker.counters)
 
     # Interpolate 0.05 seconds and save as starting point for next iteration
     a_prev = self.a_desired
@@ -116,8 +147,12 @@ class Planner():
     longitudinalPlan.accels = [float(x) for x in self.a_desired_trajectory]
     longitudinalPlan.jerks = [float(x) for x in self.j_desired_trajectory]
 
-    longitudinalPlan.hasLead = sm['radarState'].leadOne.status
-    longitudinalPlan.longitudinalPlanSource = self.mpc.source
+    longitudinalPlan.hasLead = self.mpcs['lead0'].status
+    longitudinalPlan.longitudinalPlanSource = self.longitudinalPlanSource
     longitudinalPlan.fcw = self.fcw
+
+    # opkr
+    longitudinalPlan.dynamicTRMode = int(self.mpcs['lead0'].dynamic_TR_mode)
+    longitudinalPlan.dynamicTRValue = float(self.mpcs['lead0'].dynamic_TR)
 
     pm.send('longitudinalPlan', plan_send)

@@ -291,6 +291,11 @@ struct DeviceState @0xa4d8b5af2aa492eb {
   networkStrength @24 :NetworkStrength;
   lastAthenaPingTime @32 :UInt64;
 
+  # atom
+  wifiIpAddress @37 :Text;
+  # opkr
+  wifiSSID @38 :Text;
+
   started @11 :Bool;
   startedMonoTime @13 :UInt64;
 
@@ -302,7 +307,9 @@ struct DeviceState @0xa4d8b5af2aa492eb {
 
   # power
   batteryPercent @8 :Int16;
+  batteryStatus @9 :Text;
   batteryCurrent @15 :Int32;
+  batteryVoltage @16 :Int32;
   chargingError @17 :Bool;
   chargingDisabled @18 :Bool;
   offroadPowerUsageUwh @23 :UInt32;
@@ -312,6 +319,7 @@ struct DeviceState @0xa4d8b5af2aa492eb {
   cpuTempC @26 :List(Float32);
   gpuTempC @27 :List(Float32);
   memoryTempC @28 :Float32;
+  batteryTempC @29 :Float32;
   ambientTempC @30 :Float32;
   nvmeTempC @35 :List(Float32);
   modemTempC @36 :List(Float32);
@@ -364,9 +372,6 @@ struct DeviceState @0xa4d8b5af2aa492eb {
   batDEPRECATED @6 :UInt32;
   pa0DEPRECATED @21 :UInt16;
   cpuUsagePercentDEPRECATED @20 :Int8;
-  batteryStatusDEPRECATED @9 :Text;
-  batteryVoltageDEPRECATED @16 :Int32;
-  batteryTempCDEPRECATED @29 :Float32;
 }
 
 struct PandaState @0xa7649e2575e4591e {
@@ -562,6 +567,18 @@ struct ControlsState @0x97ff69c53601abf1 {
 
   cumLagMs @15 :Float32;
   canErrorCounter @57 :UInt32;
+
+  # atom
+  alertTextMsg1  @60 :Text;
+  alertTextMsg2  @61 :Text;
+  # opkr
+  lateralControlMethod  @62 :UInt8;
+  limitSpeedCamera @63 :Float32;
+  limitSpeedCameraDist @64 :Float32;
+  steerRatio @65 :Float32;
+  mapSign @66 :Float32;
+  dynamicTRMode @67 :UInt8;
+  dynamicTRValue @68 :Float32;
 
   lateralControlState :union {
     indiState @52 :LateralINDIState;
@@ -811,6 +828,10 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
   speeds @33 :List(Float32);
   jerks @34 :List(Float32);
 
+  # opkr
+  dynamicTRMode @35 :UInt8;
+  dynamicTRValue @36 :Float32;
+
   enum LongitudinalPlanSource {
     cruise @0;
     lead0 @1;
@@ -871,6 +892,15 @@ struct LateralPlan @0xe1e9318e2ae8b51e {
   psis @26 :List(Float32);
   curvatures @27 :List(Float32);
   curvatureRates @28 :List(Float32);
+
+  # opkr
+  outputScale @29 :Float32;
+  steerRateCost @30 :Float32;
+  standstillElapsedTime @31 :Float32;
+  vCruiseSet @32 :Float32;
+  vCurvature @33 :Float32;
+  lanelessMode @34 :Bool;
+  modelSpeed @35 :Float32;
 
   enum Desire {
     none @0;
@@ -1308,6 +1338,19 @@ struct LiveParametersData {
   steerRatioStd @13 :Float32;
 }
 
+struct LiveNaviData {
+  speedLimit @0 :Int32;
+  speedLimitDistance @1 :Float32;
+  safetySign @2 :Int32;
+  roadCurvature @3 :Float32;
+  turnInfo @4 :Int32;
+  distanceToTurn @5 :Float32;
+  ts @6 :UInt64;
+
+  mapValid @7 :Bool;
+  mapEnable @8 :Int32;
+}
+
 struct LiveMapDataDEPRECATED {
   speedLimitValid @0 :Bool;
   speedLimit @1 :Float32;
@@ -1326,6 +1369,22 @@ struct LiveMapDataDEPRECATED {
   roadCurvature @9 :List(Float32);
   distToTurn @10 :Float32;
   mapValid @11 :Bool;
+}
+
+struct LiveMapData {
+  speedLimitValid @0 :Bool;
+  speedLimit @1 :Float32;
+  speedLimitAheadValid @2 :Bool;
+  speedLimitAhead @3 :Float32;
+  speedLimitAheadDistance @4 :Float32;
+  turnSpeedLimitValid @5 :Bool;
+  turnSpeedLimit @6 :Float32;
+  turnSpeedLimitEndDistance @7 :Float32;
+  turnSpeedLimitSign @8 :Int16;
+  turnSpeedLimitsAhead @9 :List(Float32);
+  turnSpeedLimitsAheadDistances @10 :List(Float32);
+  turnSpeedLimitsAheadSigns @11 :List(Int16);
+  lastGpsTimestamp @12 :Int64;  # Milliseconds since January 1, 1970.
 }
 
 struct CameraOdometry {
@@ -1429,6 +1488,9 @@ struct Event {
     deviceState @6 :DeviceState;
     logMessage @18 :Text;
 
+    # OPKR Navi
+    liveNaviData @80 :LiveNaviData;
+    liveMapData @81: LiveMapData;
 
     # *********** debug ***********
     testJoystick @52 :Joystick;
