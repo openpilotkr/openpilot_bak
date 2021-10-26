@@ -440,7 +440,6 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓〓【 U I Menu 】〓〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new AutoShutdown());
   layout->addWidget(new ForceShutdown());
-  //layout->addWidget(new AutoScreenDimmingToggle());
   layout->addWidget(new VolumeControl());
   layout->addWidget(new BrightnessControl());
   layout->addWidget(new AutoScreenOff());
@@ -540,7 +539,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new MaxRateUp());
   layout->addWidget(new MaxRateDown());
   const char* p_edit_go = "/data/openpilot/selfdrive/assets/addon/script/p_edit.sh ''";
-  auto peditbtn = new ButtonControl("Change Panda Values, "RUN");
+  auto peditbtn = new ButtonControl("Change Panda Values", "RUN");
   QObject::connect(peditbtn, &ButtonControl::clicked, [=]() {
     if (ConfirmationDialog::confirm("Apply the changed panda value. Do you want to proceed? It automatically reboots.", this)){
       std::system(p_edit_go);
