@@ -81,4 +81,13 @@ public:
 
 private:
   const std::string params_path;
+
+public:  // atom
+  inline int getInt( const char *key )
+  {
+    int   ret_code = 0;
+    std::string result = get( key );
+    ret_code = std::stoi( result );
+    return ret_code;
+  }
 };
