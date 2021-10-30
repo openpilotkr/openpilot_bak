@@ -149,7 +149,7 @@ bool usb_connect() {
   // power on charging, only the first time. Panda can also change mode and it causes a brief disconneciton
 #ifndef __x86_64__
   if (!connected_once) {
-    tmp_panda->set_usb_power_mode(cereal::PandaState::UsbPowerMode::CDP);
+    tmp_panda->set_usb_power_mode(cereal::PeripheralState::UsbPowerMode::CDP);
   }
 #endif
 
@@ -266,9 +266,9 @@ void panda_state_thread() {
   // Broadcast empty pandaState message when panda is not yet connected
   while (!panda) {
     MessageBuilder msg;
-    auto pandaState  = msg.initEvent().initPandaState();
+    auto pandaState  = msg.initEvent().initPeripheralState();
 
-    pandaState.setPandaType(cereal::PandaState::PandaType::UNKNOWN);
+    pandaState.setPandaType(cereal::PeripheralState::PandaType::UNKNOWN);
     pm.send("pandaState", msg);
     util::sleep_for(500);
   }
@@ -351,7 +351,7 @@ void panda_state_thread() {
     auto evt = msg.initEvent();
     evt.setValid(panda->comms_healthy);
 
-    auto ps = evt.initPandaState();
+    auto ps = evt.initPeripheralState();
     ps.setUptime(pandaState.uptime);
 
     if (Hardware::TICI()) {
@@ -377,24 +377,24 @@ void panda_state_thread() {
     ps.setCanFwdErrs(pandaState.can_fwd_errs);
     ps.setGmlanSendErrs(pandaState.gmlan_send_errs);
     ps.setPandaType(panda->hw_type);
-    ps.setUsbPowerMode(cereal::PandaState::UsbPowerMode(pandaState.usb_power_mode));
+    ps.setUsbPowerMode(cereal::PeripheralState::UsbPowerMode(pandaState.usb_power_mode));
     ps.setSafetyModel(cereal::CarParams::SafetyModel(pandaState.safety_model));
     ps.setSafetyParam(pandaState.safety_param);
     ps.setFanSpeedRpm(fan_speed_rpm);
-    ps.setFaultStatus(cereal::PandaState::FaultStatus(pandaState.fault_status));
+    ps.setFaultStatus(cereal::PeripheralState::FaultStatus(pandaState.fault_status));
     ps.setPowerSaveEnabled((bool)(pandaState.power_save_enabled));
     ps.setHeartbeatLost((bool)(pandaState.heartbeat_lost));
-    ps.setHarnessStatus(cereal::PandaState::HarnessStatus(pandaState.car_harness_status));
+    ps.setHarnessStatus(cereal::PeripheralState::HarnessStatus(pandaState.car_harness_status));
 
     // Convert faults bitset to capnp list
     std::bitset<sizeof(pandaState.faults) * 8> fault_bits(pandaState.faults);
     auto faults = ps.initFaults(fault_bits.count());
 
     size_t i = 0;
-    for (size_t f = size_t(cereal::PandaState::FaultType::RELAY_MALFUNCTION);
-        f <= size_t(cereal::PandaState::FaultType::INTERRUPT_RATE_TICK); f++) {
+    for (size_t f = size_t(cereal::PeripheralState::FaultType::RELAY_MALFUNCTION);
+        f <= size_t(cereal::PeripheralState::FaultType::INTERRUPT_RATE_TICK); f++) {
       if (fault_bits.test(f)) {
-        faults.set(i, cereal::PandaState::FaultType(f));
+        faults.set(i, cereal::PeripheralState::FaultType(f));
         i++;
       }
     }
@@ -409,7 +409,7 @@ void hardware_control_thread() {
   SubMaster sm({"deviceState", "driverCameraState"});
 
   // Other pandas don't have hardware to control
-  if (panda->hw_type != cereal::PandaState::PandaType::UNO && panda->hw_type != cereal::PandaState::PandaType::DOS) return;
+  if (panda->hw_type != cereal::PeripheralState::PandaType::UNO && panda->hw_type != cereal::PeripheralState::PandaType::DOS) return;
 
   uint64_t last_front_frame_t = 0;
   uint16_t prev_fan_speed = 999;
@@ -436,10 +436,10 @@ void hardware_control_thread() {
       bool charging_disabled = sm["deviceState"].getDeviceState().getChargingDisabled();
       if (charging_disabled != prev_charging_disabled) {
         if (charging_disabled) {
-          panda->set_usb_power_mode(cereal::PandaState::UsbPowerMode::CLIENT);
+          panda->set_usb_power_mode(cereal::PeripheralState::UsbPowerMode::CLIENT);
           LOGW("TURN OFF CHARGING!\n");
         } else {
-          panda->set_usb_power_mode(cereal::PandaState::UsbPowerMode::CDP);
+          panda->set_usb_power_mode(cereal::PeripheralState::UsbPowerMode::CDP);
           LOGW("TURN ON CHARGING!\n");
         }
         prev_charging_disabled = charging_disabled;

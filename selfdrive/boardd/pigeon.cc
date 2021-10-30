@@ -41,9 +41,8 @@ Pigeon * Pigeon::connect(const char * tty) {
   return pigeon;
 }
 
-bool Pigeon::wait_for_ack(const std::string &ack, const std::string &nack, int timeout_ms) {
+bool Pigeon::wait_for_ack(const std::string &ack, const std::string &nack) {
   std::string s;
-  const double start_t = millis_since_boot();
   while (!do_exit) {
     s += receive();
 
@@ -53,7 +52,7 @@ bool Pigeon::wait_for_ack(const std::string &ack, const std::string &nack, int t
     } else if (s.find(nack) != std::string::npos) {
       LOGE("Received NACK from ublox");
       return false;
-    } else if (s.size() > 0x1000 || ((millis_since_boot() - start_t) > timeout_ms)) {
+    } else if (s.size() > 0x1000) {
       LOGE("No response from ublox");
       return false;
     }
