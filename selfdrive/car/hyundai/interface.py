@@ -25,8 +25,8 @@ class CarInterface(CarInterfaceBase):
     self.mad_mode_enabled = Params().get_bool('MadModeEnabled')
 
   @staticmethod
-  def compute_gb(accel, speed):
-    return float(accel) / CarControllerParams.MAX_BRAKE
+  def get_pid_accel_limits(CP, current_speed, cruise_speed):
+    return CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX
 
   @staticmethod
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=[]):  # pylint: disable=dangerous-default-value
@@ -77,7 +77,13 @@ class CarInterface(CarInterfaceBase):
     ret.longitudinalTuning.kfBP = [0., 4., 9., 17., 23., 31.]
     ret.longitudinalTuning.kfV = [1., 1., 1., 1., 1., 1.]
 
-    ret.startAccel = 0.0
+    ret.stoppingControl = True
+    ret.vEgoStopping = 0.5  # 1.0
+    ret.vEgoStarting = 0.5
+    ret.startAccel = -0.2 # 0.0
+    ret.stopAccel = -0.5 # 0.0
+    ret.stoppingDecelRate = 0.2 # 0.8
+    ret.startingAccelRate = 0.8 # 3.2
 
     ret.vCruisekph = 0
     ret.resSpeed = 0

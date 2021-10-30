@@ -7,10 +7,8 @@ Ecu = car.CarParams.Ecu
 
 # Steer torque limits
 class CarControllerParams:
-  MAX_GAS = 2.0
-  MAX_BRAKE = 3.5
-  ACCEL_LOOKUP_BP = [-1., 0., MAX_GAS / MAX_BRAKE]
-  ACCEL_LOOKUP_V = [-MAX_BRAKE, 0., MAX_GAS]
+  ACCEL_MIN = -3.5 # m/s
+  ACCEL_MAX = 2.0 # m/s
 
   def __init__(self, CP):
     self.STEER_MAX = int(Params().get("SteerMaxAdj", encoding="utf8"))  # default 384

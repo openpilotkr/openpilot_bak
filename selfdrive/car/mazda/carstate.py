@@ -12,9 +12,7 @@ class CarState(CarStateBase):
     can_define = CANDefine(DBC[CP.carFingerprint]["pt"])
     self.shifter_values = can_define.dv["GEAR"]["GEAR"]
 
-    self.cruise_speed = 0
     self.acc_active_last = False
-    self.low_speed_lockout = True
     self.low_speed_alert = False
     self.lkas_allowed = False
 
@@ -35,8 +33,10 @@ class CarState(CarStateBase):
     can_gear = int(cp.vl["GEAR"]["GEAR"])
     ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(can_gear, None))
 
-    ret.leftBlinker = cp.vl["BLINK_INFO"]["LEFT_BLINK"] == 1
-    ret.rightBlinker = cp.vl["BLINK_INFO"]["RIGHT_BLINK"] == 1
+    ret.leftBlindspot = cp.vl["BSM"]["LEFT_BS1"] == 1
+    ret.rightBlindspot = cp.vl["BSM"]["RIGHT_BS1"] == 1
+    ret.leftBlinker, ret.rightBlinker = self.update_blinker_from_lamp(40, cp.vl["BLINK_INFO"]["LEFT_BLINK"] == 1,
+                                                                      cp.vl["BLINK_INFO"]["RIGHT_BLINK"] == 1)
 
     ret.steeringAngleDeg = cp.vl["STEER"]["STEER_ANGLE"]
     ret.steeringTorque = cp.vl["STEER_TORQUE"]["STEER_TORQUE_SENSOR"]
@@ -45,6 +45,7 @@ class CarState(CarStateBase):
     ret.steeringTorqueEps = cp.vl["STEER_TORQUE"]["STEER_TORQUE_MOTOR"]
     ret.steeringRateDeg = cp.vl["STEER_RATE"]["STEER_ANGLE_RATE"]
 
+    # TODO: this should be from 0 - 1.
     ret.brakePressed = cp.vl["PEDALS"]["BRAKE_ON"] == 1
     ret.brake = cp.vl["BRAKE"]["BRAKE_PRESSURE"]
 
@@ -52,11 +53,9 @@ class CarState(CarStateBase):
     ret.doorOpen = any([cp.vl["DOORS"]["FL"], cp.vl["DOORS"]["FR"],
                         cp.vl["DOORS"]["BL"], cp.vl["DOORS"]["BR"]])
 
+    # TODO: this should be from 0 - 1.
     ret.gas = cp.vl["ENGINE_DATA"]["PEDAL_GAS"]
     ret.gasPressed = ret.gas > 0
-
-    ret.leftBlindspot = cp.vl["BSM"]["LEFT_BS1"] == 1
-    ret.rightBlindspot = cp.vl["BSM"]["RIGHT_BS1"] == 1
 
     # LKAS is enabled at 52kph going up and disabled at 45kph going down
     if speed_kph > LKAS_LIMITS.ENABLE_SPEED:
@@ -64,18 +63,16 @@ class CarState(CarStateBase):
     elif speed_kph < LKAS_LIMITS.DISABLE_SPEED:
       self.lkas_allowed = False
 
+    # TODO: the signal used for available seems to be the adaptive cruise signal, instead of the main on
+    #       it should be used for carState.cruiseState.nonAdaptive instead
     ret.cruiseState.available = cp.vl["CRZ_CTRL"]["CRZ_AVAILABLE"] == 1
     ret.cruiseState.enabled = cp.vl["CRZ_CTRL"]["CRZ_ACTIVE"] == 1
     ret.cruiseState.speed = cp.vl["CRZ_EVENTS"]["CRZ_SPEED"] * CV.KPH_TO_MS
 
     if ret.cruiseState.enabled:
-      if not self.lkas_allowed:
-        if not self.acc_active_last:
-          self.low_speed_lockout = True
-        else:
-          self.low_speed_alert = True
+      if not self.lkas_allowed and self.acc_active_last:
+        self.low_speed_alert = True
       else:
-        self.low_speed_lockout = False
         self.low_speed_alert = False
 
     # Check if LKAS is disabled due to lack of driver torque when all other states indicate

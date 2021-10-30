@@ -18,6 +18,8 @@ EventName = car.CarEvent.EventName
 # WARNING: this value was determined based on the model's training distribution,
 #MAX_CTRL_SPEED = (V_CRUISE_MAX + 4) * CV.KPH_TO_MS  # 144 + 4 = 92 mph
 MAX_CTRL_SPEED = 161 * CV.KPH_TO_MS  # 144 + 4 = 92 mph
+ACCEL_MAX = 2.0
+ACCEL_MIN = -3.5
 
 
 # generic car and radar interfaces
@@ -38,6 +40,7 @@ class CarInterfaceBase():
       self.cp = self.CS.get_can_parser(CP)
       self.cp_cam = self.CS.get_cam_can_parser(CP)
       self.cp_body = self.CS.get_body_can_parser(CP)
+      self.cp_loopback = self.CS.get_loopback_can_parser(CP)
 
     self.CC = None
     if CarController is not None:
@@ -47,12 +50,8 @@ class CarInterfaceBase():
     self.steer_warning_fix_enabled = Params().get_bool("SteerWarningFix")
 
   @staticmethod
-  def calc_accel_override(a_ego, a_target, v_ego, v_target):
-    return 1.
-
-  @staticmethod
-  def compute_gb(accel, speed):
-    raise NotImplementedError
+  def get_pid_accel_limits(CP, current_speed, cruise_speed):
+    return ACCEL_MIN, ACCEL_MAX
 
   @staticmethod
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=None):
@@ -61,6 +60,16 @@ class CarInterfaceBase():
   @staticmethod
   def init(CP, logcan, sendcan):
     pass
+
+  @staticmethod
+  def get_steer_feedforward_default(desired_angle, v_ego):
+    # Proportional to realigning tire momentum: lateral acceleration.
+    # TODO: something with lateralPlan.curvatureRates
+    return desired_angle * (v_ego**2)
+
+  @classmethod
+  def get_steer_feedforward_function(cls):
+    return cls.get_steer_feedforward_default
 
   # returns a set of default params to avoid repetition in car specific params
   @staticmethod
@@ -77,15 +86,14 @@ class CarInterfaceBase():
     ret.pcmCruise = True     # openpilot's state is tied to the PCM's cruise state on most cars
     ret.minEnableSpeed = -1. # enable is done by stock ACC, so ignore this
     ret.steerRatioRear = 0.  # no rear steering, at least on the listed cars aboveA
-    ret.gasMaxBP = [0.]
-    ret.gasMaxV = [.5]       # half max brake
-    ret.brakeMaxBP = [0.]
-    ret.brakeMaxV = [1.]
     ret.openpilotLongitudinalControl = False
-    ret.startAccel = 0.0
     ret.minSpeedCan = 0.3
-    ret.stoppingBrakeRate = 0.2 # brake_travel/s while trying to stop
-    ret.startingBrakeRate = 0.8 # brake_travel/s while releasing on restart
+    ret.startAccel = -0.8
+    ret.stopAccel = -2.0
+    ret.startingAccelRate = 3.2 # brake_travel/s while releasing on restart
+    ret.stoppingDecelRate = 0.8 # brake_travel/s while trying to stop
+    ret.vEgoStopping = 0.5
+    ret.vEgoStarting = 0.5
     ret.stoppingControl = True
     ret.longitudinalTuning.deadzoneBP = [0.]
     ret.longitudinalTuning.deadzoneV = [0.]
@@ -97,6 +105,8 @@ class CarInterfaceBase():
     ret.longitudinalTuning.kdV = [0.]
     ret.longitudinalTuning.kfBP = [0.]
     ret.longitudinalTuning.kfV = [1.]
+    ret.longitudinalActuatorDelayLowerBound = 0.15
+    ret.longitudinalActuatorDelayUpperBound = 0.15
     return ret
 
   # returns a car.CarState, pass in car.CarControl
@@ -104,7 +114,7 @@ class CarInterfaceBase():
     raise NotImplementedError
 
   # return sendcan, pass in a car.CarControl
-  def apply(self, c, sm):
+  def apply(self, c):
     raise NotImplementedError
 
   def create_common_events(self, cs_out, extra_gears=None, gas_resume_speed=-1, pcm_enable=True):
@@ -145,7 +155,8 @@ class CarInterfaceBase():
     elif cs_out.steerWarning and not self.steer_wind_down_enabled and not self.steer_warning_fix_enabled:
       # only escalate to the harsher alert after the condition has
       # persisted for 0.5s and we're certain that the user isn't overriding
-      if self.steering_unpressed > int(0.5/DT_CTRL) and self.steer_warning > int(0.5/DT_CTRL):
+      if not cs_out.standstill and self.steering_unpressed > int(0.5 / DT_CTRL) and \
+         self.steer_warning > int(0.5 / DT_CTRL):
         events.add(EventName.steerTempUnavailable)
       else:
         events.add(EventName.steerTempUnavailableSilent)
@@ -253,4 +264,8 @@ class CarStateBase:
 
   @staticmethod
   def get_body_can_parser(CP):
+    return None
+
+  @staticmethod
+  def get_loopback_can_parser(CP):
     return None

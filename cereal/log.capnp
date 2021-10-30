@@ -702,6 +702,7 @@ struct ModelDataV2 {
   orientation @5 :XYZTData;
   velocity @6 :XYZTData;
   orientationRate @7 :XYZTData;
+  acceleration @19 :XYZTData;
 
   # prediction lanelines and road edges
   laneLines @8 :List(XYZTData);
@@ -886,7 +887,7 @@ struct LateralPlan @0xe1e9318e2ae8b51e {
   desire @17 :Desire;
   laneChangeState @18 :LaneChangeState;
   laneChangeDirection @19 :LaneChangeDirection;
-
+  useLaneLines @29 :Bool;
 
   # desired curvatures over next 2.5s in rad/m
   psis @26 :List(Float32);
@@ -894,13 +895,13 @@ struct LateralPlan @0xe1e9318e2ae8b51e {
   curvatureRates @28 :List(Float32);
 
   # opkr
-  outputScale @29 :Float32;
-  steerRateCost @30 :Float32;
-  standstillElapsedTime @31 :Float32;
-  vCruiseSet @32 :Float32;
-  vCurvature @33 :Float32;
-  lanelessMode @34 :Bool;
-  modelSpeed @35 :Float32;
+  outputScale @30 :Float32;
+  steerRateCost @31 :Float32;
+  standstillElapsedTime @32 :Float32;
+  vCruiseSet @33 :Float32;
+  vCurvature @34 :Float32;
+  lanelessMode @35 :Bool;
+  modelSpeed @36 :Float32;
 
   enum Desire {
     none @0;

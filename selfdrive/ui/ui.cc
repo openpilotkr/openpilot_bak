@@ -110,7 +110,8 @@ static void update_state(UIState *s) {
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
-    scene.engageable = sm["controlsState"].getControlsState().getEngageable();
+    auto cs = sm["controlsState"].getControlsState();
+    scene.engageable = cs.getEngageable() || cs.getEnabled();
     scene.dm_active = sm["driverMonitoringState"].getDriverMonitoringState().getIsActiveMode();
   }
 
@@ -196,6 +197,21 @@ static void update_state(UIState *s) {
       }
     }
   }
+  if (sm.updated("pandaStates")) {
+    auto pandaStates = sm["pandaStates"].getPandaStates();
+    if (pandaStates.size() > 0) {
+      scene.pandaType = pandaStates[0].getPandaType();
+
+      if (scene.pandaType != cereal::PandaState::PandaType::UNKNOWN) {
+        scene.ignition = false;
+        for (const auto& pandaState : pandaStates) {
+          scene.ignition |= pandaState.getIgnitionLine() || pandaState.getIgnitionCan();
+        }
+      }
+    }
+  } else if ((s->sm->frame - s->sm->rcv_frame("pandaStates")) > 5*UI_FREQ) {
+    scene.pandaType = cereal::PandaState::PandaType::UNKNOWN;
+  }
   if (sm.updated("deviceState")) {
     scene.deviceState = sm["deviceState"].getDeviceState();
     scene.cpuPerc = (scene.deviceState.getCpuUsagePercent()[0] + scene.deviceState.getCpuUsagePercent()[1] + scene.deviceState.getCpuUsagePercent()[2] + scene.deviceState.getCpuUsagePercent()[3])/4;
@@ -204,20 +220,6 @@ static void update_state(UIState *s) {
     scene.ambientTemp = scene.deviceState.getAmbientTempC();
     scene.fanSpeed = scene.deviceState.getFanSpeedPercentDesired();
     scene.batPercent = scene.deviceState.getBatteryPercent();
-  }
-  if (sm.updated("pandaState")) {
-    auto pandaState = sm["pandaState"].getPandaState();
-    scene.pandaType = pandaState.getPandaType();
-    scene.ignition = pandaState.getIgnitionLine() || pandaState.getIgnitionCan();
-    scene.controlAllowed = pandaState.getControlsAllowed();
-  } else if ((s->sm->frame - s->sm->rcv_frame("pandaState")) > 5*UI_FREQ) {
-    scene.pandaType = cereal::PandaState::PandaType::UNKNOWN;
-  }
-  if (sm.updated("ubloxGnss")) {
-    auto ub_data = sm["ubloxGnss"].getUbloxGnss();
-    if (ub_data.which() == cereal::UbloxGnss::MEASUREMENT_REPORT) {
-      scene.satelliteCount = ub_data.getMeasurementReport().getNumMeas();
-    }
   }
   if (sm.updated("gpsLocationExternal")) {
     scene.gpsAccuracy = sm["gpsLocationExternal"].getGpsLocationExternal().getAccuracy();
