@@ -1490,8 +1490,8 @@ struct Event {
     logMessage @18 :Text;
 
     # OPKR Navi
-    liveNaviData @80 :LiveNaviData;
-    liveMapData @81: LiveMapData;
+    liveNaviData @82 :LiveNaviData;
+    liveMapData @83: LiveMapData;
 
     # *********** debug ***********
     testJoystick @52 :Joystick;
