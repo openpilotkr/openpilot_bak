@@ -1,6 +1,8 @@
 #include "selfdrive/ui/qt/widgets/opkr.h"
 
 #include <QHBoxLayout>
+#include <QTextStream>
+#include <QFile>
 #include <QNetworkReply>
 
 #include <QProcess>
@@ -192,105 +194,11 @@ void OpenpilotView::refresh() {
   }
 }
 
-CarRecognition::CarRecognition() : AbstractControl("차량강제인식", "핑거프린트 문제로 차량인식이 안될경우 차량을 선택하여 강제 인식합니다.", "") {
-
-  // setup widget
-  hlayout->addStretch(1);
-  
-  //carname_label.setAlignment(Qt::AlignVCenter);
-  carname_label.setStyleSheet("color: #aaaaaa; font-size: 45px;");
-  hlayout->addWidget(&carname_label);
-  QMenu *vehicle_select_menu = new QMenu();
-  vehicle_select_menu->addAction("GENESIS", [=]() {carname = "GENESIS";});
-  vehicle_select_menu->addAction("GENESIS_G70", [=]() {carname = "GENESIS_G70";});
-  vehicle_select_menu->addAction("GENESIS_G80", [=]() {carname = "GENESIS_G80";});
-  vehicle_select_menu->addAction("GENESIS_G90", [=]() {carname = "GENESIS_G90";});
-  vehicle_select_menu->addAction("AVANTE", [=]() {carname = "AVANTE";});
-  vehicle_select_menu->addAction("I30", [=]() {carname = "I30";});
-  vehicle_select_menu->addAction("SONATA", [=]() {carname = "SONATA";});
-  vehicle_select_menu->addAction("SONATA_HEV", [=]() {carname = "SONATA_HEV";});
-  vehicle_select_menu->addAction("SONATA_LF", [=]() {carname = "SONATA_LF";});
-  vehicle_select_menu->addAction("SONATA_LF_TURBO", [=]() {carname = "SONATA_LF_TURBO";});
-  vehicle_select_menu->addAction("SONATA_LF_HEV", [=]() {carname = "SONATA_LF_HEV";});
-  vehicle_select_menu->addAction("KONA", [=]() {carname = "KONA";});
-  vehicle_select_menu->addAction("KONA_EV", [=]() {carname = "KONA_EV";});
-  vehicle_select_menu->addAction("KONA_HEV", [=]() {carname = "KONA_HEV";});
-  vehicle_select_menu->addAction("IONIQ_EV", [=]() {carname = "IONIQ_EV";});
-  vehicle_select_menu->addAction("IONIQ_HEV", [=]() {carname = "IONIQ_HEV";});
-  vehicle_select_menu->addAction("SANTA_FE", [=]() {carname = "SANTA_FE";});
-  vehicle_select_menu->addAction("PALISADE", [=]() {carname = "PALISADE";});
-  vehicle_select_menu->addAction("VELOSTER", [=]() {carname = "VELOSTER";});
-  vehicle_select_menu->addAction("GRANDEUR_IG", [=]() {carname = "GRANDEUR_IG";});
-  vehicle_select_menu->addAction("GRANDEUR_IG_HEV", [=]() {carname = "GRANDEUR_IG_HEV";});
-  vehicle_select_menu->addAction("GRANDEUR_IG_FL", [=]() {carname = "GRANDEUR_IG_FL";});
-  vehicle_select_menu->addAction("GRANDEUR_IG_FL_HEV", [=]() {carname = "GRANDEUR_IG_FL_HEV";});
-  vehicle_select_menu->addAction("NEXO", [=]() {carname = "NEXO";});
-  vehicle_select_menu->addAction("K3", [=]() {carname = "K3";});
-  vehicle_select_menu->addAction("K5", [=]() {carname = "K5";});
-  vehicle_select_menu->addAction("K5_HEV", [=]() {carname = "K5_HEV";});
-  vehicle_select_menu->addAction("K7", [=]() {carname = "K7";});
-  vehicle_select_menu->addAction("K7_HEV", [=]() {carname = "K7_HEV";});
-  vehicle_select_menu->addAction("SPORTAGE", [=]() {carname = "SPORTAGE";});
-  vehicle_select_menu->addAction("SORENTO", [=]() {carname = "SORENTO";});
-  vehicle_select_menu->addAction("STINGER", [=]() {carname = "STINGER";});
-  vehicle_select_menu->addAction("NIRO_EV", [=]() {carname = "NIRO_EV";});
-  vehicle_select_menu->addAction("NIRO_HEV", [=]() {carname = "NIRO_HEV";});
-  vehicle_select_menu->addAction("SELTOS", [=]() {carname = "SELTOS";});
-  vehicle_select_menu->addAction("SOUL_EV", [=]() {carname = "SOUL_EV";});
-  vehicle_select_menu->addAction("MOHAVE", [=]() {carname = "MOHAVE";});
-
-  QPushButton *set_vehicle_btn = new QPushButton("선택");
-  set_vehicle_btn->setMenu(vehicle_select_menu);
-  hlayout->addWidget(set_vehicle_btn);
-
-  btn.setStyleSheet(R"(
-    padding: 0;
-    border-radius: 50px;
-    font-size: 35px;
-    font-weight: 500;
-    color: #E4E4E4;
-    background-color: #393939;
-  )");
-  btn.setFixedSize(200, 100);
-  hlayout->addWidget(&btn);
-
-  QObject::connect(&btn, &QPushButton::clicked, [=]() {
-    if (btn.text() == "설정" && carname.length()) {
-      params.put("CarModel", carname.toStdString());
-      params.put("CarModelAbb", carname.toStdString());
-      QProcess::execute("/data/openpilot/selfdrive/assets/addon/script/car_force_set.sh");
-      refresh(carname);
-    } else {
-      carname = "";
-      //params.put("CarModel", "");
-      params.remove("CarModel");
-      params.remove("CarModelAbb");
-      refresh(carname);
-    }
-  });
-  refresh(carname);
-}
-
-void CarRecognition::refresh(QString carname) {
-  QString param = QString::fromStdString(params.get("CarModelAbb"));
-  if (carname.length()) {
-    carname_label.setText(carname);
-    btn.setText("제거");
-  } else if (param.length()) {
-    carname_label.setText(QString::fromStdString(params.get("CarModelAbb")));
-    btn.setText("제거");
-  } else {
-    carname_label.setText("");
-    btn.setText("설정");
-  }
-}
-
-// atom, opkr mod
-CarSelectCombo::CarSelectCombo() : AbstractControl("차량강제인식", "핑거프린트 대신 자동차 모델을 강제로 인식시키는 메뉴입니다.", "") 
+CarSelectCombo::CarSelectCombo() : AbstractControl("", "", "") 
 {
   combobox.setStyleSheet(R"(
     subcontrol-origin: padding;
-    subcontrol-position: top right;
+    subcontrol-position: top left;
     selection-background-color: #111;
     selection-color: yellow;
     color: white;
@@ -301,46 +209,18 @@ CarSelectCombo::CarSelectCombo() : AbstractControl("차량강제인식", "핑거
     width: 100px;
   )");
 
-  combobox.addItem("차량을 선택하세요");
-  combobox.addItem("GENESIS");
-  combobox.addItem("GENESIS_G70");
-  combobox.addItem("GENESIS_G80");
-  combobox.addItem("GENESIS_G90");
-  combobox.addItem("AVANTE");
-  combobox.addItem("I30");
-  combobox.addItem("SONATA");
-  combobox.addItem("SONATA_HEV");
-  combobox.addItem("SONATA_LF");
-  combobox.addItem("SONATA_LF_TURBO");
-  combobox.addItem("SONATA_LF_HEV");
-  combobox.addItem("KONA");
-  combobox.addItem("KONA_EV");
-  combobox.addItem("KONA_HEV");
-  combobox.addItem("IONIQ_EV");
-  combobox.addItem("IONIQ_HEV");
-  combobox.addItem("SANTA_FE");
-  combobox.addItem("PALISADE");
-  combobox.addItem("VELOSTER");
-  combobox.addItem("GRANDEUR_IG");
-  combobox.addItem("GRANDEUR_IG_HEV");
-  combobox.addItem("GRANDEUR_IG_FL");
-  combobox.addItem("GRANDEUR_IG_FL_HEV");
-  combobox.addItem("NEXO");
-  combobox.addItem("K3");
-  combobox.addItem("K5");
-  combobox.addItem("K5_HEV");
-  combobox.addItem("K7");
-  combobox.addItem("K7_HEV");
-  combobox.addItem("SPORTAGE");
-  combobox.addItem("SORENTO");
-  combobox.addItem("STINGER");
-  combobox.addItem("NIRO_EV");
-  combobox.addItem("NIRO_HEV");
-  combobox.addItem("SELTOS");
-  combobox.addItem("SOUL_EV");
-  combobox.addItem("MOHAVE");
+  combobox.addItem("Select Your Car");
+  QFile carlistfile("/data/params/d/CarList");
+  if (carlistfile.open(QIODevice::ReadOnly)) {
+    QTextStream carname(&carlistfile);
+    while (!carname.atEnd()) {
+      QString line = carname.readLine();
+      combobox.addItem(line);
+    }
+    carlistfile.close();
+  }
 
-  combobox.setFixedWidth(700);
+  combobox.setFixedWidth(1055);
 
   btn.setStyleSheet(R"(
     padding: 0;
@@ -354,10 +234,9 @@ CarSelectCombo::CarSelectCombo() : AbstractControl("차량강제인식", "핑거
   btn.setFixedSize(150, 100);
 
   QObject::connect(&btn, &QPushButton::clicked, [=]() {
-    if (btn.text() == "설정제거") {
-      if (ConfirmationDialog::confirm("차량 강제 설정을 해제하시겠습니까?", this)) {
+    if (btn.text() == "UNSET") {
+      if (ConfirmationDialog::confirm("Do you want to unset?", this)) {
         params.remove("CarModel");
-        params.remove("CarModelAbb");
         combobox.setCurrentIndex(0);
         refresh();
       }
@@ -367,17 +246,15 @@ CarSelectCombo::CarSelectCombo() : AbstractControl("차량강제인식", "핑거
   //combobox.view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
   hlayout->addWidget(&combobox);
-  hlayout->addWidget(&btn);
+  hlayout->addWidget(&btn, Qt::AlignRight);
 
   QObject::connect(&combobox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), [=](int index)
   {
     combobox.itemData(combobox.currentIndex());
     QString str = combobox.currentText();
     if (combobox.currentIndex() != 0) {
-      if (ConfirmationDialog::confirm(str + "(으)로 강제 설정하시겠습니까?", this)) {
+      if (ConfirmationDialog::confirm("Press OK to set your car as\n" + str, this)) {
         params.put("CarModel", str.toStdString());
-        params.put("CarModelAbb", str.toStdString());
-        QProcess::execute("/data/openpilot/selfdrive/assets/addon/script/car_force_set.sh");
       }
     }
     refresh();
@@ -386,15 +263,15 @@ CarSelectCombo::CarSelectCombo() : AbstractControl("차량강제인식", "핑거
 }
 
 void CarSelectCombo::refresh() {
-  QString selected_carname = QString::fromStdString(params.get("CarModelAbb"));
+  QString selected_carname = QString::fromStdString(params.get("CarModel"));
   int index = combobox.findText(selected_carname);
   if (index >= 0) combobox.setCurrentIndex(index);
   if (selected_carname.length()) {
     btn.setEnabled(true);
-    btn.setText("설정제거");
+    btn.setText("UNSET");
   } else {
     btn.setEnabled(false);
-    btn.setText("<-선택");
+    btn.setText("SET");
   }
 }
 

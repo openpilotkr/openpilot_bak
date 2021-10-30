@@ -191,7 +191,7 @@ function launch {
 
   # ssh key restore, by opkr
   if [ -f "/data/params/d/OpkrSSHLegacy" ]; then
-    SSH_KEY=$(/data/data/com.termux/files/usr/bin/cat /data/params/d/OpkrSSHLegacy)
+    SSH_KEY=$(cat /data/params/d/OpkrSSHLegacy)
   else
     setprop persist.neos.ssh 1
     cp -f /data/openpilot/selfdrive/assets/addon/key/GithubSshKeys_legacy /data/params/d/GithubSshKeys
@@ -207,6 +207,8 @@ function launch {
     cp -f /data/openpilot/selfdrive/assets/addon/key/GithubSshKeys_legacy /data/params/d/GithubSshKeys
     chmod 600 /data/params/d/GithubSshKeys
   fi
+
+  cat /data/openpilot/selfdrive/car/hyundai/values.py | grep ' = "' | awk -F'"' '{print $2}' > /data/params/d/CarList
 
   # start manager
   cd selfdrive/manager
