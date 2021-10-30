@@ -292,9 +292,9 @@ struct DeviceState @0xa4d8b5af2aa492eb {
   lastAthenaPingTime @32 :UInt64;
 
   # atom
-  wifiIpAddress @37 :Text;
+  wifiIpAddress @38 :Text;
   # opkr
-  wifiSSID @38 :Text;
+  wifiSSID @39 :Text;
 
   started @11 :Bool;
   startedMonoTime @13 :UInt64;
