@@ -572,7 +572,7 @@ int main() {
   err = set_realtime_priority(54);
   LOG("set priority returns %d", err);
 
-  err = set_core_affinity(Hardware::TICI() ? 4 : 3);
+  err = set_core_affinity({Hardware::TICI() ? 4 : 3});
   LOG("set affinity returns %d", err);
 
   // check the environment
