@@ -54,7 +54,7 @@ class Panda {
 
   std::atomic<bool> connected = true;
   std::atomic<bool> comms_healthy = true;
-  cereal::PeripheralState::PandaType hw_type = cereal::PeripheralState::PandaType::UNKNOWN;
+  cereal::PandaState::PandaType hw_type = cereal::PandaState::PandaType::UNKNOWN;
   bool has_rtc = false;
 
   // HW communication
@@ -64,7 +64,7 @@ class Panda {
   int usb_bulk_read(unsigned char endpoint, unsigned char* data, int length, unsigned int timeout=TIMEOUT);
 
   // Panda functionality
-  cereal::PeripheralState::PandaType get_hw_type();
+  cereal::PandaState::PandaType get_hw_type();
   void set_safety_model(cereal::CarParams::SafetyModel safety_model, int safety_param=0);
   void set_unsafe_mode(uint16_t unsafe_mode);
   void set_rtc(struct tm sys_time);
@@ -77,7 +77,7 @@ class Panda {
   std::optional<std::vector<uint8_t>> get_firmware_version();
   std::optional<std::string> get_serial();
   void set_power_saving(bool power_saving);
-  void set_usb_power_mode(cereal::PeripheralState::UsbPowerMode power_mode);
+  void set_usb_power_mode(cereal::PandaState::UsbPowerMode power_mode);
   void send_heartbeat();
   void can_send(capnp::List<cereal::CanData>::Reader can_data_list);
   int can_receive(kj::Array<capnp::word>& out_buf);

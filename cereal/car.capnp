@@ -424,7 +424,9 @@ struct CarParams {
   minEnableSpeed @7 :Float32;
   minSteerSpeed @8 :Float32;
   maxSteeringAngleDeg @54 :Float32;
-  safetyConfigs @62 :List(SafetyConfig);
+  safetyModel @9 :SafetyModel;
+  safetyModelPassive @42 :SafetyModel = silent;
+  safetyParam @10 :Int16;
 
   steerMaxBP @11 :List(Float32);
   steerMaxV @12 :List(Float32);
@@ -495,11 +497,6 @@ struct CarParams {
   vCruisekph @73: Float32;
   resSpeed @74: Float32;
   vFuture @75: Float32;
-
-  struct SafetyConfig {
-    safetyModel @0 :SafetyModel;
-    safetyParam @1 :Int16;
-  }
 
   struct LateralParams {
     torqueBP @0 :List(Int32);
@@ -646,7 +643,4 @@ struct CarParams {
   enableCameraDEPRECATED @4 :Bool;
   isPandaBlackDEPRECATED @39: Bool;
   hasStockCameraDEPRECATED @57 :Bool;
-  safetyParamDEPRECATED @10 :Int16;
-  safetyModelDEPRECATED @9 :SafetyModel;
-  safetyModelPassiveDEPRECATED @42 :SafetyModel = silent;
 }
