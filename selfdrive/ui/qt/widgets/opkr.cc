@@ -14,24 +14,24 @@
 
 #include "selfdrive/ui/ui.h"
 
-SwitchOpenpilot::SwitchOpenpilot() : ButtonControl("오픈파일럿SW(리포/브랜치) 변경", "", "다른 오픈파일럿 코드로 변경합니다. 아이디/리포지토리/브랜치를 입력해서 변경 가능합니다.") {
+SwitchOpenpilot::SwitchOpenpilot() : ButtonControl("Change Fork/Branch", "", "Change to another open pilot code. You can change it by entering ID/repository/branch.") {
 
   QObject::connect(this, &ButtonControl::clicked, [=]() {
-    if (text() == "변경") {
-      QString userid = InputDialog::getText("첫번째: 깃아이디를 입력하세요. 예) openpilotusers", this);
+    if (text() == "EDIT") {
+      QString userid = InputDialog::getText("First: Enter your Git ID. ex) openpilotkr", this);
       if (userid.length() > 0) {
         getUserID(userid);
-        QString repoid = InputDialog::getText("두번째: 리포지토리를 입력하세요. 예) openpilot_088", this);
+        QString repoid = InputDialog::getText("Second: Enter the repository. ex) openpilot", this);
         if (repoid.length() > 0) {
           getRepoID(repoid);
-          QString branchid = InputDialog::getText("마지막: 브랜치명을 입력하세요. 예) OPKR_088", this);
+          QString branchid = InputDialog::getText("Last: Enter the brand name. ex) OPKR", this);
           if (branchid.length() > 0) {
             getBranchID(branchid);
             githubbranch = branchid;
-            QString cmd0 = QString::fromStdString("리포지토리/브랜치를 변경합니다. 완료까지 약간의 시간이 소요됩니다. 진행하시겠습니까?\n") + QString::fromStdString("https://github.com/") + githubid + QString::fromStdString("/") + githubrepo + QString::fromStdString(".git\n") + QString::fromStdString("브랜치: ") + githubbranch;
+            QString cmd0 = QString::fromStdString("Change repository/branch. It takes a little time to complete. Do you want to proceed?\n") + QString::fromStdString("https://github.com/") + githubid + QString::fromStdString("/") + githubrepo + QString::fromStdString(".git\n") + QString::fromStdString("Branch: ") + githubbranch;
             const char* p0 = cmd0.toStdString().c_str();
             if (ConfirmationDialog::confirm(p0, this)) {
-              setText("완료");
+              setText("DONE");
               setEnabled(true);
               QString time_format = "yyyyMMddHHmmss";
               QDateTime a = QDateTime::currentDateTime();
@@ -72,12 +72,12 @@ void SwitchOpenpilot::getUserID(const QString &userid) {
     request->deleteLater();
   });
   QObject::connect(request, &HttpRequest::failedResponse, [=] {
-    ConfirmationDialog::alert(userid + " 해당 아이디가 존재하지 않습니다. 입력창으로 돌아가 취소 버튼을 누른후 처음부터 다시 시도하십시오.", this);
+    ConfirmationDialog::alert(userid + " The ID does not exist. Return to the input window, press the cancel button, and try again from the beginning.", this);
     refresh();
     request->deleteLater();
   });
   QObject::connect(request, &HttpRequest::timeoutResponse, [=] {
-    ConfirmationDialog::alert("요청된 시간이 초과되었습니다", this);
+    ConfirmationDialog::alert("The requested time has exceeded.", this);
     refresh();
     request->deleteLater();
   });
@@ -94,12 +94,12 @@ void SwitchOpenpilot::getRepoID(const QString &repoid) {
     request->deleteLater();
   });
   QObject::connect(request, &HttpRequest::failedResponse, [=] {
-    ConfirmationDialog::alert(repoid + " 해당 리포지토리가 존재하지 않습니다. 입력창으로 돌아가 취소 버튼을 누른후 처음부터 다시 시도하십시오.", this);
+    ConfirmationDialog::alert(repoid + " The repository does not exist. Return to the input window, press the cancel button, and try again from the beginning.", this);
     refresh();
     request->deleteLater();
   });
   QObject::connect(request, &HttpRequest::timeoutResponse, [=] {
-    ConfirmationDialog::alert("요청된 시간이 초과되었습니다", this);
+    ConfirmationDialog::alert("The requested time has exceeded.", this);
     refresh();
     request->deleteLater();
   });
@@ -116,19 +116,19 @@ void SwitchOpenpilot::getBranchID(const QString &branchid) {
     request->deleteLater();
   });
   QObject::connect(request, &HttpRequest::failedResponse, [=] {
-    ConfirmationDialog::alert(branchid + " 해당 브랜치가 존재하지 않습니다. 취소 버튼을 누른후 처음부터 다시 시도하십시오.", this);
+    ConfirmationDialog::alert(branchid + " The branch does not exist. Press the cancel button and try again from the beginning.", this);
     refresh();
     request->deleteLater();
   });
   QObject::connect(request, &HttpRequest::timeoutResponse, [=] {
-    ConfirmationDialog::alert("요청된 시간이 초과되었습니다", this);
+    ConfirmationDialog::alert("The requested time has exceeded.", this);
     refresh();
     request->deleteLater();
   });
   request->sendRequest("https://github.com/" + githubid + "/" + githubrepo + "/tree/" + branchid);
 }
 
-GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") {
+GitHash::GitHash() : AbstractControl("Commit (Local/Remote)", "", "") {
 
   QString lhash = QString::fromStdString(params.get("GitCommit").substr(0, 10));
   QString rhash = QString::fromStdString(params.get("GitCommitRemote").substr(0, 10));
@@ -148,7 +148,7 @@ GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") {
   hlayout->addWidget(&remote_hash);
 }
 
-OpenpilotView::OpenpilotView() : AbstractControl("오픈파일럿 주행화면 미리보기", "오픈파일럿 주행화면을 미리보기 합니다.", "") {
+OpenpilotView::OpenpilotView() : AbstractControl("Preview Driving Camera", "Preview the open pilot driving screen.", "") {
 
   // setup widget
   hlayout->addStretch(1);
@@ -181,9 +181,9 @@ void OpenpilotView::refresh() {
   bool param = params.getBool("IsOpenpilotViewEnabled");
   QString car_param = QString::fromStdString(params.get("CarParams"));
   if (param) {
-    btn.setText("미리보기해제");
+    btn.setText("UNPREVIEW");
   } else {
-    btn.setText("미리보기");
+    btn.setText("PREVIEW");
   }
   if (car_param.length()) {
     btn.setEnabled(false);
@@ -399,7 +399,7 @@ void CarSelectCombo::refresh() {
 }
 
 //UI
-AutoShutdown::AutoShutdown() : AbstractControl("EON 자동 종료", "운행(온로드) 후 시동을 끈 상태(오프로드)에서 설정시간 이후에 자동으로 이온이 꺼집니다.", "../assets/offroad/icon_shell.png") {
+AutoShutdown::AutoShutdown() : AbstractControl("EON AutoShutdown", "EON is automatically turned off after the set time while the engine is turned off (offload) after driving (onload).", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -455,33 +455,33 @@ AutoShutdown::AutoShutdown() : AbstractControl("EON 자동 종료", "운행(온�
 void AutoShutdown::refresh() {
   QString option = QString::fromStdString(params.get("OpkrAutoShutdown"));
   if (option == "0") {
-    label.setText(QString::fromStdString("항상켜기"));
+    label.setText(QString::fromStdString("AlwaysOn"));
   } else if (option == "1") {
-    label.setText(QString::fromStdString("바로끄기"));
+    label.setText(QString::fromStdString("RightOff"));
   } else if (option == "2") {
-    label.setText(QString::fromStdString("30초"));
+    label.setText(QString::fromStdString("30sec"));
   } else if (option == "3") {
-    label.setText(QString::fromStdString("1분"));
+    label.setText(QString::fromStdString("1min"));
   } else if (option == "4") {
-    label.setText(QString::fromStdString("3분"));
+    label.setText(QString::fromStdString("3mins"));
   } else if (option == "5") {
-    label.setText(QString::fromStdString("5분"));
+    label.setText(QString::fromStdString("5mins"));
   } else if (option == "6") {
-    label.setText(QString::fromStdString("10분"));
+    label.setText(QString::fromStdString("10mins"));
   } else if (option == "7") {
-    label.setText(QString::fromStdString("30분"));
+    label.setText(QString::fromStdString("30mins"));
   } else if (option == "8") {
-    label.setText(QString::fromStdString("1시간"));
+    label.setText(QString::fromStdString("1hour"));
   } else if (option == "9") {
-    label.setText(QString::fromStdString("3시간"));
+    label.setText(QString::fromStdString("3hours"));
   } else if (option == "10") {
-    label.setText(QString::fromStdString("5시간"));
+    label.setText(QString::fromStdString("5hours"));
   }
   btnminus.setText("－");
   btnplus.setText("＋");
 }
 
-ForceShutdown::ForceShutdown() : AbstractControl("EON 강제 종료", "운행을 하지 않고(온로드 진입X) 오프로드상태에서 화면이 꺼진경우 일정시간 이후에 강제로 꺼지게 합니다. 터치이벤트 발생시 꺼지는 시간이 리셋됩니다.", "../assets/offroad/icon_shell.png") {
+ForceShutdown::ForceShutdown() : AbstractControl("EON ForceShutdown", "If the screen is turned off while off-road without driving (on-road X), force it to turn off after a certain period of time. When a touch event occurs, the off time is reset.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -537,24 +537,24 @@ ForceShutdown::ForceShutdown() : AbstractControl("EON 강제 종료", "운행을
 void ForceShutdown::refresh() {
   QString option = QString::fromStdString(params.get("OpkrForceShutdown"));
   if (option == "0") {
-    label.setText(QString::fromStdString("항상켜기"));
+    label.setText(QString::fromStdString("AlwaysOn"));
   } else if (option == "1") {
-    label.setText(QString::fromStdString("1분"));
+    label.setText(QString::fromStdString("1min"));
   } else if (option == "2") {
-    label.setText(QString::fromStdString("3분"));
+    label.setText(QString::fromStdString("3mins"));
   } else if (option == "3") {
-    label.setText(QString::fromStdString("5분"));
+    label.setText(QString::fromStdString("5mins"));
   } else if (option == "4") {
-    label.setText(QString::fromStdString("10분"));
+    label.setText(QString::fromStdString("10mins"));
   } else if (option == "5") {
-    label.setText(QString::fromStdString("30분"));
+    label.setText(QString::fromStdString("30mins"));
   }
   btnminus.setText("－");
   btnplus.setText("＋");
 }
 
 
-VolumeControl::VolumeControl() : AbstractControl("EON 볼륨 조절(%)", "EON의 볼륨을 조절합니다. 안드로이드 기본값/수동설정", "../assets/offroad/icon_shell.png") {
+VolumeControl::VolumeControl() : AbstractControl("EON Volume Control(%)", "Adjust the volume of EON. Android Default/Manual Settings", "../assets/offroad/icon_shell.png") {
 
   effect.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/sounds/warning_1.wav"));
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
@@ -615,9 +615,9 @@ VolumeControl::VolumeControl() : AbstractControl("EON 볼륨 조절(%)", "EON의
 void VolumeControl::refresh() {
   QString option = QString::fromStdString(params.get("OpkrUIVolumeBoost"));
   if (option == "0") {
-    label.setText(QString::fromStdString("기본값"));
+    label.setText(QString::fromStdString("Default"));
   } else if (option == "-5") {
-    label.setText(QString::fromStdString("음소거"));
+    label.setText(QString::fromStdString("Mute"));
   } else {
     label.setText(QString::fromStdString(params.get("OpkrUIVolumeBoost")));
   }
@@ -636,7 +636,7 @@ void VolumeControl::playsound() {
   }
 }
 
-BrightnessControl::BrightnessControl() : AbstractControl("EON 밝기 조절(%)", "EON화면의 밝기를 수동 조절합니다.", "../assets/offroad/icon_shell.png") {
+BrightnessControl::BrightnessControl() : AbstractControl("EON Brightness Control(%)", "Manually adjust the brightness of the EON screen.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -694,7 +694,7 @@ BrightnessControl::BrightnessControl() : AbstractControl("EON 밝기 조절(%)",
 void BrightnessControl::refresh() {
   QString option = QString::fromStdString(params.get("OpkrUIBrightness"));
   if (option == "0") {
-    label.setText(QString::fromStdString("자동조절"));
+    label.setText(QString::fromStdString("Auto"));
   } else {
     label.setText(QString::fromStdString(params.get("OpkrUIBrightness")));
   }
@@ -702,7 +702,7 @@ void BrightnessControl::refresh() {
   btnplus.setText("＋");
 }
 
-BrightnessOffControl::BrightnessOffControl() : AbstractControl("EON 화면끄기 밝기(%)", "EON 화면 꺼짐 기능 사용시 자동밝기 비율에 따라 밝기를 감소시킵니다.", "../assets/offroad/icon_shell.png") {
+BrightnessOffControl::BrightnessOffControl() : AbstractControl("EON Brt at SCR Off Func(%)", "When using the EON screen off function, the brightness is reduced according to the automatic brightness ratio.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -760,7 +760,7 @@ BrightnessOffControl::BrightnessOffControl() : AbstractControl("EON 화면끄기
 void BrightnessOffControl::refresh() {
   QString option = QString::fromStdString(params.get("OpkrUIBrightnessOff"));
   if (option == "0") {
-    label.setText(QString::fromStdString("완전꺼짐"));
+    label.setText(QString::fromStdString("FullyOff"));
   } else {
     label.setText(QString::fromStdString(params.get("OpkrUIBrightnessOff")));
   }
@@ -768,7 +768,7 @@ void BrightnessOffControl::refresh() {
   btnplus.setText("＋");
 }
 
-AutoScreenOff::AutoScreenOff() : AbstractControl("EON 화면끄기 시간", "주행 시작 후 화면보호를 위해 이온화면이 꺼지게 하거나 밝기를 줄입니다. 터치나 이벤트 발생시 자동으로 밝아지거나 켜집니다.", "../assets/offroad/icon_shell.png") 
+AutoScreenOff::AutoScreenOff() : AbstractControl("EON SCR Off Timer", "Turn off the EON screen or reduce brightness to protect the screen after driving starts. It automatically brightens or turns on when a touch or event occurs.", "../assets/offroad/icon_shell.png") 
 {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
@@ -828,19 +828,19 @@ void AutoScreenOff::refresh()
 {
   QString option = QString::fromStdString(params.get("OpkrAutoScreenOff"));
   if (option == "-2") {
-    label.setText(QString::fromStdString("항상켜기"));
+    label.setText(QString::fromStdString("AlwaysOn"));
   } else if (option == "-1") {
-    label.setText(QString::fromStdString("15초"));
+    label.setText(QString::fromStdString("15secs"));
   } else if (option == "0") {
-    label.setText(QString::fromStdString("30초"));
+    label.setText(QString::fromStdString("30secs"));
   } else {
-    label.setText(QString::fromStdString(params.get("OpkrAutoScreenOff")) + "분");
+    label.setText(QString::fromStdString(params.get("OpkrAutoScreenOff")) + "min(s)");
   }
   btnminus.setText("－");
   btnplus.setText("＋");
 }
 
-ChargingMin::ChargingMin() : AbstractControl("배터리 최소 충전 값", "배터리 최소 충전값을 설정합니다.", "../assets/offroad/icon_shell.png") {
+ChargingMin::ChargingMin() : AbstractControl("BAT MinCharging Value", "Sets the minimum battery charge value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -899,7 +899,7 @@ void ChargingMin::refresh() {
   btnplus.setText("＋");
 }
 
-ChargingMax::ChargingMax() : AbstractControl("배터리 최대 충전 값", "배터리 최대 충전값을 설정합니다.", "../assets/offroad/icon_shell.png") {
+ChargingMax::ChargingMax() : AbstractControl("BAT MaxCharging Value", "Sets the maximum battery charge value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -958,74 +958,7 @@ void ChargingMax::refresh() {
   btnplus.setText("＋");
 }
 
-FanSpeedGain::FanSpeedGain() : AbstractControl("팬속도 조절 Gain", "팬속도 Gain을 조절합니다. 팬 컨트롤 보드 사용시 팬 동작 기준값을 조절할 수 있습니다.", "../assets/offroad/icon_shell.png") {
-
-  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
-  label.setStyleSheet("color: #e0e879");
-  hlayout->addWidget(&label);
-
-  btnminus.setStyleSheet(R"(
-    padding: 0;
-    border-radius: 50px;
-    font-size: 35px;
-    font-weight: 500;
-    color: #E4E4E4;
-    background-color: #393939;
-  )");
-  btnplus.setStyleSheet(R"(
-    padding: 0;
-    border-radius: 50px;
-    font-size: 35px;
-    font-weight: 500;
-    color: #E4E4E4;
-    background-color: #393939;
-  )");
-  btnminus.setFixedSize(150, 100);
-  btnplus.setFixedSize(150, 100);
-  hlayout->addWidget(&btnminus);
-  hlayout->addWidget(&btnplus);
-
-  QObject::connect(&btnminus, &QPushButton::clicked, [=]() {
-    auto str = QString::fromStdString(params.get("OpkrFanSpeedGain"));
-    int value = str.toInt();
-    value = value - 16384;
-    if (value <= -16384 ) {
-      value = -16384;
-    }
-    QString values = QString::number(value);
-    params.put("OpkrFanSpeedGain", values.toStdString());
-    refresh();
-  });
-  
-  QObject::connect(&btnplus, &QPushButton::clicked, [=]() {
-    auto str = QString::fromStdString(params.get("OpkrFanSpeedGain"));
-    int value = str.toInt();
-    value = value + 16384;
-    if (value >= 32768 ) {
-      value = 32768;
-    }
-    QString values = QString::number(value);
-    params.put("OpkrFanSpeedGain", values.toStdString());
-    refresh();
-  });
-  refresh();
-}
-
-void FanSpeedGain::refresh() {
-  auto strs = QString::fromStdString(params.get("OpkrFanSpeedGain"));
-  int valuei = strs.toInt();
-  float valuef = valuei;
-  QString valuefs = QString::number(valuef);
-  if (valuefs == "0") {
-    label.setText(QString::fromStdString("기본값"));
-  } else {
-    label.setText(QString::fromStdString(valuefs.toStdString()));
-  }
-  btnminus.setText("－");
-  btnplus.setText("＋");
-}
-
-RecordCount::RecordCount() : AbstractControl("녹화파일 최대 개수 설정", "녹화 파일 최대 개수를 설정합니다.", "../assets/offroad/icon_shell.png") {
+RecordCount::RecordCount() : AbstractControl("Number of Recorded Files", "Sets the maximum number of recording files.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1084,7 +1017,7 @@ void RecordCount::refresh() {
   btnplus.setText("＋");
 }
 
-RecordQuality::RecordQuality() : AbstractControl("녹화 화질 설정", "녹화 화질을 설정합니다. 저화질/중화질/고화질/초고화질", "../assets/offroad/icon_shell.png") {
+RecordQuality::RecordQuality() : AbstractControl("Recording Quality", "Set the recording quality. Low/Mid/high definition/high definition/ultra-high definition.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1140,19 +1073,19 @@ RecordQuality::RecordQuality() : AbstractControl("녹화 화질 설정", "녹화
 void RecordQuality::refresh() {
   QString option = QString::fromStdString(params.get("RecordingQuality"));
   if (option == "0") {
-    label.setText(QString::fromStdString("저화질"));
+    label.setText(QString::fromStdString("Low"));
   } else if (option == "1") {
-    label.setText(QString::fromStdString("중화질"));
+    label.setText(QString::fromStdString("Mid"));
   } else if (option == "2") {
-    label.setText(QString::fromStdString("고화질"));
+    label.setText(QString::fromStdString("High"));
   } else {
-    label.setText(QString::fromStdString("초고화질"));
+    label.setText(QString::fromStdString("U-High"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");
 }
 
-MonitoringMode::MonitoringMode() : AbstractControl("모니터링 모드 설정", "모니터링 모드를 설정합니다. 기본설정/졸음방지, 졸음방지의 경우 아래 Threshold 값을 조정(낮춤)하여 좀더 빨리 경고메시지를 보낼 수 있습니다.", "../assets/offroad/icon_shell.png") {
+MonitoringMode::MonitoringMode() : AbstractControl("Driver Monitoring Mode", "Set the monitoring mode. In the case of preference/prevention of sleepiness and sleepiness prevention, you can send a warning message faster by adjusting (lowering) the threshold value below.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1208,15 +1141,15 @@ MonitoringMode::MonitoringMode() : AbstractControl("모니터링 모드 설정",
 void MonitoringMode::refresh() {
   QString option = QString::fromStdString(params.get("OpkrMonitoringMode"));
   if (option == "0") {
-    label.setText(QString::fromStdString("기본설정"));
+    label.setText(QString::fromStdString("Default"));
   } else if (option == "1") {
-    label.setText(QString::fromStdString("졸음방지"));
+    label.setText(QString::fromStdString("UnSleep"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");
 }
 
-MonitorEyesThreshold::MonitorEyesThreshold() : AbstractControl("E2E EYE Threshold", "눈감지 범위에 대한 기준값을 조정합니다. 자신에게 맞는 값을 기준값을 설정합니다. 눈을 감고 있을 때 distratedEyes값 보다 낮게 설정해야 합니다. 기본값:0.75", "../assets/offroad/icon_shell.png") {
+MonitorEyesThreshold::MonitorEyesThreshold() : AbstractControl("E2E EYE Threshold", "Adjust the reference value for the eye detection range. Set the reference value for the value that suits you. When you close your eyes, you should set it lower than the distracted Eyes value. Default: 0.75", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1279,7 +1212,7 @@ void MonitorEyesThreshold::refresh() {
   btnplus.setText("＋");
 }
 
-NormalEyesThreshold::NormalEyesThreshold() : AbstractControl("Normal EYE Threshold", "눈 인식 기준값을 조정합니다. 인식률이 낮은경우 값을 낮춥니다. 기본값:0.5", "../assets/offroad/icon_shell.png") {
+NormalEyesThreshold::NormalEyesThreshold() : AbstractControl("Normal EYE Threshold", "Adjust the eye recognition reference value. Lower the value when the recognition rate is low. Default: 0.5", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1342,7 +1275,7 @@ void NormalEyesThreshold::refresh() {
   btnplus.setText("＋");
 }
 
-BlinkThreshold::BlinkThreshold() : AbstractControl("Blink Threshold", "눈 깜빡임 정도에 대한 인식값을 조정합니다. 눈을 감고있을 때 BlinkProb를 확인후 값을 낮춰야 합니다. 기본값:0.5", "../assets/offroad/icon_shell.png") {
+BlinkThreshold::BlinkThreshold() : AbstractControl("Blink Threshold", "Adjust the recognition value for the degree of blinking. When you close your eyes, check BlinkProb and lower the value. Default: 0.5", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1405,72 +1338,8 @@ void BlinkThreshold::refresh() {
   btnplus.setText("＋");
 }
 
-//주행
-VariableCruiseProfile::VariableCruiseProfile() : AbstractControl("크루즈 가감속 프로파일", "크루즈 가감속 프로파일을 설정합니다. follow/relaxed", "../assets/offroad/icon_shell.png") {
-
-  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
-  label.setStyleSheet("color: #e0e879");
-  hlayout->addWidget(&label);
-
-  btnminus.setStyleSheet(R"(
-    padding: 0;
-    border-radius: 50px;
-    font-size: 35px;
-    font-weight: 500;
-    color: #E4E4E4;
-    background-color: #393939;
-  )");
-  btnplus.setStyleSheet(R"(
-    padding: 0;
-    border-radius: 50px;
-    font-size: 35px;
-    font-weight: 500;
-    color: #E4E4E4;
-    background-color: #393939;
-  )");
-  btnminus.setFixedSize(150, 100);
-  btnplus.setFixedSize(150, 100);
-  hlayout->addWidget(&btnminus);
-  hlayout->addWidget(&btnplus);
-
-  QObject::connect(&btnminus, &QPushButton::clicked, [=]() {
-    auto str = QString::fromStdString(params.get("OpkrVariableCruiseProfile"));
-    int value = str.toInt();
-    value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
-    }
-    QString values = QString::number(value);
-    params.put("OpkrVariableCruiseProfile", values.toStdString());
-    refresh();
-  });
-  
-  QObject::connect(&btnplus, &QPushButton::clicked, [=]() {
-    auto str = QString::fromStdString(params.get("OpkrVariableCruiseProfile"));
-    int value = str.toInt();
-    value = value + 1;
-    if (value >= 1 ) {
-      value = 1;
-    }
-    QString values = QString::number(value);
-    params.put("OpkrVariableCruiseProfile", values.toStdString());
-    refresh();
-  });
-  refresh();
-}
-
-void VariableCruiseProfile::refresh() {
-  QString option = QString::fromStdString(params.get("OpkrVariableCruiseProfile"));
-  if (option == "0") {
-    label.setText(QString::fromStdString("follow"));
-  } else {
-    label.setText(QString::fromStdString("relaxed"));
-  }
-  btnminus.setText("◀");
-  btnplus.setText("▶");
-}
-
-CruisemodeSelInit::CruisemodeSelInit() : AbstractControl("크루즈 시작모드 설정", "크루즈 시작모드를 설정합니다. 오파모드/차간+커브/차간Only/커브Only/편도1차선/맵감속Only  오파모드:버튼속도제어 사용안함, 차간+커브:버튼속도제어를 차간거리와 커브구간에서 사용, 차간Only:버튼감속을 차간거리에서만 사용, 커브Only:버튼감속을 커브구간에서만 사용, 편도1차선:편도1차선 구간에서 카메라오프셋을 낮춰 오른쪽으로 붙여서 주행, 맵감속Only:맵피 감속만 사용", "../assets/offroad/icon_shell.png") {
+//Driving
+CruisemodeSelInit::CruisemodeSelInit() : AbstractControl("Cruise Start Mode", "Set the cruise start mode. OP mode/dist+curve/dist only/curve only/one-way 1 lane/safetycam deceleration Only. op mode:no button speed control, dist+curve:use button speed control in the inter-vehicle distance and curve section, dist only:curve only:curve one-way speed only, one-way speed control", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1526,23 +1395,23 @@ CruisemodeSelInit::CruisemodeSelInit() : AbstractControl("크루즈 시작모드
 void CruisemodeSelInit::refresh() {
   QString option = QString::fromStdString(params.get("CruiseStatemodeSelInit"));
   if (option == "0") {
-    label.setText(QString::fromStdString("오파모드"));
+    label.setText(QString::fromStdString("OP Stock"));
   } else if (option == "1") {
-    label.setText(QString::fromStdString("차간+커브"));
+    label.setText(QString::fromStdString("Dist+Curv"));
   } else if (option == "2") {
-    label.setText(QString::fromStdString("차간Only"));
+    label.setText(QString::fromStdString("DistOnly"));
   } else if (option == "3") {
-    label.setText(QString::fromStdString("커브Only"));
+    label.setText(QString::fromStdString("CurvOnly"));
   } else if (option == "4") {
-    label.setText(QString::fromStdString("편도1차선"));
+    label.setText(QString::fromStdString("OneWay"));
   } else {
-    label.setText(QString::fromStdString("맵감속Only"));
+    label.setText(QString::fromStdString("SafeCamDecOnly"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");
 }
 
-LaneChangeSpeed::LaneChangeSpeed() : AbstractControl("차선변경 속도 설정", "차선변경 가능 속도를 설정합니다.", "../assets/offroad/icon_shell.png") {
+LaneChangeSpeed::LaneChangeSpeed() : AbstractControl("LaneChange Speed", "Set the lane changeable speed.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1601,7 +1470,7 @@ void LaneChangeSpeed::refresh() {
   btnplus.setText("＋");
 }
 
-LaneChangeDelay::LaneChangeDelay() : AbstractControl("차선변경 지연시간 설정", "턴시그널 작동후 차선변경전 지연시간을 설정합니다.", "../assets/offroad/icon_shell.png") {
+LaneChangeDelay::LaneChangeDelay() : AbstractControl("LaneChange Delay", "Set the delay time after turn signal operation before lane change.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1657,23 +1526,23 @@ LaneChangeDelay::LaneChangeDelay() : AbstractControl("차선변경 지연시간 
 void LaneChangeDelay::refresh() {
   QString option = QString::fromStdString(params.get("OpkrAutoLaneChangeDelay"));
   if (option == "0") {
-    label.setText(QString::fromStdString("수동"));
+    label.setText(QString::fromStdString("Nudge"));
   } else if (option == "1") {
-    label.setText(QString::fromStdString("즉시"));
+    label.setText(QString::fromStdString("RightNow"));
   } else if (option == "2") {
-    label.setText(QString::fromStdString("0.5초"));
+    label.setText(QString::fromStdString("0.5sec"));
   } else if (option == "3") {
-    label.setText(QString::fromStdString("1초"));
+    label.setText(QString::fromStdString("1sec"));
   } else if (option == "4") {
-    label.setText(QString::fromStdString("1.5초"));
+    label.setText(QString::fromStdString("1.5sec"));
   } else {
-    label.setText(QString::fromStdString("2초"));
+    label.setText(QString::fromStdString("2secs"));
   }
   btnminus.setText("－");
   btnplus.setText("＋");
 }
 
-LeftCurvOffset::LeftCurvOffset() : AbstractControl("오프셋조정(왼쪽 커브)", "커브구간에서 차량위치를 조정합니다.(-값: 차를 왼쪽으로 이동, +값:차를 오른쪽으로 이동)", "../assets/offroad/icon_shell.png") {
+LeftCurvOffset::LeftCurvOffset() : AbstractControl("LeftCurv Offset", "Adjust the position of the vehicle in the curve section. (-value: move the car to the left, +value: move the car to the right)", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1732,7 +1601,7 @@ void LeftCurvOffset::refresh() {
   btnplus.setText("＋");
 }
 
-RightCurvOffset::RightCurvOffset() : AbstractControl("오프셋조정(오른쪽 커브)", "커브구간에서 차량위치를 조정합니다.(-값: 차를 왼쪽으로 이동, +값:차를 오른쪽으로 이동)", "../assets/offroad/icon_shell.png") {
+RightCurvOffset::RightCurvOffset() : AbstractControl("RightCurv Offset", "Adjust the position of the vehicle in the curve section. (-value: move the car to the left, +value: move the car to the right)", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1791,7 +1660,7 @@ void RightCurvOffset::refresh() {
   btnplus.setText("＋");
 }
 
-MaxAngleLimit::MaxAngleLimit() : AbstractControl("최대 조향각 설정(각도)", "오파 가능한 핸들의 최대 조향각을 설정합니다. 각도를 90도이상 설정시 일부차량에서 오류가 발생할 수 있으니 참고하시기 바랍니다.", "../assets/offroad/icon_shell.png") {
+MaxAngleLimit::MaxAngleLimit() : AbstractControl("Max Steering Angle", "Set the maximum steering angle of the handle where the openpilot is possible. Please note that some vehicles may experience errors if the angle is set above 90 degrees.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1847,7 +1716,7 @@ MaxAngleLimit::MaxAngleLimit() : AbstractControl("최대 조향각 설정(각도
 void MaxAngleLimit::refresh() {
   QString option = QString::fromStdString(params.get("OpkrMaxAngleLimit"));
   if (option == "80") {
-    label.setText(QString::fromStdString("제한없음"));
+    label.setText(QString::fromStdString("NoLimit"));
   } else {
     label.setText(QString::fromStdString(params.get("OpkrMaxAngleLimit")));
   }
@@ -1855,7 +1724,7 @@ void MaxAngleLimit::refresh() {
   btnplus.setText("＋");
 }
 
-SteerAngleCorrection::SteerAngleCorrection() : AbstractControl("스티어앵글 영점 조정", "직선주로에서 현재조향각이 0이 아닐겨우 SteerAngle 영점을 조정하여 0으로 맞춥니다. ex) 직선주로시 0.5도 인경우, 0.5로 세팅, -0.5도인경우 -0.5로 세팅", "../assets/offroad/icon_shell.png") {
+SteerAngleCorrection::SteerAngleCorrection() : AbstractControl("Str Angle Adjust", "On the straight path, adjust the SteerAngle zero to zero the current steering angle. ex) Set it to 0.5 degrees Celsius for a straight line, and -0.5 degrees Celsius for -0.5 degrees Celsius.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1918,7 +1787,7 @@ void SteerAngleCorrection::refresh() {
   btnplus.setText("＋");
 }
 
-SpeedLimitOffset::SpeedLimitOffset() : AbstractControl("MAP기반 제한속도 오프셋(%)", "맵기반 감속시 GPS속도와 실속도차이를 보상하여 감속합니다.", "../assets/offroad/icon_shell.png") {
+SpeedLimitOffset::SpeedLimitOffset() : AbstractControl("SpeedLimit Offset(%)", "During safetycam deceleration, it decelerates by compensating for the difference between GPS speed and real speed.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1979,7 +1848,7 @@ void SpeedLimitOffset::refresh() {
   btnplus.setText("＋");
 }
 
-RESChoice::RESChoice() : AbstractControl("자동RES 옵션", "자동RES옵션을 설정합니다. 1. 일시적 크루즈속도 조정, 2. 설정속도 자체를 조정, 3. 선행차유무에따라 조정(선행차 있을 시 크루즈속도조정, 선행차 없을 시 설정속도조정)  ※자동 RES는 조건에 따라 동작이 잘 되지 않을 수도 있으니 참고하시고 사용바랍니다.", "../assets/offroad/icon_shell.png") {
+RESChoice::RESChoice() : AbstractControl("AutoRES Option", "Sets the auto RES option. 1. Adjust the temporary cruise speed, 2. Adjust the set speed itself according to the presence or absence of a preceding car. 3. Adjust the cruise speed if there is a preceding car, and adjust the set speed if there is no preceding car. 자동Please note that the automatic RES may not work well depending on the conditions.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2035,17 +1904,17 @@ RESChoice::RESChoice() : AbstractControl("자동RES 옵션", "자동RES옵션을
 void RESChoice::refresh() {
   QString option = QString::fromStdString(params.get("AutoResOption"));
   if (option == "0") {
-    label.setText(QString::fromStdString("크루즈속도조정"));
+    label.setText(QString::fromStdString("CruiseSet"));
   } else if (option == "1") {
-    label.setText(QString::fromStdString("설정속도조정"));
+    label.setText(QString::fromStdString("MaxSpeedSet"));
   } else {
-    label.setText(QString::fromStdString("자동모드(선행차)"));
+    label.setText(QString::fromStdString("AUTO(LeadCar)"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");
 }
 
-AutoResCondition::AutoResCondition() : AbstractControl("자동RES 조건", "자동RES조건을 설정합니다. 브레이크해제시 작동/가속페달조작시 작동", "../assets/offroad/icon_shell.png") {
+AutoResCondition::AutoResCondition() : AbstractControl("AutoRES Condition", "Sets the automatic RES condition. When the brake is released/operated when the accelerator pedal is operated.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2101,15 +1970,15 @@ AutoResCondition::AutoResCondition() : AbstractControl("자동RES 조건", "자�
 void AutoResCondition::refresh() {
   QString option = QString::fromStdString(params.get("AutoResCondition"));
   if (option == "0") {
-    label.setText(QString::fromStdString("브레이크해제시"));
+    label.setText(QString::fromStdString("RelBrake"));
   } else {
-    label.setText(QString::fromStdString("가속페달조작시"));
+    label.setText(QString::fromStdString("OnGas"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");
 }
 
-AutoResLimitTime::AutoResLimitTime() : AbstractControl("자동RES 허용시간(초)", "자동RES허용시간을 조정합니다. 크루즈 해제 후 설정시간 이내에서만 자동RES가 동작합니다.", "../assets/offroad/icon_shell.png") {
+AutoResLimitTime::AutoResLimitTime() : AbstractControl("AutoRES Allow(sec)", "Adjust the automatic RES allowance time. Automatic RES operates only within the set time after the cruise is released.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2165,7 +2034,7 @@ AutoResLimitTime::AutoResLimitTime() : AbstractControl("자동RES 허용시간(�
 void AutoResLimitTime::refresh() {
   QString option = QString::fromStdString(params.get("AutoResLimitTime"));
   if (option == "0") {
-    label.setText(QString::fromStdString("제한없음"));
+    label.setText(QString::fromStdString("NoLimit"));
   } else {
     label.setText(QString::fromStdString(params.get("AutoResLimitTime")));
   }
@@ -2173,7 +2042,7 @@ void AutoResLimitTime::refresh() {
   btnplus.setText("+");
 }
 
-AutoEnableSpeed::AutoEnableSpeed() : AbstractControl("자동 인게이지 속도(km/h)", "자동 인게이지 속도를 설정합니다.", "../assets/offroad/icon_shell.png") {
+AutoEnableSpeed::AutoEnableSpeed() : AbstractControl("Auto Engage Speed(km/h)", "Set the automatic engage speed.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2229,7 +2098,7 @@ AutoEnableSpeed::AutoEnableSpeed() : AbstractControl("자동 인게이지 속도
 void AutoEnableSpeed::refresh() {
   QString option = QString::fromStdString(params.get("AutoEnableSpeed"));
   if (option == "0") {
-    label.setText(QString::fromStdString("출발시"));
+    label.setText(QString::fromStdString("atDepart"));
   } else {
     label.setText(QString::fromStdString(params.get("AutoEnableSpeed")));
   }
@@ -2237,7 +2106,7 @@ void AutoEnableSpeed::refresh() {
   btnplus.setText("+");
 }
 
-CamDecelDistAdd::CamDecelDistAdd() : AbstractControl("안전감속시작거리 조정(%)", "안전구간 감속시 감속시작 거리를 줄이거나 늘립니다.(+값: 원거리에서 감속시작, -값: 근거리에서 감속시작) ※감속시작 거리 = 현재속도에 따른 보간값 X 현재속도와 캠속도 차이에 따른 보간값 X 줄임/늘림 비율", "../assets/offroad/icon_shell.png") {
+CamDecelDistAdd::CamDecelDistAdd() : AbstractControl("SafetyCamDist Adj(%)", "Reduce or increase the deceleration start distance during deceleration of the safety section (+ value: deceleration start from a long distance, -value: deceleration start at a short distance) = interpolation value X interpolation value X reduction/increase ratio according to difference between current speed and cam speed.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2293,7 +2162,7 @@ CamDecelDistAdd::CamDecelDistAdd() : AbstractControl("안전감속시작거리 �
 void CamDecelDistAdd::refresh() {
   QString option = QString::fromStdString(params.get("SafetyCamDecelDistGain"));
   if (option == "0") {
-    label.setText(QString::fromStdString("기본값"));
+    label.setText(QString::fromStdString("Default"));
   } else {
     label.setText(QString::fromStdString(params.get("SafetyCamDecelDistGain")));
   }
@@ -2301,8 +2170,8 @@ void CamDecelDistAdd::refresh() {
   btnplus.setText("+");
 }
 
-//판다값
-MaxSteer::MaxSteer() : AbstractControl("MAX_STEER", "판다 MAX_STEER 값을 수정합니다. 적용하려면 아래 실행 버튼을 누르세요.", "../assets/offroad/icon_shell.png") {
+//Panda
+MaxSteer::MaxSteer() : AbstractControl("MAX_STEER", "Modify the Panda MAX_STEEER value. Press the Run button below to apply.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2361,7 +2230,7 @@ void MaxSteer::refresh() {
   btnplus.setText("＋");
 }
 
-MaxRTDelta::MaxRTDelta() : AbstractControl("RT_DELTA", "판다 RT_DELTA 값을 수정합니다. 적용하려면 아래 실행 버튼을 누르세요.", "../assets/offroad/icon_shell.png") {
+MaxRTDelta::MaxRTDelta() : AbstractControl("RT_DELTA", "Modify the panda RT_DELTA value. Press the Run button below to apply.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2420,7 +2289,7 @@ void MaxRTDelta::refresh() {
   btnplus.setText("＋");
 }
 
-MaxRateUp::MaxRateUp() : AbstractControl("MAX_RATE_UP", "판다 MAX_RATE_UP 값을 수정합니다. 적용하려면 아래 실행 버튼을 누르세요.", "../assets/offroad/icon_shell.png") {
+MaxRateUp::MaxRateUp() : AbstractControl("MAX_RATE_UP", "Modify the Panda MAX_RATE_UP value. Press the Run button below to apply.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2479,7 +2348,7 @@ void MaxRateUp::refresh() {
   btnplus.setText("＋");
 }
 
-MaxRateDown::MaxRateDown() : AbstractControl("MAX_RATE_DOWN", "판다 MAX_RATE_DOWN 값을 수정합니다. 적용하려면 아래 실행 버튼을 누르세요.", "../assets/offroad/icon_shell.png") {
+MaxRateDown::MaxRateDown() : AbstractControl("MAX_RATE_DOWN", "Modify the Panda MAX_RATE_DOWN value. Press the Run button below to apply.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2539,7 +2408,7 @@ void MaxRateDown::refresh() {
 }
 
 //튜닝
-CameraOffset::CameraOffset() : AbstractControl("CameraOffset", "CameraOffset값을 설정합니다. (+값:왼쪽이동, -값:오른쪽이동)", "../assets/offroad/icon_shell.png") {
+CameraOffset::CameraOffset() : AbstractControl("CameraOffset", "Sets the CameraOffset value. (+value:Move Left, -value:Move Right)", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2602,7 +2471,7 @@ void CameraOffset::refresh() {
   btnplus.setText("＋");
 }
 
-PathOffset::PathOffset() : AbstractControl("PathOffset", "PathOffset값을 설정합니다. (+값:왼쪽이동, -값:오른쪽이동)", "../assets/offroad/icon_shell.png") {
+PathOffset::PathOffset() : AbstractControl("PathOffset", "Sets the PathOffset value. (+value:Move left, -value:Move right)", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2665,7 +2534,7 @@ void PathOffset::refresh() {
   btnplus.setText("＋");
 }
 
-SRBaseControl::SRBaseControl() : AbstractControl("SteerRatio", "SteerRatio 기본값을 설정합니다.", "../assets/offroad/icon_shell.png") {
+SRBaseControl::SRBaseControl() : AbstractControl("SteerRatio", "Sets the SteerRatio default value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2763,7 +2632,7 @@ void SRBaseControl::refresh() {
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
 
-SRMaxControl::SRMaxControl() : AbstractControl("SteerRatioMax", "SteerRatio 최대값을 설정합니다.", "../assets/offroad/icon_shell.png") {
+SRMaxControl::SRMaxControl() : AbstractControl("SteerRatioMax", "Sets the SteerRatio maximum value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2861,7 +2730,7 @@ void SRMaxControl::refresh() {
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
 
-SteerActuatorDelay::SteerActuatorDelay() : AbstractControl("SteerActuatorDelay", "SteerActuatorDelay값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+SteerActuatorDelay::SteerActuatorDelay() : AbstractControl("SteerActuatorDelay", "Adjust the SteerActuatorDelay value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2924,7 +2793,7 @@ void SteerActuatorDelay::refresh() {
   btnplus.setText("＋");
 }
 
-SteerRateCost::SteerRateCost() : AbstractControl("SteerRateCost", "SteerRateCost값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+SteerRateCost::SteerRateCost() : AbstractControl("SteerRateCost", "Adjust the SteerRateCost value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2987,7 +2856,7 @@ void SteerRateCost::refresh() {
   btnplus.setText("＋");
 }
 
-SteerLimitTimer::SteerLimitTimer() : AbstractControl("SteerLimitTimer", "SteerLimitTimer값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+SteerLimitTimer::SteerLimitTimer() : AbstractControl("SteerLimitTimer", "Adjust the SteerLimitTimer value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3050,7 +2919,7 @@ void SteerLimitTimer::refresh() {
   btnplus.setText("＋");
 }
 
-TireStiffnessFactor::TireStiffnessFactor() : AbstractControl("TireStiffnessFactor", "TireStiffnessFactor값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+TireStiffnessFactor::TireStiffnessFactor() : AbstractControl("TireStiffnessFactor", "Adjust the TireStiffnessFactor value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3113,7 +2982,7 @@ void TireStiffnessFactor::refresh() {
   btnplus.setText("＋");
 }
 
-SteerMaxBase::SteerMaxBase() : AbstractControl("SteerMax기본값", "SteerMax기본값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+SteerMaxBase::SteerMaxBase() : AbstractControl("SteerMax기본값", "Adjust the SteerMax default.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3172,7 +3041,7 @@ void SteerMaxBase::refresh() {
   btnplus.setText("＋");
 }
 
-SteerMaxMax::SteerMaxMax() : AbstractControl("SteerMax최대값", "SteerMax최대값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+SteerMaxMax::SteerMaxMax() : AbstractControl("SteerMax최대값", "Adjust the SteerMax maximum.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3231,7 +3100,7 @@ void SteerMaxMax::refresh() {
   btnplus.setText("＋");
 }
 
-SteerMaxv::SteerMaxv() : AbstractControl("SteerMaxV", "SteerMaxV값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+SteerMaxv::SteerMaxv() : AbstractControl("SteerMaxV", "Adjust the SteerMaxV value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3294,7 +3163,7 @@ void SteerMaxv::refresh() {
   btnplus.setText("＋");
 }
 
-SteerDeltaUpBase::SteerDeltaUpBase() : AbstractControl("SteerDeltaUp기본값", "SteerDeltaUp기본값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+SteerDeltaUpBase::SteerDeltaUpBase() : AbstractControl("SteerDeltaUpDefault", "Adjust the Steer DeltaUp default value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3353,7 +3222,7 @@ void SteerDeltaUpBase::refresh() {
   btnplus.setText("＋");
 }
 
-SteerDeltaUpMax::SteerDeltaUpMax() : AbstractControl("SteerDeltaUp최대값", "SteerDeltaUp최대값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+SteerDeltaUpMax::SteerDeltaUpMax() : AbstractControl("SteerDeltaUpMax", "Adjust the Steer DeltaUp maximum value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3412,7 +3281,7 @@ void SteerDeltaUpMax::refresh() {
   btnplus.setText("＋");
 }
 
-SteerDeltaDownBase::SteerDeltaDownBase() : AbstractControl("SteerDeltaDown기본값", "SteerDeltaDown기본값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+SteerDeltaDownBase::SteerDeltaDownBase() : AbstractControl("SteerDeltaDownDefault", "Adjust the SteerDeltaDown default.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3471,7 +3340,7 @@ void SteerDeltaDownBase::refresh() {
   btnplus.setText("＋");
 }
 
-SteerDeltaDownMax::SteerDeltaDownMax() : AbstractControl("SteerDeltaDown최대값", "SteerDeltaDown최대값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+SteerDeltaDownMax::SteerDeltaDownMax() : AbstractControl("SteerDeltaDownMax", "Adjust the SteerDeltaDown maximum.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3530,7 +3399,7 @@ void SteerDeltaDownMax::refresh() {
   btnplus.setText("＋");
 }
 
-SteerThreshold::SteerThreshold() : AbstractControl("SteerThreshold", "SteerThreshold값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+SteerThreshold::SteerThreshold() : AbstractControl("SteerThreshold", "Adjust the SteerThreshold value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3590,7 +3459,7 @@ void SteerThreshold::refresh() {
 }
 
 //제어
-LateralControl::LateralControl() : AbstractControl("조향제어", "조향제어 방법을 설정합니다. (PID/INDI/LQR)", "../assets/offroad/icon_shell.png") {
+LateralControl::LateralControl() : AbstractControl("LatControl(Reboot)", "Set the steering control method(PID/INDI/LQR). Reboot Required.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3656,7 +3525,7 @@ void LateralControl::refresh() {
   btnplus.setText("▶");
 }
 
-PidKp::PidKp() : AbstractControl("Kp", "Kp값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+PidKp::PidKp() : AbstractControl("Kp", "Adjust Kp", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3719,7 +3588,7 @@ void PidKp::refresh() {
   btnplus.setText("＋");
 }
 
-PidKi::PidKi() : AbstractControl("Ki", "Ki값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+PidKi::PidKi() : AbstractControl("Ki", "Adjust Ki", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3782,7 +3651,7 @@ void PidKi::refresh() {
   btnplus.setText("＋");
 }
 
-PidKd::PidKd() : AbstractControl("Kd", "Kd값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+PidKd::PidKd() : AbstractControl("Kd", "Adjust Kd", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3845,7 +3714,7 @@ void PidKd::refresh() {
   btnplus.setText("＋");
 }
 
-PidKf::PidKf() : AbstractControl("Kf", "Kf값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+PidKf::PidKf() : AbstractControl("Kf", "Adjust Kf", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -3908,70 +3777,7 @@ void PidKf::refresh() {
   btnplus.setText("＋");
 }
 
-IgnoreZone::IgnoreZone() : AbstractControl("IgnoreZone", "IgnoreZone값을 조정합니다.", "../assets/offroad/icon_shell.png") {
-
-  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
-  label.setStyleSheet("color: #e0e879");
-  hlayout->addWidget(&label);
-
-  btnminus.setStyleSheet(R"(
-    padding: 0;
-    border-radius: 50px;
-    font-size: 35px;
-    font-weight: 500;
-    color: #E4E4E4;
-    background-color: #393939;
-  )");
-  btnplus.setStyleSheet(R"(
-    padding: 0;
-    border-radius: 50px;
-    font-size: 35px;
-    font-weight: 500;
-    color: #E4E4E4;
-    background-color: #393939;
-  )");
-  btnminus.setFixedSize(150, 100);
-  btnplus.setFixedSize(150, 100);
-  hlayout->addWidget(&btnminus);
-  hlayout->addWidget(&btnplus);
-
-  QObject::connect(&btnminus, &QPushButton::clicked, [=]() {
-    auto str = QString::fromStdString(params.get("IgnoreZone"));
-    int value = str.toInt();
-    value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
-    }
-    QString values = QString::number(value);
-    params.put("IgnoreZone", values.toStdString());
-    refresh();
-  });
-  
-  QObject::connect(&btnplus, &QPushButton::clicked, [=]() {
-    auto str = QString::fromStdString(params.get("IgnoreZone"));
-    int value = str.toInt();
-    value = value + 1;
-    if (value >= 30 ) {
-      value = 30;
-    }
-    QString values = QString::number(value);
-    params.put("IgnoreZone", values.toStdString());
-    refresh();
-  });
-  refresh();
-}
-
-void IgnoreZone::refresh() {
-  auto strs = QString::fromStdString(params.get("IgnoreZone"));
-  int valuei = strs.toInt();
-  float valuef = valuei * 0.1;
-  QString valuefs = QString::number(valuef);
-  label.setText(QString::fromStdString(valuefs.toStdString()));
-  btnminus.setText("－");
-  btnplus.setText("＋");
-}
-
-OuterLoopGain::OuterLoopGain() : AbstractControl("OuterLoopGain", "OuterLoopGain값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+OuterLoopGain::OuterLoopGain() : AbstractControl("OuterLoopGain", "Adjust OuterLoopGain", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -4034,7 +3840,7 @@ void OuterLoopGain::refresh() {
   btnplus.setText("＋");
 }
 
-InnerLoopGain::InnerLoopGain() : AbstractControl("InnerLoopGain", "InnerLoopGain값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+InnerLoopGain::InnerLoopGain() : AbstractControl("InnerLoopGain", "Adjust InnerLoopGain", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -4097,7 +3903,7 @@ void InnerLoopGain::refresh() {
   btnplus.setText("＋");
 }
 
-TimeConstant::TimeConstant() : AbstractControl("TimeConstant", "TimeConstant값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+TimeConstant::TimeConstant() : AbstractControl("TimeConstant", "Adjust TimeConstant", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -4160,7 +3966,7 @@ void TimeConstant::refresh() {
   btnplus.setText("＋");
 }
 
-ActuatorEffectiveness::ActuatorEffectiveness() : AbstractControl("ActuatorEffectiveness", "ActuatorEffectiveness값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+ActuatorEffectiveness::ActuatorEffectiveness() : AbstractControl("ActuatorEffectiveness", "Adjust ActuatorEffectiveness", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -4223,7 +4029,7 @@ void ActuatorEffectiveness::refresh() {
   btnplus.setText("＋");
 }
 
-Scale::Scale() : AbstractControl("Scale", "Scale값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+Scale::Scale() : AbstractControl("Scale", "Adjust Scale", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -4282,7 +4088,7 @@ void Scale::refresh() {
   btnplus.setText("＋");
 }
 
-LqrKi::LqrKi() : AbstractControl("LqrKi", "ki값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+LqrKi::LqrKi() : AbstractControl("LqrKi", "Adjust ki", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -4345,7 +4151,7 @@ void LqrKi::refresh() {
   btnplus.setText("＋");
 }
 
-DcGain::DcGain() : AbstractControl("DcGain", "DcGain값을 조정합니다.", "../assets/offroad/icon_shell.png") {
+DcGain::DcGain() : AbstractControl("DcGain", "Adjust DcGain", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -4408,7 +4214,7 @@ void DcGain::refresh() {
   btnplus.setText("＋");
 }
 
-CruiseGapTR::CruiseGapTR() : AbstractControl("크루즈갭", "크루즈갭에 따른 차간거리(TR)를 조절 합니다. TR은 앞차와 추돌시간(초)을 말하며 커질수록 앞차와 더 먼 간격을 유지합니다.", "") {
+CruiseGapTR::CruiseGapTR() : AbstractControl("CruiseGap", "Adjust the inter-vehicle distance (TR) according to the cruise gap. TR refers to the time in seconds of collision with the car in front, and the larger it becomes, the farther it is from the car in front.", "") {
   QString dtr = QString::fromStdString(params.get("DynamicTR"));
   if (dtr == "0") {
     btn1.setStyleSheet(R"(
@@ -4498,7 +4304,7 @@ CruiseGapTR::CruiseGapTR() : AbstractControl("크루즈갭", "크루즈갭에 �
       label1a.setText("1:");
     } else {
       btn1.setFixedSize(100, 100);
-      label1a.setText("1칸:");
+      label1a.setText("1S:");
     }
     hlayout->addWidget(&btn1);
   }
@@ -4510,7 +4316,7 @@ CruiseGapTR::CruiseGapTR() : AbstractControl("크루즈갭", "크루즈갭에 �
       label2a.setText("2:");
     } else {
       btn2.setFixedSize(100, 100);
-      label2a.setText("2칸:");
+      label2a.setText("2S:");
     }
     hlayout->addWidget(&btn2);
   }
@@ -4522,7 +4328,7 @@ CruiseGapTR::CruiseGapTR() : AbstractControl("크루즈갭", "크루즈갭에 �
       label3a.setText("3:");
     } else {
       btn3.setFixedSize(100, 100);
-      label3a.setText("3칸:");
+      label3a.setText("3S:");
     }
     hlayout->addWidget(&btn3);
   }
@@ -4534,7 +4340,7 @@ CruiseGapTR::CruiseGapTR() : AbstractControl("크루즈갭", "크루즈갭에 �
       label4a.setText("4:");
     } else {
       btn4.setFixedSize(100, 100);
-      label4a.setText("4칸:");
+      label4a.setText("4S:");
     }
     hlayout->addWidget(&btn4);
   }
@@ -4626,7 +4432,7 @@ void CruiseGapTR::refresh4() {
   btn4.setText("▲");
 }
 
-DynamicTR::DynamicTR() : AbstractControl("다이나믹TR 사용(갭할당)", "DynamicTR을 사용 및 해당갭에 할당합니다.", "../assets/offroad/icon_shell.png") {
+DynamicTR::DynamicTR() : AbstractControl("Use DynamicTR", "Use DynamicTR and assign it to the corresponding gap.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -4682,7 +4488,7 @@ DynamicTR::DynamicTR() : AbstractControl("다이나믹TR 사용(갭할당)", "Dy
 void DynamicTR::refresh() {
   QString option = QString::fromStdString(params.get("DynamicTR"));
   if (option == "0") {
-    label.setText(QString::fromStdString("사용안함"));
+    label.setText(QString::fromStdString("UnUse"));
   } else if (option == "1") {
     label.setText(QString::fromStdString("■"));
   } else if (option == "2") {
@@ -4891,7 +4697,7 @@ void LCTimingFactor::refresh4() {
   btn4.setText("↕");
 }
 
-LCTimingFactorUD::LCTimingFactorUD() : AbstractControl("차선변경 타이밍(km/h: 정도값)", "차선변경 시 해당 속도별 차선변경 타이밍을 조절합니다. 빠른 차선변경을 원할경우 값을 높이고 느린 차선변경을 원할경우 값을 낮추세요.", "../assets/offroad/icon_shell.png") {
+LCTimingFactorUD::LCTimingFactorUD() : AbstractControl("LaneChange Time (km/h: value)", "When changing lanes, adjust the timing of lane change for each speed. If you want a quick lane change, increase the value and lower the value if you want a slow lane change.", "../assets/offroad/icon_shell.png") {
 
   btn.setStyleSheet(R"(
     padding: 0;
@@ -4951,7 +4757,7 @@ void LCTimingFactorUD::refresh() {
 void LCTimingFactorUD::refresh2() {
   bool param = params.getBool("LCTimingFactorEnable");
   if (param) {
-    btn2.setText("사용중");
+    btn2.setText("ON");
     btn2.setStyleSheet(R"(
     padding: 0;
     border-radius: 50px;
@@ -4961,7 +4767,7 @@ void LCTimingFactorUD::refresh2() {
     background-color: #00A12E;
     )");
   } else {
-    btn2.setText("미사용");
+    btn2.setText("OFF");
     btn2.setStyleSheet(R"(
     padding: 0;
     border-radius: 50px;
@@ -4973,7 +4779,7 @@ void LCTimingFactorUD::refresh2() {
   }
 }
 
-LiveSRPercent::LiveSRPercent() : AbstractControl("LiveSR 비율조정(%)", "LiveSR 사용시 학습된 값을 임의로 조정(%)하여 사용합니다. -값:학습된값에서 낮춤, +값:학습된값에서 높임", "../assets/offroad/icon_shell.png") {
+LiveSRPercent::LiveSRPercent() : AbstractControl("LiveSR Adjust(%)", "When using LiveSR, the learned value is arbitrarily adjusted (%) and used. -Value:Lower from learned value, +Value:Lower from learned value", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -5029,7 +4835,7 @@ LiveSRPercent::LiveSRPercent() : AbstractControl("LiveSR 비율조정(%)", "Live
 void LiveSRPercent::refresh() {
   QString option = QString::fromStdString(params.get("LiveSteerRatioPercent"));
   if (option == "0") {
-    label.setText(QString::fromStdString("기본값"));
+    label.setText(QString::fromStdString("Default"));
   } else {
     label.setText(QString::fromStdString(params.get("LiveSteerRatioPercent")));
   }
@@ -5228,7 +5034,7 @@ void VCurvSpeed::refresh4() {
   btn4.setText("↕");
 }
 
-VCurvSpeedUD::VCurvSpeedUD() : AbstractControl("커브감속정도 조정(모델속도: km/h)", "모델속도에 따른 커브감속 속도를 조정합니다.(보간값)", "../assets/offroad/icon_shell.png") {
+VCurvSpeedUD::VCurvSpeedUD() : AbstractControl("VisionCurvDecel(ModelSpeed: km/h)", "Adjust the curve deceleration speed according to the model speed. (interpolation value)", "../assets/offroad/icon_shell.png") {
 
   btn.setStyleSheet(R"(
     padding: 0;
@@ -5264,7 +5070,7 @@ void VCurvSpeedUD::refresh() {
   }
 }
 
-OCurvOffset::OCurvOffset() : AbstractControl("OSM 커브 속도 오프셋(%)", "OSM 커브 속도를 조정합니다.(+값: 속도를 높임, -값: 속도를 낮춤", "../assets/offroad/icon_shell.png") {
+OCurvOffset::OCurvOffset() : AbstractControl("OSM CurvDecel(%)", "Adjust the speed of the OSM curve (+value: speed up, -value: speed down)", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
