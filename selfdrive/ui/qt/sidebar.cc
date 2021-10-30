@@ -109,7 +109,7 @@ void Sidebar::updateState(const UIState &s) {
   } else if (ts == cereal::DeviceState::ThermalStatus::YELLOW) {
     tempColor = warning_color;
   }
-  setProperty("tempStatus", QVariant::fromValue(ItemStatus{QString("%1¡ÆC").arg((int)deviceState.getAmbientTempC()), tempColor}));
+  setProperty("tempStatus", QVariant::fromValue(ItemStatus{QString("%1â„ƒ").arg((int)deviceState.getAmbientTempC()), tempColor}));
 
   ItemStatus pandaStatus = {"Panda\nConnected", good_color};
   if (s.scene.pandaType == cereal::PandaState::PandaType::UNKNOWN) {
