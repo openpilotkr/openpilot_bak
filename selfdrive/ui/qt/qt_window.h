@@ -3,7 +3,6 @@
 #include <string>
 
 #include <QApplication>
-#include <QScreen>
 #include <QWidget>
 
 #ifdef QCOM2
