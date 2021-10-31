@@ -1101,12 +1101,12 @@ static void draw_laneless_button(UIState *s) {
   nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
   if (s->scene.laneless_mode == 0) {
     nvgFontSize(s->vg, 50);
-    nvgText(s->vg,btn_xc1,btn_yc-10,"LANE",NULL);
-    nvgText(s->vg,btn_xc1,btn_yc+10,"Mode",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc-15,"LANE",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc+15,"Mode",NULL);
   } else if (s->scene.laneless_mode == 1) {
     nvgFontSize(s->vg, 50);
-    nvgText(s->vg,btn_xc1,btn_yc-10,"LANE",NULL);
-    nvgText(s->vg,btn_xc1,btn_yc+10,"Less",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc-15,"LANE",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc+15,"Less",NULL);
   } else if (s->scene.laneless_mode == 2) {
     nvgText(s->vg,btn_xc1,btn_yc,"AUTO",NULL);
   }
