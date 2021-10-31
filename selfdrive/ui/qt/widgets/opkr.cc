@@ -60,7 +60,7 @@ SwitchOpenpilot::SwitchOpenpilot() : ButtonControl("Change Fork/Branch", "", "Ch
 }
 
 void SwitchOpenpilot::refresh() {
-  setText("변경");
+  setText("CHANGE");
   setEnabled(true);
 }
 
@@ -579,7 +579,7 @@ void BrightnessControl::refresh() {
   btnplus.setText("＋");
 }
 
-BrightnessOffControl::BrightnessOffControl() : AbstractControl("EON Brt at SCR Off Func(%)", "When using the EON screen off function, the brightness is reduced according to the automatic brightness ratio.", "../assets/offroad/icon_shell.png") {
+BrightnessOffControl::BrightnessOffControl() : AbstractControl("Brightness at SCR Off(%)", "When using the EON screen off function, the brightness is reduced according to the automatic brightness ratio.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -637,7 +637,7 @@ BrightnessOffControl::BrightnessOffControl() : AbstractControl("EON Brt at SCR O
 void BrightnessOffControl::refresh() {
   QString option = QString::fromStdString(params.get("OpkrUIBrightnessOff"));
   if (option == "0") {
-    label.setText(QString::fromStdString("FullyOff"));
+    label.setText(QString::fromStdString("Dark"));
   } else {
     label.setText(QString::fromStdString(params.get("OpkrUIBrightnessOff")));
   }
@@ -1282,7 +1282,7 @@ void CruisemodeSelInit::refresh() {
   } else if (option == "4") {
     label.setText(QString::fromStdString("OneWay"));
   } else {
-    label.setText(QString::fromStdString("SafeCamDecOnly"));
+    label.setText(QString::fromStdString("CamOnly"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");
@@ -2859,7 +2859,7 @@ void TireStiffnessFactor::refresh() {
   btnplus.setText("＋");
 }
 
-SteerMaxBase::SteerMaxBase() : AbstractControl("SteerMax기본값", "Adjust the SteerMax default.", "../assets/offroad/icon_shell.png") {
+SteerMaxBase::SteerMaxBase() : AbstractControl("SteerMaxDefault", "Adjust the SteerMax default.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -2918,7 +2918,7 @@ void SteerMaxBase::refresh() {
   btnplus.setText("＋");
 }
 
-SteerMaxMax::SteerMaxMax() : AbstractControl("SteerMax최대값", "Adjust the SteerMax maximum.", "../assets/offroad/icon_shell.png") {
+SteerMaxMax::SteerMaxMax() : AbstractControl("SteerMaxMax", "Adjust the SteerMax maximum.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");

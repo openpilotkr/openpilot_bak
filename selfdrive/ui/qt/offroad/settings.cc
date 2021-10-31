@@ -101,7 +101,7 @@ TogglesPanel::TogglesPanel(QWidget *parent) : ListWidget(parent) {
                                   "../assets/offroad/icon_shell.png",
                                   this));
   addItem(new ParamControl("OpkrEnableUploader",
-                                  "Enable Sending Log to Server.",
+                                  "Enable Sending Log to Server",
                                   "Activate the upload process to transmit system logs and other driving data to the server. Upload it only off-road.",
                                   "../assets/offroad/icon_shell.png",
                                   this));
@@ -633,7 +633,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
       padding-bottom: 20px;
       font-weight: bold;
       border 1px grey solid;
-      border-radius: 100px;
+      border-radius: 50px;
       background-color: #292929;
       font-weight: 400;
     }
@@ -641,7 +641,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
       background-color: #3B3B3B;
     }
   )");
-  close_btn->setFixedSize(200, 200);
+  close_btn->setFixedSize(150, 150);
   sidebar_layout->addSpacing(45);
   sidebar_layout->addWidget(close_btn, 0, Qt::AlignCenter);
   QObject::connect(close_btn, &QPushButton::clicked, this, &SettingsWindow::closeSettings);
@@ -660,7 +660,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     {"Tuning", new TuningPanel(this)},
   };
 
-  sidebar_layout->addSpacing(50);
+  sidebar_layout->addSpacing(60);
 
 #ifdef ENABLE_MAPS
   auto map_panel = new MapPanel(this);
