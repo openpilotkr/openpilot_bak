@@ -107,13 +107,14 @@ void OnroadWindow::offroadTransition(bool offroad) {
     QString token = QString::fromStdString(Params().get("dp_mapbox_token_sk"));
     if (map == nullptr && !token.isEmpty()) {
       QMapboxGLSettings settings;
+
       // // Valid for 4 weeks since we can't swap tokens on the fly
       // QString token = MAPBOX_TOKEN.isEmpty() ? CommaApi::create_jwt({}, 4 * 7 * 24 * 3600) : MAPBOX_TOKEN;
 
       if (!Hardware::PC()) {
         settings.setCacheDatabasePath("/data/mbgl-cache.db");
       }
-      //settings.setApiBaseUrl(MAPS_HOST);
+      settings.setApiBaseUrl(MAPS_HOST);
       settings.setCacheDatabaseMaximumSize(20 * 1024 * 1024);
       settings.setAccessToken(token.trimmed());
 
