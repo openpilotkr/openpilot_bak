@@ -105,7 +105,7 @@ MapPanel::MapPanel(QWidget* parent) : QWidget(parent) {
     no_prime_layout->addWidget(screenshot, 0, Qt::AlignHCenter);
 
     QLabel *signup = new QLabel("Get turn-by-turn directions displayed and more with a comma \nprime subscription. Sign up now: https://connect.comma.ai");
-    signup->setStyleSheet(R"(font-size: 40px; color: white; font-weight:300;)");
+    signup->setStyleSheet(R"(font-size: 38px; color: white; font-weight:300;)");
     signup->setAlignment(Qt::AlignCenter);
 
     no_prime_layout->addSpacing(20);
