@@ -152,7 +152,6 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"LastUpdateException", PERSISTENT},
     {"LastUpdateTime", PERSISTENT},
     {"LiveParameters", PERSISTENT},
-    {"MapboxToken", PERSISTENT | DONT_LOG},
     {"NavDestination", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_OFF},
     {"NavSettingTime24h", PERSISTENT},
     {"OpenpilotEnabledToggle", PERSISTENT},
@@ -319,7 +318,6 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"VCurvSpeedUD", PERSISTENT},
     {"OCurvOffset", PERSISTENT},
     {"StockNaviSpeedEnabled", PERSISTENT},
-    {"OPKRMapboxGmapKey", PERSISTENT},
     {"OPKRMapboxTokenPk", PERSISTENT},
     {"OPKRMapboxTokenSk", PERSISTENT},
 };
