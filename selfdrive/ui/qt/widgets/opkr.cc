@@ -19,7 +19,7 @@
 SwitchOpenpilot::SwitchOpenpilot() : ButtonControl("Change Fork/Branch", "", "Change to another open pilot code. You can change it by entering ID/repository/branch.") {
 
   QObject::connect(this, &ButtonControl::clicked, [=]() {
-    if (text() == "EDIT") {
+    if (text() == "CHANGE") {
       QString userid = InputDialog::getText("First: Enter your Git ID. ex) openpilotkr", this);
       if (userid.length() > 0) {
         getUserID(userid);
