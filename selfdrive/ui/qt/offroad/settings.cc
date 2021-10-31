@@ -468,7 +468,6 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   });
   layout->addWidget(realdatadelbtn);
   layout->addWidget(new MonitoringMode());
-  layout->addWidget(new MonitorEyesThreshold());
   layout->addWidget(new NormalEyesThreshold());
   layout->addWidget(new BlinkThreshold());
   layout->addWidget(new RunNaviOnBootToggle());
@@ -641,7 +640,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
       background-color: #3B3B3B;
     }
   )");
-  close_btn->setFixedSize(200, 150);
+  close_btn->setFixedSize(220, 130);
   sidebar_layout->addSpacing(35);
   sidebar_layout->addWidget(close_btn, 0, Qt::AlignCenter);
   QObject::connect(close_btn, &QPushButton::clicked, this, &SettingsWindow::closeSettings);

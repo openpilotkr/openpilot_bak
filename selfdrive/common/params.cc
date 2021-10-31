@@ -278,7 +278,6 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"AutoResCondition", PERSISTENT},
     {"SteerWindDown", PERSISTENT},
     {"OpkrMonitoringMode", PERSISTENT},
-    {"OpkrMonitorEyesThreshold", PERSISTENT},
     {"OpkrMonitorNormalEyesThreshold", PERSISTENT},
     {"OpkrMonitorBlinkThreshold", PERSISTENT},
     {"MadModeEnabled", PERSISTENT},

@@ -123,7 +123,6 @@ def manager_init():
     ("AutoResCondition", "0"),
     ("SteerWindDown", "0"),
     ("OpkrMonitoringMode", "0"),
-    ("OpkrMonitorEyesThreshold", "45"),
     ("OpkrMonitorNormalEyesThreshold", "45"),
     ("OpkrMonitorBlinkThreshold", "35"),
     ("MadModeEnabled", "1"),
