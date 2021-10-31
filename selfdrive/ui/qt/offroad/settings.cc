@@ -533,7 +533,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new CarSelectCombo());
 
   layout->addWidget(horizontal_line());
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 Panda Values 】〓〓〓〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓【 Panda Values 】〓〓〓〓〓〓〓", ""));
   layout->addWidget(new MaxSteer());
   layout->addWidget(new MaxRTDelta());
   layout->addWidget(new MaxRateUp());
@@ -660,7 +660,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     {"Tuning", new TuningPanel(this)},
   };
 
-  sidebar_layout->addSpacing(10);
+  sidebar_layout->addSpacing(50);
 
 #ifdef ENABLE_MAPS
   auto map_panel = new MapPanel(this);
