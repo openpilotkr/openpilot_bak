@@ -329,7 +329,7 @@ static void ui_draw_debug(UIState *s) {
     //  nvgFontSize(s->vg, 34);
     //  ui_print(s, 28, 28, "LAT／LON: %.5f／%.5f", scene.latitudeUblox, scene.longitudeUblox);
     //}
-    nvgFontSize(s->vg, 45);
+    nvgFontSize(s->vg, 50);
     //ui_print(s, ui_viz_rx, ui_viz_ry, "Live Parameters");
     ui_print(s, ui_viz_rx, ui_viz_ry+240, "SR:%.2f", scene.liveParams.steerRatio);
     //ui_print(s, ui_viz_rx, ui_viz_ry+100, "AOfs:%.2f", scene.liveParams.angleOffset);
@@ -359,7 +359,7 @@ static void ui_draw_debug(UIState *s) {
     ui_print(s, ui_viz_rx+200, ui_viz_ry+360, "TSL:%.0f", scene.liveMapData.oturnSpeedLimit);
     ui_print(s, ui_viz_rx+200, ui_viz_ry+400, "TSLED:%.0f", scene.liveMapData.oturnSpeedLimitEndDistance);
     ui_print(s, ui_viz_rx+200, ui_viz_ry+440, "TSLS:%d", scene.liveMapData.oturnSpeedLimitSign);
-    nvgFontSize(s->vg, 45);
+    nvgFontSize(s->vg, 50);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (scene.lateralControlMethod == 0) {
       ui_print(s, ui_viz_rx_center, bdr_s+305, "PID");
@@ -392,7 +392,7 @@ static void ui_draw_gear( UIState *s ) {
   char str_msg[512];
 
   nvgFontFace(s->vg, "sans-bold");
-  nvgFontSize(s->vg, 192 );
+  nvgFontSize(s->vg, 220 );
   switch( ngetGearShifter )
   {
     case 1 : strcpy( str_msg, "P" ); nColor = nvgRGBA(200, 200, 255, 255); break;
@@ -432,15 +432,15 @@ static void ui_draw_vision_maxspeed_org(UIState *s) {
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   if (cruise_speed >= 30 && s->scene.controls_state.getEnabled()) {
     const std::string cruise_speed_str = std::to_string((int)std::nearbyint(cruise_speed));
-    ui_draw_text(s, rect.centerX(), bdr_s+65, cruise_speed_str.c_str(), 26 * 2.8, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), "sans-bold");
+    ui_draw_text(s, rect.centerX(), bdr_s+65, cruise_speed_str.c_str(), 26 * 3, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), "sans-bold");
   } else {
-  	ui_draw_text(s, rect.centerX(), bdr_s+65, "-", 26 * 2.8, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), "sans-semibold");
+  	ui_draw_text(s, rect.centerX(), bdr_s+65, "-", 26 * 3, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), "sans-semibold");
   }
   if (is_cruise_set) {
     const std::string maxspeed_str = std::to_string((int)std::nearbyint(maxspeed));
-    ui_draw_text(s, rect.centerX(), bdr_s+165, maxspeed_str.c_str(), 48 * 2.4, COLOR_WHITE, "sans-bold");
+    ui_draw_text(s, rect.centerX(), bdr_s+165, maxspeed_str.c_str(), 48 * 2.7, COLOR_WHITE, "sans-bold");
   } else {
-    ui_draw_text(s, rect.centerX(), bdr_s+165, "-", 42 * 2.4, COLOR_WHITE_ALPHA(100), "sans-semibold");
+    ui_draw_text(s, rect.centerX(), bdr_s+165, "-", 42 * 2.7, COLOR_WHITE_ALPHA(100), "sans-semibold");
   }
 }
 
@@ -456,12 +456,12 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(100), 10, 20.);
 
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
-  ui_draw_text(s, rect.centerX()+viz_max_o/2, bdr_s+65, "MAX", 26 * 2.2, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), "sans-regular");
+  ui_draw_text(s, rect.centerX()+viz_max_o/2, bdr_s+65, "MAX", 26 * 2.5, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), "sans-regular");
   if (is_cruise_set) {
     const std::string maxspeed_str = std::to_string((int)std::nearbyint(maxspeed));
-    ui_draw_text(s, rect.centerX()+viz_max_o/2, bdr_s+165, maxspeed_str.c_str(), 48 * 2.3, COLOR_WHITE, "sans-bold");
+    ui_draw_text(s, rect.centerX()+viz_max_o/2, bdr_s+165, maxspeed_str.c_str(), 48 * 2.5, COLOR_WHITE, "sans-bold");
   } else {
-    ui_draw_text(s, rect.centerX()+viz_max_o/2, bdr_s+165, "-", 42 * 2.3, COLOR_WHITE_ALPHA(100), "sans-semibold");
+    ui_draw_text(s, rect.centerX()+viz_max_o/2, bdr_s+165, "-", 42 * 2.5, COLOR_WHITE_ALPHA(100), "sans-semibold");
   }
 }
 
@@ -491,19 +491,19 @@ static void ui_draw_vision_cruise_speed(UIState *s) {
 
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   if (s->scene.limitSpeedCamera > 29) {
-    ui_draw_text(s, rect.centerX(), bdr_s+65, "LIMIT", 26 * 2.2, COLOR_WHITE_ALPHA(s->scene.cruiseAccStatus ? 200 : 100), "sans-regular");
+    ui_draw_text(s, rect.centerX(), bdr_s+65, "LIMIT", 26 * 2.5, COLOR_WHITE_ALPHA(s->scene.cruiseAccStatus ? 200 : 100), "sans-regular");
   } else if (is_cruise_set) {
     const std::string maxspeed_str = std::to_string((int)std::nearbyint(maxspeed));
-    ui_draw_text(s, rect.centerX(), bdr_s+65, maxspeed_str.c_str(), 26 * 2.8, COLOR_WHITE, "sans-bold");
+    ui_draw_text(s, rect.centerX(), bdr_s+65, maxspeed_str.c_str(), 26 * 3, COLOR_WHITE, "sans-bold");
   } else {
-    ui_draw_text(s, rect.centerX(), bdr_s+65, "-", 26 * 2.8, COLOR_WHITE_ALPHA(100), "sans-semibold");
+    ui_draw_text(s, rect.centerX(), bdr_s+65, "-", 26 * 3, COLOR_WHITE_ALPHA(100), "sans-semibold");
   }
 
   const std::string cruise_speed_str = std::to_string((int)std::nearbyint(cruise_speed));
   if (cruise_speed >= 30 && s->scene.controls_state.getEnabled()) {
-    ui_draw_text(s, rect.centerX(), bdr_s+165, cruise_speed_str.c_str(), 48 * 2.3, COLOR_WHITE, "sans-bold");
+    ui_draw_text(s, rect.centerX(), bdr_s+165, cruise_speed_str.c_str(), 48 * 2.5, COLOR_WHITE, "sans-bold");
   } else {
-    ui_draw_text(s, rect.centerX(), bdr_s+165, "-", 42 * 2.3, COLOR_WHITE_ALPHA(100), "sans-semibold");
+    ui_draw_text(s, rect.centerX(), bdr_s+165, "-", 42 * 2.5, COLOR_WHITE_ALPHA(100), "sans-semibold");
   }
 }
 
@@ -1100,9 +1100,13 @@ static void draw_laneless_button(UIState *s) {
   }
   nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
   if (s->scene.laneless_mode == 0) {
-    nvgText(s->vg,btn_xc1,btn_yc,"LANE\nMODE",NULL);
+    nvgFontSize(s->vg, 50);
+    nvgText(s->vg,btn_xc1,btn_yc-10,"LANE",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc+10,"Mode",NULL);
   } else if (s->scene.laneless_mode == 1) {
-    nvgText(s->vg,btn_xc1,btn_yc,"LANE\nLESS",NULL);
+    nvgFontSize(s->vg, 50);
+    nvgText(s->vg,btn_xc1,btn_yc-10,"LANE",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc+10,"Less",NULL);
   } else if (s->scene.laneless_mode == 2) {
     nvgText(s->vg,btn_xc1,btn_yc,"AUTO",NULL);
   }
@@ -1239,7 +1243,7 @@ void draw_kr_date_time(UIState *s) {
   nvgStrokeWidth(s->vg, 0);
   nvgStroke(s->vg);
 
-  nvgFontSize(s->vg, 60);
+  nvgFontSize(s->vg, 65);
   nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   nvgText(s->vg, s->fb_w/2, rect_y, now, NULL);
 }
@@ -1290,59 +1294,59 @@ static void ui_draw_live_tune_panel(UIState *s) {
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
   if (s->scene.live_tune_panel_list == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%+0.3f", s->scene.cameraOffset*0.001);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "CameraOffset");
   } else if (s->scene.live_tune_panel_list == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%+0.3f", s->scene.pathOffset*0.001);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "PathOffset");
   } else if (s->scene.live_tune_panel_list == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.2f", s->scene.osteerRateCost*0.01);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "SteerRateCost");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+0) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.2f", s->scene.pidKp*0.01);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Kp");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+1) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.3f", s->scene.pidKi*0.001);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Ki");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+2) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.2f", s->scene.pidKd*0.01);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Kd");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+3) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.5f", s->scene.pidKf*0.00001);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Kf");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+0) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiInnerLoopGain*0.1);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: ILGain");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+1) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiOuterLoopGain*0.1);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: OLGain");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+2) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiTimeConstant*0.1);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: TConst");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+3) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiActuatorEffectiveness*0.1);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: ActEffct");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+0) && s->scene.lateralControlMethod == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.0f", s->scene.lqrScale*1.0);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "LQR: Scale");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+1) && s->scene.lateralControlMethod == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.3f", s->scene.lqrKi*0.001);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "LQR: Ki");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+2) && s->scene.lateralControlMethod == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.5f", s->scene.lqrDcGain*0.00001);
-    nvgFontSize(s->vg, 90);
+    nvgFontSize(s->vg, 100);
     ui_print(s, s->fb_w/2, y_pos - 95, "LQR: DcGain");
   }
   nvgFillColor(s->vg, nvgRGBA(171,242,0,150));
