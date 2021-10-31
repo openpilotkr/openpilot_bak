@@ -103,7 +103,6 @@ def manager_init():
     ("OpkrDrivingRecord", "0"),
     ("OpkrTurnSteeringDisable", "0"),
     ("CarModel", ""),
-    ("CarModelAbb", ""),
     ("OpkrHotspotOnBoot", "0"),
     ("OpkrSSHLegacy", "1"),
     ("CruiseOverMaxSpeed", "0"),
