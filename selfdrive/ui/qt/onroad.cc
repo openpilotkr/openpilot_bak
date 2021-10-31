@@ -104,7 +104,7 @@ void OnroadWindow::mousePressEvent(QMouseEvent* e) {
 void OnroadWindow::offroadTransition(bool offroad) {
 #ifdef ENABLE_MAPS
   if (!offroad) {
-    QString token = QString::fromStdString(Params().get("OPKRMapboxTokenSk"));
+    QString token = QString::fromStdString(Params().get("dp_mapbox_token_sk"));
     if (map == nullptr && !token.isEmpty()) {
       QMapboxGLSettings settings;
 
