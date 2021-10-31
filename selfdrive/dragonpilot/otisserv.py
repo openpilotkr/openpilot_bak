@@ -92,7 +92,7 @@ class OtisServ(BaseHTTPRequestHandler):
         if postvars is None or "gmap_key_val" not in postvars or postvars.get("gmap_key_val")[0] == "":
           self.display_page_gmap_key()
           return
-        params.put('dp_mapbox_gmap_key', postvars.get("gmap_key_val")[0])
+        params.put('OPKRMapboxGmapKey', postvars.get("gmap_key_val")[0])
 
     else:
       # mapbox public key
@@ -104,7 +104,7 @@ class OtisServ(BaseHTTPRequestHandler):
         if "pk." not in token:
           self.display_page_public_token("Your token was incorrect!")
           return
-        params.put('dp_mapbox_token_pk', token)
+        params.put('OPKRMapboxTokenPk', token)
 
     # app key
     if self.get_app_token() is None:
@@ -115,7 +115,7 @@ class OtisServ(BaseHTTPRequestHandler):
       if "sk." not in token:
         self.display_page_app_token("Your token was incorrect!")
         return
-      params.put('dp_mapbox_token_sk', token)
+      params.put('OPKRMapboxTokenSk', token)
 
     # nav confirmed
     if postvars is not None:
@@ -159,19 +159,19 @@ class OtisServ(BaseHTTPRequestHandler):
     self.wfile.write(bytes(self.get_parsed_template("gmap_index.html", {"{{gmap_key}}": self.get_gmap_key()}), "utf-8"))
 
   def get_gmap_key(self):
-    token = params.get("dp_mapbox_gmap_key", encoding='utf8')
+    token = params.get("OPKRMapboxGmapKey", encoding='utf8')
     if token is not None and token != "":
       return token.rstrip('\x00')
     return None
 
   def get_public_token(self):
-    token = params.get("dp_mapbox_token_pk", encoding='utf8')
+    token = params.get("OPKRMapboxTokenPk", encoding='utf8')
     if token is not None and token != "":
       return token.rstrip('\x00')
     return None
 
   def get_app_token(self):
-    token = params.get("dp_mapbox_token_sk", encoding='utf8')
+    token = params.get("OPKRMapboxTokenSk", encoding='utf8')
     if token is not None and token != "":
       return token.rstrip('\x00')
     return None
