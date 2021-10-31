@@ -319,9 +319,10 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"VCurvSpeedUD", PERSISTENT},
     {"OCurvOffset", PERSISTENT},
     {"StockNaviSpeedEnabled", PERSISTENT},
-    {"OPKRMapboxGmapKey", PERSISTENT},
-    {"OPKRMapboxTokenPk", PERSISTENT},
-    {"OPKRMapboxTokenSk", PERSISTENT},
+    {"dp_mapbox_gmap_enable", PERSISTENT},
+    {"dp_mapbox_gmap_key", PERSISTENT},
+    {"dp_mapbox_token_pk", PERSISTENT},
+    {"dp_mapbox_token_sk", PERSISTENT},
 };
 
 } // namespace
