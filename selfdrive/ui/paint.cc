@@ -117,10 +117,10 @@ static void draw_lead(UIState *s, const cereal::ModelDataV2::LeadDataV3::Reader 
 
   if (s->scene.radarDistance < 149) {
     draw_chevron(s, x, y, sz, nvgRGBA(201, 34, 49, fillAlpha), COLOR_YELLOW);
-    ui_draw_text(s, x, y + sz/1.5f, "R", 20 * 2.5, COLOR_WHITE, "sans-bold"); //neokii
+    ui_draw_text(s, x, y + sz/1.5f, "R", 60, COLOR_WHITE, "sans-bold"); //neokii
   } else {
     draw_chevron(s, x, y, sz, nvgRGBA(165, 255, 135, fillAlpha), COLOR_GREEN);
-    ui_draw_text(s, x, y + sz/1.5f, "C", 20 * 2.5, COLOR_BLACK, "sans-bold"); //hoya
+    ui_draw_text(s, x, y + sz/1.5f, "C", 60, COLOR_BLACK, "sans-bold"); //hoya
   }
 }
 
@@ -250,38 +250,38 @@ static void ui_draw_tpms(UIState *s) {
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   const int pos_x = viz_tpms_x + (viz_tpms_w / 2);
   const int pos_y = viz_tpms_y + 40;
-  ui_draw_text(s, pos_x, pos_y, "TPMS", 40, COLOR_WHITE_ALPHA(180), "sans-regular");
+  ui_draw_text(s, pos_x, pos_y, "TPMS", 45, COLOR_WHITE_ALPHA(180), "sans-regular");
   snprintf(tpmsFl, sizeof(tpmsFl), "%.1f", scene.tpmsPressureFl);
   snprintf(tpmsFr, sizeof(tpmsFr), "%.1f", scene.tpmsPressureFr);
   snprintf(tpmsRl, sizeof(tpmsRl), "%.1f", scene.tpmsPressureRl);
   snprintf(tpmsRr, sizeof(tpmsRr), "%.1f", scene.tpmsPressureRr);
   if (scene.tpmsPressureFl < 34) {
-    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 50, COLOR_RED, "sans-bold");
+    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 60, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureFl > 50) {
-    ui_draw_text(s, pos_x-45, pos_y+45, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+45, "N/A", 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
   if (scene.tpmsPressureFr < 34) {
-    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 50, COLOR_RED, "sans-bold");
+    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 60, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureFr > 50) {
-    ui_draw_text(s, pos_x+45, pos_y+45, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+45, "N/A", 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
   if (scene.tpmsPressureRl < 34) {
-    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 50, COLOR_RED, "sans-bold");
+    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 60, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureRl > 50) {
-    ui_draw_text(s, pos_x-45, pos_y+90, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+90, "N/A", 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
   if (scene.tpmsPressureRr < 34) {
-    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 50, COLOR_RED, "sans-bold");
+    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 60, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureRr > 50) {
-    ui_draw_text(s, pos_x+45, pos_y+90, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+90, "N/A", 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
 }
 
@@ -329,7 +329,7 @@ static void ui_draw_debug(UIState *s) {
     //  nvgFontSize(s->vg, 34);
     //  ui_print(s, 28, 28, "LAT／LON: %.5f／%.5f", scene.latitudeUblox, scene.longitudeUblox);
     //}
-    nvgFontSize(s->vg, 37);
+    nvgFontSize(s->vg, 45);
     //ui_print(s, ui_viz_rx, ui_viz_ry, "Live Parameters");
     ui_print(s, ui_viz_rx, ui_viz_ry+240, "SR:%.2f", scene.liveParams.steerRatio);
     //ui_print(s, ui_viz_rx, ui_viz_ry+100, "AOfs:%.2f", scene.liveParams.angleOffset);
@@ -359,7 +359,7 @@ static void ui_draw_debug(UIState *s) {
     ui_print(s, ui_viz_rx+200, ui_viz_ry+360, "TSL:%.0f", scene.liveMapData.oturnSpeedLimit);
     ui_print(s, ui_viz_rx+200, ui_viz_ry+400, "TSLED:%.0f", scene.liveMapData.oturnSpeedLimitEndDistance);
     ui_print(s, ui_viz_rx+200, ui_viz_ry+440, "TSLS:%d", scene.liveMapData.oturnSpeedLimitSign);
-    nvgFontSize(s->vg, 37);
+    nvgFontSize(s->vg, 45);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (scene.lateralControlMethod == 0) {
       ui_print(s, ui_viz_rx_center, bdr_s+305, "PID");
@@ -392,7 +392,7 @@ static void ui_draw_gear( UIState *s ) {
   char str_msg[512];
 
   nvgFontFace(s->vg, "sans-bold");
-  nvgFontSize(s->vg, 160 );
+  nvgFontSize(s->vg, 192 );
   switch( ngetGearShifter )
   {
     case 1 : strcpy( str_msg, "P" ); nColor = nvgRGBA(200, 200, 255, 255); break;
@@ -1009,24 +1009,24 @@ static void draw_safetysign(UIState *s) {
     ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 20, diameter/2);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (safety_speed < 100) {
-      ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 140, COLOR_BLACK_ALPHA(200), "sans-bold");
+      ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 168, COLOR_BLACK_ALPHA(200), "sans-bold");
     } else {
-      ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 100, COLOR_BLACK_ALPHA(200), "sans-bold");
+      ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 120, COLOR_BLACK_ALPHA(200), "sans-bold");
     }
     ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity), 20.);
     ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 8, 20);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 65, COLOR_WHITE_ALPHA(200), "sans-bold");
+    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 78, COLOR_WHITE_ALPHA(200), "sans-bold");
   } else if ((s->scene.mapSign == 195 || s->scene.mapSign == 197) && safety_speed == 0 && safety_dist != 0 && !s->scene.comma_stock_ui) {
     ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), diameter2/2);
     ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 20, diameter/2);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), "VAR\nSEC", 90, COLOR_BLACK_ALPHA(200), "sans-bold");
+    ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), "VAR\nSEC", 108, COLOR_BLACK_ALPHA(200), "sans-bold");
 
     ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity), 20.);
     ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 8, 20);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 65, COLOR_WHITE_ALPHA(200), "sans-bold");
+    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 78, COLOR_WHITE_ALPHA(200), "sans-bold");
   }
 }
 
@@ -1049,7 +1049,7 @@ static void draw_compass(UIState *s) {
     nvgTranslate(s->vg, compass_x+compass_size/2, compass_y+compass_size/2);
     nvgRotate(s->vg, niddle_rotation);
     nvgFontFace(s->vg, "sans-bold");
-    nvgFontSize(s->vg, 60);
+    nvgFontSize(s->vg, 72);
     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
     nvgText(s->vg, 0, 0, "↑", NULL);
     nvgRestore(s->vg);
@@ -1069,7 +1069,7 @@ static void draw_navi_button(UIState *s) {
   nvgStrokeColor(s->vg, nvgRGBA(255,255,255,80));
   nvgStrokeWidth(s->vg, 6);
   nvgStroke(s->vg);
-  nvgFontSize(s->vg, 45);
+  nvgFontSize(s->vg, 55);
   if (s->scene.map_is_running) {
     NVGcolor fillColor = nvgRGBA(0,0,255,80);
     nvgFillColor(s->vg, fillColor);
@@ -1092,7 +1092,7 @@ static void draw_laneless_button(UIState *s) {
   nvgStrokeColor(s->vg, nvgRGBA(255,255,255,80));
   nvgStrokeWidth(s->vg, 6);
   nvgStroke(s->vg);
-  nvgFontSize(s->vg, 45);
+  nvgFontSize(s->vg, 55);
   if (s->scene.lateralPlan.lanelessModeStatus) {
     NVGcolor fillColor = nvgRGBA(0,255,0,80);
     nvgFillColor(s->vg, fillColor);
@@ -1100,9 +1100,9 @@ static void draw_laneless_button(UIState *s) {
   }
   nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
   if (s->scene.laneless_mode == 0) {
-    nvgText(s->vg,btn_xc1,btn_yc,"OFF",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc,"LANE\nMODE",NULL);
   } else if (s->scene.laneless_mode == 1) {
-    nvgText(s->vg,btn_xc1,btn_yc,"ON",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc,"LANE\nLESS",NULL);
   } else if (s->scene.laneless_mode == 2) {
     nvgText(s->vg,btn_xc1,btn_yc,"AUTO",NULL);
   }
@@ -1239,7 +1239,7 @@ void draw_kr_date_time(UIState *s) {
   nvgStrokeWidth(s->vg, 0);
   nvgStroke(s->vg);
 
-  nvgFontSize(s->vg, 50);
+  nvgFontSize(s->vg, 60);
   nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   nvgText(s->vg, s->fb_w/2, rect_y, now, NULL);
 }
@@ -1290,59 +1290,59 @@ static void ui_draw_live_tune_panel(UIState *s) {
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
   if (s->scene.live_tune_panel_list == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%+0.3f", s->scene.cameraOffset*0.001);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "CameraOffset");
   } else if (s->scene.live_tune_panel_list == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%+0.3f", s->scene.pathOffset*0.001);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "PathOffset");
   } else if (s->scene.live_tune_panel_list == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.2f", s->scene.osteerRateCost*0.01);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "SteerRateCost");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+0) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.2f", s->scene.pidKp*0.01);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Kp");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+1) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.3f", s->scene.pidKi*0.001);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Ki");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+2) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.2f", s->scene.pidKd*0.01);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Kd");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+3) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.5f", s->scene.pidKf*0.00001);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Kf");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+0) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiInnerLoopGain*0.1);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: ILGain");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+1) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiOuterLoopGain*0.1);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: OLGain");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+2) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiTimeConstant*0.1);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: TConst");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+3) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiActuatorEffectiveness*0.1);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: ActEffct");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+0) && s->scene.lateralControlMethod == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.0f", s->scene.lqrScale*1.0);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "LQR: Scale");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+1) && s->scene.lateralControlMethod == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.3f", s->scene.lqrKi*0.001);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "LQR: Ki");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+2) && s->scene.lateralControlMethod == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.5f", s->scene.lqrDcGain*0.00001);
-    nvgFontSize(s->vg, 75);
+    nvgFontSize(s->vg, 90);
     ui_print(s, s->fb_w/2, y_pos - 95, "LQR: DcGain");
   }
   nvgFillColor(s->vg, nvgRGBA(171,242,0,150));
@@ -1362,7 +1362,7 @@ static void ui_draw_auto_hold(UIState *s) {
   ui_fill_rect(s->vg, rect, color, 30.);
   ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(50), 10, 20.);
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-  ui_draw_text(s, rect.centerX(), rect.centerY(), "AUTO HOLD", 90, COLOR_GREEN_ALPHA(150), "sans-bold");
+  ui_draw_text(s, rect.centerX(), rect.centerY(), "AUTO HOLD", 108, COLOR_GREEN_ALPHA(150), "sans-bold");
 }
 
 static void ui_draw_vision(UIState *s) {

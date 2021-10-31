@@ -231,7 +231,7 @@ static void screen_draw_button(UIState *s) {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   }
   if (s->scene.gpsAccuracyUblox == 0.00) {
-    nvgFontSize(s->vg, 45);
+    nvgFontSize(s->vg, 55);
     nvgFontFace(s->vg, "sans-bold");
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgText(s->vg, btn_xc, btn_yc, "REC", NULL);
