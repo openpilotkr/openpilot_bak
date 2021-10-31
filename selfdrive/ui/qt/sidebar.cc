@@ -96,9 +96,9 @@ void Sidebar::updateState(const UIState &s) {
   ItemStatus connectStatus;
   auto last_ping = deviceState.getLastAthenaPingTime();
   if (last_ping == 0) {
-    connectStatus = ItemStatus{"Network\nOffline", warning_color};
+    connectStatus = ItemStatus{"NETWORK\nOFFLINE", warning_color};
   } else {
-    connectStatus = nanos_since_boot() - last_ping < 80e9 ? ItemStatus{"Network\nOnline", good_color} : ItemStatus{"Network\nError", danger_color};
+    connectStatus = nanos_since_boot() - last_ping < 80e9 ? ItemStatus{"NETWORK\nONLINE", good_color} : ItemStatus{"NETWORK\nERROR", danger_color};
   }
   setProperty("connectStatus", QVariant::fromValue(connectStatus));
 
@@ -111,13 +111,13 @@ void Sidebar::updateState(const UIState &s) {
   }
   setProperty("tempStatus", QVariant::fromValue(ItemStatus{QString("%1℃").arg((int)deviceState.getAmbientTempC()), tempColor}));
 
-  ItemStatus pandaStatus = {"Panda\nConnected", good_color};
+  ItemStatus pandaStatus = {"PANDA\nONLINE", good_color};
   if (s.scene.pandaType == cereal::PandaState::PandaType::UNKNOWN) {
-    pandaStatus = {"Panda\nDisconnected", danger_color};
+    pandaStatus = {"PANDA\nOFFLINE", danger_color};
   } else if (s.scene.started && !sm["liveLocationKalman"].getLiveLocationKalman().getGpsOK() && s.scene.gpsAccuracyUblox != 0.00) {
-    pandaStatus = {"Connected\nGPS Searching", warning_color};
+    pandaStatus = {"ONLINE\nGPS Searching", warning_color};
   } else if (s.scene.satelliteCount > 0) {
-  	pandaStatus = {QString("Connected\nSAT : %1").arg(s.scene.satelliteCount), good_color};
+  	pandaStatus = {QString("ONLINE\nSAT : %1").arg(s.scene.satelliteCount), good_color};
   }
   setProperty("pandaStatus", QVariant::fromValue(pandaStatus));
 
