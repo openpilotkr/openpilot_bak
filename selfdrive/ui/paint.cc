@@ -362,11 +362,11 @@ static void ui_draw_debug(UIState *s) {
     nvgFontSize(s->vg, 50);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (scene.lateralControlMethod == 0) {
-      ui_print(s, ui_viz_rx_center, bdr_s+305, "PID");
+      ui_print(s, ui_viz_rx_center, bdr_s+295, "PID");
     } else if (scene.lateralControlMethod == 1) {
-      ui_print(s, ui_viz_rx_center, bdr_s+305, "INDI");
+      ui_print(s, ui_viz_rx_center, bdr_s+295, "INDI");
     } else if (scene.lateralControlMethod == 2) {
-      ui_print(s, ui_viz_rx_center, bdr_s+305, "LQR");
+      ui_print(s, ui_viz_rx_center, bdr_s+295, "LQR");
     }
   }
 }
@@ -1243,7 +1243,7 @@ void draw_kr_date_time(UIState *s) {
   nvgStrokeWidth(s->vg, 0);
   nvgStroke(s->vg);
 
-  nvgFontSize(s->vg, 65);
+  nvgFontSize(s->vg, 80);
   nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   nvgText(s->vg, s->fb_w/2, rect_y, now, NULL);
 }
@@ -1290,63 +1290,63 @@ static void ui_draw_live_tune_panel(UIState *s) {
   nvgFill(s->vg);
 
   //param value
-  nvgFontSize(s->vg, 150);
+  nvgFontSize(s->vg, 170);
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
   if (s->scene.live_tune_panel_list == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%+0.3f", s->scene.cameraOffset*0.001);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "CameraOffset");
   } else if (s->scene.live_tune_panel_list == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%+0.3f", s->scene.pathOffset*0.001);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "PathOffset");
   } else if (s->scene.live_tune_panel_list == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.2f", s->scene.osteerRateCost*0.01);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "SteerRateCost");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+0) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.2f", s->scene.pidKp*0.01);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Kp");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+1) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.3f", s->scene.pidKi*0.001);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Ki");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+2) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.2f", s->scene.pidKd*0.01);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Kd");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+3) && s->scene.lateralControlMethod == 0) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.5f", s->scene.pidKf*0.00001);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "Pid: Kf");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+0) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiInnerLoopGain*0.1);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: ILGain");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+1) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiOuterLoopGain*0.1);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: OLGain");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+2) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiTimeConstant*0.1);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: TConst");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+3) && s->scene.lateralControlMethod == 1) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.1f", s->scene.indiActuatorEffectiveness*0.1);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "INDI: ActEffct");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+0) && s->scene.lateralControlMethod == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.0f", s->scene.lqrScale*1.0);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "LQR: Scale");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+1) && s->scene.lateralControlMethod == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.3f", s->scene.lqrKi*0.001);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "LQR: Ki");
   } else if (s->scene.live_tune_panel_list == (s->scene.list_count+2) && s->scene.lateralControlMethod == 2) {
     ui_print(s, s->fb_w/2, y_pos + height/2, "%0.5f", s->scene.lqrDcGain*0.00001);
-    nvgFontSize(s->vg, 100);
+    nvgFontSize(s->vg, 120);
     ui_print(s, s->fb_w/2, y_pos - 95, "LQR: DcGain");
   }
   nvgFillColor(s->vg, nvgRGBA(171,242,0,150));
@@ -1366,7 +1366,7 @@ static void ui_draw_auto_hold(UIState *s) {
   ui_fill_rect(s->vg, rect, color, 30.);
   ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(50), 10, 20.);
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-  ui_draw_text(s, rect.centerX(), rect.centerY(), "AUTO HOLD", 108, COLOR_GREEN_ALPHA(150), "sans-bold");
+  ui_draw_text(s, rect.centerX(), rect.centerY(), "AUTO HOLD", 110, COLOR_GREEN_ALPHA(150), "sans-bold");
 }
 
 static void ui_draw_vision(UIState *s) {
