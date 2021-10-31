@@ -641,8 +641,8 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
       background-color: #3B3B3B;
     }
   )");
-  close_btn->setFixedSize(150, 200);
-  sidebar_layout->addSpacing(5);
+  close_btn->setFixedSize(200, 150);
+  sidebar_layout->addSpacing(35);
   sidebar_layout->addWidget(close_btn, 0, Qt::AlignCenter);
   QObject::connect(close_btn, &QPushButton::clicked, this, &SettingsWindow::closeSettings);
 
@@ -668,7 +668,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
   QObject::connect(map_panel, &MapPanel::closeSettings, this, &SettingsWindow::closeSettings);
 #endif
 
-  const int padding = panels.size() > 3 ? 14 : 24;
+  const int padding = panels.size() > 3 ? 8 : 18;
 
   nav_btns = new QButtonGroup();
   for (auto &[name, panel] : panels) {
