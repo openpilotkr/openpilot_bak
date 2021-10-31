@@ -28,7 +28,7 @@
 #include "cereal/messaging/messaging.h"
 
 //const QString MAPBOX_TOKEN = util::getenv("MAPBOX_TOKEN").c_str();
-const QString MAPBOX_TOKEN = QString::fromStdString(Params().get("MapboxToken"));
+const QString MAPBOX_TOKEN = QString::fromStdString(Params().get("OPKRMapboxTokenSk"));
 const QString MAPS_HOST = util::getenv("MAPS_HOST", MAPBOX_TOKEN.isEmpty() ? "https://maps.comma.ai" : "https://api.mapbox.com").c_str();
 
 class MapInstructions : public QWidget {
