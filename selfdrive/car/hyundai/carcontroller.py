@@ -156,7 +156,7 @@ class CarController():
     self.sm = messaging.SubMaster(['controlsState', 'radarState'])
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
-             left_lane, right_lane, left_lane_depart, right_lane_depart, set_speed, lead_visible, lead_dist, lead_vrel, lead_yrel, v_future):
+             left_lane, right_lane, left_lane_depart, right_lane_depart, set_speed, lead_visible, v_future):
 
     param = self.p
 
