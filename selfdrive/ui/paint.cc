@@ -964,11 +964,11 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
 static void bb_ui_draw_UI(UIState *s) {
   const int bb_dml_w = 180;
   const int bb_dml_x = bdr_s;
-  const int bb_dml_y = bdr_s + 210;
+  const int bb_dml_y = bdr_s + 220;
 
   const int bb_dmr_w = 180;
   const int bb_dmr_x = s->fb_w - bb_dmr_w - bdr_s;
-  const int bb_dmr_y = bdr_s + 210;
+  const int bb_dmr_y = bdr_s + 220;
 
   bb_ui_draw_measures_right(s, bb_dml_x, bb_dml_y, bb_dml_w);
   bb_ui_draw_measures_left(s, bb_dmr_x, bb_dmr_y-20, bb_dmr_w);
