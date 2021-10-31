@@ -437,7 +437,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->setSpacing(30);
 
   // OPKR
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓〓【 U I Menu 】〓〓〓〓〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 U I Menu 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new AutoShutdown());
   layout->addWidget(new ForceShutdown());
   layout->addWidget(new VolumeControl());
@@ -476,7 +476,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new KRTimeToggle());
 
   layout->addWidget(horizontal_line());
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓〓【 DRIVING 】〓〓〓〓〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 DRIVING 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new AutoResumeToggle());
   layout->addWidget(new VariableCruiseToggle());
   layout->addWidget(new CruisemodeSelInit());
@@ -508,7 +508,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new MadModeEnabledToggle());
 
   layout->addWidget(horizontal_line());
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓〓【 DEVELOPER 】〓〓〓〓〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 DEVELOPER 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new DebugUiOneToggle());
   layout->addWidget(new DebugUiTwoToggle());
   layout->addWidget(new ShowErrorToggle());
@@ -533,7 +533,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new CarSelectCombo());
 
   layout->addWidget(horizontal_line());
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓〓【 Panda Values 】〓〓〓〓〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 Panda Values 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new MaxSteer());
   layout->addWidget(new MaxRTDelta());
   layout->addWidget(new MaxRateUp());
@@ -555,7 +555,7 @@ TuningPanel::TuningPanel(QWidget* parent) : QWidget(parent) {
   layout->setSpacing(30);
 
   // OPKR
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new CameraOffset());
   layout->addWidget(new PathOffset());
   layout->addWidget(new LiveSteerRatioToggle());
@@ -579,7 +579,7 @@ TuningPanel::TuningPanel(QWidget* parent) : QWidget(parent) {
 
   layout->addWidget(horizontal_line());
 
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓〓【 CONTROL 】〓〓〓〓〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 CONTROL 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new LateralControl());
   layout->addWidget(new LiveTunePanelToggle());
   QString lat_control = QString::fromStdString(Params().get("LateralControlMethod", false));
@@ -601,7 +601,7 @@ TuningPanel::TuningPanel(QWidget* parent) : QWidget(parent) {
 
   layout->addWidget(horizontal_line());
 
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓〓【 LONGCONTROL 】〓〓〓〓〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 LONGCONTROL 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new DynamicTR());
   layout->addWidget(new CruiseGapTR());
   layout->addWidget(new RadarLongHelperToggle());
@@ -660,7 +660,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     {"Tuning", new TuningPanel(this)},
   };
 
-  sidebar_layout->addSpacing(43);
+  sidebar_layout->addSpacing(10);
 
 #ifdef ENABLE_MAPS
   auto map_panel = new MapPanel(this);
@@ -668,7 +668,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
   QObject::connect(map_panel, &MapPanel::closeSettings, this, &SettingsWindow::closeSettings);
 #endif
 
-  const int padding = panels.size() > 3 ? 18 : 28;
+  const int padding = panels.size() > 3 ? 10 : 20;
 
   nav_btns = new QButtonGroup();
   for (auto &[name, panel] : panels) {
@@ -680,7 +680,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
         color: grey;
         border: none;
         background: none;
-        font-size: 65px;
+        font-size: 60px;
         font-weight: 500;
         padding-top: %1px;
         padding-bottom: %1px;
