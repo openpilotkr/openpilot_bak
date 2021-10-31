@@ -697,7 +697,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
+    bb_ry = bb_y + bb_h - 15;
   }
   //DEVICE TEMP
   if (scene.batt_less) {
@@ -797,7 +797,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
   }
 
   //finally draw the frame
-  bb_h += 20;
+  bb_h += 10;
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
   nvgStrokeColor(s->vg, COLOR_WHITE_ALPHA(80));
@@ -951,7 +951,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
   }
 
   //finally draw the frame
-  bb_h += 20;
+  bb_h += 10;
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
   nvgStrokeColor(s->vg, COLOR_WHITE_ALPHA(80));
@@ -964,11 +964,11 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
 static void bb_ui_draw_UI(UIState *s) {
   const int bb_dml_w = 180;
   const int bb_dml_x = bdr_s;
-  const int bb_dml_y = bdr_s + 220;
+  const int bb_dml_y = bdr_s + 210;
 
   const int bb_dmr_w = 180;
   const int bb_dmr_x = s->fb_w - bb_dmr_w - bdr_s;
-  const int bb_dmr_y = bdr_s + 220;
+  const int bb_dmr_y = bdr_s + 210;
 
   bb_ui_draw_measures_right(s, bb_dml_x, bb_dml_y, bb_dml_w);
   bb_ui_draw_measures_left(s, bb_dmr_x, bb_dmr_y-20, bb_dmr_w);
