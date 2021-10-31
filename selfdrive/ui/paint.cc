@@ -672,7 +672,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
   const UIScene &scene = s->scene;
   int bb_rx = bb_x + (int)(bb_w/2);
   int bb_ry = bb_y;
-  int bb_h = -50;
+  int bb_h = 5;
   NVGcolor lab_color = COLOR_WHITE_ALPHA(200);
   NVGcolor uom_color = COLOR_WHITE_ALPHA(200);
   int value_fontSize=30;
@@ -718,7 +718,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
+    bb_ry = bb_y + bb_h - 15;
   }
   //BAT TEMP
   if (!scene.batt_less) {
@@ -739,7 +739,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
+    bb_ry = bb_y + bb_h - 15;
   }
   //BAT LEVEL
   if(!scene.batt_less) {
@@ -752,7 +752,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
+    bb_ry = bb_y + bb_h - 15;
   }
   //add Ublox GPS accuracy
   if (scene.gpsAccuracyUblox != 0.00) {
@@ -780,7 +780,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
+    bb_ry = bb_y + bb_h - 15;
   }
   //add altitude
   if (scene.gpsAccuracyUblox != 0.00) {
@@ -793,7 +793,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
+    bb_ry = bb_y + bb_h - 15;
   }
 
   //finally draw the frame
@@ -809,7 +809,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
   const UIScene &scene = s->scene;
   int bb_rx = bb_x + (int)(bb_w/2);
   int bb_ry = bb_y;
-  int bb_h = -50;
+  int bb_h = 5;
   NVGcolor lab_color = COLOR_WHITE_ALPHA(200);
   NVGcolor uom_color = COLOR_WHITE_ALPHA(200);
   int value_fontSize=30;
@@ -847,7 +847,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
+    bb_ry = bb_y + bb_h - 15;
   }
   //add visual radar relative speed
   if (true) {
@@ -881,7 +881,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
+    bb_ry = bb_y + bb_h - 15;
   }
   //add steering angle
   if (true) {
@@ -905,7 +905,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
+    bb_ry = bb_y + bb_h - 15;
   }
 
   //add steerratio from lateralplan
@@ -923,7 +923,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
+    bb_ry = bb_y + bb_h - 15;
   }
 
   //cruise gap
@@ -947,7 +947,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
         value_fontSize, label_fontSize, uom_fontSize );
-    bb_ry = bb_y + bb_h;
+    bb_ry = bb_y + bb_h - 15;
   }
 
   //finally draw the frame
