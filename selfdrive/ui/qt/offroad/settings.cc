@@ -601,7 +601,7 @@ TuningPanel::TuningPanel(QWidget* parent) : QWidget(parent) {
 
   layout->addWidget(horizontal_line());
 
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 LONGCONTROL 】〓〓〓〓〓〓〓〓", ""));
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓【 LONGCONTROL 】〓〓〓〓〓〓〓", ""));
   layout->addWidget(new DynamicTR());
   layout->addWidget(new CruiseGapTR());
   layout->addWidget(new RadarLongHelperToggle());
