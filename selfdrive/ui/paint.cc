@@ -300,10 +300,10 @@ static void ui_draw_standstill(UIState *s) {
   //if (scene.standStill) {
   if (true) {
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
-    nvgFontSize(s->vg, 125);
+    nvgFontSize(s->vg, 175);
     nvgFillColor(s->vg, COLOR_ORANGE_ALPHA(240));
     ui_print(s, viz_standstill_x, viz_standstill_y, "STOP");
-    nvgFontSize(s->vg, 150);
+    nvgFontSize(s->vg, 200);
     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(240));
     ui_print(s, viz_standstill_x, viz_standstill_y+150, "%01d:%02d", minute, second);
   }
@@ -809,7 +809,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
   //finally draw the frame
   if (!scene.batt_less) {bb_h += -(bb_y_offset*5);} else {bb_h += -(bb_y_offset*4);}
   if (true) {bb_h += -(bb_y_offset*0);} else {bb_h += -(bb_y_offset*2);}
-  //bb_h += 20;
+  bb_h += 10;
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
   nvgStrokeColor(s->vg, COLOR_WHITE_ALPHA(80));
@@ -970,7 +970,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
 
   //finally draw the frame
   if (true) {bb_h += -(bb_y_offset*5);} else {bb_h += -(bb_y_offset*6);}
-  //bb_h += 20;
+  bb_h += 10;
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
   nvgStrokeColor(s->vg, COLOR_WHITE_ALPHA(80));
