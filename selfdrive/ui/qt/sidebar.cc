@@ -111,11 +111,11 @@ void Sidebar::updateState(const UIState &s) {
   }
   setProperty("tempStatus", QVariant::fromValue(ItemStatus{QString("%1℃").arg((int)deviceState.getAmbientTempC()), tempColor}));
 
-  ItemStatus pandaStatus = {"PANDA\nONLINE", good_color};
+  ItemStatus pandaStatus = {"VEHICLE\nONLINE", good_color};
   if (s.scene.pandaType == cereal::PandaState::PandaType::UNKNOWN) {
-    pandaStatus = {"PANDA\nOFFLINE", danger_color};
+    pandaStatus = {"NO\nPANDA", danger_color};
   } else if (s.scene.started && !sm["liveLocationKalman"].getLiveLocationKalman().getGpsOK() && s.scene.gpsAccuracyUblox != 0.00) {
-    pandaStatus = {"ONLINE\nGPS Searching", warning_color};
+    pandaStatus = {"ONLINE\nGPS Search", warning_color};
   } else if (s.scene.satelliteCount > 0) {
   	pandaStatus = {QString("ONLINE\nSAT : %1").arg(s.scene.satelliteCount), good_color};
   }
