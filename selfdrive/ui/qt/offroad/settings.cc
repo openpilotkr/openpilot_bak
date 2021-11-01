@@ -444,7 +444,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new BrightnessControl());
   layout->addWidget(new AutoScreenOff());
   layout->addWidget(new BrightnessOffControl());
-  layout->addWidget(new GetoffAlertToggle());
+  layout->addWidget(new GetOffAlert());
   layout->addWidget(new BatteryChargingControlToggle());
   layout->addWidget(new ChargingMin());
   layout->addWidget(new ChargingMax());

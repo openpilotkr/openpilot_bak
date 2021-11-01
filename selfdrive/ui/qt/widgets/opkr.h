@@ -40,18 +40,6 @@ public:
   }
 };
 
-class GetoffAlertToggle : public ToggleControl {
-  Q_OBJECT
-
-public:
-  GetoffAlertToggle() : ToggleControl("Alert Eon Detach", "Device alert you a alarm to detach the EON when ignition off.", "../assets/offroad/icon_shell.png", Params().getBool("OpkrEnableGetoffAlert")) {
-    QObject::connect(this, &GetoffAlertToggle::toggleFlipped, [=](int state) {
-      bool status = state ? true : false;
-      Params().putBool("OpkrEnableGetoffAlert", status);
-    });
-  }
-};
-
 class AutoResumeToggle : public ToggleControl {
   Q_OBJECT
 
@@ -1653,6 +1641,21 @@ class OCurvOffset : public AbstractControl {
 
 public:
   OCurvOffset();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+  Params params;
+  
+  void refresh();
+};
+
+class GetOffAlert : public AbstractControl {
+  Q_OBJECT
+
+public:
+  GetOffAlert();
 
 private:
   QPushButton btnplus;
