@@ -72,7 +72,8 @@ private:
   QStackedWidget *panel_widget;
 };
 
-class UserPanel : public QWidget {
+//class UserPanel : public QWidget {
+class UserPanel : public QFrame {
   Q_OBJECT
 
 public:
