@@ -377,12 +377,12 @@ static void update_params(UIState *s) {
     scene.lqrScale = std::stoi(params.get("Scale"));
     scene.lqrKi = std::stoi(params.get("LqrKi"));
     scene.lqrDcGain = std::stoi(params.get("DcGain"));
+    scene.navi_select = std::stoi(params.get("OPKRNaviSelect"));
     scene.live_tune_panel_enable = params.getBool("OpkrLiveTunePanelEnable");
     scene.kr_date_show = params.getBool("KRDateShow");
     scene.kr_time_show = params.getBool("KRTimeShow");
     scene.steer_wind_down = params.getBool("SteerWindDown");
     scene.show_error = params.getBool("ShowError");
-    scene.navi_select = std::stoi(params.get("OPKRNaviSelect"));
 
     if (scene.autoScreenOff > 0) {
       scene.nTime = scene.autoScreenOff * 60 * UI_FREQ;

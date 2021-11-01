@@ -535,6 +535,17 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
     std::system(open_settings);
   });
   layout->addWidget(open_settings_btn);
+  const char* softkey = "am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity";
+  auto softkey_btn = new ButtonControl("SoftKey RUN/SET", "RUN");
+  QObject::connect(softkey_btn, &ButtonControl::clicked, [=]() {
+    std::system(softkey);
+  });
+  layout->addWidget(softkey_btn);
+  auto mixplorer_btn = new ButtonControl("RUN Mixplorer", "RUN");
+  QObject::connect(mixplorer_btn, &ButtonControl::clicked, [=]() {
+    std::system("/data/openpilot/selfdrive/assets/addon/script/run_mixplorer.sh");
+  });
+  layout->addWidget(mixplorer_btn);
   layout->addWidget(horizontal_line());
   layout->addWidget(new CarSelectCombo());
 
