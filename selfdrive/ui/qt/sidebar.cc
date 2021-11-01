@@ -65,7 +65,7 @@ void Sidebar::mousePressEvent(QMouseEvent *event) {
     return;
   }
   // OPKR map overlay
-  if (overlay_btn.contains(event->pos()) && QUIState::ui_state.scene.started) {
+  if (overlay_btn.contains(event->pos()) && QUIState::ui_state.scene.started && !QUIState::ui_state.scene.mapbox_running) {
     QSoundEffect effect;
     effect.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/sounds/warning_1.wav"));
     //effect.setLoopCount(1);

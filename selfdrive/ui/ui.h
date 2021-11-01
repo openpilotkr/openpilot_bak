@@ -216,6 +216,7 @@ typedef struct UIScene {
   bool stand_still;
   bool show_error;
   int display_maxspeed_time = 0;
+  bool mapbox_running;
 
   cereal::DeviceState::Reader deviceState;
   cereal::RadarState::LeadData::Reader lead_data[2];

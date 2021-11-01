@@ -93,9 +93,18 @@ void OnroadWindow::updateState(const UIState &s) {
 }
 
 void OnroadWindow::mousePressEvent(QMouseEvent* e) {
+  if (map_overlay_btn.ptInRect(e->x(), e->y()) || map_btn.ptInRect(e->x(), e->y()) || map_return_btn.ptInRect(e->x(), e->y()) || 
+    rec_btn.ptInRect(e->x(), e->y()) || laneless_btn.ptInRect(e->x(), e->y()) || monitoring_btn.ptInRect(e->x(), e->y()) ||
+    stockui_btn.ptInRect(e->x(), e->y()) || tuneui_btn.ptInRect(e->x(), e->y()) || QUIState::ui_state.scene.map_on_top || 
+    QUIState::ui_state.scene.live_tune_panel_enable) {return;}
   if (map != nullptr) {
     bool sidebarVisible = geometry().x() > 0;
     map->setVisible(!sidebarVisible && !map->isVisible());
+    if (map->isVisible()) {
+      QUIState::ui_state.scene.mapbox_running = true;
+    } else {
+      QUIState::ui_state.scene.mapbox_running = false;
+    }
   }
   // propagation event to parent(HomeWindow)
   QWidget::mousePressEvent(e);

@@ -1249,7 +1249,11 @@ void draw_kr_date_time(UIState *s) {
   nvgStrokeWidth(s->vg, 0);
   nvgStroke(s->vg);
 
-  nvgFontSize(s->vg, 80);
+  if (s->scene.mapbox_running) {
+    nvgFontSize(s->vg, 60);
+  } else {
+    nvgFontSize(s->vg, 80);
+  }
   nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   nvgText(s->vg, s->fb_w/2, rect_y, now, NULL);
 }
