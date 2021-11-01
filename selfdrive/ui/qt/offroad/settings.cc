@@ -545,11 +545,11 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   // });
   layout->addWidget(softkey_btn);
   auto mixplorer_btn = new ButtonControl("RUN Mixplorer", "RUN");
+  layout->addWidget(mixplorer_btn);
   QObject::connect(mixplorer_btn, &ButtonControl::clicked, this, &UserPanel::closeSettings);
   // QObject::connect(mixplorer_btn, &ButtonControl::clicked, [=]() {
   //   std::system("/data/openpilot/selfdrive/assets/addon/script/run_mixplorer.sh");
   // });
-  layout->addWidget(mixplorer_btn);
   QPushButton *clos_btn = new QPushButton("×");
   clos_btn->setStyleSheet(R"(
     QPushButton {
