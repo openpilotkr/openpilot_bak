@@ -83,19 +83,19 @@ def update_apks(show_spinner=False):
         system("pm uninstall %s" % app)
         success = install_apk(apk_path)
 
-      if app is "com.mixplorer":
+      if app == "com.mixplorer":
         appops_set("com.mixplorer", "SU", "allow")
         pm_grant("com.mixplorer", "android.permission.READ_EXTERNAL_STORAGE")
-      if app is "com.gmd.hidesoftkeys":
+      if app == "com.gmd.hidesoftkeys":
         appops_set("com.gmd.hidesoftkeys", "SU", "allow")
         pm_grant("com.gmd.hidesoftkeys", "android.permission.SYSTEM_ALERT_WINDOW")
         system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.gmd.hidesoftkeys_preferences.xml /data/data/com.gmd.hidesoftkeys/shared_prefs/")
         system("chmod 660 /data/data/com.gmd.hidesoftkeys/shared_prefs/com.gmd.hidesoftkeys_preferences.xml")
-      if app is "com.mnsoft.mappyobn":
+      if app == "com.mnsoft.mappyobn":
         wanted_permissions = ["ACCESS_FINE_LOCATION", "READ_PHONE_STATE", "READ_EXTERNAL_STORAGE", "SYSTEM_ALERT_WINDOW"]
         for permission in wanted_permissions:
           pm_grant("com.mnsoft.mappyobn", "android.permission."+permission)
-      if app is "com.waze":
+      if app == "com.waze":
         pm_grant("com.waze", "android.permission.ACCESS_FINE_LOCATION")
         pm_grant("com.waze", "android.permission.SYSTEM_ALERT_WINDOW")
 
