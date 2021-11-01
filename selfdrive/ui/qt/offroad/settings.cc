@@ -528,6 +528,12 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
     }
   });
   layout->addWidget(calokbtn);
+  const char* open_settings = "am start -a android.intent.action.MAIN -n com.android.settings/.Settings";
+  auto open_settings_btn = new ButtonControl("Open Android Settings", "RUN");
+  QObject::connect(open_settings_btn, &ButtonControl::clicked, [=]() {
+    std::system(open_settings);
+  });
+  layout->addWidget(open_settings_btn);
   layout->addWidget(horizontal_line());
   layout->addWidget(new CarSelectCombo());
 
