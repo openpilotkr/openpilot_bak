@@ -22,13 +22,13 @@ fi
 #     setprop persist.sys.timezone Asia/Seoul
 # fi
 
-# if [ ! -f "/system/fonts/opensans_regular.ttf" ]; then
+# if [ ! -f "/system/fonts/NotoSansKR-Regular.ttf" ]; then
 #     sleep 3
 #     mount -o remount,rw /system
-#   	cp -rf /data/openpilot/selfdrive/assets/fonts/opensans* /system/fonts/
+#     cp -rf /data/openpilot/selfdrive/assets/addon/font/NotoSansKR* /system/fonts/
 #     cp -rf /data/openpilot/selfdrive/assets/addon/font/fonts.xml /system/etc/fonts.xml
 #     chmod 644 /system/etc/fonts.xml
-#   	chmod 644 /system/fonts/opensans*
+#     chmod 644 /system/fonts/NotoSansKR*
 #     mount -o remount,r /system
 #     reboot
 # fi
