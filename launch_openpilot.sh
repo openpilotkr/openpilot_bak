@@ -33,6 +33,14 @@ if [ ! -f "/system/fonts/NotoSansKR-Regular.ttf" ]; then
     reboot
 fi
 
+if [ -d "/data/data/com.gmd.hidesoftkeys" ] && [ ! -f "/data/SOFTKEY_SET" ]; then
+    touch /data/SOFTKEY_SET
+    am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity
+    sleep 3
+    pkill com.gmd.hidesoftkeys
+    cp -f /data/openpilot/selfdrive/assets/addon/param/com.gmd.hidesoftkeys_preferences.xml /data/data/com.gmd.hidesoftkeys/shared_prefs/
+    reboot
+fi
 export PASSIVE="0"
 exec ./launch_chffrplus.sh
 
