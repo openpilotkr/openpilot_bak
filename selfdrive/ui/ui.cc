@@ -317,7 +317,12 @@ static void update_params(UIState *s) {
       scene.map_on_top = true;
       scene.map_on_overlay = false;
       params.putBool("OpkrMapEnable", true);
-      system("am start com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity");
+      if (scene.navi_select == 0) {
+        system("am start com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity");
+      } else {
+        system("am start com.waze/com.waze.MainActivity");
+      }
+
     } else if (frame - scene.started_frame > 20*UI_FREQ) {
       scene.navi_on_boot = true;
     }
@@ -377,6 +382,7 @@ static void update_params(UIState *s) {
     scene.kr_time_show = params.getBool("KRTimeShow");
     scene.steer_wind_down = params.getBool("SteerWindDown");
     scene.show_error = params.getBool("ShowError");
+    scene.navi_select = std::stoi(params.get("OPKRNaviSelect"));
 
     if (scene.autoScreenOff > 0) {
       scene.nTime = scene.autoScreenOff * 60 * UI_FREQ;

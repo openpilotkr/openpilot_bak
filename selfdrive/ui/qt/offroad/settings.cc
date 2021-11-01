@@ -470,6 +470,7 @@ UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
   layout->addWidget(new MonitoringMode());
   layout->addWidget(new NormalEyesThreshold());
   layout->addWidget(new BlinkThreshold());
+  layout->addWidget(new OPKRNaviSelect());
   layout->addWidget(new RunNaviOnBootToggle());
   layout->addWidget(new KRDateToggle());
   layout->addWidget(new KRTimeToggle());

@@ -1665,3 +1665,18 @@ private:
   
   void refresh();
 };
+
+class OPKRNaviSelect : public AbstractControl {
+  Q_OBJECT
+
+public:
+  OPKRNaviSelect();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+  Params params;
+  
+  void refresh();
+};

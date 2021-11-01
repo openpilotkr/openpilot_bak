@@ -324,6 +324,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"dp_mapbox_token_pk", PERSISTENT},
     {"dp_mapbox_token_sk", PERSISTENT},
     {"dp_atl", PERSISTENT},
+    {"OPKRNaviSelect", PERSISTENT},
 };
 
 } // namespace
