@@ -550,6 +550,24 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   //   std::system("/data/openpilot/selfdrive/assets/addon/script/run_mixplorer.sh");
   // });
   layout->addWidget(mixplorer_btn);
+  QPushButton *clos_btn = new QPushButton("×");
+  clos_btn->setStyleSheet(R"(
+    QPushButton {
+      font-size: 140px;
+      padding-bottom: 20px;
+      font-weight: bold;
+      border 1px grey solid;
+      border-radius: 50px;
+      background-color: #292929;
+      font-weight: 400;
+    }
+    QPushButton:pressed {
+      background-color: #3B3B3B;
+    }
+  )");
+  clos_btn->setFixedSize(220, 130);
+  layout->addWidget(clos_btn);
+  QObject::connect(clos_btn, &QPushButton::clicked, this, &UserPanel::closeSettings);
   layout->addWidget(horizontal_line());
   layout->addWidget(new CarSelectCombo());
 
