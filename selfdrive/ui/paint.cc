@@ -224,9 +224,9 @@ static void ui_draw_tpms(UIState *s) {
   char tpmsRl[64];
   char tpmsRr[64];
   int viz_tpms_w = 180;
-  int viz_tpms_h = 150;
+  int viz_tpms_h = 145;
   int viz_tpms_x = s->fb_w - viz_tpms_w - bdr_s;
-  int viz_tpms_y = s->fb_h - bdr_s - 300;
+  int viz_tpms_y = s->fb_h - bdr_s - 295;
   float maxv = 0;
   float minv = 300;
   const Rect rect = {viz_tpms_x, viz_tpms_y, viz_tpms_w, viz_tpms_h};
@@ -255,33 +255,33 @@ static void ui_draw_tpms(UIState *s) {
   snprintf(tpmsFr, sizeof(tpmsFr), "%.1f", scene.tpmsPressureFr);
   snprintf(tpmsRl, sizeof(tpmsRl), "%.1f", scene.tpmsPressureRl);
   snprintf(tpmsRr, sizeof(tpmsRr), "%.1f", scene.tpmsPressureRr);
-  if (scene.tpmsPressureFl < 34) {
-    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 60, COLOR_RED, "sans-bold");
+  if (scene.tpmsPressureFl < 33) {
+    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 55, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureFl > 50) {
-    ui_draw_text(s, pos_x-45, pos_y+45, "N/A", 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+45, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
-  if (scene.tpmsPressureFr < 34) {
-    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 60, COLOR_RED, "sans-bold");
+  if (scene.tpmsPressureFr < 33) {
+    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 55, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureFr > 50) {
-    ui_draw_text(s, pos_x+45, pos_y+45, "N/A", 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+45, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
-  if (scene.tpmsPressureRl < 34) {
-    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 60, COLOR_RED, "sans-bold");
+  if (scene.tpmsPressureRl < 33) {
+    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 55, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureRl > 50) {
-    ui_draw_text(s, pos_x-45, pos_y+90, "N/A", 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+90, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
-  if (scene.tpmsPressureRr < 34) {
-    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 60, COLOR_RED, "sans-bold");
+  if (scene.tpmsPressureRr < 33) {
+    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 55, COLOR_RED, "sans-bold");
   } else if (scene.tpmsPressureRr > 50) {
-    ui_draw_text(s, pos_x+45, pos_y+90, "N/A", 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+90, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 60, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
   }
 }
 
@@ -312,7 +312,7 @@ static void ui_draw_standstill(UIState *s) {
       nvgFontSize(s->vg, 200);
     }
     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(240));
-    ui_print(s, viz_standstill_x, viz_standstill_y+150, "%01d:%02d", minute, second);
+    ui_print(s, scene.mapbox_running ? viz_standstill_x + 250 : viz_standstill_x, scene.mapbox_running ? viz_standstill_y+100 : viz_standstill_y+150, "%01d:%02d", minute, second);
   }
 }
 
@@ -326,8 +326,8 @@ static void ui_draw_debug(UIState *s) {
   nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
 
   if (scene.nDebugUi1) {
-    ui_draw_text(s, 0, 1010-bdr_s, scene.alertTextMsg1.c_str(), 45, COLOR_WHITE_ALPHA(125), "sans-semibold");
-    ui_draw_text(s, 0, 1050-bdr_s, scene.alertTextMsg2.c_str(), 45, COLOR_WHITE_ALPHA(125), "sans-semibold");
+    ui_draw_text(s, 0, 1010-bdr_s, scene.alertTextMsg1.c_str(), scene.mapbox_running?35:45, COLOR_WHITE_ALPHA(125), "sans-semibold");
+    ui_draw_text(s, 0, 1050-bdr_s, scene.alertTextMsg2.c_str(), scene.mapbox_running?35:45, COLOR_WHITE_ALPHA(125), "sans-semibold");
   }
 
   
@@ -337,7 +337,11 @@ static void ui_draw_debug(UIState *s) {
     //  nvgFontSize(s->vg, 34);
     //  ui_print(s, 28, 28, "LAT／LON: %.5f／%.5f", scene.latitudeUblox, scene.longitudeUblox);
     //}
-    nvgFontSize(s->vg, 50);
+    if (scene.mapbox_running) {
+      nvgFontSize(s->vg, 40);
+    } else {
+      nvgFontSize(s->vg, 50);
+    }
     //ui_print(s, ui_viz_rx, ui_viz_ry, "Live Parameters");
     ui_print(s, ui_viz_rx, ui_viz_ry+240, "SR:%.2f", scene.liveParams.steerRatio);
     //ui_print(s, ui_viz_rx, ui_viz_ry+100, "AOfs:%.2f", scene.liveParams.angleOffset);
@@ -806,10 +810,8 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
   }
 
   //finally draw the frame
-  if (!scene.batt_less) {bb_h += -(bb_y_offset*5);} else {bb_h += -(bb_y_offset*4);}
-  if (scene.gpsAccuracyUblox != 0.00) {bb_h += -(bb_y_offset*1);} else {bb_h += -(bb_y_offset*2);}
-  if (!scene.batt_less) {bb_h += (bb_y_offset*4);} else {bb_h += (bb_y_offset*5);}
-  if (scene.gpsAccuracyUblox != 0.00) {bb_h += (bb_y_offset*2);} else {bb_h += (bb_y_offset*1);}
+  if (!scene.batt_less) {bb_h += -(bb_y_offset*1);} else {bb_h += -(bb_y_offset*2);}
+  if (scene.gpsAccuracyUblox != 0.00) {bb_h += -(bb_y_offset*0);} else {bb_h += -(bb_y_offset*1);}
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
   nvgStrokeColor(s->vg, COLOR_WHITE_ALPHA(80));
@@ -964,8 +966,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
   }
 
   //finally draw the frame
-  if (scene.longitudinal_control) {bb_h += -(bb_y_offset*5);} else {bb_h += -(bb_y_offset*6);}
-  if (scene.longitudinal_control) {bb_h += (bb_y_offset*2);} else {bb_h += (bb_y_offset*3);}
+  bb_h += -(bb_y_offset*3);
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
   nvgStrokeColor(s->vg, COLOR_WHITE_ALPHA(80));
