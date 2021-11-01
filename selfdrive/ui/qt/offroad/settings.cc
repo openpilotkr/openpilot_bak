@@ -430,7 +430,8 @@ QWidget * network_panel(QWidget * parent) {
   return w;
 }
 
-UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
+//UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
+UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   QVBoxLayout *layout = new QVBoxLayout(this);
 
   layout->setContentsMargins(0, 0, 0, 0);
