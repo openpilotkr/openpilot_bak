@@ -335,9 +335,9 @@
         <font weight="400" style="normal">NotoSansSymbols-Regular-Subsetted.ttf</font>
     </family>
     <family lang="ko">
-        <font weight="400" style="normal">opensans_regular.ttf</font>
-        <font weight="500" style="normal">opensans_semibold.ttf</font>
-        <font weight="700" style="normal">opensans_bold.ttf</font>
+        <font weight="400" style="normal">NotoSansKR-Regular.ttf</font>
+        <font weight="500" style="normal">NotoSansKR-Medium.ttf</font>
+        <font weight="700" style="normal">NotoSansKR-Bold.ttf</font>
     </family>
     <family lang="zh-Hans">
         <font weight="400" style="normal">NotoSansSC-Regular.otf</font>
