@@ -299,10 +299,18 @@ static void ui_draw_standstill(UIState *s) {
 
   if (scene.standStill) {
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
-    nvgFontSize(s->vg, 170);
+    if (scene.mapbox_running) {
+      nvgFontSize(s->vg, 120);
+    } else {
+      nvgFontSize(s->vg, 170);
+    }
     nvgFillColor(s->vg, COLOR_ORANGE_ALPHA(240));
     ui_print(s, viz_standstill_x, viz_standstill_y, "STOP");
-    nvgFontSize(s->vg, 200);
+    if (scene.mapbox_running) {
+      nvgFontSize(s->vg, 150);
+    } else {
+      nvgFontSize(s->vg, 200);
+    }
     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(240));
     ui_print(s, viz_standstill_x, viz_standstill_y+150, "%01d:%02d", minute, second);
   }
@@ -1250,7 +1258,7 @@ void draw_kr_date_time(UIState *s) {
   nvgStroke(s->vg);
 
   if (s->scene.mapbox_running) {
-    nvgFontSize(s->vg, 50);
+    nvgFontSize(s->vg, 55);
   } else {
     nvgFontSize(s->vg, 80);
   }
