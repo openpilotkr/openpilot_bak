@@ -221,7 +221,7 @@ def thermald_thread():
   env = dict(os.environ)
   env['LD_LIBRARY_PATH'] = mediaplayer
 
-  getoff_alert = int(params.get("OpkrEnableGetoffAlert", encoding="utf8")
+  getoff_alert = int(params.get("OpkrEnableGetoffAlert", encoding="utf8"))
 
   hotspot_on_boot = params.get_bool("OpkrHotspotOnBoot")
   hotspot_run = False
