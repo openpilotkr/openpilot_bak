@@ -799,8 +799,9 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
 
   //finally draw the frame
   if (!scene.batt_less) {bb_h += -(bb_y_offset*5);} else {bb_h += -(bb_y_offset*4);}
-  if (scene.gpsAccuracyUblox != 0.00) {bb_h += -(bb_y_offset*0);} else {bb_h += -(bb_y_offset*2);}
-  bb_h += 20;
+  if (scene.gpsAccuracyUblox != 0.00) {bb_h += -(bb_y_offset*1);} else {bb_h += -(bb_y_offset*2);}
+  if (!scene.batt_less) {bb_h += (bb_y_offset*4;} else {bb_h += (bb_y_offset*5);}
+  if (scene.gpsAccuracyUblox != 0.00) {bb_h += (bb_y_offset*2);} else {bb_h += (bb_y_offset*1);}
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
   nvgStrokeColor(s->vg, COLOR_WHITE_ALPHA(80));
@@ -956,7 +957,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
 
   //finally draw the frame
   if (scene.longitudinal_control) {bb_h += -(bb_y_offset*5);} else {bb_h += -(bb_y_offset*6);}
-  bb_h += 20;
+  if (scene.longitudinal_control) {bb_h += (bb_y_offset*1);} else {bb_h += (bb_y_offset*2);}
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
   nvgStrokeColor(s->vg, COLOR_WHITE_ALPHA(80));
@@ -1371,7 +1372,7 @@ static void ui_draw_auto_hold(UIState *s) {
   ui_fill_rect(s->vg, rect, color, 30.);
   ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(50), 10, 20.);
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-  ui_draw_text(s, rect.centerX(), rect.centerY(), "AUTO HOLD", 150, COLOR_GREEN_ALPHA(150), "sans-bold");
+  ui_draw_text(s, rect.centerX(), rect.centerY(), "AUTO HOLD", 110, COLOR_GREEN_ALPHA(150), "sans-bold");
 }
 
 static void ui_draw_vision(UIState *s) {
