@@ -76,7 +76,7 @@ class UserPanel : public QWidget {
   Q_OBJECT
 
 public:
-  explicit UserPanel(QWidget *parent = nullptr);
+  explicit UserPanel(QWidget *parent = 0);
 
 signals:
   void closeSettings();
