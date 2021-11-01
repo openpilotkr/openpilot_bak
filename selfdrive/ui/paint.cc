@@ -807,7 +807,8 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
   }
 
   //finally draw the frame
-  if (!scene.batt_less) {bb_h += -(bb_y_offset*6);} else {bb_h += -(bb_y_offset*5);}
+  if (!scene.batt_less) {bb_h += -(bb_y_offset*5);} else {bb_h += -(bb_y_offset*4);}
+  if (true) {bb_h += -(bb_y_offset*0);} else {bb_h += -(bb_y_offset*2);}
   //bb_h += 20;
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
@@ -968,7 +969,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
   }
 
   //finally draw the frame
-  bb_h += -(bb_y_offset*7);
+  if (true) {bb_h += -(bb_y_offset*5)} else {bb_h += -(bb_y_offset*6)}
   //bb_h += 20;
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
@@ -1152,9 +1153,10 @@ static void ui_draw_vision_header(UIState *s) {
   if (!s->scene.comma_stock_ui) {
     bb_ui_draw_UI(s);
     ui_draw_tpms(s);
-    if (s->scene.controls_state.getEnabled()) {
-      ui_draw_standstill(s);
-    }
+    // if (s->scene.controls_state.getEnabled()) {
+    //   ui_draw_standstill(s);
+    // }
+    ui_draw_standstill(s);
     draw_safetysign(s);
     draw_compass(s);
     draw_navi_button(s);
