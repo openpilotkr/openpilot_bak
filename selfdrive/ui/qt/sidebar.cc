@@ -55,15 +55,6 @@ void Sidebar::mousePressEvent(QMouseEvent *event) {
     }
     return;
   }
-  // OPKR 
-  if (home_btn.contains(event->pos())) {
-      QUIState::ui_state.scene.homebtn_count = QUIState::ui_state.scene.homebtn_count + 1;
-    if (QUIState::ui_state.scene.homebtn_count > 2) {
-      QUIState::ui_state.scene.homebtn_count = 0;
-      QProcess::execute("/data/openpilot/selfdrive/assets/addon/script/run_mixplorer.sh");
-    }
-    return;
-  }
   // OPKR map overlay
   if (overlay_btn.contains(event->pos()) && QUIState::ui_state.scene.started && !QUIState::ui_state.scene.mapbox_running) {
     QSoundEffect effect;

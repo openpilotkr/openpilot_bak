@@ -181,7 +181,6 @@ typedef struct UIScene {
   int speed_lim_off;
   bool monitoring_mode;
   int setbtn_count = 0;
-  int homebtn_count = 0;
   bool forceGearD;
   bool comma_stock_ui, opkr_livetune_ui;
   bool is_OpenpilotViewEnabled = false;
