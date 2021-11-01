@@ -74,12 +74,17 @@ private:
 
 class UserPanel : public QWidget {
   Q_OBJECT
+
 public:
   explicit UserPanel(QWidget *parent = nullptr);
+
+signals:
+  void closeSettings();
 };
 
 class TuningPanel : public QWidget {
   Q_OBJECT
+
 public:
   explicit TuningPanel(QWidget *parent = nullptr);
 };
