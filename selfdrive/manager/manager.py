@@ -49,7 +49,7 @@ def manager_init():
     ("OpkrEnableDriverMonitoring", "1"),
     ("OpkrEnableLogger", "0"),
     ("OpkrEnableUploader", "0"),
-    ("OpkrEnableGetoffAlert", "1"),
+    ("OpkrEnableGetoffAlert", "0"),
     ("OpkrAutoResume", "1"),
     ("OpkrVariableCruise", "1"),
     ("OpkrLaneChangeSpeed", "45"),
