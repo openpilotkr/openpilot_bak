@@ -969,7 +969,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
   }
 
   //finally draw the frame
-  if (true) {bb_h += -(bb_y_offset*5)} else {bb_h += -(bb_y_offset*6)}
+  if (true) {bb_h += -(bb_y_offset*5);} else {bb_h += -(bb_y_offset*6);}
   //bb_h += 20;
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
