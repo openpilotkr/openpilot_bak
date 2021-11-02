@@ -90,6 +90,7 @@ void Sidebar::mousePressEvent(QMouseEvent *event) {
   }
   // OPKR map overlay
   if (overlay_btn.contains(event->pos()) && QUIState::ui_state.scene.started && !QUIState::ui_state.scene.mapbox_running) {
+    mLastPressTime=QDateTime::currentMSecsSinceEpoch();
     QSoundEffect effect;
     effect.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/sounds/warning_1.wav"));
     //effect.setLoopCount(1);
@@ -106,7 +107,9 @@ void Sidebar::mousePressEvent(QMouseEvent *event) {
     QProcess::execute("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
     QUIState::ui_state.scene.map_on_top = false;
     QUIState::ui_state.scene.map_on_overlay = !QUIState::ui_state.scene.map_on_overlay;
+    return;
   }
+  mLastPressTime=QDateTime::currentMSecsSinceEpoch() + 10000;
 }
 
 void Sidebar::mouseReleaseEvent(QMouseEvent *event) {
