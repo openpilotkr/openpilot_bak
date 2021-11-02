@@ -144,22 +144,20 @@ class CarInterfaceBase():
     if cs_out.cruiseState.nonAdaptive:
       events.add(EventName.wrongCruiseMode)
 
-    self.steer_warning = self.steer_warning + 1 if cs_out.steerWarning else 0
-    self.steering_unpressed = 0 if cs_out.steeringPressed else self.steering_unpressed + 1
 
     # Handle permanent and temporary steering faults
+    self.steering_unpressed = 0 if cs_out.steeringPressed else self.steering_unpressed + 1
+    if cs_out.steerWarning:
+      # if the user overrode recently, show a less harsh alert
+      if self.silent_steer_warning or cs_out.standstill or self.steering_unpressed < int(1.5 / DT_CTRL):
+        self.silent_steer_warning = True
+        events.add(EventName.steerTempUnavailableSilent)
+      else:
+        events.add(EventName.steerTempUnavailable)
+    else:
+      self.silent_steer_warning = False
     if cs_out.steerError:
       events.add(EventName.steerUnavailable)
-    elif cs_out.steerWarning and (cs_out.vEgo < 0.1 or cs_out.standstill) and not self.steer_wind_down_enabled and cs_out.steeringAngleDeg < 90:
-      events.add(EventName.isgActive)
-    elif cs_out.steerWarning and not self.steer_wind_down_enabled and not self.steer_warning_fix_enabled:
-      # only escalate to the harsher alert after the condition has
-      # persisted for 0.5s and we're certain that the user isn't overriding
-      if not cs_out.standstill and self.steering_unpressed > int(0.5 / DT_CTRL) and \
-         self.steer_warning > int(0.5 / DT_CTRL):
-        events.add(EventName.steerTempUnavailable)
-      else:
-        events.add(EventName.steerTempUnavailableSilent)
 
     # Disable on rising edge of gas or brake. Also disable on brake when speed > 0.
     # Optionally allow to press gas at zero speed to resume.

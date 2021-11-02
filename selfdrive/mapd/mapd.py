@@ -9,6 +9,7 @@ from selfdrive.mapd.lib.osm import OSM
 from selfdrive.mapd.lib.geo import distance_to_points
 from selfdrive.mapd.lib.WayCollection import WayCollection
 from .config import QUERY_RADIUS, MIN_DISTANCE_FOR_NEW_QUERY, FULL_STOP_MAX_SPEED, LOOK_AHEAD_HORIZON_TIME
+from common.params import Params
 
 
 _DEBUG = False
@@ -47,6 +48,7 @@ class MapD():
     self._disengaging = False
     self._query_thread = None
     self._lock = threading.RLock()
+    self.ms_to_spd = 3.6 if Params().get_bool("IsMetric") else 2.236936
 
   def udpate_state(self, sm):
     sock = 'controlsState'
@@ -201,15 +203,15 @@ class MapD():
 
     map_data_msg.liveMapData.lastGpsTimestamp = self.last_gps.timestamp
     map_data_msg.liveMapData.speedLimitValid = bool(speed_limit is not None)
-    map_data_msg.liveMapData.speedLimit = float(speed_limit*3.6 if speed_limit is not None else 0.0)
+    map_data_msg.liveMapData.speedLimit = float(speed_limit*self.ms_to_spd if speed_limit is not None else 0.0)
     map_data_msg.liveMapData.speedLimitAheadValid = bool(next_speed_limit_section is not None)
-    map_data_msg.liveMapData.speedLimitAhead = float(next_speed_limit_section.value*3.6
+    map_data_msg.liveMapData.speedLimitAhead = float(next_speed_limit_section.value*self.ms_to_spd
                                                      if next_speed_limit_section is not None else 0.0)
     map_data_msg.liveMapData.speedLimitAheadDistance = float(next_speed_limit_section.start
                                                              if next_speed_limit_section is not None else 0.0)
 
     map_data_msg.liveMapData.turnSpeedLimitValid = bool(turn_speed_limit_section is not None)
-    map_data_msg.liveMapData.turnSpeedLimit = float(turn_speed_limit_section.value*3.6
+    map_data_msg.liveMapData.turnSpeedLimit = float(turn_speed_limit_section.value*self.ms_to_spd
                                                     if turn_speed_limit_section is not None else 0.0)
     map_data_msg.liveMapData.turnSpeedLimitSign = int(turn_speed_limit_section.curv_sign
                                                       if turn_speed_limit_section is not None else 0)

@@ -67,7 +67,7 @@ typedef struct Alert {
   }
 } Alert;
 
-const Alert CONTROLS_WAITING_ALERT = {"openpilot Unavailable", "Waiting for controls to start", 
+const Alert CONTROLS_WAITING_ALERT = {"openpilot Unavailable", "Waiting for controls to start",
                                       "controlsWaiting", cereal::ControlsState::AlertSize::MID,
                                       AudibleAlert::NONE};
 
