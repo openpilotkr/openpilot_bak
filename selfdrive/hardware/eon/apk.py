@@ -6,8 +6,9 @@ import shutil
 from common.basedir import BASEDIR
 from selfdrive.swaglog import cloudlog
 from common.spinner import Spinner
+import time
 
-android_packages = ("com.opkr.maphack", "com.mixplorer", "com.gmd.hidesoftkeys", "com.google.android.inputmethod.korean", "com.mnsoft.mappyobn", "com.waze",)
+android_packages = ("com.opkr.maphack", "com.mixplorer", "com.mnsoft.mappyobn", "com.waze", "com.google.android.inputmethod.korean", "com.gmd.hidesoftkeys",)
 
 def get_installed_apks():
   dat = subprocess.check_output(["pm", "list", "packages", "-f"], encoding='utf8').strip().split("\n")
@@ -89,6 +90,14 @@ def update_apks(show_spinner=False):
       if app == "com.gmd.hidesoftkeys":
         appops_set("com.gmd.hidesoftkeys", "SU", "allow")
         pm_grant("com.gmd.hidesoftkeys", "android.permission.SYSTEM_ALERT_WINDOW")
+        system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
+        time.sleep(5)
+        system("pkill com.gmd.hidesoftkeys")
+        system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.gmd.hidesoftkeys_preferences.xml /data/data/com.gmd.hidesoftkeys/shared_prefs/")
+        system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
+        time.sleep(3)
+        system("pkill com.gmd.hidesoftkeys")
+        system("reboot")
       if app == "com.mnsoft.mappyobn":
         wanted_permissions = ["ACCESS_FINE_LOCATION", "READ_PHONE_STATE", "READ_EXTERNAL_STORAGE", "SYSTEM_ALERT_WINDOW"]
         for permission in wanted_permissions:

@@ -22,25 +22,17 @@ fi
 #     setprop persist.sys.timezone Asia/Seoul
 # fi
 
-if [ ! -f "/system/fonts/NotoSansKR-Regular.ttf" ]; then
+if [ ! -f "/system/fonts/KaiGenGothicKR-Normal.ttf" ]; then
     sleep 3
     mount -o remount,rw /system
-    cp -rf /data/openpilot/selfdrive/assets/addon/font/NotoSansKR* /system/fonts/
+    cp -rf /data/openpilot/selfdrive/assets/addon/font/KaiGenGothicKR* /system/fonts/
     cp -rf /data/openpilot/selfdrive/assets/addon/font/fonts.xml /system/etc/fonts.xml
     chmod 644 /system/etc/fonts.xml
-    chmod 644 /system/fonts/NotoSansKR*
+    chmod 644 /system/fonts/KaiGenGothicKR*
     mount -o remount,r /system
     reboot
 fi
 
-if [ -d "/data/data/com.gmd.hidesoftkeys" ] && [ ! -f "/data/SOFTKEY_SET" ]; then
-    touch /data/SOFTKEY_SET
-    am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity
-    sleep 3
-    pkill com.gmd.hidesoftkeys
-    cp -f /data/openpilot/selfdrive/assets/addon/param/com.gmd.hidesoftkeys_preferences.xml /data/data/com.gmd.hidesoftkeys/shared_prefs/
-    reboot
-fi
 export PASSIVE="0"
 exec ./launch_chffrplus.sh
 
