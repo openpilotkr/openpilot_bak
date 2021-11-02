@@ -673,8 +673,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
   UserPanel *user = new UserPanel(this);
   QObject::connect(device, &DevicePanel::reviewTrainingGuide, this, &SettingsWindow::reviewTrainingGuide);
   QObject::connect(device, &DevicePanel::showDriverView, this, &SettingsWindow::showDriverView);
-  //QObject::connect(user, &UserPanel::closeSettings, this, &SettingsWindow::closeSettings);
-  QObject::connect(user, &UserPanel::showDriverView, this, &SettingsWindow::showDriverView);
+  QObject::connect(user, &UserPanel::closeSettings, this, &SettingsWindow::closeSettings);
 
   QList<QPair<QString, QWidget *>> panels = {
     {"Device", device},
