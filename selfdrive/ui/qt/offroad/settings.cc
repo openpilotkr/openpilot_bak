@@ -430,11 +430,10 @@ QWidget * network_panel(QWidget * parent) {
   return w;
 }
 
-//UserPanel::UserPanel(QWidget* parent) : QWidget(parent) {
 UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   QVBoxLayout *layout = new QVBoxLayout(this);
 
-  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setContentsMargins(50, 0, 50, 0);
   layout->setSpacing(30);
 
   // OPKR
@@ -530,25 +529,24 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
     }
   });
   layout->addWidget(calokbtn);
-  // const char* open_settings = "am start -a android.intent.action.MAIN -n com.android.settings/.Settings";
+  const char* open_settings = "am start -a android.intent.action.MAIN -n com.android.settings/.Settings";
   auto open_settings_btn = new ButtonControl("Open Android Settings", "RUN");
-  QObject::connect(open_settings_btn, &ButtonControl::clicked, this, &UserPanel::closeSettings);
-  // QObject::connect(open_settings_btn, &ButtonControl::clicked, [=]() {
-  //   std::system(open_settings);
-  // });
+  QObject::connect(open_settings_btn, &ButtonControl::clicked, [=]() {
+    emit closeSettings();
+    std::system(open_settings);
+  });
   layout->addWidget(open_settings_btn);
-  // const char* softkey = "am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity";
+  const char* softkey = "am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity";
   auto softkey_btn = new ButtonControl("SoftKey RUN/SET", "RUN");
-  QObject::connect(softkey_btn, &ButtonControl::clicked, this, &UserPanel::closeSettings);
-  // QObject::connect(softkey_btn, &ButtonControl::clicked, [=]() {
-  //   std::system(softkey);
-  // });
+  QObject::connect(softkey_btn, &ButtonControl::clicked, [=]() {
+    emit closeSettings();
+    std::system(softkey);
+  });
   layout->addWidget(softkey_btn);
   auto mixplorer_btn = new ButtonControl("RUN Mixplorer", "RUN");
   QObject::connect(mixplorer_btn, &ButtonControl::clicked, [=]() {
-	//emit closeSettings();
-	emit showDriverView();
-    //std::system("/data/openpilot/selfdrive/assets/addon/script/run_mixplorer.sh");
+	  emit closeSettings();
+    std::system("/data/openpilot/selfdrive/assets/addon/script/run_mixplorer.sh");
   });
   layout->addWidget(mixplorer_btn, 0);
   layout->addWidget(horizontal_line());
@@ -570,10 +568,10 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(peditbtn);
 }
 
-TuningPanel::TuningPanel(QWidget* parent) : QWidget(parent) {
+TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
   QVBoxLayout *layout = new QVBoxLayout(this);
 
-  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setContentsMargins(50, 0, 50, 0);
   layout->setSpacing(30);
 
   // OPKR
