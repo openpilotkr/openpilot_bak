@@ -107,6 +107,8 @@ def update_apks(show_spinner=False):
       if app == "com.waze":
         pm_grant("com.waze", "android.permission.ACCESS_FINE_LOCATION")
         pm_grant("com.waze", "android.permission.SYSTEM_ALERT_WINDOW")
+      if app == "com.google.android.inputmethod.korean":
+        pm_grant("com.google.android.inputmethod.korean", "android.permission.BIND_INPUT_METHOD")
 
       assert success
 
