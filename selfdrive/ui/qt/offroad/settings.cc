@@ -237,9 +237,8 @@ SoftwarePanel::SoftwarePanel(QWidget* parent) : ListWidget(parent) {
   updateBtn = new ButtonControl("Check for Updates", "");
   connect(updateBtn, &ButtonControl::clicked, [=]() {
     if (params.getBool("IsOffroad")) {
-      const QString paramsPath = QString::fromStdString(params.getParamsPath());
-      fs_watch->addPath(paramsPath + "/d/LastUpdateTime");
-      fs_watch->addPath(paramsPath + "/d/UpdateFailedCount");
+      fs_watch->addPath(QString::fromStdString(params.getParamPath("LastUpdateTime")));
+      fs_watch->addPath(QString::fromStdString(params.getParamPath("UpdateFailedCount")));
     }
     std::system("/data/openpilot/selfdrive/assets/addon/script/gitcommit.sh");
     std::system("date '+%F %T' > /data/params/d/LastUpdateTime");
@@ -271,7 +270,7 @@ SoftwarePanel::SoftwarePanel(QWidget* parent) : ListWidget(parent) {
   });
   connect(parent, SIGNAL(offroadTransition(bool)), uninstallBtn, SLOT(setEnabled(bool)));
 
-  QWidget *widgets[] = {versionLbl, gitRemoteLbl, gitBranchLbl, lastUpdateLbl, updateBtn};
+  QWidget *widgets[] = {osVersionLbl, versionLbl, gitRemoteLbl, gitBranchLbl, lastUpdateLbl, updateBtn};
   for (QWidget* w : widgets) {
     addItem(w);
   }
@@ -366,8 +365,7 @@ SoftwarePanel::SoftwarePanel(QWidget* parent) : ListWidget(parent) {
   addItem(uninstallBtn);
   fs_watch = new QFileSystemWatcher(this);
   QObject::connect(fs_watch, &QFileSystemWatcher::fileChanged, [=](const QString path) {
-    int update_failed_count = params.get<int>("UpdateFailedCount").value_or(0);
-    if (path.contains("UpdateFailedCount") && update_failed_count > 0) {
+    if (path.contains("UpdateFailedCount") && std::atoi(params.get("UpdateFailedCount").c_str()) > 0) {
       lastUpdateLbl->setText("failed to fetch update");
       updateBtn->setText("CHECK");
       updateBtn->setEnabled(true);
