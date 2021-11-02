@@ -326,8 +326,8 @@ static void ui_draw_debug(UIState *s) {
   nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
 
   if (scene.nDebugUi1) {
-    ui_draw_text(s, 0, 1010-bdr_s+(scene.mapbox_running ? 15:0), scene.alertTextMsg1.c_str(), scene.mapbox_running?32:45, COLOR_WHITE_ALPHA(125), "sans-semibold");
-    ui_draw_text(s, 0, 1050-bdr_s, scene.alertTextMsg2.c_str(), scene.mapbox_running?32:45, COLOR_WHITE_ALPHA(125), "sans-semibold");
+    ui_draw_text(s, 0, 1010-bdr_s+(scene.mapbox_running ? 17:0), scene.alertTextMsg1.c_str(), scene.mapbox_running?33:45, COLOR_WHITE_ALPHA(125), "sans-semibold");
+    ui_draw_text(s, 0, 1050-bdr_s, scene.alertTextMsg2.c_str(), scene.mapbox_running?33:45, COLOR_WHITE_ALPHA(125), "sans-semibold");
   }
 
   
