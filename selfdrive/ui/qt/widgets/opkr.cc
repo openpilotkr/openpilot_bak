@@ -275,6 +275,87 @@ void CarSelectCombo::refresh() {
   }
 }
 
+TimeZoneSelectCombo::TimeZoneSelectCombo() : AbstractControl("", "", "") 
+{
+  combobox.setStyleSheet(R"(
+    subcontrol-origin: padding;
+    subcontrol-position: top left;
+    selection-background-color: #111;
+    selection-color: yellow;
+    color: white;
+    background-color: #393939;
+    border-style: solid;
+    border: 0px solid #1e1e1e;
+    border-radius: 0;
+    width: 100px;
+  )");
+
+  combobox.addItem("Select Your TimeZone");
+  QFile timezonelistfile("/data/openpilot/selfdrive/assets/addon/param/TimeZone");
+  if (timezonelistfile.open(QIODevice::ReadOnly)) {
+    QTextStream timezonename(&timezonelistfile);
+    while (!timezonename.atEnd()) {
+      QString line = timezonename.readLine();
+      combobox.addItem(line);
+    }
+    timezonelistfile.close();
+  }
+
+  combobox.setFixedWidth(1055);
+
+  btn.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+
+  btn.setFixedSize(150, 100);
+
+  QObject::connect(&btn, &QPushButton::clicked, [=]() {
+    if (btn.text() == "UNSET") {
+      if (ConfirmationDialog::confirm("Do you want to set default?", this)) {
+        params.put("OPKRTimeZone", "UTC");
+        combobox.setCurrentIndex(0);
+        refresh();
+      }
+    }
+  });
+
+  //combobox.view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+  hlayout->addWidget(&combobox);
+  hlayout->addWidget(&btn, Qt::AlignRight);
+
+  QObject::connect(&combobox, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), [=](int index)
+  {
+    combobox.itemData(combobox.currentIndex());
+    QString str = combobox.currentText();
+    if (combobox.currentIndex() != 0) {
+      if (ConfirmationDialog::confirm("Press OK to set your timezone as\n" + str, this)) {
+        params.put("OPKRTimeZone", str.toStdString());
+      }
+    }
+    refresh();
+  });
+  refresh();
+}
+
+void TimeZoneSelectCombo::refresh() {
+  QString selected_timezonename = QString::fromStdString(params.get("OPKRTimeZone"));
+  int index = combobox.findText(selected_timezonename);
+  if (index >= 0) combobox.setCurrentIndex(index);
+  if (selected_timezonename.length()) {
+    btn.setEnabled(true);
+    btn.setText("UNSET");
+  } else {
+    btn.setEnabled(false);
+    btn.setText("SET");
+  }
+}
+
 //UI
 AutoShutdown::AutoShutdown() : AbstractControl("EON AutoShutdown", "EON is automatically turned off after the set time while the engine is turned off (offload) after driving (onload).", "../assets/offroad/icon_shell.png") {
 

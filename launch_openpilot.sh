@@ -3,7 +3,8 @@
 ALIAS_CHECK=$(/usr/bin/grep gitpull /system/comma/home/.bash_profile)
 # GET_PROP1=$(getprop persist.sys.locale)
 # GET_PROP2=$(getprop persist.sys.local)
-# GET_PROP3=$(getprop persist.sys.timezone)
+GET_PROP_ATZ=$(getprop persist.sys.timezone)
+GET_PROP_STZ=$(cat /data/params/d/OPKRTimeZone)
 
 if [ "$ALIAS_CHECK" == "" ]; then
     sleep 3
@@ -18,9 +19,9 @@ fi
 # if [ "$GET_PROP2" != "ko-KR" ]; then
 #     setprop persist.sys.local ko-KR
 # fi
-# if [ "$GET_PROP3" != "Asia/Seoul" ]; then
-#     setprop persist.sys.timezone Asia/Seoul
-# fi
+if [ "$GET_PROP_STZ" != "" ] && [ "$GET_PROP_ATZ" != "$GET_PROP_STZ" ]; then
+    setprop persist.sys.timezone $GET_PROP_STZ
+fi
 
 if [ ! -f "/system/fonts/KaiGenGothicKR-Normal.ttf" ]; then
     sleep 3
