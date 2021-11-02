@@ -34,6 +34,7 @@ public slots:
 protected:
   void paintEvent(QPaintEvent *event) override;
   void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
   void drawMetric(QPainter &p, const QString &label, const QString &val, QColor c, int y);
 
   QImage home_img, settings_img;
@@ -47,6 +48,7 @@ protected:
     {cereal::DeviceState::NetworkType::CELL5_G, "5G"}
   };
 
+  QTimer mouset;
   const QRect settings_btn = QRect(50, 35, 200, 117);
   const QRect overlay_btn = QRect(0, 465, 150, 150);
   const QColor good_color = QColor(255, 255, 255);

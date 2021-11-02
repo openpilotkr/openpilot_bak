@@ -48,11 +48,12 @@ Sidebar::Sidebar(QWidget *parent) : QFrame(parent) {
 
 void Sidebar::mousePressEvent(QMouseEvent *event) {
   if (settings_btn.contains(event->pos())) {
-    QUIState::ui_state.scene.setbtn_count = QUIState::ui_state.scene.setbtn_count + 1;
-    if (QUIState::ui_state.scene.setbtn_count > 1) {
-      QUIState::ui_state.scene.setbtn_count = 0;
-      emit openSettings();
-    }
+    mouset.start();
+    // QUIState::ui_state.scene.setbtn_count = QUIState::ui_state.scene.setbtn_count + 1;
+    // if (QUIState::ui_state.scene.setbtn_count > 1) {
+    //   QUIState::ui_state.scene.setbtn_count = 0;
+    //   emit openSettings();
+    // }
     return;
   }
   // OPKR map overlay
@@ -74,6 +75,16 @@ void Sidebar::mousePressEvent(QMouseEvent *event) {
     QUIState::ui_state.scene.map_on_top = false;
     QUIState::ui_state.scene.map_on_overlay = !QUIState::ui_state.scene.map_on_overlay;
   }
+}
+
+void mouseReleaseEvent(QMouseEvent *event) {
+  if (settings_btn.contains(event->pos())) {
+    mouset.stop();
+    if (mouset > 2000) {
+      emit openSettings();
+    }
+  }
+  mouset = 0;
 }
 
 void Sidebar::updateState(const UIState &s) {
