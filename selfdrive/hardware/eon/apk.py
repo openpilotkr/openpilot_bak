@@ -109,6 +109,12 @@ def update_apks(show_spinner=False):
         pm_grant("com.waze", "android.permission.SYSTEM_ALERT_WINDOW")
       if app == "com.google.android.inputmethod.korean":
         pm_grant("com.google.android.inputmethod.korean", "android.permission.BIND_INPUT_METHOD")
+        system("am start com.google.android.inputmethod.korean/com.google.android.apps.inputmethod.libs.framework.core.LauncherActivity")
+        time.sleep(3)
+        system("pkill com.google.android.inputmethod.korean")        
+        system("settings put secure enabled_input_methods com.google.android.inputmethod.korean/.KoreanIme")
+        system("settings put secure default_input_method com.google.android.inputmethod.korean/.KoreanIme")
+        system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.google.android.inputmethod.korean*.xml /data/data/com.google.android.inputmethod.korean/shared_prefs/")
 
       assert success
 
