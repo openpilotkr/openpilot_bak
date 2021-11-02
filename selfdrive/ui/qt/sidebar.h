@@ -2,6 +2,7 @@
 
 #include <QFrame>
 #include <QMap>
+#include <QTimer>
 
 //#include "selfdrive/common/params.h"
 #include "selfdrive/ui/ui.h"
@@ -48,12 +49,12 @@ protected:
     {cereal::DeviceState::NetworkType::CELL5_G, "5G"}
   };
 
-  QTimer mouset;
   const QRect settings_btn = QRect(50, 35, 200, 117);
   const QRect overlay_btn = QRect(0, 465, 150, 150);
   const QColor good_color = QColor(255, 255, 255);
   const QColor warning_color = QColor(218, 202, 37);
   const QColor danger_color = QColor(201, 34, 49);
+  QTimer mouset;
 
   //Params params;
   ItemStatus connect_status, panda_status, temp_status;

@@ -180,7 +180,6 @@ typedef struct UIScene {
   float steerMax_V;
   int speed_lim_off;
   bool monitoring_mode;
-  int setbtn_count = 0;
   bool forceGearD;
   bool comma_stock_ui, opkr_livetune_ui;
   bool is_OpenpilotViewEnabled = false;
