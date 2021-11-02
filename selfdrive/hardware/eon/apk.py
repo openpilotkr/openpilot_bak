@@ -88,15 +88,13 @@ def update_apks(show_spinner=False):
         appops_set("com.mixplorer", "SU", "allow")
         pm_grant("com.mixplorer", "android.permission.READ_EXTERNAL_STORAGE")
       if app == "com.gmd.hidesoftkeys":
+        appops_set("com.gmd.hidesoftkeys", "SU", "allow")
+        pm_grant("com.gmd.hidesoftkeys", "android.permission.SYSTEM_ALERT_WINDOW")
         system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
         time.sleep(7)
         system("pkill com.gmd.hidesoftkeys")
         time.sleep(2)
         system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.gmd.hidesoftkeys_preferences.xml /data/data/com.gmd.hidesoftkeys/shared_prefs/")
-        appops_set("com.gmd.hidesoftkeys", "SU", "allow")
-        pm_grant("com.gmd.hidesoftkeys", "android.permission.SYSTEM_ALERT_WINDOW")
-        system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
-        time.sleep(5)
         system("cp -f /data/openpilot/selfdrive/assets/addon/param/appops.xml /data/system/")
         system("reboot")
       if app == "com.mnsoft.mappyobn":
