@@ -681,7 +681,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     {"Network", network_panel(this)},
     {"Toggles", new TogglesPanel(this)},
     {"Software", new SoftwarePanel(this)},
-    {"UserMenu", new UserPanel(this)},
+    {"UserMenu", user},
     {"Tuning", new TuningPanel(this)},
   };
 
