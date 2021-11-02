@@ -545,11 +545,12 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   // });
   layout->addWidget(softkey_btn);
   auto mixplorer_btn = new ButtonControl("RUN Mixplorer", "RUN");
-  layout->addWidget(mixplorer_btn, 0);
   QObject::connect(mixplorer_btn, &ButtonControl::clicked, [=]() {
-	emit closeSettings();
+	//emit closeSettings();
+	emit showDriverView();
     //std::system("/data/openpilot/selfdrive/assets/addon/script/run_mixplorer.sh");
   });
+  layout->addWidget(mixplorer_btn, 0);
   layout->addWidget(horizontal_line());
   layout->addWidget(new CarSelectCombo());
 
@@ -672,7 +673,8 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
   UserPanel *user = new UserPanel(this);
   QObject::connect(device, &DevicePanel::reviewTrainingGuide, this, &SettingsWindow::reviewTrainingGuide);
   QObject::connect(device, &DevicePanel::showDriverView, this, &SettingsWindow::showDriverView);
-  QObject::connect(user, &UserPanel::closeSettings, this, &SettingsWindow::closeSettings);
+  //QObject::connect(user, &UserPanel::closeSettings, this, &SettingsWindow::closeSettings);
+  QObject::connect(user, &UserPanel::showDriverView, this, &SettingsWindow::showDriverView);
 
   QList<QPair<QString, QWidget *>> panels = {
     {"Device", device},
