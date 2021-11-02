@@ -93,9 +93,12 @@ def update_apks(show_spinner=False):
         system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
         time.sleep(6)
         system("pkill com.gmd.hidesoftkeys")
-        time.sleep(2)
+        time.sleep(1)
         system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.gmd.hidesoftkeys_preferences.xml /data/data/com.gmd.hidesoftkeys/shared_prefs/")
         system("cp -f /data/openpilot/selfdrive/assets/addon/param/appops.xml /data/system/")
+        time.sleep(1)
+        system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
+        time.sleep(5)
         system("reboot")
       if app == "com.mnsoft.mappyobn":
         wanted_permissions = ["ACCESS_FINE_LOCATION", "READ_PHONE_STATE", "READ_EXTERNAL_STORAGE", "SYSTEM_ALERT_WINDOW"]
