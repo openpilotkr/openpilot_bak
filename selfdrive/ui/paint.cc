@@ -326,8 +326,8 @@ static void ui_draw_debug(UIState *s) {
   nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
 
   if (scene.nDebugUi1) {
-    ui_draw_text(s, 0, 1010-bdr_s+(scene.mapbox_running ? 15:0), scene.alertTextMsg1.c_str(), scene.mapbox_running?30:45, COLOR_WHITE_ALPHA(125), "sans-semibold");
-    ui_draw_text(s, 0, 1050-bdr_s, scene.alertTextMsg2.c_str(), scene.mapbox_running?30:45, COLOR_WHITE_ALPHA(125), "sans-semibold");
+    ui_draw_text(s, 0, 1010-bdr_s+(scene.mapbox_running ? 15:0), scene.alertTextMsg1.c_str(), scene.mapbox_running?32:45, COLOR_WHITE_ALPHA(125), "sans-semibold");
+    ui_draw_text(s, 0, 1050-bdr_s, scene.alertTextMsg2.c_str(), scene.mapbox_running?32:45, COLOR_WHITE_ALPHA(125), "sans-semibold");
   }
 
   
@@ -811,7 +811,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
 
   //finally draw the frame
   if (!scene.batt_less) {bb_h += -(bb_y_offset*1);} else {bb_h += -(bb_y_offset*2);}
-  if (scene.gpsAccuracyUblox != 0.00) {bb_h += -(bb_y_offset*2.5);} else {bb_h += -(bb_y_offset*1);}
+  if (scene.gpsAccuracyUblox != 0.00) {bb_h += -(bb_y_offset*3);} else {bb_h += -(bb_y_offset*1);}
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
   nvgStrokeColor(s->vg, COLOR_WHITE_ALPHA(80));
@@ -966,7 +966,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
   }
 
   //finally draw the frame
-  if (scene.longitudinal_control) {bb_h += -(bb_y_offset*3.5);} else {bb_h += -(bb_y_offset*3);}
+  if (scene.longitudinal_control) {bb_h += -(bb_y_offset*4);} else {bb_h += -(bb_y_offset*3);}
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
   nvgStrokeColor(s->vg, COLOR_WHITE_ALPHA(80));
