@@ -81,6 +81,7 @@ public:
 
 signals:
   void closeSettings();
+  void showDriverView();
 };
 
 class TuningPanel : public QWidget {
