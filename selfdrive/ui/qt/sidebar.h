@@ -33,10 +33,10 @@ public slots:
   void updateState(const UIState &s);
 
 private:
-  // Remembers the point in time when mouse button went down
-  quint64 mLastPressTime=0;
-  // Pressing and holding for one full second constitutes a "longpress", set whatever value in milliseconds you want here.
-  static const quint64 MY_LONG_PRESS_THRESHOLD=1000;
+  // opkr
+  quint64 mLastPressTime = 0;
+  bool trig_settings = false;
+  static const quint64 MY_LONG_PRESS_THRESHOLD = 1000;
 
 protected:
   void paintEvent(QPaintEvent *event) override;
