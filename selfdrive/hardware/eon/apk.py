@@ -87,19 +87,6 @@ def update_apks(show_spinner=False):
       if app == "com.mixplorer":
         appops_set("com.mixplorer", "SU", "allow")
         pm_grant("com.mixplorer", "android.permission.READ_EXTERNAL_STORAGE")
-      if app == "com.gmd.hidesoftkeys":
-        appops_set("com.gmd.hidesoftkeys", "SU", "allow")
-        pm_grant("com.gmd.hidesoftkeys", "android.permission.SYSTEM_ALERT_WINDOW")
-        system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
-        time.sleep(6)
-        system("pkill com.gmd.hidesoftkeys")
-        time.sleep(1)
-        system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.gmd.hidesoftkeys_preferences.xml /data/data/com.gmd.hidesoftkeys/shared_prefs/")
-        system("cp -f /data/openpilot/selfdrive/assets/addon/param/appops.xml /data/system/")
-        time.sleep(1)
-        system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
-        time.sleep(5)
-        system("reboot")
       if app == "com.mnsoft.mappyobn":
         wanted_permissions = ["ACCESS_FINE_LOCATION", "READ_PHONE_STATE", "READ_EXTERNAL_STORAGE", "SYSTEM_ALERT_WINDOW"]
         for permission in wanted_permissions:
@@ -115,6 +102,23 @@ def update_apks(show_spinner=False):
         system("settings put secure enabled_input_methods com.google.android.inputmethod.korean/.KoreanIme")
         system("settings put secure default_input_method com.google.android.inputmethod.korean/.KoreanIme")
         system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.google.android.inputmethod.korean*.xml /data/data/com.google.android.inputmethod.korean/shared_prefs/")
+        time.sleep(1)
+        system("am start com.google.android.inputmethod.korean/com.google.android.apps.inputmethod.libs.framework.core.LauncherActivity")
+        time.sleep(3)
+        system("reboot")
+      if app == "com.gmd.hidesoftkeys":
+        appops_set("com.gmd.hidesoftkeys", "SU", "allow")
+        pm_grant("com.gmd.hidesoftkeys", "android.permission.SYSTEM_ALERT_WINDOW")
+        system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
+        time.sleep(6)
+        system("pkill com.gmd.hidesoftkeys")
+        time.sleep(1)
+        system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.gmd.hidesoftkeys_preferences.xml /data/data/com.gmd.hidesoftkeys/shared_prefs/")
+        system("cp -f /data/openpilot/selfdrive/assets/addon/param/appops.xml /data/system/")
+        time.sleep(1)
+        system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
+        time.sleep(5)
+        system("reboot")
 
       assert success
 
