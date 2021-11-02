@@ -6,6 +6,7 @@
 
 #include <QProcess>
 #include <QSoundEffect>
+#include <QDateTime>
 
 void Sidebar::drawMetric(QPainter &p, const QString &label, const QString &val, QColor c, int y) {
   const QRect rect = {30, y, 240, val.isEmpty() ? (label.contains("\n") ? 124 : 100) : 148};
@@ -46,14 +47,45 @@ Sidebar::Sidebar(QWidget *parent) : QFrame(parent) {
   setFixedWidth(300);
 }
 
+// void Sidebar::mousePressEvent(QMouseEvent *event) {
+//   if (settings_btn.contains(event->pos())) {
+//     // QUIState::ui_state.scene.setbtn_count = QUIState::ui_state.scene.setbtn_count + 1;
+//     // if (QUIState::ui_state.scene.setbtn_count > 1) {
+//     //   QUIState::ui_state.scene.setbtn_count = 0;
+//     //   emit openSettings();
+//     // }
+//     return;
+//   }
+//   // OPKR map overlay
+//   if (overlay_btn.contains(event->pos()) && QUIState::ui_state.scene.started && !QUIState::ui_state.scene.mapbox_running) {
+//     QSoundEffect effect;
+//     effect.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/sounds/warning_1.wav"));
+//     //effect.setLoopCount(1);
+//     //effect.setLoopCount(QSoundEffect::Infinite);
+//     //effect.setVolume(0.1);
+//     float volume = 0.5f;
+//     if (QUIState::ui_state.scene.nVolumeBoost < 0) {
+//       volume = 0.0f;
+//     } else if (QUIState::ui_state.scene.nVolumeBoost > 1) {
+//       volume = QUIState::ui_state.scene.nVolumeBoost * 0.01;
+//     }
+//     effect.setVolume(volume);
+//     effect.play();
+//     QProcess::execute("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
+//     QUIState::ui_state.scene.map_on_top = false;
+//     QUIState::ui_state.scene.map_on_overlay = !QUIState::ui_state.scene.map_on_overlay;
+//   }
+// }
+
 void Sidebar::mousePressEvent(QMouseEvent *event) {
   if (settings_btn.contains(event->pos())) {
-    mouset.start();
     // QUIState::ui_state.scene.setbtn_count = QUIState::ui_state.scene.setbtn_count + 1;
     // if (QUIState::ui_state.scene.setbtn_count > 1) {
     //   QUIState::ui_state.scene.setbtn_count = 0;
     //   emit openSettings();
     // }
+    // Remeber last time mousr was pressed
+    mLastPressTime=QDateTime::currentMSecsSinceEpoch();
     return;
   }
   // OPKR map overlay
@@ -77,14 +109,14 @@ void Sidebar::mousePressEvent(QMouseEvent *event) {
   }
 }
 
-void mouseReleaseEvent(QMouseEvent *event) {
-  if (settings_btn.contains(event->pos())) {
-    mouset.stop();
-    if (mouset > 2000) {
+void Sidebar::mouseReleaseEvent(QMouseEvent *event) {
+  // Calculate for how long the button has been pressed upon release
+  const quint64 pressTime = QDateTime::currentMSecsSinceEpoch() - mLastPressTime;
+  // The press time exceeds our "threshold" and this constitutes a longpress
+  if( pressTime > MY_LONG_PRESS_THRESHOLD){
+      // We pass the original mouse event in case it is useful (it contains all sorts of goodies like mouse posittion, which button was pressed etc).
       emit openSettings();
-    }
   }
-  mouset = 0;
 }
 
 void Sidebar::updateState(const UIState &s) {

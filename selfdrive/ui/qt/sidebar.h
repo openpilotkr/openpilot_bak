@@ -32,6 +32,12 @@ signals:
 public slots:
   void updateState(const UIState &s);
 
+private:
+  // Remembers the point in time when mouse button went down
+  quint64 mLastPressTime=0;
+  // Pressing and holding for one full second constitutes a "longpress", set whatever value in milliseconds you want here.
+  static const quint64 MY_LONG_PRESS_THRESHOLD=1000;
+
 protected:
   void paintEvent(QPaintEvent *event) override;
   void mousePressEvent(QMouseEvent *event) override;
@@ -54,7 +60,6 @@ protected:
   const QColor good_color = QColor(255, 255, 255);
   const QColor warning_color = QColor(218, 202, 37);
   const QColor danger_color = QColor(201, 34, 49);
-  QTimer mouset;
 
   //Params params;
   ItemStatus connect_status, panda_status, temp_status;
