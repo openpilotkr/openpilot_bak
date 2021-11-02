@@ -91,7 +91,7 @@ def update_apks(show_spinner=False):
         appops_set("com.gmd.hidesoftkeys", "SU", "allow")
         pm_grant("com.gmd.hidesoftkeys", "android.permission.SYSTEM_ALERT_WINDOW")
         system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
-        time.sleep(7)
+        time.sleep(6)
         system("pkill com.gmd.hidesoftkeys")
         time.sleep(2)
         system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.gmd.hidesoftkeys_preferences.xml /data/data/com.gmd.hidesoftkeys/shared_prefs/")
