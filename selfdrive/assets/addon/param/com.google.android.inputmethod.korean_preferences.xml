@@ -3,17 +3,17 @@
     <boolean name="enable_auto_capitalization" value="true" />
     <boolean name="pref_key_allow_download_with_metered_network" value="false" />
     <boolean name="enable_share_snippets" value="true" />
-    <boolean name="enable_suggest_emojis" value="true" />
     <string name="korean_keyboard_type">ko_2_bulsik</string>
-    <long name="daily_ping_task_next_run_time" value="1635853148982" />
+    <boolean name="enable_suggest_emojis" value="true" />
+    <long name="daily_ping_task_next_run_time" value="1635864828121" />
     <boolean name="USER_SELECTED_KEYBOARD" value="true" />
     <boolean name="enable_sound_on_keypress" value="false" />
     <boolean name="enable_voice_input" value="true" />
     <string name="ACTIVE_IME.SOFT.ko">ko_2_bulsik</string>
     <string name="key_long_press_delay">300</string>
-    <string name="ACTIVE_LANGUAGE_-1901779940">en</string>
     <string name="additional_keyboard_theme"></string>
     <boolean name="enable_shortcuts_dictionary" value="true" />
+    <string name="ACTIVE_LANGUAGE_-1901779940">en</string>
     <boolean name="enable_user_metrics" value="false" />
     <boolean name="import_user_contacts" value="false" />
     <int name="contacts_first_time_delay_millis" value="60000" />
@@ -25,14 +25,12 @@
     <boolean name="switch_to_other_imes" value="true" />
     <string name="ACTIVE_IME.SOFT.en">en_qwerty</string>
     <boolean name="enable_scrub_move" value="true" />
-    <long name="save_dict_time_vq" value="1635830392776" />
-    <int name="pref_key_access_points_hint_shown_times" value="0" />
     <string name="one_handed_mode">0</string>
+    <int name="pref_key_access_points_hint_shown_times" value="0" />
     <boolean name="enable_handwriting_feedback" value="false" />
-    <long name="pref_key_access_points_hint_shown_timestamp" value="1635827092736" />
+    <long name="pref_key_access_points_hint_shown_timestamp" value="1635831744325" />
     <boolean name="sync" value="false" />
     <boolean name="show_launcher_icon" value="true" />
-    <long name="save_dict_time_yf" value="1635830392830" />
     <boolean name="enable_emoji_alt_physical_key" value="true" />
     <boolean name="enable_auto_space_smart_punctuation" value="true" />
     <boolean name="block_offensive_words" value="true" />
@@ -45,8 +43,8 @@
     <boolean name="pref_key_save_non_prime_keyboard_type" value="true" />
     <boolean name="pref_key_use_personalized_dicts" value="true" />
     <boolean name="show_english_keyboard" value="true" />
-    <boolean name="enable_vibrate_on_keypress" value="true" />
     <boolean name="pref_key_auto_correction" value="true" />
+    <boolean name="enable_vibrate_on_keypress" value="true" />
     <boolean name="enable_popup_on_keypress" value="true" />
     <boolean name="next_word_prediction" value="true" />
     <boolean name="credentials_valid" value="false" />
@@ -64,10 +62,11 @@
     <boolean name="enable_auto_language_switching" value="true" />
     <boolean name="allow_get_location" value="true" />
     <boolean name="always_false" value="false" />
+    <long name="daily_ping_task_last_run_time" value="1635836028118" />
     <boolean name="enable_gesture_auto_commit" value="false" />
     <boolean name="show_suggestions" value="true" />
     <boolean name="pref_show_recent_emoji_in_symbol_keyboard" value="false" />
-    <long name="english_periodical_task_next_run_time" value="1635908202116" />
+    <long name="english_periodical_task_next_run_time" value="1635901451421" />
     <boolean name="enable_spatial_model" value="true" />
     <int name="contacts_regular_import_interval_millis" value="86400000" />
 </map>
