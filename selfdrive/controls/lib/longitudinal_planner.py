@@ -124,4 +124,7 @@ class Planner():
     longitudinalPlan.longitudinalPlanSource = self.mpc.source
     longitudinalPlan.fcw = self.fcw
 
+    longitudinalPlan.dynamicTRMode = int(self.mpc.dynamic_TR_mode)
+    longitudinalPlan.dynamicTRValue = float(self.mpc.dynamic_TR)
+
     pm.send('longitudinalPlan', plan_send)
