@@ -29,12 +29,14 @@ import requests
 from common.basedir import BASEDIR
 from common.params import Params
 
+GMAP_ENABLE = Params().get_bool("dp_mapbox_gmap_enable")
+
 hostName = ""
 serverPort = 8082
 
 class OtisServ(BaseHTTPRequestHandler):
   def do_GET(self):
-    use_gmap = Params().get_bool("dp_mapbox_gmap_enable")
+    use_gmap = GMAP_ENABLE
 
     print("use_gmap1={}".format(use_gmap))
 
@@ -80,7 +82,7 @@ class OtisServ(BaseHTTPRequestHandler):
       self.display_page_addr_input()
 
   def do_POST(self):
-    use_gmap = Params().get_bool("dp_mapbox_gmap_enable")
+    use_gmap = GMAP_ENABLE
     print("use_gmap2={}".format(use_gmap))
     postvars = self.parse_POST()
     self.send_response(200)
