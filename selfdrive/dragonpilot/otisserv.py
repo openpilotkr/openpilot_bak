@@ -36,6 +36,8 @@ class OtisServ(BaseHTTPRequestHandler):
   def do_GET(self):
     use_gmap = Params().get_bool("dp_mapbox_gmap_enable")
 
+    print("use_gmap1={}".format(use_gmap))
+
     if self.path == '/logo.png':
       self.get_logo()
       return
@@ -79,6 +81,7 @@ class OtisServ(BaseHTTPRequestHandler):
 
   def do_POST(self):
     use_gmap = Params().get_bool("dp_mapbox_gmap_enable")
+    print("use_gmap2={}".format(use_gmap))
     postvars = self.parse_POST()
     self.send_response(200)
     self.send_header("Content-type", "text/html")
