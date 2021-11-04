@@ -11,6 +11,9 @@ from selfdrive.controls.lib.radar_helpers import _LEAD_ACCEL_TAU
 from pyextra.acados_template import AcadosModel, AcadosOcp, AcadosOcpSolver
 from casadi import SX, vertcat
 
+from common.params import Params
+from decimal import Decimal
+
 LONG_MPC_DIR = os.path.dirname(os.path.abspath(__file__))
 EXPORT_DIR = os.path.join(LONG_MPC_DIR, "c_generated_code")
 JSON_FILE = "acados_ocp_long.json"
@@ -46,14 +49,14 @@ T_REACT = 1.8
 MAX_BRAKE = 9.81
 
 
-def get_stopped_equivalence_factor(v_lead):
-  return T_REACT * v_lead + (v_lead*v_lead) / (2 * MAX_BRAKE)
+def get_stopped_equivalence_factor(v_lead, tr):
+  return tr * v_lead + (v_lead*v_lead) / (2 * MAX_BRAKE)
 
-def get_safe_obstacle_distance(v_ego):
-  return 2 * T_REACT * v_ego + (v_ego*v_ego) / (2 * MAX_BRAKE) + 4.0
+def get_safe_obstacle_distance(v_ego, tr):
+  return 2 * tr * v_ego + (v_ego*v_ego) / (2 * MAX_BRAKE) + 4.0
 
-def desired_follow_distance(v_ego, v_lead):
-  return get_safe_obstacle_distance(v_ego) - get_stopped_equivalence_factor(v_lead)
+def desired_follow_distance(v_ego, v_lead, tr):
+  return get_safe_obstacle_distance(v_ego, tr) - get_stopped_equivalence_factor(v_lead, tr)
 
 
 def gen_long_model():
@@ -89,7 +92,7 @@ def gen_long_model():
   return model
 
 
-def gen_long_mpc_solver():
+def gen_long_mpc_solver(self):
   ocp = AcadosOcp()
   ocp.model = gen_long_model()
 
@@ -117,7 +120,7 @@ def gen_long_mpc_solver():
   ocp.cost.yref = np.zeros((COST_DIM, ))
   ocp.cost.yref_e = np.zeros((COST_E_DIM, ))
 
-  desired_dist_comfort = get_safe_obstacle_distance(v_ego)
+  desired_dist_comfort = get_safe_obstacle_distance(v_ego, self.TR)
 
   # The main cost in normal operation is how close you are to the "desired" distance
   # from an obstacle at every timestep. This obstacle can be a lead car
@@ -187,6 +190,16 @@ class LongitudinalMpc():
     self.accel_limit_arr[:,0] = -1.2
     self.accel_limit_arr[:,1] = 1.2
     self.source = SOURCES[2]
+
+    self.TR = 0
+
+    self.cruise_gap1 = float(Decimal(Params().get("CruiseGap1", encoding="utf8")) * Decimal('0.1'))
+    self.cruise_gap2 = float(Decimal(Params().get("CruiseGap2", encoding="utf8")) * Decimal('0.1'))
+    self.cruise_gap3 = float(Decimal(Params().get("CruiseGap3", encoding="utf8")) * Decimal('0.1'))
+    self.cruise_gap4 = float(Decimal(Params().get("CruiseGap4", encoding="utf8")) * Decimal('0.1'))
+
+    self.dynamic_TR = 0
+    self.dynamic_TR_mode = int(Params().get("DynamicTR", encoding="utf8"))
 
   def reset(self):
     self.solver = AcadosOcpSolver('long', N, EXPORT_DIR)
@@ -286,6 +299,20 @@ class LongitudinalMpc():
 
   def update(self, carstate, radarstate, v_cruise):
     v_ego = self.x0[1]
+
+    # opkr
+    cruise_gap = int(clip(carstate.cruiseGapSet, 1., 4.))
+    self.dynamic_TR = interp(v_ego*3.6, [0, 20, 40, 60, 110], [1.0, 1.3, 1.4, 1.6, 1.8] )
+    self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
+    if self.dynamic_TR_mode == 1:
+      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.dynamic_TR, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
+    elif self.dynamic_TR_mode == 2:
+      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.dynamic_TR, self.cruise_gap3, self.cruise_gap4])
+    elif self.dynamic_TR_mode == 3:
+      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.dynamic_TR, self.cruise_gap4])
+    elif self.dynamic_TR_mode == 4:
+      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.dynamic_TR])
+
     self.status = radarstate.leadOne.status or radarstate.leadTwo.status
 
     lead_xv_0 = self.process_lead(radarstate.leadOne)
@@ -298,8 +325,8 @@ class LongitudinalMpc():
     # To estimate a safe distance from a moving lead, we calculate how much stopping
     # distance that lead needs as a minimum. We can add that to the current distance
     # and then treat that as a stopped car/obstacle at this new distance.
-    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(lead_xv_0[:,1])
-    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(lead_xv_1[:,1])
+    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(lead_xv_0[:,1], self.TR)
+    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(lead_xv_1[:,1], self.TR)
 
     # Fake an obstacle for cruise, this ensures smooth acceleration to set speed
     # when the leads are no factor.
@@ -308,7 +335,7 @@ class LongitudinalMpc():
     v_cruise_clipped = np.clip(v_cruise * np.ones(N+1),
                                cruise_lower_bound,
                                cruise_upper_bound)
-    cruise_obstacle = T_IDXS*v_cruise_clipped + get_safe_obstacle_distance(v_cruise_clipped)
+    cruise_obstacle = T_IDXS*v_cruise_clipped + get_safe_obstacle_distance(v_cruise_clipped, self.TR)
 
     x_obstacles = np.column_stack([lead_0_obstacle, lead_1_obstacle, cruise_obstacle])
     self.source = SOURCES[np.argmin(x_obstacles[0])]
