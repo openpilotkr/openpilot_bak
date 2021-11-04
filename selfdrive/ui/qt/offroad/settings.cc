@@ -466,6 +466,7 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   });
   layout->addWidget(realdatadelbtn);
   layout->addWidget(new MonitoringMode());
+  layout->addWidget(new MonitorEyesThreshold());
   layout->addWidget(new NormalEyesThreshold());
   layout->addWidget(new BlinkThreshold());
   layout->addWidget(new OPKRNaviSelect());
