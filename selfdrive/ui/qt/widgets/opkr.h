@@ -514,6 +514,18 @@ public:
   }
 };
 
+class E2ELongToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+  E2ELongToggle() : ToggleControl("Enable E2E Long", "Activate E2E Long. It may work unexpectedly. Be careful.", "../assets/offroad/icon_shell.png", Params().getBool("E2ELong")) {
+    QObject::connect(this, &E2ELongToggle::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("E2ELong", status);
+    });
+  }
+};
+
 // openpilot preview
 class OpenpilotView : public AbstractControl {
   Q_OBJECT
