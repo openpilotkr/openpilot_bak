@@ -61,9 +61,9 @@ class CarInterface(CarInterfaceBase):
     tire_stiffness_factor = 1.
 
     ret.longitudinalTuning.kpBP = [0., 4., 9., 17., 23., 31.]
-    ret.longitudinalTuning.kpV = [1.0, 1.2, 1.0, 0.7, 0.5, 0.4]
+    ret.longitudinalTuning.kpV = [1.1, 1.3, 1.1, 0.8, 0.6, 0.5]
     ret.longitudinalTuning.kiBP = [0., 4., 9., 17., 23., 31.]
-    ret.longitudinalTuning.kiV = [0.26, 0.25, 0.24, 0.19, 0.15, 0.13]
+    ret.longitudinalTuning.kiV = [0.27, 0.26, 0.25, 0.2, 0.17, 0.15]
 
     # ret.longitudinalTuning.kpBP = [0., 4., 9., 17., 23., 31.]
     # ret.longitudinalTuning.kpV = [1.0, 0.9, 0.8, 0.65, 0.5, 0.4]
@@ -73,7 +73,7 @@ class CarInterface(CarInterfaceBase):
     # ret.longitudinalTuning.deadzoneBP = [0., 4.]
     # ret.longitudinalTuning.deadzoneV = [0., 0.1]
     ret.longitudinalTuning.kdBP = [0., 4., 9., 17., 23., 31.]
-    ret.longitudinalTuning.kdV = [0.7, 0.8, 0.65, 0.5, 0.3, 0.2]
+    ret.longitudinalTuning.kdV = [0.8, 0.9, 0.75, 0.6, 0.4, 0.3]
     ret.longitudinalTuning.kfBP = [0., 4., 9., 17., 23., 31.]
     ret.longitudinalTuning.kfV = [1., 1., 1., 1., 1., 1.]
 
@@ -162,7 +162,7 @@ class CarInterface(CarInterfaceBase):
     ret.steerMaxV = [SteerMaxV]
     ret.steerMaxBP = [0.]
 
-
+    # genesis
     if candidate == CAR.GENESIS:
       ret.mass = 1900. + STD_CARGO_KG
       ret.wheelbase = 3.01
@@ -175,6 +175,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate == CAR.GENESIS_G90:
       ret.mass = 2200
       ret.wheelbase = 3.15
+    # hyundai
     elif candidate == CAR.SANTA_FE:
       ret.mass = 1694 + STD_CARGO_KG
       ret.wheelbase = 2.765
