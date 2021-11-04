@@ -318,7 +318,7 @@ class CarController():
             self.switch_timer = randint(10, 15)
           self.standstill_fault_reduce_timer += 1
         # gap save
-        elif 160 < self.standstill_fault_reduce_timer and self.cruise_gap_prev == 0 and self.opkr_autoresume and self.opkr_cruisegap_auto_adj: 
+        elif 160 < self.standstill_fault_reduce_timer and self.cruise_gap_prev == 0 and CS.cruiseGapSet != 1.0 and self.opkr_autoresume and self.opkr_cruisegap_auto_adj: 
           self.cruise_gap_prev = CS.cruiseGapSet
           self.cruise_gap_set_init = 1
         # gap adjust to 1 for fast start
@@ -358,7 +358,7 @@ class CarController():
             self.resume_cnt = 0
             self.switch_timer = randint(10, 15)
             self.cruise_gap_adjusting = True
-        elif self.cruise_gap_prev == CS.cruiseGapSet and self.opkr_autoresume:
+        elif self.cruise_gap_prev == CS.cruiseGapSet and CS.cruiseGapSet != 1.0 and self.opkr_autoresume:
           self.cruise_gap_set_init = 0
           self.cruise_gap_prev = 0
           self.cruise_gap_adjusting = False
