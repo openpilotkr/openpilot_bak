@@ -166,9 +166,9 @@ class CarController():
     if frame % 10 == 0:
       self.model_speed = path_plan.modelSpeed
 
-    self.dRel = int(self.sm['radarState'].leadOne.dRel) #EON Lead
-    self.vRel = int(self.sm['radarState'].leadOne.vRel) #EON Lead
-    self.yRel = int(self.sm['radarState'].leadOne.yRel) #EON Lead
+    self.dRel = self.sm['radarState'].leadOne.dRel #EON Lead
+    self.vRel = self.sm['radarState'].leadOne.vRel #EON Lead
+    self.yRel = self.sm['radarState'].leadOne.yRel #EON Lead
 
     if CS.out.vEgo > 8:
       if self.variable_steer_max:
