@@ -137,7 +137,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     modeChangeMaponly @114;
     needBrake @115;
     standStill @116;
-    modelLongAlert @117;
+    e2eLongAlert @117;
     isgActive @118;
     camSpeedDown @119;
     gapAdjusting @120;

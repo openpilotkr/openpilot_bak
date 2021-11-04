@@ -236,6 +236,14 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   # ********** events only containing alerts displayed in all states **********
 
+  EventName.e2eLongAlert: {
+    ET.PERMANENT: Alert(
+      "E2E Long Enabled",
+      "Be careful, It may work unexpectedly.",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, .4, 0., 2.),
+  },
+
   EventName.joystickDebug: {
     ET.WARNING: joystick_alert,
     ET.PERMANENT: Alert(
