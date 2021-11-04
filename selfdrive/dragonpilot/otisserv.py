@@ -29,9 +29,7 @@ import requests
 from common.basedir import BASEDIR
 from common.params import Params
 
-GMAP_ENABLE = Params().get_bool("IsMetric")
-
-print("use_gmap_enable={}".format(GMAP_ENABLE))
+GMAP_ENABLE = Params().get_bool("GoogleMapEnabled")
 
 hostName = ""
 serverPort = 8082
@@ -39,8 +37,6 @@ serverPort = 8082
 class OtisServ(BaseHTTPRequestHandler):
   def do_GET(self):
     use_gmap = GMAP_ENABLE
-
-    print("use_gmap1={}".format(use_gmap))
 
     if self.path == '/logo.png':
       self.get_logo()
@@ -85,7 +81,7 @@ class OtisServ(BaseHTTPRequestHandler):
 
   def do_POST(self):
     use_gmap = GMAP_ENABLE
-    print("use_gmap2={}".format(use_gmap))
+
     postvars = self.parse_POST()
     self.send_response(200)
     self.send_header("Content-type", "text/html")

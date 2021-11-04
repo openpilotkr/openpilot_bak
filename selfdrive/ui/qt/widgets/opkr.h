@@ -526,6 +526,18 @@ public:
   }
 };
 
+class GoogleMapEnabledToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+  GoogleMapEnabledToggle() : ToggleControl("Use GoogleMap for Mapbox", "Use GoogleMap when you search a destination.", "../assets/offroad/icon_shell.png", Params().getBool("GoogleMapEnabled")) {
+    QObject::connect(this, &GoogleMapEnabledToggle::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("GoogleMapEnabled", status);
+    });
+  }
+};
+
 // openpilot preview
 class OpenpilotView : public AbstractControl {
   Q_OBJECT
