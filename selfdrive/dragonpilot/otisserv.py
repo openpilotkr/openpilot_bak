@@ -29,7 +29,9 @@ import requests
 from common.basedir import BASEDIR
 from common.params import Params
 
-GMAP_ENABLE = Params().get_bool("dp_mapbox_gmap_enable")
+GMAP_ENABLE = Params().get_bool("IsMetric")
+
+print("use_gmap_enable={}".format(GMAP_ENABLE))
 
 hostName = ""
 serverPort = 8082
