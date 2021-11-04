@@ -11,6 +11,9 @@ from selfdrive.controls.lib.radar_helpers import _LEAD_ACCEL_TAU
 from pyextra.acados_template import AcadosModel, AcadosOcp, AcadosOcpSolver
 from casadi import SX, vertcat
 
+from common.params import Params
+from decimal import Decimal
+
 LONG_MPC_DIR = os.path.dirname(os.path.abspath(__file__))
 EXPORT_DIR = os.path.join(LONG_MPC_DIR, "c_generated_code")
 JSON_FILE = "acados_ocp_long.json"
@@ -188,6 +191,18 @@ class LongitudinalMpc():
     self.accel_limit_arr[:,1] = 1.2
     self.source = SOURCES[2]
 
+    self.TR = 0
+
+    self.cruise_gap1 = float(Decimal(Params().get("CruiseGap1", encoding="utf8")) * Decimal('0.1'))
+    self.cruise_gap2 = float(Decimal(Params().get("CruiseGap2", encoding="utf8")) * Decimal('0.1'))
+    self.cruise_gap3 = float(Decimal(Params().get("CruiseGap3", encoding="utf8")) * Decimal('0.1'))
+    self.cruise_gap4 = float(Decimal(Params().get("CruiseGap4", encoding="utf8")) * Decimal('0.1'))
+
+    self.dynamic_TR = 0
+    self.dynamic_TR_mode = int(Params().get("DynamicTR", encoding="utf8"))
+
+    self.lo_timer = 0 
+
   def reset(self):
     self.solver = AcadosOcpSolver('long', N, EXPORT_DIR)
     self.v_solution = [0.0 for i in range(N+1)]
@@ -286,6 +301,25 @@ class LongitudinalMpc():
 
   def update(self, carstate, radarstate, v_cruise):
     v_ego = self.x0[1]
+
+    # opkr
+    self.lo_timer += 1
+    if self.lo_timer > 100:
+      self.lo_timer = 0
+      self.e2e = Params().get_bool("E2ELong")
+
+    cruise_gap = int(clip(carstate.cruiseGapSet, 1., 4.))
+    self.dynamic_TR = interp(v_ego*3.6, [0, 20, 40, 60, 110], [1.0, 1.3, 1.4, 1.6, 1.8] )
+    self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
+    if self.dynamic_TR_mode == 1:
+      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.dynamic_TR, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
+    elif self.dynamic_TR_mode == 2:
+      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.dynamic_TR, self.cruise_gap3, self.cruise_gap4])
+    elif self.dynamic_TR_mode == 3:
+      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.dynamic_TR, self.cruise_gap4])
+    elif self.dynamic_TR_mode == 4:
+      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.dynamic_TR])
+
     self.status = radarstate.leadOne.status or radarstate.leadTwo.status
 
     lead_xv_0 = self.process_lead(radarstate.leadOne)

@@ -212,6 +212,7 @@ class Controls:
     self.map_enabled = False
     self.lane_change_delay = int(Params().get("OpkrAutoLaneChangeDelay", encoding="utf8"))
     self.auto_enable_speed = max(1, int(Params().get("AutoEnableSpeed", encoding="utf8")))
+    self.e2e_long_alert_prev = True
 
   def auto_enable(self, CS):
     if CS.cruiseState.available and CS.vEgo >= self.auto_enable_speed * CV.KPH_TO_MS and CS.gearShifter == GearShifter.drive and self.sm['liveCalibration'].calStatus != Calibration.UNCALIBRATED:
@@ -305,6 +306,12 @@ class Controls:
       self.map_enabled = Params().get_bool("OpkrMapEnable")
       self.live_sr = Params().get_bool("OpkrLiveSteerRatio")
       self.live_sr_percent = int(Params().get("LiveSteerRatioPercent", encoding="utf8"))
+      # E2ELongAlert
+      if Params().get_bool("E2ELong") and self.e2e_long_alert_prev:
+        self.events.add(EventName.e2eLongAlert)
+        self.e2e_long_alert_prev = not self.e2e_long_alert_prev
+      elif not Params().get_bool("E2ELong"):
+        self.e2e_long_alert_prev = True
       self.second = 0.0
     if len(self.sm['radarState'].radarErrors):
       self.events.add(EventName.radarFault)

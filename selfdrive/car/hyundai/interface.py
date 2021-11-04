@@ -68,11 +68,11 @@ class CarInterface(CarInterfaceBase):
     ret.longitudinalTuning.deadzoneBP = [0., 4.]
     ret.longitudinalTuning.deadzoneV = [0., 0.1]
     ret.longitudinalTuning.kdBP = [0., 4., 9., 17., 23., 31.]
-    ret.longitudinalTuning.kdV = [0.7, 0.65, 0.5, 0.4, 0.3, 0.2]
+    ret.longitudinalTuning.kdV = [0.8, 0.9, 0.75, 0.6, 0.4, 0.3]
     ret.longitudinalTuning.kfBP = [0., 4., 9., 17., 23., 31.]
     ret.longitudinalTuning.kfV = [1., 1., 1., 1., 1., 1.]
 
-    ret.stoppingControl = True
+    ret.stoppingControl = False
     ret.vEgoStopping = 0.5  # 1.0
     ret.vEgoStarting = 0.5
     ret.startAccel = -0.2 # 0.0
@@ -83,6 +83,7 @@ class CarInterface(CarInterfaceBase):
     ret.vCruisekph = 0
     ret.resSpeed = 0
     ret.vFuture = 0
+    ret.aqValue = 0
 
     params = Params()
     PidKp = float(Decimal(params.get("PidKp", encoding="utf8")) * Decimal('0.01'))
@@ -157,7 +158,7 @@ class CarInterface(CarInterfaceBase):
     ret.steerMaxV = [SteerMaxV]
     ret.steerMaxBP = [0.]
 
-
+    # genesis
     if candidate == CAR.GENESIS:
       ret.mass = 1900. + STD_CARGO_KG
       ret.wheelbase = 3.01
@@ -170,6 +171,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate == CAR.GENESIS_G90:
       ret.mass = 2200
       ret.wheelbase = 3.15
+    # hyundai
     elif candidate == CAR.SANTA_FE:
       ret.mass = 1694 + STD_CARGO_KG
       ret.wheelbase = 2.765
@@ -376,6 +378,7 @@ class CarInterface(CarInterfaceBase):
       self.CP.vFuture = self.CC.vFuture
     else:
       self.CP.vFuture = 0
+    self.CP.aqValue = self.CC.aq_value
 
     if self.CC.mode_change_timer and self.CS.out.cruiseState.modeSel == 0:
       events.add(EventName.modeChangeOpenpilot)

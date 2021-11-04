@@ -166,9 +166,10 @@ class CarController():
     if frame % 10 == 0:
       self.model_speed = path_plan.modelSpeed
 
-    self.dRel = int(self.sm['radarState'].leadOne.dRel) #EON Lead
-    self.vRel = int(self.sm['radarState'].leadOne.vRel) #EON Lead
-    self.yRel = int(self.sm['radarState'].leadOne.yRel) #EON Lead
+    self.sm.update(0)
+    self.dRel = self.sm['radarState'].leadOne.dRel #EON Lead
+    self.vRel = self.sm['radarState'].leadOne.vRel #EON Lead
+    self.yRel = self.sm['radarState'].leadOne.yRel #EON Lead
 
     if CS.out.vEgo > 8:
       if self.variable_steer_max:
@@ -318,7 +319,7 @@ class CarController():
             self.switch_timer = randint(10, 15)
           self.standstill_fault_reduce_timer += 1
         # gap save
-        elif 160 < self.standstill_fault_reduce_timer and self.cruise_gap_prev == 0 and self.opkr_autoresume and self.opkr_cruisegap_auto_adj: 
+        elif 160 < self.standstill_fault_reduce_timer and self.cruise_gap_prev == 0 and CS.cruiseGapSet != 1.0 and self.opkr_autoresume and self.opkr_cruisegap_auto_adj: 
           self.cruise_gap_prev = CS.cruiseGapSet
           self.cruise_gap_set_init = 1
         # gap adjust to 1 for fast start
@@ -358,7 +359,7 @@ class CarController():
             self.resume_cnt = 0
             self.switch_timer = randint(10, 15)
             self.cruise_gap_adjusting = True
-        elif self.cruise_gap_prev == CS.cruiseGapSet and self.opkr_autoresume:
+        elif self.cruise_gap_prev == CS.cruiseGapSet and CS.cruiseGapSet != 1.0 and self.opkr_autoresume:
           self.cruise_gap_set_init = 0
           self.cruise_gap_prev = 0
           self.cruise_gap_adjusting = False
@@ -453,7 +454,6 @@ class CarController():
       self.resume_cnt = 0
 
     if CS.out.vEgo <= 1:
-      self.sm.update(0)
       long_control_state = self.sm['controlsState'].longControlState
       if long_control_state == LongCtrlState.stopping and CS.out.vEgo < 0.1 and not CS.out.gasPressed:
         self.acc_standstill_timer += 1
@@ -503,7 +503,7 @@ class CarController():
           # neokii's logic, opkr mod
           stock_weight = 0.
           if aReqValue > 0.:
-            stock_weight = interp(CS.out.radarDistance, [4.5, 15, 25.], [0., 1., 0.])
+            stock_weight = interp(CS.out.radarDistance, [4.5, 20., 25.], [0., 1., 0.])
           elif aReqValue < 0. and self.stopping_dist_adj_enabled:
             stock_weight = interp(CS.out.radarDistance, [2.0, 3.5, 4.5, 6.0, 25.], [1., 0.1, 0.4, 0.65, 0.])
           elif aReqValue < 0.:

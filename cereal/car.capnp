@@ -137,7 +137,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     modeChangeMaponly @114;
     needBrake @115;
     standStill @116;
-    modelLongAlert @117;
+    e2eLongAlert @117;
     isgActive @118;
     camSpeedDown @119;
     gapAdjusting @120;
@@ -497,6 +497,7 @@ struct CarParams {
   vCruisekph @72: Float32;
   resSpeed @73: Float32;
   vFuture @74: Float32;
+  aqValue @75: Float32;
 
   struct LateralParams {
     torqueBP @0 :List(Int32);

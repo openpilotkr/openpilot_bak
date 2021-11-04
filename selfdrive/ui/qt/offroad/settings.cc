@@ -466,6 +466,7 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   });
   layout->addWidget(realdatadelbtn);
   layout->addWidget(new MonitoringMode());
+  layout->addWidget(new MonitorEyesThreshold());
   layout->addWidget(new NormalEyesThreshold());
   layout->addWidget(new BlinkThreshold());
   layout->addWidget(new OPKRNaviSelect());
@@ -519,6 +520,7 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new WhitePandaSupportToggle());
   layout->addWidget(new SteerWarningFixToggle());
   layout->addWidget(new BattLessToggle());
+  layout->addWidget(new GoogleMapEnabledToggle());
   layout->addWidget(new TimeZoneSelectCombo());
   const char* cal_ok = "cp -f /data/openpilot/selfdrive/assets/addon/param/CalibrationParams /data/params/d/";
   auto calokbtn = new ButtonControl("Enable Calibration by Force", "RUN");
@@ -625,6 +627,7 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new CruiseGapTR());
   layout->addWidget(new RadarLongHelperToggle());
   layout->addWidget(new StoppingDistAdjToggle());
+  layout->addWidget(new E2ELongToggle());
 }
 
 void SettingsWindow::showEvent(QShowEvent *event) {

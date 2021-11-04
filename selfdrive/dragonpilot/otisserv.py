@@ -28,19 +28,21 @@ import json
 import requests
 from common.basedir import BASEDIR
 from common.params import Params
-params = Params()
+
+GMAP_ENABLE = Params().get_bool("GoogleMapEnabled")
 
 hostName = ""
 serverPort = 8082
 
 class OtisServ(BaseHTTPRequestHandler):
   def do_GET(self):
-    use_gmap = params.get_bool('dp_mapbox_gmap_enable')
+    use_gmap = GMAP_ENABLE
+
     if self.path == '/logo.png':
       self.get_logo()
       return
     if self.path == '/?reset=1':
-      params.put("NavDestination", "")
+      Params().put("NavDestination", "")
     if use_gmap:
       if self.path == '/style.css':
         self.send_response(200)
@@ -78,7 +80,8 @@ class OtisServ(BaseHTTPRequestHandler):
       self.display_page_addr_input()
 
   def do_POST(self):
-    use_gmap = params.get_bool('dp_mapbox_gmap_enable')
+    use_gmap = GMAP_ENABLE
+
     postvars = self.parse_POST()
     self.send_response(200)
     self.send_header("Content-type", "text/html")
@@ -90,7 +93,7 @@ class OtisServ(BaseHTTPRequestHandler):
         if postvars is None or "gmap_key_val" not in postvars or postvars.get("gmap_key_val")[0] == "":
           self.display_page_gmap_key()
           return
-        params.put('dp_mapbox_gmap_key', postvars.get("gmap_key_val")[0])
+        Params().put("dp_mapbox_gmap_key", postvars.get("gmap_key_val")[0])
 
     else:
       # mapbox public key
@@ -102,7 +105,7 @@ class OtisServ(BaseHTTPRequestHandler):
         if "pk." not in token:
           self.display_page_public_token("Your token was incorrect!")
           return
-        params.put('dp_mapbox_token_pk', token)
+        Params().put("dp_mapbox_token_pk", token)
 
     # app key
     if self.get_app_token() is None:
@@ -113,12 +116,12 @@ class OtisServ(BaseHTTPRequestHandler):
       if "sk." not in token:
         self.display_page_app_token("Your token was incorrect!")
         return
-      params.put('dp_mapbox_token_sk', token)
+      Params().put("dp_mapbox_token_sk", token)
 
     # nav confirmed
     if postvars is not None:
       if "lat" in postvars and postvars.get("lat")[0] != "" and "lon" in postvars and postvars.get("lon")[0] != "":
-        params.put('NavDestination', "{\"latitude\": %f, \"longitude\": %f}" % (float(postvars.get("lat")[0]), float(postvars.get("lon")[0])))
+        Params().put("NavDestination", "{\"latitude\": %f, \"longitude\": %f}" % (float(postvars.get("lat")[0]), float(postvars.get("lon")[0])))
 
       # search
       if not use_gmap and "addr_val" in postvars:
@@ -157,19 +160,19 @@ class OtisServ(BaseHTTPRequestHandler):
     self.wfile.write(bytes(self.get_parsed_template("gmap_index.html", {"{{gmap_key}}": self.get_gmap_key()}), "utf-8"))
 
   def get_gmap_key(self):
-    token = params.get("dp_mapbox_gmap_key", encoding='utf8')
+    token = Params().get("dp_mapbox_gmap_key", encoding='utf8')
     if token is not None and token != "":
       return token.rstrip('\x00')
     return None
 
   def get_public_token(self):
-    token = params.get("dp_mapbox_token_pk", encoding='utf8')
+    token = Params().get("dp_mapbox_token_pk", encoding='utf8')
     if token is not None and token != "":
       return token.rstrip('\x00')
     return None
 
   def get_app_token(self):
-    token = params.get("dp_mapbox_token_sk", encoding='utf8')
+    token = Params().get("dp_mapbox_token_sk", encoding='utf8')
     if token is not None and token != "":
       return token.rstrip('\x00')
     return None

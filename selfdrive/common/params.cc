@@ -256,6 +256,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"AutoResCondition", PERSISTENT},
     {"SteerWindDown", PERSISTENT},
     {"OpkrMonitoringMode", PERSISTENT},
+    {"OpkrMonitorEyesThreshold", PERSISTENT},
     {"OpkrMonitorNormalEyesThreshold", PERSISTENT},
     {"OpkrMonitorBlinkThreshold", PERSISTENT},
     {"MadModeEnabled", PERSISTENT},
@@ -297,13 +298,14 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"VCurvSpeedUD", PERSISTENT},
     {"OCurvOffset", PERSISTENT},
     {"StockNaviSpeedEnabled", PERSISTENT},
-    {"dp_mapbox_gmap_enable", PERSISTENT},
+    {"GoogleMapEnabled", PERSISTENT},
     {"dp_mapbox_gmap_key", PERSISTENT},
     {"dp_mapbox_token_pk", PERSISTENT},
     {"dp_mapbox_token_sk", PERSISTENT},
     {"dp_atl", PERSISTENT},
     {"OPKRNaviSelect", PERSISTENT},
     {"OPKRTimeZone", PERSISTENT},
+    {"E2ELong", PERSISTENT},
 };
 
 } // namespace

@@ -236,6 +236,14 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   # ********** events only containing alerts displayed in all states **********
 
+  EventName.e2eLongAlert: {
+    ET.PERMANENT: Alert(
+      "E2E Long Enabled",
+      "Be careful, It may work unexpectedly.",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, .4, 0., 2.),
+  },
+
   EventName.joystickDebug: {
     ET.WARNING: joystick_alert,
     ET.PERMANENT: Alert(
@@ -501,7 +509,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   EventName.emgButtonManual: {
     ET.WARNING: Alert(
-      "Hazard flahser On",
+      "Hazard Flahser On",
       "",
       AlertStatus.userPrompt, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
@@ -562,14 +570,14 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   },
   EventName.modeChangeDistance: {
     ET.WARNING: Alert(
-      "Distance only Mode",
+      "Distance Only Mode",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, 1., 0, 1.),
   },
   EventName.modeChangeCurv: {
     ET.WARNING: Alert(
-      "Curve only Mode",
+      "Curve Only Mode",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, 1., 0, 1.),
@@ -583,7 +591,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   },
   EventName.modeChangeMaponly: {
     ET.WARNING: Alert(
-      "Speedlimit only Mode",
+      "SpeedLimit Only Mode",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeWarning1, 1., 0, 1.),
@@ -659,7 +667,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   EventName.camSpeedDown: {
     ET.WARNING: Alert(
-      "Slow Down on Speed Limit",
+      "Slowing Down on SpeedLimit",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, .5, .5, alert_rate=0.75),
@@ -683,7 +691,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   EventName.curvSpeedDown: {
     ET.WARNING: Alert(
-      "Slow Down On Curve",
+      "Slowing Down On Curve",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, .5, .5),
@@ -912,7 +920,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       "",
       AlertStatus.normal, AlertSize.full,
       Priority.LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2, creation_delay=0.5),
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Reverse Gear"),
+    ET.SOFT_DISABLE: SoftDisableAlert("Reverse Gear"),
     ET.NO_ENTRY: NoEntryAlert("Reverse Gear"),
   },
 

@@ -72,6 +72,7 @@ AutoResOption:0
 AutoResCondition:0
 SteerWindDown:0
 OpkrMonitoringMode:0
+OpkrMonitorEyesThreshold:45
 OpkrMonitorNormalEyesThreshold:45
 OpkrMonitorBlinkThreshold:35
 CruiseGap1:10
@@ -101,3 +102,4 @@ VCurvSpeed90:85
 VCurvSpeedUD:1
 OCurvOffset:0
 StockNaviSpeedEnabled:0
+E2ELong:0

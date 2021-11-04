@@ -77,7 +77,7 @@ PrimeUserWidget::PrimeUserWidget(QWidget* parent) : QWidget(parent) {
   mainLayout = new QVBoxLayout(this);
   mainLayout->setMargin(30);
 
-  QLabel* commaPrime = new QLabel("OPENPILOT");
+  QLabel* commaPrime = new QLabel("OPKR");
   mainLayout->addWidget(commaPrime, 0, Qt::AlignCenter);
   mainLayout->addSpacing(15);
   QPixmap hkgpix("../assets/addon/img/hkg.png");
@@ -145,7 +145,7 @@ PrimeAdWidget::PrimeAdWidget(QWidget* parent) : QFrame(parent) {
   main_layout->setMargin(30);
   main_layout->setSpacing(15);
 
-  main_layout->addWidget(new QLabel("OPENPILOT"), 1, Qt::AlignCenter);
+  main_layout->addWidget(new QLabel("OPKR"), 1, Qt::AlignCenter);
 
   QPixmap hkgpix("../assets/addon/img/hkg.png");
   QLabel *hkg = new QLabel();
