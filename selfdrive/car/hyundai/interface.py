@@ -88,6 +88,7 @@ class CarInterface(CarInterfaceBase):
     ret.vCruisekph = 0
     ret.resSpeed = 0
     ret.vFuture = 0
+    ret.aqValue = 0
 
     params = Params()
     PidKp = float(Decimal(params.get("PidKp", encoding="utf8")) * Decimal('0.01'))
@@ -382,6 +383,7 @@ class CarInterface(CarInterfaceBase):
       self.CP.vFuture = self.CC.vFuture
     else:
       self.CP.vFuture = 0
+    self.CP.aqValue = self.CC.aq_value
 
     if self.CC.mode_change_timer and self.CS.out.cruiseState.modeSel == 0:
       events.add(EventName.modeChangeOpenpilot)

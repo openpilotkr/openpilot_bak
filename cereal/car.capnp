@@ -497,6 +497,7 @@ struct CarParams {
   vCruisekph @72: Float32;
   resSpeed @73: Float32;
   vFuture @74: Float32;
+  aqValue @75: Float32;
 
   struct LateralParams {
     torqueBP @0 :List(Int32);
