@@ -370,6 +370,8 @@ class CarController():
       self.cruise_gap_adjusting = False
       self.auto_res_starting = False
 
+    print("gap_prev={}  gapset={}  drel={}  vrel={}  gap_init={}".format(self.cruise_gap_prev, CS.cruiseGapSet, self.dRel, self.vRel*3.6, self.cruise_gap_set_init))
+
     if not enabled:
       self.cruise_init = False
     if CS.cruise_buttons == 4:
