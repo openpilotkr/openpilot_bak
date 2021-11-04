@@ -35,7 +35,8 @@ serverPort = 8082
 
 class OtisServ(BaseHTTPRequestHandler):
   def do_GET(self):
-    use_gmap = params.get_bool('dp_mapbox_gmap_enable')
+    # use_gmap = params.get_bool('dp_mapbox_gmap_enable')
+    use_gmap = True
     if self.path == '/logo.png':
       self.get_logo()
       return
@@ -78,7 +79,8 @@ class OtisServ(BaseHTTPRequestHandler):
       self.display_page_addr_input()
 
   def do_POST(self):
-    use_gmap = params.get_bool('dp_mapbox_gmap_enable')
+    # use_gmap = params.get_bool('dp_mapbox_gmap_enable')
+    use_gmap = True
     postvars = self.parse_POST()
     self.send_response(200)
     self.send_header("Content-type", "text/html")
