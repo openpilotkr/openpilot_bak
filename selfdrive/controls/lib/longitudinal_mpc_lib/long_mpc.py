@@ -49,14 +49,14 @@ T_REACT = 1.8
 MAX_BRAKE = 9.81
 
 
-def get_stopped_equivalence_factor(v_lead, tr):
-  return tr * v_lead + (v_lead*v_lead) / (2 * MAX_BRAKE)
+def get_stopped_equivalence_factor(v_lead):
+  return T_REACT * v_lead + (v_lead*v_lead) / (2 * MAX_BRAKE)
 
-def get_safe_obstacle_distance(v_ego, tr):
-  return 2 * tr * v_ego + (v_ego*v_ego) / (2 * MAX_BRAKE) + 4.0
+def get_safe_obstacle_distance(v_ego):
+  return 2 * T_REACT * v_ego + (v_ego*v_ego) / (2 * MAX_BRAKE) + 4.0
 
-def desired_follow_distance(v_ego, v_lead, tr):
-  return get_safe_obstacle_distance(v_ego, tr) - get_stopped_equivalence_factor(v_lead, tr)
+def desired_follow_distance(v_ego, v_lead):
+  return get_safe_obstacle_distance(v_ego) - get_stopped_equivalence_factor(v_lead)
 
 
 def gen_long_model():
@@ -92,7 +92,7 @@ def gen_long_model():
   return model
 
 
-def gen_long_mpc_solver(self):
+def gen_long_mpc_solver():
   ocp = AcadosOcp()
   ocp.model = gen_long_model()
 
@@ -120,7 +120,7 @@ def gen_long_mpc_solver(self):
   ocp.cost.yref = np.zeros((COST_DIM, ))
   ocp.cost.yref_e = np.zeros((COST_E_DIM, ))
 
-  desired_dist_comfort = get_safe_obstacle_distance(v_ego, self.TR)
+  desired_dist_comfort = get_safe_obstacle_distance(v_ego)
 
   # The main cost in normal operation is how close you are to the "desired" distance
   # from an obstacle at every timestep. This obstacle can be a lead car
@@ -332,8 +332,8 @@ class LongitudinalMpc():
     # To estimate a safe distance from a moving lead, we calculate how much stopping
     # distance that lead needs as a minimum. We can add that to the current distance
     # and then treat that as a stopped car/obstacle at this new distance.
-    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(lead_xv_0[:,1], self.TR)
-    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(lead_xv_1[:,1], self.TR)
+    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(lead_xv_0[:,1])
+    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(lead_xv_1[:,1])
 
     # Fake an obstacle for cruise, this ensures smooth acceleration to set speed
     # when the leads are no factor.
@@ -342,7 +342,7 @@ class LongitudinalMpc():
     v_cruise_clipped = np.clip(v_cruise * np.ones(N+1),
                                cruise_lower_bound,
                                cruise_upper_bound)
-    cruise_obstacle = T_IDXS*v_cruise_clipped + get_safe_obstacle_distance(v_cruise_clipped, self.TR)
+    cruise_obstacle = T_IDXS*v_cruise_clipped + get_safe_obstacle_distance(v_cruise_clipped)
 
     x_obstacles = np.column_stack([lead_0_obstacle, lead_1_obstacle, cruise_obstacle])
     self.source = SOURCES[np.argmin(x_obstacles[0])]
