@@ -166,6 +166,7 @@ class CarController():
     if frame % 10 == 0:
       self.model_speed = path_plan.modelSpeed
 
+    self.sm.update(0)
     self.dRel = self.sm['radarState'].leadOne.dRel #EON Lead
     self.vRel = self.sm['radarState'].leadOne.vRel #EON Lead
     self.yRel = self.sm['radarState'].leadOne.yRel #EON Lead
