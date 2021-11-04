@@ -454,7 +454,6 @@ class CarController():
       self.resume_cnt = 0
 
     if CS.out.vEgo <= 1:
-      self.sm.update(0)
       long_control_state = self.sm['controlsState'].longControlState
       if long_control_state == LongCtrlState.stopping and CS.out.vEgo < 0.1 and not CS.out.gasPressed:
         self.acc_standstill_timer += 1
