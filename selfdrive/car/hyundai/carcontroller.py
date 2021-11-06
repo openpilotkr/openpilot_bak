@@ -341,7 +341,7 @@ class CarController():
       self.on_speed_control = self.NC.onSpeedControl
       self.curv_speed_control = self.NC.curvSpeedControl
       btn_signal = self.NC.update(CS, path_plan)
-      if btn_signal != None:
+      if btn_signal != None and not self.cruise_gap_adjusting:
         can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal)) if not self.longcontrol \
          else can_sends.append(create_clu11(self.packer, frame, CS.clu11, btn_signal, clu11_speed, CS.CP.sccBus))
         self.resume_cnt += 1
