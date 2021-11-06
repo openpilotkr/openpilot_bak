@@ -71,7 +71,7 @@ TogglesPanel::TogglesPanel(QWidget *parent) : ListWidget(parent) {
   addItem(record_toggle);
   addItem(new ParamControl("EndToEndToggle",
                                   "\U0001f96c Enable Lane selector Mode \U0001f96c",
-                                  "Activate lane selection mode. Rain mode/Rainless mode/Auto mode can be selected and adjusted on the screen.",
+                                  "Activate lane selection mode. Lane Mode/Lane Less/AUTO can be selected and switched on the screen.",
                                   "../assets/offroad/icon_road.png",
                                   this));
 #ifdef ENABLE_MAPS
