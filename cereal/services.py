@@ -63,6 +63,8 @@ services = {
   "uploaderState": (True, 0., 1),
   "liveNaviData": (False, 0.),
   "liveMapData": (True, 0.),
+  "navInstruction": (True, 0.),
+  "navRoute": (True, 0.),
 
   # debug
   "testJoystick": (False, 0.),

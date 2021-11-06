@@ -13,7 +13,6 @@
 #include "selfdrive/ui/qt/maps/map.h"
 #endif
 
-
 OnroadWindow::OnroadWindow(QWidget *parent) : QWidget(parent) {
   QVBoxLayout *main_layout  = new QVBoxLayout(this);
   main_layout->setMargin(bdr_s);
