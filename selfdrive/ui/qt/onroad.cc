@@ -66,7 +66,7 @@ void OnroadWindow::updateState(const UIState &s) {
           QString modified_time = modifiedtime.toString("yyyy-MM-dd hh:mm:ss ");
           const std::string txt = util::read_file("/data/log/error.txt");
           if (RichTextDialog::alert(modified_time + QString::fromStdString(txt), this)) {
-            s.scene.tmux_error_check = true;
+            QUIState::ui_state.scene.tmux_error_check = true;
           }
         }
       }
@@ -83,7 +83,7 @@ void OnroadWindow::updateState(const UIState &s) {
           QString modified_time = modifiedtime.toString("yyyy-MM-dd hh:mm:ss ");
           const std::string txt = util::read_file("/data/log/error.txt");
           if (RichTextDialog::alert(modified_time + QString::fromStdString(txt), this)) {
-            s.scene.tmux_error_check = true;
+            QUIState::ui_state.scene.tmux_error_check = true;
           }
         }
       }
