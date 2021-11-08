@@ -26,9 +26,6 @@
 const QString MAPBOX_TOKEN = QString::fromStdString(Params().get("dp_mapbox_token_sk"));
 const QString MAPS_HOST = util::getenv("MAPS_HOST", MAPBOX_TOKEN.isEmpty() ? "https://maps.comma.ai" : "https://api.mapbox.com").c_str();
 
-qDebug() << MAPBOX_TOKEN;
-qDebug() << MAPS_HOST;
-
 class MapInstructions : public QWidget {
   Q_OBJECT
 

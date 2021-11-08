@@ -110,6 +110,9 @@ RouteEngine::RouteEngine() {
   parameters["mapbox.access_token"] = token;
   parameters["mapbox.directions_api_url"] = MAPS_HOST + "/directions/v5/mapbox/";
 
+  qWarning() << token;
+  qWarning() << MAPS_HOST;
+
   geoservice_provider = new QGeoServiceProvider("mapbox", parameters);
   routing_manager = geoservice_provider->routingManager();
   if (routing_manager == nullptr) {
