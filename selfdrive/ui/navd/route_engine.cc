@@ -127,9 +127,9 @@ RouteEngine::RouteEngine() {
 
 void RouteEngine::timerUpdate() {
   sm->update(0);
-  if (!sm->updated("liveLocationKalman")) {
-    return;
-  }
+  // if (!sm->updated("liveLocationKalman")) {
+  //   return;
+  // }
 
   auto location = (*sm)["liveLocationKalman"].getLiveLocationKalman();
   gps_ok = location.getGpsOK();
