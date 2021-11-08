@@ -106,12 +106,8 @@ RouteEngine::RouteEngine() {
   // Build routing engine
   QVariantMap parameters;
   QString token = MAPBOX_TOKEN.isEmpty() ? CommaApi::create_jwt({}, 4 * 7 * 24 * 3600) : MAPBOX_TOKEN;
-  //QString token = QString::fromStdString(Params().get("dp_mapbox_token_sk"));
   parameters["mapbox.access_token"] = token;
   parameters["mapbox.directions_api_url"] = MAPS_HOST + "/directions/v5/mapbox/";
-
-  qWarning() << token;
-  qWarning() << MAPS_HOST;
 
   geoservice_provider = new QGeoServiceProvider("mapbox", parameters);
   routing_manager = geoservice_provider->routingManager();
