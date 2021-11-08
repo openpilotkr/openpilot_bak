@@ -103,10 +103,8 @@ void MapWindow::timerUpdate() {
     return;
   }
 
-  update();
-
-  if (m_map.isNull()) {
-    return;
+  if (isVisible()) {
+    update();
   }
 
   sm->update(0);
@@ -128,6 +126,11 @@ void MapWindow::timerUpdate() {
       velocity_filter.update(velocity);
     }
   }
+
+  if (m_map.isNull()) {
+    return;
+  }
+
   loaded_once = loaded_once || m_map->isFullyLoaded();
   if (!loaded_once) {
     map_instructions->showError("Map Loading");
@@ -215,6 +218,7 @@ void MapWindow::initializeGL() {
   m_map->setPitch(MIN_PITCH);
   m_map->setStyleUrl("mapbox://styles/commaai/ckr64tlwp0azb17nqvr9fj13s");
 
+  connect(m_map.data(), SIGNAL(needsRendering()), this, SLOT(update()));
   QObject::connect(m_map.data(), &QMapboxGL::mapChanged, [=](QMapboxGL::MapChange change) {
     if (change == QMapboxGL::MapChange::MapChangeDidFinishLoadingMap) {
       loaded_once = true;
@@ -223,7 +227,7 @@ void MapWindow::initializeGL() {
 }
 
 void MapWindow::paintGL() {
-  if (!isVisible() || m_map.isNull()) return;
+  if (!isVisible()) return;
   m_map->render();
 }
 
@@ -309,9 +313,7 @@ void MapWindow::pinchTriggered(QPinchGesture *gesture) {
 }
 
 void MapWindow::offroadTransition(bool offroad) {
-  if (offroad) {
-    clearRoute();
-  } else {
+  if (!offroad) {
     auto dest = coordinate_from_param("NavDestination");
     setVisible(dest.has_value());
   }
