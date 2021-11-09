@@ -82,7 +82,7 @@ class Controls:
       ignore = ['driverCameraState', 'managerState'] if SIMULATION else None
       self.sm = messaging.SubMaster(['deviceState', 'pandaState', 'modelV2', 'liveCalibration',
                                      'driverMonitoringState', 'longitudinalPlan', 'lateralPlan', 'liveLocationKalman',
-                                     'managerState', 'liveParameters', 'radarState', 'liveNaviData'] + self.camera_packets + joystick_packet,
+                                     'managerState', 'liveParameters', 'radarState', 'liveNaviData', 'liveMapData'] + self.camera_packets + joystick_packet,
                                      ignore_alive=ignore, ignore_avg_freq=['radarState', 'longitudinalPlan'])
 
     self.can_sock = can_sock
@@ -213,6 +213,7 @@ class Controls:
     self.lane_change_delay = int(Params().get("OpkrAutoLaneChangeDelay", encoding="utf8"))
     self.auto_enable_speed = max(1, int(Params().get("AutoEnableSpeed", encoding="utf8")))
     self.e2e_long_alert_prev = True
+    self.osm_spdlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
 
   def auto_enable(self, CS):
     if CS.cruiseState.available and CS.vEgo >= self.auto_enable_speed * CV.KPH_TO_MS and CS.gearShifter == GearShifter.drive and self.sm['liveCalibration'].calStatus != Calibration.UNCALIBRATED:
@@ -765,7 +766,10 @@ class Controls:
     controlsState.canErrorCounter = self.can_error_counter
     controlsState.alertTextMsg1 = self.log_alertTextMsg1
     controlsState.alertTextMsg2 = self.log_alertTextMsg2
-    if self.map_enabled:
+    if int(self.sm['liveMapData'].speedLimit) and self.osm_spdlimit_enabled:
+      controlsState.limitSpeedCamera = int(self.sm['liveMapData'].speedLimit)
+      controlsState.limitSpeedCameraDist = float(self.sm['liveMapData'].speedLimitAheadDistance)
+    elif self.map_enabled:
       controlsState.limitSpeedCamera = int(self.sm['liveNaviData'].speedLimit)
       controlsState.limitSpeedCameraDist = float(self.sm['liveNaviData'].speedLimitDistance)
       controlsState.mapSign = int(self.sm['liveNaviData'].safetySign)
