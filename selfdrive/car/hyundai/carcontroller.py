@@ -341,12 +341,6 @@ class CarController():
       self.on_speed_control = self.NC.onSpeedControl
       self.curv_speed_control = self.NC.curvSpeedControl
       btn_signal = self.NC.update(CS, path_plan)
-      if btn_signal != None and not self.cruise_gap_adjusting:
-        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal)) if not self.longcontrol \
-         else can_sends.append(create_clu11(self.packer, frame, CS.clu11, btn_signal, clu11_speed, CS.CP.sccBus))
-        self.resume_cnt += 1
-      else:
-        self.resume_cnt = 0
       if self.opkr_cruisegap_auto_adj:
         # gap restore
         if self.switch_timer > 0:
@@ -354,17 +348,24 @@ class CarController():
         elif self.dRel > 17 and self.vRel*3.6 < 5 and self.cruise_gap_prev != CS.cruiseGapSet and self.cruise_gap_set_init == 1 and self.opkr_autoresume:
           can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
             else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
+          self.cruise_gap_adjusting = True
           self.resume_cnt += 1
           if self.resume_cnt > 5:
             self.resume_cnt = 0
             self.switch_timer = randint(10, 15)
-            self.cruise_gap_adjusting = True
         elif self.cruise_gap_prev == CS.cruiseGapSet and CS.cruiseGapSet != 1.0 and self.opkr_autoresume:
           self.cruise_gap_set_init = 0
           self.cruise_gap_prev = 0
           self.cruise_gap_adjusting = False
         else:
           self.cruise_gap_adjusting = False
+      if not self.cruise_gap_adjusting:
+        if btn_signal != None:
+          can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal)) if not self.longcontrol \
+          else can_sends.append(create_clu11(self.packer, frame, CS.clu11, btn_signal, clu11_speed, CS.CP.sccBus))
+          self.resume_cnt += 1
+        else:
+          self.resume_cnt = 0
     else:
       self.on_speed_control = False
       self.curv_speed_control = False
