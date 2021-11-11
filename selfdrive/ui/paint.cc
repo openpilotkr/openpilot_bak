@@ -514,7 +514,7 @@ static void ui_draw_vision_cruise_speed(UIState *s) {
 
   const std::string cruise_speed_str = std::to_string((int)std::nearbyint(cruise_speed));
   if (s->scene.controls_state.getEnabled() && !s->scene.cruiseAccStatus && s->scene.limitSpeedCamera > 19) {
-    const std::string limitspeedcamera_str = std::to_string(std::nearbyint(limitspeedcamera));
+    const std::string limitspeedcamera_str = std::to_string((int)std::nearbyint(limitspeedcamera));
     ui_draw_text(s, rect.centerX(), bdr_s+165, limitspeedcamera_str.c_str(), 48 * 2.5, COLOR_WHITE, "sans-bold");
   } else if (cruise_speed >= 30 && s->scene.controls_state.getEnabled()) {
     ui_draw_text(s, rect.centerX(), bdr_s+165, cruise_speed_str.c_str(), 48 * 2.5, COLOR_WHITE, "sans-bold");
