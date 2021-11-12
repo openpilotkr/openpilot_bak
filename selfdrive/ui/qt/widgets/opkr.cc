@@ -5361,7 +5361,7 @@ OPKRServerAPI::OPKRServerAPI() : ButtonControl("User's API", "", "Set Your API s
         QString cmd0 = QString::fromStdString("Your Input is\n") + users_api_host + QString::fromStdString("\nPress OK to apply&reboot");
         const char* p1 = cmd0.toStdString().c_str();
         if (ConfirmationDialog::confirm(p1, this)) {
-          params.put("OPKRServerAPI", users_api_host);
+          params.put("OPKRServerAPI", users_api_host.toStdString());
           params.put("OPKRServer", "2");
           QProcess::execute("rm -f /data/params/d/DongleId");
           QProcess::execute("rm -f /data/params/d/IMEI");
