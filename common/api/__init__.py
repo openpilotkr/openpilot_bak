@@ -4,8 +4,16 @@ import requests
 from datetime import datetime, timedelta
 from common.basedir import PERSIST
 from selfdrive.version import version
+from common.params import Params
 
-API_HOST = os.getenv('API_HOST', 'https://api.retropilot.org')
+if int(Params().get("OPKRServer", encoding="utf8")) == 0:
+  API_HOST = os.getenv('API_HOST', 'https://api.retropilot.org')
+elif int(Params().get("OPKRServer", encoding="utf8")) == 1:
+  API_HOST = os.getenv('API_HOST', 'https://api.commadotai.com')
+elif int(Params().get("OPKRServer", encoding="utf8")) == 2:
+  API_HOST = os.getenv('API_HOST', 'https://' + Params().get("OPKRServerAPI", encoding="utf8"))
+else:
+  API_HOST = os.getenv('API_HOST', 'https://api.retropilot.org')
 
 class Api():
   def __init__(self, dongle_id):

@@ -473,6 +473,8 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new RunNaviOnBootToggle());
   layout->addWidget(new KRDateToggle());
   layout->addWidget(new KRTimeToggle());
+  layout->addWidget(new OPKRServerSelect());
+  layout->addWidget(new OPKRServerAPI());
 
   layout->addWidget(horizontal_line());
   layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 DRIVING 】〓〓〓〓〓〓〓〓", ""));

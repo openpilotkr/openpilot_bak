@@ -6,10 +6,20 @@
 #include <QTimer>
 
 #include "selfdrive/common/util.h"
+#include "selfdrive/common/params.h"
 
 namespace CommaApi {
 
-const QString BASE_URL = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+if (Params().get("OPKRServer") == "0") {
+  const QString BASE_URL = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+} else if (Params().get("OPKRServer") == "1") {
+  const QString BASE_URL = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
+} else if (Params().get("OPKRServer") == "2") {
+  const QString BASE_URL = util::getenv("API_HOST", "https://" + Params().get("OPKRServerAPI", encoding="utf8")).c_str();
+} else {
+  const QString BASE_URL = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+}
+
 QByteArray rsa_sign(const QByteArray &data);
 QString create_jwt(const QJsonObject &payloads = {}, int expiry = 3600);
 

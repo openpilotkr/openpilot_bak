@@ -16,7 +16,7 @@
 
 #include "selfdrive/ui/ui.h"
 
-SwitchOpenpilot::SwitchOpenpilot() : ButtonControl("Change Fork/Branch", "", "Change to another open pilot code. You can change it by entering ID/repository/branch.") {
+SwitchOpenpilot::SwitchOpenpilot() : ButtonControl("Change Repo/Branch", "", "Change to another open pilot code. You can change it by entering ID/repository/branch.") {
 
   QObject::connect(this, &ButtonControl::clicked, [=]() {
     if (text() == "CHANGE") {
@@ -1806,7 +1806,7 @@ void SpeedLimitOffset::refresh() {
   btnplus.setText("＋");
 }
 
-RESChoice::RESChoice() : AbstractControl("AutoRES Option", "Sets the auto RES option. 1. Adjust the temporary cruise speed, 2. Adjust the set speed itself according to the presence or absence of a preceding car. 3. Adjust the cruise speed if there is a preceding car, and adjust the set speed if there is no preceding car. 자동Please note that the automatic RES may not work well depending on the conditions.", "../assets/offroad/icon_shell.png") {
+RESChoice::RESChoice() : AbstractControl("AutoRES Option", "Sets the auto RES option. 1. Adjust the temporary cruise speed, 2. Adjust the set speed itself according to the presence or absence of a preceding car. 3. Adjust the cruise speed if there is a preceding car, and adjust the set speed if there is no preceding car. Please note that the automatic RES may not work well depending on the conditions.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -5217,4 +5217,180 @@ void OPKRNaviSelect::refresh() {
   }
   btnminus.setText("◀");
   btnplus.setText("▶");
+}
+
+OPKRServerSelect::OPKRServerSelect() : AbstractControl("API Server", "Set API server to Retropilot/Comma/User's", "../assets/offroad/icon_shell.png") {
+  btn1.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btn1.setFixedSize(250, 100);
+  btn2.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btn2.setFixedSize(250, 100);
+  btn3.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btn3.setFixedSize(250, 100);
+  hlayout->addWidget(&btn1);
+  hlayout->addWidget(&btn2);
+  hlayout->addWidget(&btn3);
+  btn1.setText("Retropilot");
+  btn2.setText("Comma");
+  btn3.setText("User's");
+
+  QObject::connect(&btn1, &QPushButton::clicked, [=]() {
+    params.put("OPKRServer", "0");
+    refresh();
+  });
+  QObject::connect(&btn2, &QPushButton::clicked, [=]() {
+    params.put("OPKRServer", "1");
+    refresh();
+  });
+  QObject::connect(&btn3, &QPushButton::clicked, [=]() {
+    params.put("OPKRServer", "2");
+    if (ConfirmationDialog::alert("You've chosen own server. Please set your api host at the menu below.", this)) {}
+    refresh();
+  });
+  refresh();
+}
+
+void OPKRServerSelect::refresh() {
+  QString option = QString::fromStdString(params.get("OPKRServer"));
+  if (option == "0") {
+    btn1.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #00A12E;
+    )");
+    btn2.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+    btn2.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+  } else if (option == "1") {
+    btn1.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+    btn2.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #00A12E;
+    )");
+    btn2.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+  } else {
+    btn1.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+    btn2.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+    btn2.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #00A12E;
+    )");
+  }
+}
+
+OPKRServerAPI::OPKRServerAPI() : ButtonControl("User's API", "", "Set Your API server URL or IP") {
+  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
+  label.setStyleSheet("color: #e0e879");
+  hlayout->addWidget(&label);
+  QObject::connect(this, &ButtonControl::clicked, [=]() {
+    if (text() == "SET") {
+      QString users_api_host = InputDialog::getText("Input Your API(url or ip):", this);
+      if (users_api_host.length() > 0) {
+        QString cmd0 = QString::fromStdString("Your Input is\n") + users_api_host + QString::fromStdString("\nPress OK to apply&reboot");
+        const char* p1 = cmd0.toStdString().c_str();
+        if (ConfirmationDialog::confirm(p1, this)) {
+          params.put("OPKRServerAPI", users_api_host);
+          params.put("OPKRServer", "2");
+          QProcess::execute("rm -f /data/params/d/DongleId");
+          QProcess::execute("rm -f /data/params/d/IMEI");
+          QProcess::execute("rm -f /data/params/d/HardwareSerial");
+          QProcess::execute("reboot");
+        }
+      }
+    } else if (text() == "UNSET") {
+      if (ConfirmationDialog::confirm("Do you want to unset? Device will be rebooted.", this)) {
+        params.remove("OPKRServerAPI");
+        params.put("OPKRServer", "0");
+        QProcess::execute("rm -f /data/params/d/DongleId");
+        QProcess::execute("rm -f /data/params/d/IMEI");
+        QProcess::execute("rm -f /data/params/d/HardwareSerial");
+        QProcess::execute("reboot");
+      }
+    }
+  });
+  refresh();
+}
+
+void OPKRServerAPI::refresh() {
+  auto str = QString::fromStdString(params.get("OPKRServerAPI"));
+  if (str.length() > 0) {
+    label.setText(QString::fromStdString("OPKRServerAPI"));
+    setText("UNSET");
+    setEnabled(true);
+  } else {
+    setText("SET");
+    setEnabled(true);
+  }
 }

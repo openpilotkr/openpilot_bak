@@ -1731,3 +1731,31 @@ private:
   
   void refresh();
 };
+
+class OPKRServerSelect : public AbstractControl {
+  Q_OBJECT
+
+public:
+  OPKRServerSelect();
+
+private:
+  QPushButton btn1;
+  QPushButton btn2;
+  QPushButton btn3;
+  Params params;
+  
+  void refresh();
+};
+
+class OPKRServerAPI : public ButtonControl {
+  Q_OBJECT
+
+public:
+  OPKRServerAPI();
+
+private:
+  QLabel label;
+  Params params;
+
+  void refresh();
+};
