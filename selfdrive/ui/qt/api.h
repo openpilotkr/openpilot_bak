@@ -8,17 +8,19 @@
 #include "selfdrive/common/util.h"
 #include "selfdrive/common/params.h"
 
+QString OPKR_SERVER = QString::fromStdString(Params().get("OPKRServer"));
+if (OPKR_SERVER == "0") {
+  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+} else if (OPKR_SERVER == "1") {
+  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
+} else if (OPKR_SERVER == "2") {
+  const QString TARGET_SERVER = "https://" + Params().get("OPKRServerAPI");
+} else {
+  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+}
 namespace CommaApi {
 
-if (Params().get("OPKRServer") == "0") {
-  const QString BASE_URL = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
-} else if (Params().get("OPKRServer") == "1") {
-  const QString BASE_URL = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
-} else if (Params().get("OPKRServer") == "2") {
-  const QString BASE_URL = "https://" + Params().get("OPKRServerAPI", encoding="utf8");
-} else {
-  const QString BASE_URL = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
-}
+const QString BASE_URL = TARGET_SERVER;
 
 QByteArray rsa_sign(const QByteArray &data);
 QString create_jwt(const QJsonObject &payloads = {}, int expiry = 3600);
