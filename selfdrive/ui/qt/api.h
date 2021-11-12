@@ -15,7 +15,7 @@ if (Params().get("OPKRServer") == "0") {
 } else if (Params().get("OPKRServer") == "1") {
   const QString BASE_URL = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
 } else if (Params().get("OPKRServer") == "2") {
-  const QString BASE_URL = util::getenv("API_HOST", "https://" + Params().get("OPKRServerAPI", encoding="utf8")).c_str();
+  const QString BASE_URL = "https://" + Params().get("OPKRServerAPI", encoding="utf8");
 } else {
   const QString BASE_URL = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
 }
