@@ -6,11 +6,11 @@ from common.basedir import PERSIST
 from selfdrive.version import version
 from common.params import Params
 
-if int(Params().get("OPKRServer", encoding="utf8")) == 0:
+if Params().get("OPKRServer", encoding="utf8") == "0":
   API_HOST = os.getenv('API_HOST', 'https://api.retropilot.org')
-elif int(Params().get("OPKRServer", encoding="utf8")) == 1:
+elif Params().get("OPKRServer", encoding="utf8") == "1":
   API_HOST = os.getenv('API_HOST', 'https://api.commadotai.com')
-elif int(Params().get("OPKRServer", encoding="utf8")) == 2:
+elif Params().get("OPKRServer", encoding="utf8") == "2":
   API_HOST = os.getenv('API_HOST', 'https://' + Params().get("OPKRServerAPI", encoding="utf8"))
 else:
   API_HOST = os.getenv('API_HOST', 'https://api.retropilot.org')
