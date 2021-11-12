@@ -164,7 +164,6 @@ def manager_init():
     ("E2ELong", "0"),
     ("GoogleMapEnabled", "0"),
     ("OPKRServer", "0"),
-    ("OPKRServerAPI", "0"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))
