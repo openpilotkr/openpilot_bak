@@ -5289,7 +5289,7 @@ void OPKRServerSelect::refresh() {
     color: #E4E4E4;
     background-color: #393939;
     )");
-    btn2.setStyleSheet(R"(
+    btn3.setStyleSheet(R"(
     padding: 0;
     border-radius: 50px;
     font-size: 35px;
@@ -5314,7 +5314,7 @@ void OPKRServerSelect::refresh() {
     color: #E4E4E4;
     background-color: #00A12E;
     )");
-    btn2.setStyleSheet(R"(
+    btn3.setStyleSheet(R"(
     padding: 0;
     border-radius: 50px;
     font-size: 35px;
@@ -5339,7 +5339,7 @@ void OPKRServerSelect::refresh() {
     color: #E4E4E4;
     background-color: #393939;
     )");
-    btn2.setStyleSheet(R"(
+    btn3.setStyleSheet(R"(
     padding: 0;
     border-radius: 50px;
     font-size: 35px;
