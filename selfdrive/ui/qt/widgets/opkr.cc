@@ -5397,7 +5397,7 @@ OPKRServerAPI::OPKRServerAPI() : AbstractControl("User's API", "Set Your API ser
 void OPKRServerAPI::refresh() {
   auto str = QString::fromStdString(params.get("OPKRServerAPI"));
   if (str.length() > 0) {
-    label.setText(QString::fromStdString("OPKRServerAPI"));
+    label.setText(QString::fromStdString(params.get("OPKRServerAPI")));
     btn.setText("UNSET");
   } else {
     btn.setText("SET");
