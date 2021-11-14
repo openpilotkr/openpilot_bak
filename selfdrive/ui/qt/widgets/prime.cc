@@ -263,6 +263,18 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   setSizePolicy(sp_retain);
 
   // set up API requests
+  QString OPKR_SERVER = QString::fromStdString(Params().get("OPKRServer"));
+  QString TARGET_SERVER = "";
+  if (OPKR_SERVER == "0") {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+  } else if (OPKR_SERVER == "1") {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
+  } else if (OPKR_SERVER == "2") {
+    TARGET_SERVER = "https://" + QString::fromStdString(Params().get("OPKRServerAPI"));
+  } else {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+  }
+
   if (auto dongleId = getDongleId()) {
     QString url = TARGET_SERVER + "/v1.1/devices/" + *dongleId + "/";
     RequestRepeater* repeater = new RequestRepeater(this, url, "ApiCache_Device", 5);
