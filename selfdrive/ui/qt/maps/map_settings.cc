@@ -124,14 +124,15 @@ MapPanel::MapPanel(QWidget* parent) : QWidget(parent) {
   clear();
 
   QString OPKR_SERVER = QString::fromStdString(Params().get("OPKRServer"));
+  QString TARGET_SERVER = "";
   if (OPKR_SERVER == "0") {
-    const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
   } else if (OPKR_SERVER == "1") {
-    const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
   } else if (OPKR_SERVER == "2") {
-    const QString TARGET_SERVER = "https://" + Params().get("OPKRServerAPI");
+    TARGET_SERVER = "https://" + QString::fromStdString(Params().get("OPKRServerAPI"));
   } else {
-    const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
   }
 
   if (auto dongle_id = getDongleId()) {
