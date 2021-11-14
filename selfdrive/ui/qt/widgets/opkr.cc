@@ -5366,7 +5366,7 @@ OPKRServerAPI::OPKRServerAPI() : AbstractControl("User's API", "Set Your API ser
   hlayout->addWidget(&btn);
 
   QObject::connect(&btn, &QPushButton::clicked, [=]() {
-    if (text() == "SET") {
+    if (btn.text() == "SET") {
       QString users_api_host = InputDialog::getText("Input Your API(url or ip):", this);
       if (users_api_host.length() > 0) {
         QString cmd0 = QString::fromStdString("Your Input is\n") + users_api_host + QString::fromStdString("\nPress OK to apply&reboot");
@@ -5380,7 +5380,7 @@ OPKRServerAPI::OPKRServerAPI() : AbstractControl("User's API", "Set Your API ser
           QProcess::execute("reboot");
         }
       }
-    } else if (text() == "UNSET") {
+    } else if (btn.text() == "UNSET") {
       if (ConfirmationDialog::confirm("Do you want to unset? Device will be rebooted.", this)) {
         params.remove("OPKRServerAPI");
         params.put("OPKRServer", "0");
