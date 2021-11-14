@@ -9,17 +9,6 @@
 #include "selfdrive/ui/qt/widgets/scrollview.h"
 #include "selfdrive/common/params.h"
 
-QString OPKR_SERVER = QString::fromStdString(Params().get("OPKRServer"));
-if (OPKR_SERVER == "0") {
-  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
-} else if (OPKR_SERVER == "1") {
-  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
-} else if (OPKR_SERVER == "2") {
-  const QString TARGET_SERVER = "https://" + Params().get("OPKRServerAPI");
-} else {
-  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
-}
-
 static QString shorten(const QString &str, int max_len) {
   return str.size() > max_len ? str.left(max_len).trimmed() + "…" : str;
 }
@@ -133,6 +122,17 @@ MapPanel::MapPanel(QWidget* parent) : QWidget(parent) {
   wrapper->addWidget(stack);
 
   clear();
+
+  QString OPKR_SERVER = QString::fromStdString(Params().get("OPKRServer"));
+  if (OPKR_SERVER == "0") {
+    const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+  } else if (OPKR_SERVER == "1") {
+    const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
+  } else if (OPKR_SERVER == "2") {
+    const QString TARGET_SERVER = "https://" + Params().get("OPKRServerAPI");
+  } else {
+    const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+  }
 
   if (auto dongle_id = getDongleId()) {
     // Fetch favorite and recent locations
