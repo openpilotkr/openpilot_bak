@@ -11,6 +11,17 @@
 
 const double MILE_TO_KM = 1.60934;
 
+QString OPKR_SERVER = QString::fromStdString(Params().get("OPKRServer"));
+if (OPKR_SERVER == "0") {
+  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+} else if (OPKR_SERVER == "1") {
+  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
+} else if (OPKR_SERVER == "2") {
+  const QString TARGET_SERVER = "https://" + Params().get("OPKRServerAPI");
+} else {
+  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+}
+
 static QLabel* newLabel(const QString& text, const QString &type) {
   QLabel* label = new QLabel(text);
   label->setProperty("type", type);
@@ -48,7 +59,7 @@ DriveStats::DriveStats(QWidget* parent) : QFrame(parent) {
   add_stats_layouts("PAST WEEK", week_);
 
   if (auto dongleId = getDongleId()) {
-    QString url = CommaApi::BASE_URL + "/v1.1/devices/" + *dongleId + "/stats";
+    QString url = TARGET_SERVER + "/v1.1/devices/" + *dongleId + "/stats";
     RequestRepeater* repeater = new RequestRepeater(this, url, "ApiCache_DriveStats", 30);
     QObject::connect(repeater, &RequestRepeater::receivedResponse, this, &DriveStats::parseResponse);
   }

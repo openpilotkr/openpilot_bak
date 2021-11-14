@@ -15,6 +15,17 @@
 #include "selfdrive/ui/qt/util.h"
 #include "selfdrive/ui/qt/qt_window.h"
 
+QString OPKR_SERVER = QString::fromStdString(Params().get("OPKRServer"));
+if (OPKR_SERVER == "0") {
+  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+} else if (OPKR_SERVER == "1") {
+  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
+} else if (OPKR_SERVER == "2") {
+  const QString TARGET_SERVER = "https://" + Params().get("OPKRServerAPI");
+} else {
+  const QString TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+}
+
 using qrcodegen::QrCode;
 
 PairingQRWidget::PairingQRWidget(QWidget* parent) : QWidget(parent) {
@@ -116,7 +127,7 @@ PrimeUserWidget::PrimeUserWidget(QWidget* parent) : QWidget(parent) {
 
   // set up API requests
   if (auto dongleId = getDongleId()) {
-    QString url = CommaApi::BASE_URL + "/v1/devices/" + *dongleId + "/owner";
+    QString url = TARGET_SERVER + "/v1/devices/" + *dongleId + "/owner";
     RequestRepeater *repeater = new RequestRepeater(this, url, "ApiCache_Owner", 6);
     QObject::connect(repeater, &RequestRepeater::receivedResponse, this, &PrimeUserWidget::replyFinished);
   }
@@ -252,7 +263,7 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
 
   // set up API requests
   if (auto dongleId = getDongleId()) {
-    QString url = CommaApi::BASE_URL + "/v1.1/devices/" + *dongleId + "/";
+    QString url = TARGET_SERVER + "/v1.1/devices/" + *dongleId + "/";
     RequestRepeater* repeater = new RequestRepeater(this, url, "ApiCache_Device", 5);
 
     QObject::connect(repeater, &RequestRepeater::receivedResponse, this, &SetupWidget::replyFinished);
