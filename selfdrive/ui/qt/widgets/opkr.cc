@@ -5350,11 +5350,22 @@ void OPKRServerSelect::refresh() {
   }
 }
 
-OPKRServerAPI::OPKRServerAPI() : ButtonControl("User's API", "", "Set Your API server URL or IP") {
+OPKRServerAPI::OPKRServerAPI() : AbstractControl("User's API", "Set Your API server URL or IP", "") {
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
   hlayout->addWidget(&label);
-  QObject::connect(this, &ButtonControl::clicked, [=]() {
+  btn.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btn.setFixedSize(150, 100);
+  hlayout->addWidget(&btn);
+
+  QObject::connect(&btn, &QPushButton::clicked, [=]() {
     if (text() == "SET") {
       QString users_api_host = InputDialog::getText("Input Your API(url or ip):", this);
       if (users_api_host.length() > 0) {
@@ -5387,10 +5398,8 @@ void OPKRServerAPI::refresh() {
   auto str = QString::fromStdString(params.get("OPKRServerAPI"));
   if (str.length() > 0) {
     label.setText(QString::fromStdString("OPKRServerAPI"));
-    setText("UNSET");
-    setEnabled(true);
+    btn.setText("UNSET");
   } else {
-    setText("SET");
-    setEnabled(true);
+    btn.setText("SET");
   }
 }

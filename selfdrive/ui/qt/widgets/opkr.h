@@ -1755,6 +1755,7 @@ public:
 
 private:
   QLabel label;
+  QPushButton btn;
   Params params;
 
   void refresh();
