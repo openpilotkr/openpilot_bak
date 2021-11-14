@@ -122,7 +122,7 @@ PrimeUserWidget::PrimeUserWidget(QWidget* parent) : QWidget(parent) {
   } else if (OPKR_SERVER == "1") {
     TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
   } else if (OPKR_SERVER == "2") {
-    TARGET_SERVER = "https://" + QString::fromStdString(Params().get("OPKRServerAPI"));
+    TARGET_SERVER = "http://" + QString::fromStdString(Params().get("OPKRServerAPI"));
   } else {
     TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
   }
@@ -270,7 +270,7 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   } else if (OPKR_SERVER == "1") {
     TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
   } else if (OPKR_SERVER == "2") {
-    TARGET_SERVER = "https://" + QString::fromStdString(Params().get("OPKRServerAPI"));
+    TARGET_SERVER = "http://" + QString::fromStdString(Params().get("OPKRServerAPI"));
   } else {
     TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
   }

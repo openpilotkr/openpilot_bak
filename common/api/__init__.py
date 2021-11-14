@@ -11,7 +11,7 @@ if Params().get("OPKRServer", encoding="utf8") == "0":
 elif Params().get("OPKRServer", encoding="utf8") == "1":
   API_HOST = os.getenv('API_HOST', 'https://api.commadotai.com')
 elif Params().get("OPKRServer", encoding="utf8") == "2":
-  API_HOST = os.getenv('API_HOST', 'https://' + Params().get("OPKRServerAPI", encoding="utf8"))
+  API_HOST = os.getenv('API_HOST', 'http://' + Params().get("OPKRServerAPI", encoding="utf8"))
 else:
   API_HOST = os.getenv('API_HOST', 'https://api.retropilot.org')
 
