@@ -1747,7 +1747,7 @@ private:
   void refresh();
 };
 
-class OPKRServerAPI : public ButtonControl {
+class OPKRServerAPI : public AbstractControl {
   Q_OBJECT
 
 public:
