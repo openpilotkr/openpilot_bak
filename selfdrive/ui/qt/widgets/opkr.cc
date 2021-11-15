@@ -5260,6 +5260,7 @@ OPKRServerSelect::OPKRServerSelect() : AbstractControl("API Server", "Set API se
   });
   QObject::connect(&btn2, &QPushButton::clicked, [=]() {
     params.put("OPKRServer", "1");
+    if (ConfirmationDialog::alert("You've chosen comma server. Your uploads might be ignored if you upload your data. I highly recommend you should reset the device to avoid be banned.", this)) {}
     refresh();
   });
   QObject::connect(&btn3, &QPushButton::clicked, [=]() {
@@ -5381,7 +5382,7 @@ OPKRServerAPI::OPKRServerAPI() : AbstractControl("User's API", "Set Your API ser
         }
       }
     } else if (btn.text() == "UNSET") {
-      if (ConfirmationDialog::confirm("Do you want to unset? Device will be rebooted.", this)) {
+      if (ConfirmationDialog::confirm("Do you want to unset? the API server gets back to Retropilot server and Device will be rebooted now.", this)) {
         params.remove("OPKRServerAPI");
         params.put("OPKRServer", "0");
         QProcess::execute("rm -f /data/params/d/DongleId");
