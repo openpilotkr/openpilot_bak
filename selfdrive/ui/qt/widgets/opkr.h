@@ -538,6 +538,18 @@ public:
   }
 };
 
+class OSMSpeedLimitEnabledToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+  OSMSpeedLimitEnabledToggle() : ToggleControl("Enable OSM SpeedLimit", "This enables OSM speedlimit.", "../assets/offroad/icon_shell.png", Params().getBool("OSMSpeedLimitEnable")) {
+    QObject::connect(this, &OSMSpeedLimitEnabledToggle::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("OSMSpeedLimitEnable", status);
+    });
+  }
+};
+
 // openpilot preview
 class OpenpilotView : public AbstractControl {
   Q_OBJECT
@@ -1717,5 +1729,34 @@ private:
   QLabel label;
   Params params;
   
+  void refresh();
+};
+
+class OPKRServerSelect : public AbstractControl {
+  Q_OBJECT
+
+public:
+  OPKRServerSelect();
+
+private:
+  QPushButton btn1;
+  QPushButton btn2;
+  QPushButton btn3;
+  Params params;
+  
+  void refresh();
+};
+
+class OPKRServerAPI : public AbstractControl {
+  Q_OBJECT
+
+public:
+  OPKRServerAPI();
+
+private:
+  QLabel label;
+  QPushButton btn;
+  Params params;
+
   void refresh();
 };

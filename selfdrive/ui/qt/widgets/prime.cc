@@ -115,8 +115,20 @@ PrimeUserWidget::PrimeUserWidget(QWidget* parent) : QWidget(parent) {
   )");
 
   // set up API requests
+  QString OPKR_SERVER = QString::fromStdString(Params().get("OPKRServer"));
+  QString TARGET_SERVER = "";
+  if (OPKR_SERVER == "0") {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+  } else if (OPKR_SERVER == "1") {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
+  } else if (OPKR_SERVER == "2") {
+    TARGET_SERVER = "http://" + QString::fromStdString(Params().get("OPKRServerAPI"));
+  } else {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+  }
+
   if (auto dongleId = getDongleId()) {
-    QString url = CommaApi::BASE_URL + "/v1/devices/" + *dongleId + "/owner";
+    QString url = TARGET_SERVER + "/v1/devices/" + *dongleId + "/owner";
     RequestRepeater *repeater = new RequestRepeater(this, url, "ApiCache_Owner", 6);
     QObject::connect(repeater, &RequestRepeater::receivedResponse, this, &PrimeUserWidget::replyFinished);
   }
@@ -251,8 +263,20 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   setSizePolicy(sp_retain);
 
   // set up API requests
+  QString OPKR_SERVER = QString::fromStdString(Params().get("OPKRServer"));
+  QString TARGET_SERVER = "";
+  if (OPKR_SERVER == "0") {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+  } else if (OPKR_SERVER == "1") {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
+  } else if (OPKR_SERVER == "2") {
+    TARGET_SERVER = "http://" + QString::fromStdString(Params().get("OPKRServerAPI"));
+  } else {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+  }
+
   if (auto dongleId = getDongleId()) {
-    QString url = CommaApi::BASE_URL + "/v1.1/devices/" + *dongleId + "/";
+    QString url = TARGET_SERVER + "/v1.1/devices/" + *dongleId + "/";
     RequestRepeater* repeater = new RequestRepeater(this, url, "ApiCache_Device", 5);
 
     QObject::connect(repeater, &RequestRepeater::receivedResponse, this, &SetupWidget::replyFinished);

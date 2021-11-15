@@ -306,6 +306,9 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OPKRNaviSelect", PERSISTENT},
     {"OPKRTimeZone", PERSISTENT},
     {"E2ELong", PERSISTENT},
+    {"OSMSpeedLimitEnable", PERSISTENT},
+    {"OPKRServer", PERSISTENT},
+    {"OPKRServerAPI", PERSISTENT},
 };
 
 } // namespace

@@ -6,10 +6,12 @@
 #include <QTimer>
 
 #include "selfdrive/common/util.h"
+#include "selfdrive/common/params.h"
 
 namespace CommaApi {
 
-const QString BASE_URL = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+const QString BASE_URL = util::getenv("API_HOST", "").c_str();
+
 QByteArray rsa_sign(const QByteArray &data);
 QString create_jwt(const QJsonObject &payloads = {}, int expiry = 3600);
 

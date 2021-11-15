@@ -7,6 +7,7 @@
 #include "selfdrive/ui/qt/request_repeater.h"
 #include "selfdrive/ui/qt/widgets/controls.h"
 #include "selfdrive/ui/qt/widgets/scrollview.h"
+#include "selfdrive/common/params.h"
 
 static QString shorten(const QString &str, int max_len) {
   return str.size() > max_len ? str.left(max_len).trimmed() + "…" : str;
@@ -122,10 +123,22 @@ MapPanel::MapPanel(QWidget* parent) : QWidget(parent) {
 
   clear();
 
+  QString OPKR_SERVER = QString::fromStdString(Params().get("OPKRServer"));
+  QString TARGET_SERVER = "";
+  if (OPKR_SERVER == "0") {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+  } else if (OPKR_SERVER == "1") {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.commadotai.com").c_str();
+  } else if (OPKR_SERVER == "2") {
+    TARGET_SERVER = "http://" + QString::fromStdString(Params().get("OPKRServerAPI"));
+  } else {
+    TARGET_SERVER = util::getenv("API_HOST", "https://api.retropilot.org").c_str();
+  }
+
   if (auto dongle_id = getDongleId()) {
     // Fetch favorite and recent locations
     {
-      QString url = CommaApi::BASE_URL + "/v1/navigation/" + *dongle_id + "/locations";
+      QString url = TARGET_SERVER + "/v1/navigation/" + *dongle_id + "/locations";
       RequestRepeater* repeater = new RequestRepeater(this, url, "ApiCache_NavDestinations", 30, true);
       QObject::connect(repeater, &RequestRepeater::receivedResponse, this, &MapPanel::parseResponse);
       QObject::connect(repeater, &RequestRepeater::failedResponse, this, &MapPanel::failedResponse);
@@ -133,12 +146,11 @@ MapPanel::MapPanel(QWidget* parent) : QWidget(parent) {
 
     // Destination set while offline
     {
-      QString url = CommaApi::BASE_URL + "/v1/navigation/" + *dongle_id + "/next";
+      QString url = TARGET_SERVER + "/v1/navigation/" + *dongle_id + "/next";
       RequestRepeater* repeater = new RequestRepeater(this, url, "", 10, true);
       HttpRequest* deleter = new HttpRequest(this);
 
       QObject::connect(repeater, &RequestRepeater::receivedResponse, [=](QString resp) {
-        auto params = Params();
         if (resp != "null") {
           if (params.get("NavDestination").empty()) {
             qWarning() << "Setting NavDestination from /next" << resp;

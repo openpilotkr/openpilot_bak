@@ -286,28 +286,28 @@ void panda_state_thread() {
       panda->set_safety_model(cereal::CarParams::SafetyModel::NO_OUTPUT);
     }
 
-    bool ignition = ((pandaState.ignition_line != 0) || (pandaState.ignition_can != 0));
+    bool ignition_local = ((pandaState.ignition_line != 0) || (pandaState.ignition_can != 0));
 
-    if (ignition) {
+    if (ignition_local) {
       no_ignition_cnt = 0;
     } else {
       no_ignition_cnt += 1;
     }
 
 #ifndef __x86_64__
-    bool power_save_desired = !ignition;
+    bool power_save_desired = !ignition_local;
     if (pandaState.power_save_enabled != power_save_desired) {
       panda->set_power_saving(power_save_desired);
     }
 
     // set safety mode to NO_OUTPUT when car is off. ELM327 is an alternative if we want to leverage athenad/connect
-    if (!ignition && (pandaState.safety_model != (uint8_t)(cereal::CarParams::SafetyModel::NO_OUTPUT))) {
+    if (!ignition_local && (pandaState.safety_model != (uint8_t)(cereal::CarParams::SafetyModel::NO_OUTPUT))) {
       panda->set_safety_model(cereal::CarParams::SafetyModel::NO_OUTPUT);
     }
 #endif
 
     // clear VIN, CarParams, and set new safety on car start
-    if (ignition && !ignition_last) {
+    if (ignition_local && !ignition_last) {
       params.clearAll(CLEAR_ON_IGNITION_ON);
 
       if (!safety_setter_thread_running) {
@@ -316,12 +316,12 @@ void panda_state_thread() {
       } else {
         LOGW("Safety setter thread already running");
       }
-    } else if (!ignition && ignition_last) {
+    } else if (!ignition_local && ignition_last) {
       params.clearAll(CLEAR_ON_IGNITION_OFF);
     }
 
     // Write to rtc once per minute when no ignition present
-    if ((panda->has_rtc) && !ignition && (no_ignition_cnt % 120 == 1)) {
+    if ((panda->has_rtc) && !ignition_local && (no_ignition_cnt % 120 == 1)) {
       // Write time to RTC if it looks reasonable
       setenv("TZ","UTC",1);
       struct tm sys_time = util::get_time();
@@ -343,7 +343,7 @@ void panda_state_thread() {
       }
     }
 
-    ignition_last = ignition;
+    ignition_last = ignition_local;
     uint16_t fan_speed_rpm = panda->get_fan_speed();
 
     // build msg

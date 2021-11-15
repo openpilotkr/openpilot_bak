@@ -22,10 +22,15 @@ const float MAX_PITCH = 50;
 const float MIN_PITCH = 0;
 const float MAP_SCALE = 2;
 
+static float get_time_typical(const QGeoRouteSegment &segment) {
+  auto maneuver = segment.maneuver();
+  auto attrs = maneuver.extendedAttributes();
+  return attrs.contains("mapbox.duration_typical") ? attrs["mapbox.duration_typical"].toDouble() : segment.travelTime();
+}
 
 MapWindow::MapWindow(const QMapboxGLSettings &settings) :
   m_settings(settings), velocity_filter(0, 10, 0.1) {
-  sm = new SubMaster({"liveLocationKalman"});
+  sm = new SubMaster({"liveLocationKalman", "navInstruction", "navRoute"});
 
   timer = new QTimer(this);
   QObject::connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -267,11 +272,7 @@ void MapWindow::paintGL() {
   m_map->render();
 }
 
-static float get_time_typical(const QGeoRouteSegment &segment) {
-  auto maneuver = segment.maneuver();
-  auto attrs = maneuver.extendedAttributes();
-  return attrs.contains("mapbox.duration_typical") ? attrs["mapbox.duration_typical"].toDouble() : segment.travelTime();
-}
+
 
 
 void MapWindow::recomputeRoute() {
@@ -576,16 +577,16 @@ void MapInstructions::updateDistance(float d) {
   distance->setText(distance_str);
 }
 
-void MapInstructions::showError(QString error) {
+void MapInstructions::showError(QString error_text) {
   primary->setText("");
-  distance->setText(error);
+  distance->setText(error_text);
   distance->setAlignment(Qt::AlignCenter);
 
   secondary->setVisible(false);
   icon_01->setVisible(false);
 
   last_banner = {};
-  error = true;
+  error_text = true;
 
   setVisible(true);
   adjustSize();

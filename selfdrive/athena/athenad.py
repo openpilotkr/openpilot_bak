@@ -32,7 +32,15 @@ from selfdrive.loggerd.xattr_cache import getxattr, setxattr
 from selfdrive.swaglog import cloudlog, SWAGLOG_DIR
 from selfdrive.version import version, get_version, get_git_remote, get_git_branch, get_git_commit
 
-ATHENA_HOST = os.getenv('ATHENA_HOST', 'wss://api.retropilot.org:4040')
+if Params().get("OPKRServer", encoding="utf8") == "0":
+  ATHENA_HOST = os.getenv('ATHENA_HOST', 'wss://api.retropilot.org:4040')
+elif Params().get("OPKRServer", encoding="utf8") == "1":
+  ATHENA_HOST = os.getenv('ATHENA_HOST', 'wss://athena.comma.ai')
+elif Params().get("OPKRServer", encoding="utf8") == "2":
+  ATHENA_HOST = os.getenv('ATHENA_HOST', 'wss://' + Params().get("OPKRServerAPI", encoding="utf8"))
+else:
+  ATHENA_HOST = os.getenv('ATHENA_HOST', 'wss://api.retropilot.org:4040')
+
 HANDLER_THREADS = int(os.getenv('HANDLER_THREADS', "4"))
 LOCAL_PORT_WHITELIST = set([8022])
 
