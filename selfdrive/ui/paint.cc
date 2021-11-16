@@ -424,8 +424,9 @@ static void ui_draw_vision_maxspeed_org(UIState *s) {
   float maxspeed = s->scene.controls_state.getVCruise();
   float cruise_speed = s->scene.vSetDis;
   const bool is_cruise_set = maxspeed != 0 && maxspeed != SET_SPEED_NA;
-  s->scene.is_speed_over_limit = s->scene.limitSpeedCamera > 19 && ((s->scene.limitSpeedCamera+round(s->scene.limitSpeedCamera*0.01*s->scene.speed_lim_off))+1 < s->scene.car_state.getVEgo()*3.6);
-  if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
+  s->scene.is_speed_over_limit = s->scene.limitSpeedCamera > 19 && ((s->scene.limitSpeedCamera+round(s->scene.limitSpeedCamera*0.01*s->scene.speed_lim_off))+1 < s->scene.car_state.getVEgo() * (s->scene.is_metric ? 3.6 : 2.2369363));
+  //if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
+  if (!s->scene.is_metric) { cruise_speed *= 1.609344; }
 
   const Rect rect = {bdr_s, bdr_s, 184, 202};
   NVGcolor color = COLOR_BLACK_ALPHA(100);
@@ -442,7 +443,7 @@ static void ui_draw_vision_maxspeed_org(UIState *s) {
   ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(100), 10, 20.);
 
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
-  if (cruise_speed >= 30 && s->scene.controls_state.getEnabled()) {
+  if (cruise_speed >= 20 && s->scene.controls_state.getEnabled()) {
     const std::string cruise_speed_str = std::to_string((int)std::nearbyint(cruise_speed));
     ui_draw_text(s, rect.centerX(), bdr_s+65, cruise_speed_str.c_str(), 26 * 3.3, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), "sans-bold");
   } else {
@@ -460,7 +461,7 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   const int SET_SPEED_NA = 255;
   float maxspeed = (*s->sm)["controlsState"].getControlsState().getVCruise();
   const bool is_cruise_set = maxspeed != 0 && maxspeed != SET_SPEED_NA && s->scene.controls_state.getEnabled();
-  if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
+  //if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
 
   int viz_max_o = 184; //offset value to move right
   const Rect rect = {bdr_s, bdr_s, 184+viz_max_o, 202};
@@ -482,11 +483,11 @@ static void ui_draw_vision_cruise_speed(UIState *s) {
   float maxspeed = s->scene.controls_state.getVCruise();
   const bool is_cruise_set = maxspeed != 0 && maxspeed != SET_SPEED_NA;
   int limitspeedcamera = s->scene.limitSpeedCamera;
-  if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
-
+  //if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
   float cruise_speed = s->scene.vSetDis;
-  if (!s->scene.is_metric) { cruise_speed *= 0.621371; }
-  s->scene.is_speed_over_limit = s->scene.limitSpeedCamera > 19 && ((s->scene.limitSpeedCamera+round(s->scene.limitSpeedCamera*0.01*s->scene.speed_lim_off))+1 < s->scene.car_state.getVEgo()*3.6);
+  if (!s->scene.is_metric) { cruise_speed *= 1.609344; }
+
+  s->scene.is_speed_over_limit = s->scene.limitSpeedCamera > 19 && ((s->scene.limitSpeedCamera+round(s->scene.limitSpeedCamera*0.01*s->scene.speed_lim_off))+1 < s->scene.car_state.getVEgo()*(s->scene.is_metric ? 3.6 : 2.2369363));
   const Rect rect = {bdr_s, bdr_s, 184, 202};
 
   NVGcolor color = COLOR_GREY;
@@ -516,7 +517,7 @@ static void ui_draw_vision_cruise_speed(UIState *s) {
   if (s->scene.controls_state.getEnabled() && !s->scene.cruiseAccStatus && s->scene.limitSpeedCamera > 19) {
     const std::string limitspeedcamera_str = std::to_string((int)std::nearbyint(limitspeedcamera));
     ui_draw_text(s, rect.centerX(), bdr_s+165, limitspeedcamera_str.c_str(), 48 * 2.5, COLOR_WHITE, "sans-bold");
-  } else if (cruise_speed >= 30 && s->scene.controls_state.getEnabled()) {
+  } else if (cruise_speed >= 20 && s->scene.controls_state.getEnabled()) {
     ui_draw_text(s, rect.centerX(), bdr_s+165, cruise_speed_str.c_str(), 48 * 2.5, COLOR_WHITE, "sans-bold");
   } else {
     ui_draw_text(s, rect.centerX(), bdr_s+165, "-", 42 * 2.5, COLOR_WHITE_ALPHA(100), "sans-semibold");
@@ -524,7 +525,7 @@ static void ui_draw_vision_cruise_speed(UIState *s) {
 }
 
 static void ui_draw_vision_speed(UIState *s) {
-  const float speed = std::max(0.0, (*s->sm)["carState"].getCarState().getVEgo() * (s->scene.is_metric ? 3.6 : 2.2369363));
+  const float speed = std::max(0.0, (*s->sm)["carState"].getCarState().getVEgo()*(s->scene.is_metric ? 3.6 : 2.2369363));
   const std::string speed_str = std::to_string((int)std::nearbyint(speed));
   UIScene &scene = s->scene;  
   const int viz_speed_w = 250;
@@ -876,18 +877,14 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
     if (lead_one.getProb() > .5) {
       //show Orange if negative speed (approaching)
       //show Orange if negative speed faster than 5mph (approaching fast)
-      if((int)((lead_one.getV()[0] - scene.car_state.getVEgoOP()) * 3.6) < 0) {
+      if((int)((lead_one.getV()[0] - scene.car_state.getVEgoOP()) * (scene.is_metric ? 3.6 : 2.2369363)) < 0) {
         val_color = nvgRGBA(255, 188, 3, 200);
       }
-      if((int)((lead_one.getV()[0] - scene.car_state.getVEgoOP()) * 3.6) < -5) {
+      if((int)((lead_one.getV()[0] - scene.car_state.getVEgoOP()) * (scene.is_metric ? 3.6 : 2.2369363)) < -5) {
         val_color = nvgRGBA(255, 0, 0, 200);
       }
       // lead car relative speed is always in meters
-      if (scene.is_metric) {
-         snprintf(val_str, sizeof(val_str), "%d", (int)((lead_one.getV()[0] - scene.car_state.getVEgoOP()) * 3.6));
-      } else {
-         snprintf(val_str, sizeof(val_str), "%d", (int)((lead_one.getV()[0] - scene.car_state.getVEgoOP()) * 2.2374144));
-      }
+      snprintf(val_str, sizeof(val_str), "%d", (int)((lead_one.getV()[0] - scene.car_state.getVEgoOP()) * (scene.is_metric ? 3.6 : 2.2369363)));
     } else {
        snprintf(val_str, sizeof(val_str), "-");
     }
@@ -1017,12 +1014,21 @@ static void draw_safetysign(UIState *s) {
   //float safety_dist = s->scene.liveNaviData.opkrspeedlimitdist;
 
   snprintf(safetySpeed, sizeof(safetySpeed), "%d", safety_speed);
-  if (safety_dist >= 1000) {
-    snprintf(safetyDist, sizeof(safetyDist), "%.2fkm", safety_dist/1000);
+  if (s->scene.is_metric) {
+    if (safety_dist >= 1000) {
+      snprintf(safetyDist, sizeof(safetyDist), "%.2fkm", safety_dist/1000);
+    } else {
+      snprintf(safetyDist, sizeof(safetyDist), "%.0fm", safety_dist);
+    }
+    opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
   } else {
-    snprintf(safetyDist, sizeof(safetyDist), "%.0fm", safety_dist);
+    if (safety_dist >= 1000) {
+      snprintf(safetyDist, sizeof(safetyDist), "%.2fmi", safety_dist/1000);
+    } else {
+      snprintf(safetyDist, sizeof(safetyDist), "%.0fyd", safety_dist);
+    }
+    opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
   }
-  opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
 
   if (safety_speed > 19 && !s->scene.comma_stock_ui) {
     ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), diameter2/2);
