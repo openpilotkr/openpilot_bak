@@ -767,10 +767,10 @@ class Controls:
     controlsState.alertTextMsg1 = self.log_alertTextMsg1
     controlsState.alertTextMsg2 = self.log_alertTextMsg2
     if int(self.sm['liveMapData'].speedLimit) and self.osm_spdlimit_enabled:
-      controlsState.limitSpeedCamera = int(self.sm['liveMapData'].speedLimit)
+      controlsState.limitSpeedCamera = int(round(self.sm['liveMapData'].speedLimit))
       controlsState.limitSpeedCameraDist = float(self.sm['liveMapData'].speedLimitAheadDistance)
     elif self.map_enabled:
-      controlsState.limitSpeedCamera = int(self.sm['liveNaviData'].speedLimit)
+      controlsState.limitSpeedCamera = int(round(self.sm['liveNaviData'].speedLimit))
       controlsState.limitSpeedCameraDist = float(self.sm['liveNaviData'].speedLimitDistance)
       controlsState.mapSign = int(self.sm['liveNaviData'].safetySign)
     else:
