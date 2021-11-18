@@ -541,8 +541,8 @@ class CarController():
     str_log1 = 'MD={}  BS={:1.0f}/{:1.0f}  CV={:03.0f}  TQ={:03.0f}  ST={:03.0f}/{:01.0f}/{:01.0f}  FR={:03.0f}'.format(
       CS.out.cruiseState.modeSel, CS.CP.mdpsBus, CS.CP.sccBus, self.model_speed, abs(new_steer), self.p.STEER_MAX, self.p.STEER_DELTA_UP, self.p.STEER_DELTA_DOWN, self.timer1.sampleTime())
     if CS.out.cruiseState.accActive:
-      str_log2 = 'AQ={:+04.2f}  VF={:03.0f}  TS={:03.0f}  SS={:03.0f}  RD/RV={:04.1f}/{:03.1f}  CG={:1.0f}  FR={:03.0f}'.format(
-       self.aq_value if self.longcontrol else CS.scc12["aReqValue"], v_future, self.NC.ctrl_speed , setSpeed, CS.lead_distance, CS.lead_objspd, CS.cruiseGapSet, self.timer1.sampleTime())
+      str_log2 = 'AQ={:+04.2f}  VF={:03.0f}  TS={:03.0f}  SS/VS={:03.0f}/{:03.0f}  RD/RV={:04.1f}/{:03.1f}  CG={:1.0f}  FR={:03.0f}'.format(
+       self.aq_value if self.longcontrol else CS.scc12["aReqValue"], v_future, self.NC.ctrl_speed , setSpeed, CS.VSetDis, CS.lead_distance, CS.lead_objspd, CS.cruiseGapSet, self.timer1.sampleTime())
     else:
       str_log2 = 'MDPS={}  LKAS={}  LEAD={}  AQ={:+04.2f}  VF={:03.0f}  CG={:1.0f}  FR={:03.0f}'.format(
        CS.out.steerWarning, CS.lkas_button_on, 0 < CS.lead_distance < 149, self.aq_value if self.longcontrol else CS.scc12["aReqValue"], v_future, CS.cruiseGapSet, self.timer1.sampleTime())
