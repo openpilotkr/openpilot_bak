@@ -46,7 +46,7 @@ void clearLayout(QLayout* layout) {
 }
 
 QString timeAgo(const QDateTime &date) {
-  int diff = date.secsTo(QDateTime::currentDateTimeUtc());
+  int diff = date.secsTo(QDateTime::currentDateTime());
 
   QString s;
   if (diff < 60) {
