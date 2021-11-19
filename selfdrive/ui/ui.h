@@ -26,8 +26,18 @@
 #define COLOR_RED_ALPHA(x) nvgRGBA(201, 34, 49, x)
 #define COLOR_YELLOW nvgRGBA(218, 202, 37, 255)
 #define COLOR_RED nvgRGBA(201, 34, 49, 255)
+#define COLOR_OCHRE nvgRGBA(218, 111, 37, 255)
+#define COLOR_OCHRE_ALPHA(x) nvgRGBA(218, 111, 37, x)
+#define COLOR_GREEN nvgRGBA(0, 255, 0, 255)
+#define COLOR_GREEN_ALPHA(x) nvgRGBA(0, 255, 0, x)
+#define COLOR_BLUE nvgRGBA(0, 0, 255, 255)
+#define COLOR_BLUE_ALPHA(x) nvgRGBA(0, 0, 255, x)
+#define COLOR_ORANGE nvgRGBA(255, 175, 3, 255)
+#define COLOR_ORANGE_ALPHA(x) nvgRGBA(255, 175, 3, x)
+#define COLOR_YELLOW_ALPHA(x) nvgRGBA(218, 202, 37, x)
+#define COLOR_GREY nvgRGBA(191, 191, 191, 1)
 
-const int bdr_s = 30;
+const int bdr_s = 15;
 const int header_h = 420;
 const int footer_h = 280;
 
@@ -50,6 +60,14 @@ typedef struct Rect {
   }
 } Rect;
 
+const Rect map_overlay_btn = {0, 465, 150, 150};
+const Rect map_return_btn = {1770, 465, 150, 150};
+const Rect map_btn = {1425, 905, 140, 140};
+const Rect rec_btn = {1745, 905, 140, 140};
+const Rect laneless_btn = {1585, 905, 140, 140};
+const Rect monitoring_btn = {50, 830, 140, 140};
+const Rect stockui_btn = {15, 15, 184, 202};
+const Rect tuneui_btn = {1720, 15, 184, 202};
 struct Alert {
   QString text1;
   QString text2;
@@ -94,9 +112,9 @@ typedef enum UIStatus {
 
 const QColor bg_colors [] = {
   [STATUS_DISENGAGED] =  QColor(0x17, 0x33, 0x49, 0xc8),
-  [STATUS_ENGAGED] = QColor(0x17, 0x86, 0x44, 0xf1),
-  [STATUS_WARNING] = QColor(0xDA, 0x6F, 0x25, 0xf1),
-  [STATUS_ALERT] = QColor(0xC9, 0x22, 0x31, 0xf1),
+  [STATUS_ENGAGED] = QColor(0x17, 0x86, 0x44, 0x96),
+  [STATUS_WARNING] = QColor(0xDA, 0x6F, 0x25, 0x96),
+  [STATUS_ALERT] = QColor(0xC9, 0x22, 0x31, 0x96),
 };
 
 typedef struct {
@@ -115,6 +133,9 @@ typedef struct UIScene {
 
   cereal::PandaState::PandaType pandaType;
 
+  bool map_on_top = false;
+  bool is_OpenpilotViewEnabled = false;
+  bool live_tune_panel_enable;
   bool controlAllowed;
   bool show_error;
   bool mapbox_running;
