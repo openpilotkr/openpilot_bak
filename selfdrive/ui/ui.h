@@ -139,6 +139,7 @@ typedef struct UIScene {
 
   cereal::PandaState::PandaType pandaType;
 
+  bool touched = false;
   bool map_on_top = false;
   bool map_on_overlay = false;
   bool map_is_running = false;
@@ -156,6 +157,7 @@ typedef struct UIScene {
   int lqrScale, lqrKi, lqrDcGain;
   bool live_tune_panel_enable;
   int live_tune_panel_list = 0;
+  int list_count = 3;
   int nTime, autoScreenOff, brightness, awake;
   int nVolumeBoost = 0;
   bool controlAllowed;
