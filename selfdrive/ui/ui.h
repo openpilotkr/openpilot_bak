@@ -149,6 +149,7 @@ typedef struct UIScene {
   bool monitoring_mode;
   bool comma_stock_ui, opkr_livetune_ui;
   bool is_OpenpilotViewEnabled = false;
+  bool driving_record;
   bool touched2 = false;
   int brightness_off;
   int cameraOffset, pathOffset, osteerRateCost;
@@ -156,10 +157,15 @@ typedef struct UIScene {
   int indiInnerLoopGain, indiOuterLoopGain, indiTimeConstant, indiActuatorEffectiveness;
   int lqrScale, lqrKi, lqrDcGain;
   bool live_tune_panel_enable;
+  bool kr_date_show;
+  bool kr_time_show;
   int live_tune_panel_list = 0;
   int list_count = 3;
   int nTime, autoScreenOff, brightness, awake;
   int nVolumeBoost = 0;
+  bool nDebugUi1;
+  bool nDebugUi2;
+  bool nOpkrBlindSpotDetect;
   bool controlAllowed;
   bool show_error;
   bool mapbox_running;
