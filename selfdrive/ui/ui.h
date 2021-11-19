@@ -134,12 +134,18 @@ typedef struct UIScene {
   cereal::PandaState::PandaType pandaType;
 
   bool map_on_top = false;
+  bool map_on_overlay = false;
+  float gpsAccuracyUblox;
   bool is_OpenpilotViewEnabled = false;
   bool live_tune_panel_enable;
+  int nVolumeBoost = 0;
   bool controlAllowed;
   bool show_error;
   bool mapbox_running;
   bool tmux_error_check = false;
+  cereal::DeviceState::Reader deviceState;
+  // gps
+  int satelliteCount;
   // modelV2
   float lane_line_probs[4];
   float road_edge_stds[2];
