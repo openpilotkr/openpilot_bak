@@ -14,7 +14,7 @@ const CanMsg TESLA_TX_MSGS[] = {
   {0x45, 2, 8},   // STW_ACTN_RQ
 };
 
-AddrCheckStruct tesla_addr_checks[] = {
+AddrCheckStruct tesla_rx_checks[] = {
   {.msg = {{0x370, 0, 8, .expected_timestep = 40000U}, { 0 }, { 0 }}},   // EPAS_sysStatus (25Hz)
   {.msg = {{0x108, 0, 8, .expected_timestep = 10000U}, { 0 }, { 0 }}},   // DI_torque1 (100Hz)
   {.msg = {{0x118, 0, 6, .expected_timestep = 10000U}, { 0 }, { 0 }}},   // DI_torque2 (100Hz)
@@ -23,13 +23,12 @@ AddrCheckStruct tesla_addr_checks[] = {
   {.msg = {{0x368, 0, 8, .expected_timestep = 100000U}, { 0 }, { 0 }}},  // DI_state (10Hz)
   {.msg = {{0x318, 0, 8, .expected_timestep = 100000U}, { 0 }, { 0 }}},  // GTW_carState (10Hz)
 };
-#define TESLA_ADDR_CHECK_LEN (sizeof(tesla_addr_checks) / sizeof(tesla_addr_checks[0]))
-addr_checks tesla_rx_checks = {tesla_addr_checks, TESLA_ADDR_CHECK_LEN};
+#define TESLA_RX_CHECK_LEN (sizeof(tesla_rx_checks) / sizeof(tesla_rx_checks[0]))
 
 bool autopilot_enabled = false;
 
-static int tesla_rx_hook(CANPacket_t *to_push) {
-  bool valid = addr_safety_check(to_push, &tesla_rx_checks,
+static int tesla_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
+  bool valid = addr_safety_check(to_push, tesla_rx_checks, TESLA_RX_CHECK_LEN,
                                  NULL, NULL, NULL);
 
   if(valid) {
@@ -101,12 +100,16 @@ static int tesla_rx_hook(CANPacket_t *to_push) {
 }
 
 
-static int tesla_tx_hook(CANPacket_t *to_send) {
+static int tesla_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
   int tx = 1;
   int addr = GET_ADDR(to_send);
   bool violation = false;
 
   if(!msg_allowed(to_send, TESLA_TX_MSGS, sizeof(TESLA_TX_MSGS) / sizeof(TESLA_TX_MSGS[0]))) {
+    tx = 0;
+  }
+
+  if(relay_malfunction) {
     tx = 0;
   }
 
@@ -162,7 +165,7 @@ static int tesla_tx_hook(CANPacket_t *to_send) {
   return tx;
 }
 
-static int tesla_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
+static int tesla_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
   int bus_fwd = -1;
   int addr = GET_ADDR(to_fwd);
 
@@ -179,14 +182,17 @@ static int tesla_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
     }
   }
 
+  if(relay_malfunction) {
+    bus_fwd = -1;
+  }
+
   return bus_fwd;
 }
 
-static const addr_checks* tesla_init(int16_t param) {
+static void tesla_init(int16_t param) {
   UNUSED(param);
   controls_allowed = 0;
   relay_malfunction_reset();
-  return &tesla_rx_checks;
 }
 
 const safety_hooks tesla_hooks = {
@@ -195,4 +201,6 @@ const safety_hooks tesla_hooks = {
   .tx = tesla_tx_hook,
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = tesla_fwd_hook,
+  .addr_check = tesla_rx_checks,
+  .addr_check_len = TESLA_RX_CHECK_LEN,
 };

@@ -127,6 +127,23 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     modelLagWarningDEPRECATED @93;
     startupOneplusDEPRECATED @82;
     startupFuzzyFingerprintDEPRECATED @97;
+    laneChangeManual @107;
+    emgButtonManual @108;
+    driverSteering @109;
+    modeChangeOpenpilot @110;
+    modeChangeDistcurv @111;
+    modeChangeDistance @112;
+    modeChangeCurv @113;
+    modeChangeOneway @114;
+    modeChangeMaponly @115;
+    needBrake @116;
+    standStill @117;
+    e2eLongAlert @118;
+    isgActive @119;
+    camSpeedDown @120;
+    gapAdjusting @121;
+    resCruise @122;
+    curvSpeedDown @123;
   }
 }
 
@@ -194,6 +211,29 @@ struct CarState {
   leftBlindspot @33 :Bool; # Is there something blocking the left lane change
   rightBlindspot @34 :Bool; # Is there something blocking the right lane change
 
+  brakeLights @19 :Bool;
+  # opkr-tpms
+  tpmsPressureFl @39 :Float32;
+  tpmsPressureFr @40 :Float32;
+  tpmsPressureRl @41 :Float32;
+  tpmsPressureRr @42 :Float32;
+
+  radarDistance @43 :Float32;
+  standStill @44 :Bool;
+  vSetDis @45 :Float32;
+  cruiseButtons @46 :Float32;
+  cruiseAccStatus @47 :Bool;
+  driverAcc @48 :Bool;
+  brakeHold @49 :Bool;    # AutoHold
+  cruiseGapSet @50 :UInt8;
+
+  # opkr
+  safetyDist @51 :Float32;
+  safetySign @52 :Float32;
+  vEgoOP @53 :Float32;  # openpilot speed
+  electGearStep @54 :Int8;
+  isMph @55 :Bool;
+
   struct WheelSpeeds {
     # optional wheel speeds
     fl @0 :Float32;
@@ -209,6 +249,11 @@ struct CarState {
     speedOffset @3 :Float32;
     standstill @4 :Bool;
     nonAdaptive @5 :Bool;
+    # atom
+    modeSel @6 :Int16;
+    cruiseSwState @7 :Int16;
+    accActive @8 :Bool;
+    gapSet @9 :Int16;
   }
 
   enum GearShifter {
@@ -246,7 +291,6 @@ struct CarState {
   }
 
   errorsDEPRECATED @0 :List(CarEvent.EventName);
-  brakeLightsDEPRECATED @19 :Bool;
 }
 
 # ******* radar state @ 20hz *******
@@ -291,8 +335,6 @@ struct CarControl {
   active @7 :Bool;
 
   actuators @6 :Actuators;
-  roll @8 :Float32;
-  pitch @9 :Float32;
 
   cruiseControl @4 :CruiseControl;
   hudControl @5 :HUDControl;
@@ -335,6 +377,7 @@ struct CarControl {
     leftLaneVisible @7: Bool;
     rightLaneDepart @8: Bool;
     leftLaneDepart @9: Bool;
+    vFuture @10:Float32;
 
     enum VisualAlert {
       # these are the choices from the Honda
@@ -383,7 +426,9 @@ struct CarParams {
   minEnableSpeed @7 :Float32;
   minSteerSpeed @8 :Float32;
   maxSteeringAngleDeg @54 :Float32;
-  safetyConfigs @62 :List(SafetyConfig);
+  safetyModel @9 :SafetyModel;
+  safetyModelPassive @42 :SafetyModel = silent;
+  safetyParam @10 :Int16;
 
   steerMaxBP @11 :List(Float32);
   steerMaxV @12 :List(Float32);
@@ -441,11 +486,20 @@ struct CarParams {
   communityFeature @46: Bool;  # true if a community maintained feature is detected
   fingerprintSource @49: FingerprintSource;
   networkLocation @50 :NetworkLocation;  # Where Panda/C2 is integrated into the car's CAN network
-
-  struct SafetyConfig {
-    safetyModel @0 :SafetyModel;
-    safetyParam @1 :Int16;
-  }
+  mdpsBus @62: Int8;
+  sasBus @63: Int8;
+  sccBus @64: Int8;
+  fcaBus @65: Int8;
+  bsmAvailable @66: Bool;
+  lfaAvailable @67: Bool;
+  lvrAvailable @68: Bool;
+  evgearAvailable @69: Bool;
+  emsAvailable @70: Bool;
+  standStill @71: Bool;
+  vCruisekph @72: Float32;
+  resSpeed @73: Float32;
+  vFuture @74: Float32;
+  aqValue @75: Float32;
 
   struct LateralParams {
     torqueBP @0 :List(Int32);
@@ -457,7 +511,9 @@ struct CarParams {
     kpV @1 :List(Float32);
     kiBP @2 :List(Float32);
     kiV @3 :List(Float32);
-    kf @4 :Float32;
+    kdBP @4 :List(Float32) = [0.];
+    kdV @5 :List(Float32) = [0.];
+    kf @6 :Float32;
   }
 
   struct LongitudinalPIDTuning {
@@ -467,6 +523,10 @@ struct CarParams {
     kiV @3 :List(Float32);
     deadzoneBP @4 :List(Float32);
     deadzoneV @5 :List(Float32);
+    kdBP @6 :List(Float32) = [0.];
+    kdV @7 :List(Float32) = [0.];
+    kfBP @8 :List(Float32);
+    kfV @9 :List(Float32);
   }
 
   struct LateralINDITuning {
@@ -586,7 +646,4 @@ struct CarParams {
   enableCameraDEPRECATED @4 :Bool;
   isPandaBlackDEPRECATED @39: Bool;
   hasStockCameraDEPRECATED @57 :Bool;
-  safetyParamDEPRECATED @10 :Int16;
-  safetyModelDEPRECATED @9 :SafetyModel;
-  safetyModelPassiveDEPRECATED @42 :SafetyModel = silent;
 }

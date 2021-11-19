@@ -60,8 +60,12 @@ class Planner():
   def update(self, sm, CP):
     v_ego = sm['carState'].vEgo
     a_ego = sm['carState'].aEgo
+    self.vego = v_ego
 
-    v_cruise_kph = sm['controlsState'].vCruise
+    if CP.sccBus != 0:
+      v_cruise_kph = sm['carState'].vSetDis
+    else:
+      v_cruise_kph = sm['controlsState'].vCruise
     v_cruise_kph = min(v_cruise_kph, V_CRUISE_MAX)
     v_cruise = v_cruise_kph * CV.KPH_TO_MS
 
@@ -79,7 +83,7 @@ class Planner():
 
     accel_limits = [A_CRUISE_MIN, get_max_accel(v_ego)]
     accel_limits_turns = limit_accel_in_turns(v_ego, sm['carState'].steeringAngleDeg, accel_limits, self.CP)
-    if force_slow_decel:
+    if force_slow_decel and False: # awareness decel is disabled for now:
       # if required so, force a smooth deceleration
       accel_limits_turns[1] = min(accel_limits_turns[1], AWARENESS_DECEL)
       accel_limits_turns[0] = min(accel_limits_turns[0], accel_limits_turns[1])
@@ -119,5 +123,8 @@ class Planner():
     longitudinalPlan.hasLead = sm['radarState'].leadOne.status
     longitudinalPlan.longitudinalPlanSource = self.mpc.source
     longitudinalPlan.fcw = self.fcw
+
+    longitudinalPlan.dynamicTRMode = int(self.mpc.dynamic_TR_mode)
+    longitudinalPlan.dynamicTRValue = float(self.mpc.dynamic_TR)
 
     pm.send('longitudinalPlan', plan_send)

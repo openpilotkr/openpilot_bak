@@ -23,8 +23,7 @@ typedef union _USB_Setup {
 }
 USB_Setup_TypeDef;
 
-#define MAX_CAN_MSGS_PER_BULK_TRANSFER 51U
-#define MAX_EP1_CHUNK_PER_BULK_TRANSFER 16256 // max data stream chunk in bytes, shouldn't be higher than 16320 or counter will overflow
+#define MAX_CAN_MSGS_PER_BULK_TRANSFER 4U
 
 bool usb_eopf_detected = false;
 
@@ -124,7 +123,7 @@ uint8_t device_desc[] = {
   0xFF, 0xFF, 0xFF, 0x40, // Class, Subclass, Protocol, Max Packet Size
   TOUSBORDER(USB_VID), // idVendor
   TOUSBORDER(USB_PID), // idProduct
-  0x00, 0x00, // bcdDevice
+  0x00, 0x23, // bcdDevice
   0x01, 0x02, // Manufacturer, Product
   0x03, 0x01 // Serial Number, Num Configurations
 };
@@ -494,7 +493,7 @@ void usb_setup(void) {
                                USB_OTG_DOEPCTL_SD0PID_SEVNFRM | USB_OTG_DOEPCTL_USBAEP;
       USBx_OUTEP(2)->DOEPINT = 0xFF;
 
-      USBx_OUTEP(3)->DOEPTSIZ = (32U << 19) | 0x800U;
+      USBx_OUTEP(3)->DOEPTSIZ = (1U << 19) | 0x40U;
       USBx_OUTEP(3)->DOEPCTL = (0x40U & USB_OTG_DOEPCTL_MPSIZ) | (2U << 18) |
                                USB_OTG_DOEPCTL_SD0PID_SEVNFRM | USB_OTG_DOEPCTL_USBAEP;
       USBx_OUTEP(3)->DOEPINT = 0xFF;
@@ -527,8 +526,6 @@ void usb_setup(void) {
         case USB_DESC_TYPE_DEVICE:
           //puts("    writing device descriptor\n");
 
-          // set bcdDevice to hardware type
-          device_desc[13] = hw_type;
           // setup transfer
           USB_WritePacket(device_desc, MIN(sizeof(device_desc), setup.b.wLength.w), 0);
           USBx_OUTEP(0)->DOEPCTL |= USB_OTG_DOEPCTL_CNAK;
@@ -824,11 +821,9 @@ void usb_irqhandler(void) {
       // USBx_OUTEP(3)->DOEPTSIZ = (1U << 19) | 0x40U;
       // USBx_OUTEP(3)->DOEPCTL |= USB_OTG_DOEPCTL_CNAK;
     } else if ((USBx_OUTEP(3)->DOEPINT) != 0) {
-      #ifdef DEBUG_USB
-        puts("OUTEP3 error ");
-        puth(USBx_OUTEP(3)->DOEPINT);
-        puts("\n");
-      #endif
+      puts("OUTEP3 error ");
+      puth(USBx_OUTEP(3)->DOEPINT);
+      puts("\n");
     } else {
       // USBx_OUTEP(3)->DOEPINT is 0, ok to skip
     }
@@ -935,7 +930,7 @@ void usb_irqhandler(void) {
 void usb_outep3_resume_if_paused(void) {
   ENTER_CRITICAL();
   if (!outep3_processing && (USBx_OUTEP(3)->DOEPCTL & USB_OTG_DOEPCTL_NAKSTS) != 0) {
-    USBx_OUTEP(3)->DOEPTSIZ = (32U << 19) | 0x800U;
+    USBx_OUTEP(3)->DOEPTSIZ = (1U << 19) | 0x40U;
     USBx_OUTEP(3)->DOEPCTL |= USB_OTG_DOEPCTL_EPENA | USB_OTG_DOEPCTL_CNAK;
   }
   EXIT_CRITICAL();

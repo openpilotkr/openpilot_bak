@@ -12,22 +12,13 @@
 #include "power_saving.h"
 #include "safety.h"
 
-#include "drivers/can_common.h"
-
-#ifdef STM32H7
-  #include "drivers/fdcan.h"
-#else
-  #include "drivers/bxcan.h"
-#endif
-
-#include "usb_protocol.h"
+#include "drivers/can.h"
 
 #include "obj/gitversion.h"
 
 extern int _app_start[0xc000]; // Only first 3 sectors of size 0x4000 are used
 
 // When changing this struct, boardd and python/__init__.py needs to be kept up to date!
-#define HEALTH_PACKET_VERSION 1
 struct __attribute__((packed)) health_t {
   uint32_t uptime_pkt;
   uint32_t voltage_pkt;
@@ -195,7 +186,15 @@ int get_rtc_pkt(void *dat) {
   return sizeof(t);
 }
 
-
+int usb_cb_ep1_in(void *usbdata, int len, bool hardwired) {
+  UNUSED(hardwired);
+  CAN_FIFOMailBox_TypeDef *reply = (CAN_FIFOMailBox_TypeDef *)usbdata;
+  int ilen = 0;
+  while (ilen < MIN(len/0x10, 4) && can_pop(&can_rx_q, &reply[ilen])) {
+    ilen++;
+  }
+  return ilen*0x10;
+}
 
 // send on serial, first byte to select the ring
 void usb_cb_ep2_out(void *usbdata, int len, bool hardwired) {
@@ -210,6 +209,23 @@ void usb_cb_ep2_out(void *usbdata, int len, bool hardwired) {
         }
       }
     }
+  }
+}
+
+// send on CAN
+void usb_cb_ep3_out(void *usbdata, int len, bool hardwired) {
+  UNUSED(hardwired);
+  int dpkt = 0;
+  uint32_t *d32 = (uint32_t *)usbdata;
+  for (dpkt = 0; dpkt < (len / 4); dpkt += 4) {
+    CAN_FIFOMailBox_TypeDef to_push;
+    to_push.RDHR = d32[dpkt + 3];
+    to_push.RDLR = d32[dpkt + 2];
+    to_push.RDTR = d32[dpkt + 1];
+    to_push.RIR = d32[dpkt];
+
+    uint8_t bus_number = (to_push.RDTR >> 4) & CAN_BUS_NUM_MASK;
+    can_send(&to_push, bus_number, false);
   }
 }
 
@@ -432,17 +448,23 @@ int usb_cb_control_msg(USB_Setup_TypeDef *setup, uint8_t *resp, bool hardwired) 
         set_safety_mode(setup->b.wValue.w, (uint16_t) setup->b.wIndex.w);
       }
       break;
-    // **** 0xdd: get healthpacket and CANPacket versions
+    // **** 0xdd: enable can forwarding
     case 0xdd:
-      resp[0] = HEALTH_PACKET_VERSION;
-      resp[1] = CAN_PACKET_VERSION;
-      resp_len = 2;
+      // wValue = Can Bus Num to forward from
+      // wIndex = Can Bus Num to forward to
+      if ((setup->b.wValue.w < BUS_MAX) && (setup->b.wIndex.w < BUS_MAX) &&
+          (setup->b.wValue.w != setup->b.wIndex.w)) { // set forwarding
+        can_set_forwarding(setup->b.wValue.w, setup->b.wIndex.w & CAN_BUS_NUM_MASK);
+      } else if((setup->b.wValue.w < BUS_MAX) && (setup->b.wIndex.w == 0xFFU)){ //Clear Forwarding
+        can_set_forwarding(setup->b.wValue.w, -1);
+      } else {
+        puts("Invalid CAN bus forwarding\n");
+      }
       break;
     // **** 0xde: set can bitrate
     case 0xde:
       if (setup->b.wValue.w < BUS_MAX) {
-        // TODO: add sanity check, ideally check if value is correct(from array of correct values)
-        bus_config[setup->b.wValue.w].can_speed = setup->b.wIndex.w;
+        can_speed[setup->b.wValue.w] = setup->b.wIndex.w;
         bool ret = can_init(CAN_NUM_FROM_BUS_NUM(setup->b.wValue.w));
         UNUSED(ret);
       }
@@ -595,25 +617,6 @@ int usb_cb_control_msg(USB_Setup_TypeDef *setup, uint8_t *resp, bool hardwired) 
       heartbeat_disabled = true;
       break;
 #endif
-    // **** 0xde: set CAN FD data bitrate
-    case 0xf9:
-      if (setup->b.wValue.w < CAN_MAX) {
-        // TODO: add sanity check, ideally check if value is correct(from array of correct values)
-        bus_config[setup->b.wValue.w].can_data_speed = setup->b.wIndex.w;
-        bus_config[setup->b.wValue.w].canfd_enabled = (setup->b.wIndex.w >= bus_config[setup->b.wValue.w].can_speed) ? true : false;
-        bus_config[setup->b.wValue.w].brs_enabled = (setup->b.wIndex.w > bus_config[setup->b.wValue.w].can_speed) ? true : false;
-        bool ret = can_init(CAN_NUM_FROM_BUS_NUM(setup->b.wValue.w));
-        UNUSED(ret);
-      }
-      break;
-    // **** 0xfa: check if CAN FD and BRS are enabled
-    case 0xfa:
-      if (setup->b.wValue.w < CAN_MAX) {
-        resp[0] =  bus_config[setup->b.wValue.w].canfd_enabled;
-        resp[1] = bus_config[setup->b.wValue.w].brs_enabled;
-        resp_len = 2;
-      }
-      break;
     default:
       puts("NO HANDLER ");
       puth(setup->b.bRequest);
@@ -660,10 +663,9 @@ void tick_handler(void) {
       }
       #ifdef DEBUG
         puts("** blink ");
-        puts("rx:"); puth4(can_rx_q.r_ptr); puts("-"); puth4(can_rx_q.w_ptr); puts("  ");
-        puts("tx1:"); puth4(can_tx1_q.r_ptr); puts("-"); puth4(can_tx1_q.w_ptr); puts("  ");
-        puts("tx2:"); puth4(can_tx2_q.r_ptr); puts("-"); puth4(can_tx2_q.w_ptr); puts("  ");
-        puts("tx3:"); puth4(can_tx3_q.r_ptr); puts("-"); puth4(can_tx3_q.w_ptr); puts("\n");
+        puth(can_rx_q.r_ptr); puts(" "); puth(can_rx_q.w_ptr); puts("  ");
+        puth(can_tx1_q.r_ptr); puts(" "); puth(can_tx1_q.w_ptr); puts("  ");
+        puth(can_tx2_q.r_ptr); puts(" "); puth(can_tx2_q.w_ptr); puts("\n");
       #endif
 
       // Tick drivers
@@ -685,14 +687,6 @@ void tick_handler(void) {
         siren_countdown -= 1U;
       }
 
-      if (controls_allowed) {
-        controls_allowed_countdown = 30U;
-      } else if (controls_allowed_countdown > 0U) {
-        controls_allowed_countdown -= 1U;
-      } else {
-
-      }
-
       if (!heartbeat_disabled) {
         // if the heartbeat has been gone for a while, go to SILENT safety mode and enter power save
         if (heartbeat_counter >= (check_started() ? HEARTBEAT_IGNITION_CNT_ON : HEARTBEAT_IGNITION_CNT_OFF)) {
@@ -700,9 +694,8 @@ void tick_handler(void) {
           puth(heartbeat_counter);
           puts(" seconds. Safety is set to SILENT mode.\n");
 
-          if (controls_allowed_countdown > 0U) {
+          if (controls_allowed) {
             siren_countdown = 5U;
-            controls_allowed_countdown = 0U;
           }
 
           // set flag to indicate the heartbeat was lost
@@ -710,12 +703,16 @@ void tick_handler(void) {
             heartbeat_lost = true;
           }
 
-          if (current_safety_mode != SAFETY_SILENT) {
-            set_safety_mode(SAFETY_SILENT, 0U);
+          if (current_safety_mode != SAFETY_NOOUTPUT) {
+            set_safety_mode(SAFETY_NOOUTPUT, 0U);
           }
-          if (power_save_status != POWER_SAVE_STATUS_ENABLED) {
-            set_power_save_state(POWER_SAVE_STATUS_ENABLED);
-          }
+
+          // if (current_safety_mode != SAFETY_SILENT) {
+          //   set_safety_mode(SAFETY_SILENT, 0U);
+          // }
+          // if (power_save_status != POWER_SAVE_STATUS_ENABLED) {
+          //   set_power_save_state(POWER_SAVE_STATUS_ENABLED);
+          // }
 
           // Also disable IR when the heartbeat goes missing
           current_board->set_ir_power(0U);
@@ -748,7 +745,7 @@ void tick_handler(void) {
       ignition_can_cnt += 1U;
 
       // synchronous safety check
-      safety_tick(current_rx_checks);
+      safety_tick(current_hooks);
     }
 
     loop_counter++;
@@ -816,7 +813,7 @@ int main(void) {
   microsecond_timer_init();
 
   // init to SILENT and can silent
-  set_safety_mode(SAFETY_SILENT, 0);
+  set_safety_mode(SAFETY_NOOUTPUT, 0); // MDPS will hard fault if SAFETY_SILENT set
 
   // enable CAN TXs
   current_board->enable_can_transceivers(true);

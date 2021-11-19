@@ -184,10 +184,49 @@ function launch {
   # write tmux scrollback to a file
   tmux capture-pane -pq -S-1000 > /tmp/launch_log
 
+  # spinner, by opkr
+  if [ -f "$BASEDIR/prebuilt" ]; then
+    python /data/openpilot/common/spinner.py &
+  fi
+
+  # ssh key restore, by opkr
+  if [ -f "/data/params/d/OpkrSSHLegacy" ]; then
+    SSH_KEY=$(cat /data/params/d/OpkrSSHLegacy)
+  else
+    setprop persist.neos.ssh 1
+    cp -f /data/openpilot/selfdrive/assets/addon/key/GithubSshKeys_legacy /data/params/d/GithubSshKeys
+    chmod 600 /data/params/d/GithubSshKeys
+  fi
+  if [ "$SSH_KEY" == "1" ]; then
+    cp -f /data/openpilot/selfdrive/assets/addon/key/GithubSshKeys_legacy /data/params/d/GithubSshKeys
+    chmod 600 /data/params/d/GithubSshKeys
+  fi
+
+  if [ ! -f "/data/params/d/GithubSshKeys" ]; then
+    setprop persist.neos.ssh 1
+    cp -f /data/openpilot/selfdrive/assets/addon/key/GithubSshKeys_legacy /data/params/d/GithubSshKeys
+    chmod 600 /data/params/d/GithubSshKeys
+  fi
+
+  cat /data/openpilot/selfdrive/car/hyundai/values.py | grep ' = "' | awk -F'"' '{print $2}' > /data/params/d/CarList
+
   # start manager
   cd selfdrive/manager
-  ./build.py && ./manager.py
-
+  if [ -f /EON ]; then
+    if [ ! -f "/system/comma/usr/lib/libgfortran.so.5.0.0" ]; then
+      mount -o remount,rw /system
+      tar -zxvf /data/openpilot/selfdrive/mapd/assets/libgfortran.tar.gz -C /system/comma/usr/lib/
+      mount -o remount,r /system
+    fi
+    if [ ! -d "/system/comma/usr/lib/python3.8/site-packages/opspline" ]; then
+      mount -o remount,rw /system
+      tar -zxvf /data/openpilot/selfdrive/mapd/assets/opspline.tar.gz -C /system/comma/usr/lib/python3.8/site-packages/
+      mount -o remount,r /system
+    fi
+    ./build.py && ./manager.py
+  else
+    ./custom_dep.py && ./build.py && ./manager.py
+  fi
   # if broken, keep on screen error
   while true; do sleep 1; done
 }
