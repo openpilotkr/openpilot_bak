@@ -66,8 +66,14 @@ const Rect map_btn = {1425, 905, 140, 140};
 const Rect rec_btn = {1745, 905, 140, 140};
 const Rect laneless_btn = {1585, 905, 140, 140};
 const Rect monitoring_btn = {50, 830, 140, 140};
+const Rect ml_btn = {1265, 905, 140, 140};
 const Rect stockui_btn = {15, 15, 184, 202};
 const Rect tuneui_btn = {1720, 15, 184, 202};
+const Rect livetunepanel_left_btn = {500, 750, 170, 160};
+const Rect livetunepanel_right_btn = {1250, 750, 170, 160};
+const Rect livetunepanel_left_above_btn = {500, 575, 170, 160};
+const Rect livetunepanel_right_above_btn = {1250, 575, 170, 160};
+
 struct Alert {
   QString text1;
   QString text2;
@@ -135,13 +141,27 @@ typedef struct UIScene {
 
   bool map_on_top = false;
   bool map_on_overlay = false;
+  bool map_is_running = false;
   float gpsAccuracyUblox;
+  int lateralControlMethod;
+  int laneless_mode;
+  bool monitoring_mode;
+  bool comma_stock_ui, opkr_livetune_ui;
   bool is_OpenpilotViewEnabled = false;
+  bool touched2 = false;
+  int brightness_off;
+  int cameraOffset, pathOffset, osteerRateCost;
+  int pidKp, pidKi, pidKd, pidKf;
+  int indiInnerLoopGain, indiOuterLoopGain, indiTimeConstant, indiActuatorEffectiveness;
+  int lqrScale, lqrKi, lqrDcGain;
   bool live_tune_panel_enable;
+  int live_tune_panel_list = 0;
+  int nTime, autoScreenOff, brightness, awake;
   int nVolumeBoost = 0;
   bool controlAllowed;
   bool show_error;
   bool mapbox_running;
+  int navi_select;
   bool tmux_error_check = false;
   cereal::DeviceState::Reader deviceState;
   // gps
@@ -177,6 +197,7 @@ typedef struct UIState {
 
   bool awake;
   bool has_prime = false;
+  bool sidebar_view;
 
   QTransform car_space_transform;
   bool wide_camera;
