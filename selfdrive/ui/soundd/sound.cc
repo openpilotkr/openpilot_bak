@@ -1,7 +1,11 @@
+#include <string>  //opkr
+
 #include "selfdrive/ui/soundd/sound.h"
 
 #include "cereal/messaging/messaging.h"
 #include "selfdrive/common/util.h"
+
+#include "selfdrive/common/params.h"
 
 // TODO: detect when we can't play sounds
 // TODO: detect when we can't display the UI
@@ -67,6 +71,11 @@ void Sound::setAlert(const Alert &alert) {
     if (alert.sound != AudibleAlert::NONE) {
       auto &[s, loops] = sounds[alert.sound];
       s->setLoopCount(loops);
+      if ((std::stof(Params().get("OpkrUIVolumeBoost")) * 0.01) < -0.03) {
+        s->setVolume(0.0);
+      } else if ((std::stof(Params().get("OpkrUIVolumeBoost")) * 0.01) > 0.03) {
+        s->setVolume(std::stof(Params().get("OpkrUIVolumeBoost")) * 0.01);
+      }
       s->play();
     }
   }
