@@ -1,11 +1,14 @@
 #include "selfdrive/ui/qt/onroad.h"
 
 #include <QDebug>
+#include <QFileInfo>
+#include <QDateTime>
 
 #include "selfdrive/common/timing.h"
 #include "selfdrive/ui/paint.h"
 #include "selfdrive/ui/qt/util.h"
 #include "selfdrive/ui/qt/api.h"
+#include "selfdrive/ui/qt/widgets/input.h"
 #ifdef ENABLE_MAPS
 #include "selfdrive/ui/qt/maps/map.h"
 #endif
@@ -46,6 +49,19 @@ void OnroadWindow::updateState(const UIState &s) {
     if (alert.type == "controlsUnresponsive") {
       bgColor = bg_colors[STATUS_ALERT];
     }
+    if (!s.scene.is_OpenpilotViewEnabled) {
+      // opkr
+      if (QFileInfo::exists("/data/log/error.txt") && s.scene.show_error && !s.scene.tmux_error_check) {
+        QFileInfo fileInfo;
+        fileInfo.setFile("/data/log/error.txt");
+        QDateTime modifiedtime = fileInfo.lastModified();
+        QString modified_time = modifiedtime.toString("yyyy-MM-dd hh:mm:ss ");
+        const std::string txt = util::read_file("/data/log/error.txt");
+        if (RichTextDialog::alert(modified_time + QString::fromStdString(txt), this)) {
+          QUIState::ui_state.scene.tmux_error_check = true;
+        }
+      }
+    }
     alerts->updateAlert(alert, bgColor);
   }
   if (bg != bgColor) {
@@ -56,22 +72,33 @@ void OnroadWindow::updateState(const UIState &s) {
 }
 
 void OnroadWindow::mousePressEvent(QMouseEvent* e) {
+  // propagation event to parent(HomeWindow)
+  QWidget::mousePressEvent(e);
+
+  if ((map_overlay_btn.ptInRect(e->x(), e->y()) || map_btn.ptInRect(e->x(), e->y()) || map_return_btn.ptInRect(e->x(), e->y()) || 
+    rec_btn.ptInRect(e->x(), e->y()) || laneless_btn.ptInRect(e->x(), e->y()) || monitoring_btn.ptInRect(e->x(), e->y()) ||
+    stockui_btn.ptInRect(e->x(), e->y()) || tuneui_btn.ptInRect(e->x(), e->y()) || QUIState::ui_state.scene.map_on_top || 
+    QUIState::ui_state.scene.live_tune_panel_enable)) {return;}
   if (map != nullptr) {
     bool sidebarVisible = geometry().x() > 0;
     map->setVisible(!sidebarVisible && !map->isVisible());
+    if (map->isVisible()) {
+      QUIState::ui_state.scene.mapbox_running = true;
+    } else {
+      QUIState::ui_state.scene.mapbox_running = false;
+    }
   }
-  // propagation event to parent(HomeWindow)
-  QWidget::mousePressEvent(e);
 }
 
 void OnroadWindow::offroadTransition(bool offroad) {
 #ifdef ENABLE_MAPS
   if (!offroad) {
-    if (map == nullptr && (QUIState::ui_state.has_prime || !MAPBOX_TOKEN.isEmpty())) {
+    QString token = QString::fromStdString(Params().get("dp_mapbox_token_sk"));
+    if (map == nullptr && !token.isEmpty()) {
       QMapboxGLSettings settings;
 
-      // Valid for 4 weeks since we can't swap tokens on the fly
-      QString token = MAPBOX_TOKEN.isEmpty() ? CommaApi::create_jwt({}, 4 * 7 * 24 * 3600) : MAPBOX_TOKEN;
+      // // Valid for 4 weeks since we can't swap tokens on the fly
+      // QString token = MAPBOX_TOKEN.isEmpty() ? CommaApi::create_jwt({}, 4 * 7 * 24 * 3600) : MAPBOX_TOKEN;
 
       if (!Hardware::PC()) {
         settings.setCacheDatabasePath("/data/mbgl-cache.db");
