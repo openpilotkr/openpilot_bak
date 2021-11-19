@@ -37,6 +37,7 @@ private:
   void showEvent(QShowEvent *event) override;
   void updateLabels();
 
+  LabelControl *gitRemoteLbl;
   LabelControl *gitBranchLbl;
   LabelControl *gitCommitLbl;
   LabelControl *osVersionLbl;
@@ -69,4 +70,21 @@ private:
   QWidget *sidebar_widget;
   QButtonGroup *nav_btns;
   QStackedWidget *panel_widget;
+};
+
+class UserPanel : public QFrame {
+  Q_OBJECT
+
+public:
+  explicit UserPanel(QWidget *parent = nullptr);
+
+signals:
+  void closeSettings();
+};
+
+class TuningPanel : public QFrame {
+  Q_OBJECT
+
+public:
+  explicit TuningPanel(QWidget *parent = nullptr);
 };
