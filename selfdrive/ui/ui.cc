@@ -338,6 +338,10 @@ static void update_status(UIState *s) {
   }
   started_prev = s->scene.started;
 
+  if (s->sm->frame % (5*UI_FREQ) == 0) {
+  	s->is_OpenpilotViewEnabled = Params().getBool("IsOpenpilotViewEnabled");
+  }
+
   Params params;
 
   //opkr navi on boot
