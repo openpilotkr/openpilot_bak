@@ -324,6 +324,9 @@ static void update_status(UIState *s) {
       s->status = controls_state.getEnabled() ? STATUS_ENGAGED : STATUS_DISENGAGED;
     }
   }
+  if (s->sm->frame % (5*UI_FREQ) == 0) {
+  	s->scene.is_OpenpilotViewEnabled = Params().getBool("IsOpenpilotViewEnabled");
+  }
 
   // Handle onroad/offroad transition
   static bool started_prev = false;
@@ -352,10 +355,6 @@ QUIState::QUIState(QObject *parent) : QObject(parent) {
   ui_state.wide_camera = Hardware::TICI() ? params.getBool("EnableWideCamera") : false;
   ui_state.has_prime = params.getBool("HasPrime");
   ui_state.sidebar_view = false;
-
-  if (sm.frame % (5*UI_FREQ) == 0) {
-  	s->scene.is_OpenpilotViewEnabled = Params().getBool("IsOpenpilotViewEnabled");
-  }
 
   // update timer
   timer = new QTimer(this);
