@@ -310,7 +310,6 @@ static void update_state(UIState *s) {
 
 void ui_update_params(UIState *s) {
   s->scene.is_metric = Params().getBool("IsMetric");
-  s->scene.is_OpenpilotViewEnabled = Params().getBool("IsOpenpilotViewEnabled");
 }
 
 static void update_status(UIState *s) {
@@ -353,6 +352,10 @@ QUIState::QUIState(QObject *parent) : QObject(parent) {
   ui_state.wide_camera = Hardware::TICI() ? params.getBool("EnableWideCamera") : false;
   ui_state.has_prime = params.getBool("HasPrime");
   ui_state.sidebar_view = false;
+
+  if (sm.frame % (5*UI_FREQ) == 0) {
+  	s->scene.is_OpenpilotViewEnabled = Params().getBool("IsOpenpilotViewEnabled");
+  }
 
   // update timer
   timer = new QTimer(this);
