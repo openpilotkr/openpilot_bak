@@ -61,8 +61,8 @@ void OnroadWindow::updateState(const UIState &s) {
           QUIState::ui_state.scene.tmux_error_check = true;
         }
       }
+	  alerts->updateAlert(alert, bgColor);
     }
-    alerts->updateAlert(alert, bgColor);
   }
   if (bg != bgColor) {
     // repaint border
