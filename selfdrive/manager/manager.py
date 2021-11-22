@@ -317,9 +317,9 @@ def manager_thread():
     if shutdown:
       break
     
-    state = managed_processes['ui'].get_process_state_msg()
-    print("state.running={}".format(state.running))
-
+    if not managed_processes['ui'].get_process_state_msg().running:
+      print("-----------------------ui running---------------------")
+      managed_processes['ui'].start()
 
 def main():
   prepare_only = os.getenv("PREPAREONLY") is not None
