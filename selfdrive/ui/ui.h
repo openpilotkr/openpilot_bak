@@ -139,17 +139,64 @@ typedef struct UIScene {
 
   cereal::PandaState::PandaType pandaType;
 
+  bool brakePress;
+  bool brakeHold;
   bool touched = false;
   bool map_on_top = false;
   bool map_on_overlay = false;
   bool map_is_running = false;
   float gpsAccuracyUblox;
+  float altitudeUblox;
+  float bearingUblox;
+
+  int cpuPerc;
+  float cpuTemp;
+  float batTemp;
+  float ambientTemp;
+  float batPercent;
+  bool rightblindspot;
+  bool leftblindspot;
+  bool leftBlinker;
+  bool rightBlinker;
+  int blinker_blinkingrate;
+  int blindspot_blinkingrate = 120;
+  int car_valid_status_changed = 0;
+  float angleSteers;
+  float steerRatio;
+  bool brakeLights;
+  bool steerOverride;
+  float output_scale;
+  int batteryPercent;
+  bool batteryCharging;
+  char batteryStatus[64];
+  int fanSpeed;
+  float tpmsPressureFl;
+  float tpmsPressureFr;
+  float tpmsPressureRl;
+  float tpmsPressureRr;
   int lateralControlMethod;
+  float radarDistance;
+  bool standStill;
+  int limitSpeedCamera;
+  float limitSpeedCameraDist;
+  int mapSign;
+  float vSetDis;
+  bool cruiseAccStatus;
   int laneless_mode;
+  int recording_count;
+  int recording_quality;
+  float steerMax_V;
+  int speed_lim_off;
   bool monitoring_mode;
+  bool forceGearD;
   bool comma_stock_ui, opkr_livetune_ui;
   bool is_OpenpilotViewEnabled = false;
   bool driving_record;
+  float steer_actuator_delay;
+  bool batt_less;
+  int cruise_gap;
+  int dynamic_tr_mode;
+  float dynamic_tr_value;
   bool touched2 = false;
   int brightness_off;
   int cameraOffset, pathOffset, osteerRateCost;
@@ -163,17 +210,34 @@ typedef struct UIScene {
   int list_count = 3;
   int nTime, autoScreenOff, brightness, awake;
   int nVolumeBoost = 0;
+  bool read_params_once = false;
   bool nDebugUi1;
   bool nDebugUi2;
   bool nOpkrBlindSpotDetect;
+  bool auto_gitpull = false;
+  bool is_speed_over_limit = false;
   bool controlAllowed;
+  bool steer_wind_down;
+  bool steer_warning;
+  bool stand_still;
   bool show_error;
+  int display_maxspeed_time = 0;
   bool mapbox_running;
   int navi_select;
   bool tmux_error_check = false;
+
   cereal::DeviceState::Reader deviceState;
+  cereal::CarState::Reader car_state;
+  cereal::ControlsState::Reader controls_state;
+  cereal::CarState::GearShifter getGearShifter;
+  cereal::LateralPlan::Reader lateral_plan;
+  cereal::LiveNaviData::Reader live_navi_data;
+  cereal::LiveMapData::Reader live_map_data;
+
   // gps
   int satelliteCount;
+  float gpsAccuracy;
+
   // modelV2
   float lane_line_probs[4];
   float road_edge_stds[2];
@@ -189,6 +253,53 @@ typedef struct UIScene {
   float light_sensor, accel_sensor, gyro_sensor;
   bool started, ignition, is_metric, longitudinal_control, end_to_end;
   uint64_t started_frame;
+
+
+  // atom
+  struct _LiveParams
+  {
+    float angleOffset;
+    float angleOffsetAverage;
+    float stiffnessFactor;
+    float steerRatio;
+  } liveParams;
+
+  struct _LateralPlan
+  {
+    float laneWidth;
+    float steerRateCost;
+    int standstillElapsedTime = 0;
+
+    float dProb;
+    float lProb;
+    float rProb;
+
+    float angleOffset;
+    bool lanelessModeStatus;
+  } lateralPlan;
+
+  struct _LiveNaviData
+  {
+    int opkrspeedlimit;
+    float opkrspeedlimitdist;
+    int opkrspeedsign;
+    float opkrcurveangle;
+    int   opkrturninfo;
+    float opkrdisttoturn;
+  } liveNaviData;
+
+  struct _LiveMapData
+  {
+    float ospeedLimit;
+    float ospeedLimitAhead;
+    float ospeedLimitAheadDistance;
+    float oturnSpeedLimit;
+    float oturnSpeedLimitEndDistance;
+    int oturnSpeedLimitSign;
+    //float turnSpeedLimitsAhead[16]; // List
+    //float turnSpeedLimitsAheadDistances[16]; // List
+    //int turnSpeedLimitsAheadSigns[16]; // List
+  } liveMapData;
 } UIScene;
 
 typedef struct UIState {
@@ -256,6 +367,7 @@ private:
   FirstOrderFilter brightness_filter;
 
   QTimer *timer;
+  int sleep_time = -1;
 
   void updateBrightness(const UIState &s);
   void updateWakefulness(const UIState &s);
