@@ -515,12 +515,11 @@ def thermald_thread():
 #      HARDWARE.shutdown()
 
     # If UI has crashed, set the brightness to reasonable non-zero value
-    manager_state = messaging.recv_one_or_none(managerState_sock)
-    if manager_state is not None:
-      ui_running = "ui" in (p.name for p in manager_state.managerState.processes if p.running)
-      if ui_running_prev and not ui_running:
-        HARDWARE.set_screen_brightness(20)
-      ui_running_prev = ui_running
+    ui_running = "ui" in (p.name for p in sm["managerState"].processes if p.running)
+    if ui_running_prev and not ui_running:
+      os.system("cd /data/openpilot/selfdrive/ui; ./ui")
+      #HARDWARE.set_screen_brightness(20)
+    ui_running_prev = ui_running
 
     msg.deviceState.chargingError = current_filter.x > 0. and msg.deviceState.batteryPercent < 90  # if current is positive, then battery is being discharged
     msg.deviceState.started = started_ts is not None
