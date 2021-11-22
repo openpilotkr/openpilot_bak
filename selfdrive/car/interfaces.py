@@ -153,14 +153,14 @@ class CarInterfaceBase():
       # if the user overrode recently, show a less harsh alert
       if (cs_out.vEgo < 0.1 or cs_out.standstill) and not self.steer_wind_down_enabled and cs_out.steeringAngleDeg < 90:
         events.add(EventName.isgActive)
-      elif self.silent_steer_warning or cs_out.standstill or self.steering_unpressed < int(1.5 / DT_CTRL):
+      elif self.silent_steer_warning or cs_out.standstill or self.steering_unpressed < int(1.5 / DT_CTRL) and cs_out.vEgo > 1:
         self.silent_steer_warning = True
         events.add(EventName.steerTempUnavailableSilent)
-      else:
+      elif cs_out.vEgo > 1:
         events.add(EventName.steerTempUnavailable)
-    else:
+    elif cs_out.vEgo > 1:
       self.silent_steer_warning = False
-    if cs_out.steerError:
+    if cs_out.steerError and cs_out.vEgo > 1:
       events.add(EventName.steerUnavailable)
 
     # Disable on rising edge of gas or brake. Also disable on brake when speed > 0.
