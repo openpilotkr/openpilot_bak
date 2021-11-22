@@ -120,7 +120,7 @@ class NaviControl():
   def ascc_button_control(self, CS, set_speed):
     self.set_point = max(20 if CS.is_set_speed_in_mph else 30, set_speed)
     self.curr_speed = CS.out.vEgo * CV.MS_TO_KPH
-    self.VSetDis = round(CS.VSetDis * 1.609344 if CS.is_set_speed_in_mph else 1)
+    self.VSetDis = round(CS.VSetDis * 1.609344 if CS.is_set_speed_in_mph else CS.VSetDis)
     btn_signal = self.switch(self.seq_command)
 
     return btn_signal
@@ -234,7 +234,7 @@ class NaviControl():
       res_speed = max(min_control_speed, CS.CP.resSpeed)
       return min(res_speed, navi_speed)
     elif CS.cruise_set_mode in [1,2,4]:
-      if self.lead_0.status and CS.CP.vFuture >= min_control_speed-6:
+      if self.lead_0.status and CS.CP.vFuture >= min_control_speed-7:
         dRel = int(self.lead_0.dRel)
         vRel = int(self.lead_0.vRel * CV.MS_TO_KPH)
         if vRel >= -5:

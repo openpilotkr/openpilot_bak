@@ -1,7 +1,5 @@
 #pragma once
 
-#include <optional>
-
 #include <QThread>
 #include <QGeoCoordinate>
 #include <QGeoManeuver>
@@ -24,8 +22,6 @@ public:
   PubMaster *pm;
 
   QTimer* timer;
-
-  std::optional<int> ui_pid;
 
   // Route
   bool gps_ok = false;
@@ -51,5 +47,4 @@ private slots:
   void timerUpdate();
   void routeCalculated(QGeoRouteReply *reply);
   void recomputeRoute();
-  void sendRoute();
 };

@@ -1008,24 +1008,27 @@ static void draw_safetysign(UIState *s) {
   char safetyDist[32];
   int safety_speed = s->scene.limitSpeedCamera;
   float safety_dist = s->scene.limitSpeedCameraDist;
+  float maxspeed = round(s->scene.controls_state.getVCruise());
   //int safety_speed = s->scene.liveNaviData.opkrspeedlimit;
   //float safety_dist = s->scene.liveNaviData.opkrspeedlimitdist;
 
   snprintf(safetySpeed, sizeof(safetySpeed), "%d", safety_speed);
-  if (s->scene.is_metric) {
-    if (safety_dist >= 1000) {
-      snprintf(safetyDist, sizeof(safetyDist), "%.2fkm", safety_dist/1000);
+  if (maxspeed != 255.0) {
+    if (s->scene.is_metric) {
+      if (safety_dist >= 1000) {
+        snprintf(safetyDist, sizeof(safetyDist), "%.2fkm", safety_dist/1000);
+      } else {
+        snprintf(safetyDist, sizeof(safetyDist), "%.0fm", safety_dist);
+      }
+      opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
     } else {
-      snprintf(safetyDist, sizeof(safetyDist), "%.0fm", safety_dist);
+      if (safety_dist >= 1000) {
+        snprintf(safetyDist, sizeof(safetyDist), "%.2fmi", safety_dist/1000);
+      } else {
+        snprintf(safetyDist, sizeof(safetyDist), "%.0fyd", safety_dist);
+      }
+      opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
     }
-    opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
-  } else {
-    if (safety_dist >= 1000) {
-      snprintf(safetyDist, sizeof(safetyDist), "%.2fmi", safety_dist/1000);
-    } else {
-      snprintf(safetyDist, sizeof(safetyDist), "%.0fyd", safety_dist);
-    }
-    opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
   }
 
   if (safety_speed > 19 && !s->scene.comma_stock_ui) {
