@@ -319,7 +319,7 @@ def manager_thread():
     
     if not managed_processes['ui'].get_process_state_msg().running:
       print("-----------------------ui running---------------------")
-      managed_processes['ui'].start()
+      os.system("cd /data/openpilot/selfdrive/ui;./ui")
 
 def main():
   prepare_only = os.getenv("PREPAREONLY") is not None
