@@ -49,7 +49,7 @@ void OnroadWindow::updateState(const UIState &s) {
     if (alert.type == "controlsUnresponsive") {
       bgColor = bg_colors[STATUS_ALERT];
     }
-    if (!s.scene.is_OpenpilotViewEnabled) {
+    if (!QUIState::ui_state.is_OpenpilotViewEnabled) {
       // opkr
       if (QFileInfo::exists("/data/log/error.txt") && s.scene.show_error && !s.scene.tmux_error_check) {
         QFileInfo fileInfo;
