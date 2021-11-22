@@ -526,6 +526,8 @@ def thermald_thread():
       HARDWARE.set_screen_brightness(20)
     ui_running_prev = ui_running
 
+    print('ui_running={}   ui_running_prev={}'.format(ui_running, ui_running_prev))
+
     msg.deviceState.chargingError = current_filter.x > 0. and msg.deviceState.batteryPercent < 90  # if current is positive, then battery is being discharged
     msg.deviceState.started = started_ts is not None
     msg.deviceState.startedMonoTime = int(1e9*(started_ts or 0))
