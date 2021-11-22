@@ -137,6 +137,9 @@ typedef struct UIScene {
   mat3 view_from_calib;
   bool world_objects_visible;
 
+  std::string alertTextMsg1;
+  std::string alertTextMsg2;
+  float alert_blinking_rate;
   cereal::PandaState::PandaType pandaType;
 
   bool brakePress;
@@ -145,6 +148,9 @@ typedef struct UIScene {
   bool map_on_top = false;
   bool map_on_overlay = false;
   bool map_is_running = false;
+  bool move_to_background = false;
+  bool navi_on_boot = false;
+
   float gpsAccuracyUblox;
   float altitudeUblox;
   float bearingUblox;
