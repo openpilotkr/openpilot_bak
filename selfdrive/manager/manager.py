@@ -322,7 +322,7 @@ def manager_thread():
     if not managed_processes['ui'].get_process_state_msg().running and not ui_started_prev:
       ui_started_prev = True
       os.system("cd /data/openpilot/selfdrive/ui;./ui &")
-    else managed_processes['ui'].get_process_state_msg().running:
+    elif managed_processes['ui'].get_process_state_msg().running:
       ui_started_prev = False
 
 def main():
