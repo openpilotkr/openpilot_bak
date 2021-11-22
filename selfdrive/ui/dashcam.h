@@ -282,7 +282,7 @@ void dashcam(UIState *s) {
     s->scene.touched = false;
   }
 
-  if (!s->scene.ignition && captureState == CAPTURE_STATE_CAPTURING && !s->scene.is_OpenpilotViewEnabled) {
+  if (!s->scene.ignition && captureState == CAPTURE_STATE_CAPTURING && !s->is_OpenpilotViewEnabled) {
     // Assume car is not in drive so stop recording
     stop_capture();
   }
