@@ -280,7 +280,7 @@ def manager_thread():
   sm = messaging.SubMaster(['deviceState'])
   pm = messaging.PubMaster(['managerState'])
 
-  ui_started = False
+  ui_started_prev = False
 
   while True:
     sm.update()
@@ -319,9 +319,11 @@ def manager_thread():
     if shutdown:
       break
 
-    if not managed_processes['ui'].get_process_state_msg().running and not ui_started:
-      ui_started = True
+    if not managed_processes['ui'].get_process_state_msg().running and not ui_started_prev:
+      ui_started_prev = True
       os.system("cd /data/openpilot/selfdrive/ui;./ui &")
+    else managed_processes['ui'].get_process_state_msg().running:
+      ui_started_prev = False
 
 def main():
   prepare_only = os.getenv("PREPAREONLY") is not None
