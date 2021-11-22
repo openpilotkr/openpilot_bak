@@ -316,6 +316,9 @@ def manager_thread():
 
     if shutdown:
       break
+    
+    state = managed_processes['ui'].get_process_state_msg()
+    print("state.running={}".format(state.running))
 
 
 def main():
