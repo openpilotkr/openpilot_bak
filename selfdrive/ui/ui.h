@@ -196,7 +196,6 @@ typedef struct UIScene {
   bool monitoring_mode;
   bool forceGearD;
   bool comma_stock_ui, opkr_livetune_ui;
-  bool is_OpenpilotViewEnabled = false;
   bool driving_record;
   float steer_actuator_delay;
   bool batt_less;
@@ -323,6 +322,7 @@ typedef struct UIState {
   bool awake;
   bool has_prime = false;
   bool sidebar_view;
+  bool is_OpenpilotViewEnabled = false;
 
   QTransform car_space_transform;
   bool wide_camera;
