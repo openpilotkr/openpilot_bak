@@ -351,6 +351,8 @@ class CarInterface(CarInterfaceBase):
     #  events.add(EventName.driverSteering)
     if self.CC.need_brake and not self.CC.longcontrol:
       events.add(EventName.needBrake)
+    if self.CC.standstill_res_button:
+      events.add(EventName.standstillResButton)
     if self.CC.cruise_gap_adjusting:
       events.add(EventName.gapAdjusting)
     if self.CC.on_speed_control and ret.vEgo > 0.3:

@@ -644,6 +644,14 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, alert_rate=0.75),
   },
 
+  EventName.standstillResButton: {
+    ET.WARNING: Alert(
+      "RES triggered for Departure",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .5, alert_rate=0.75),
+  },
+
   EventName.gapAdjusting: {
     ET.WARNING: Alert(
       "Adjusting Cruise Gap",
