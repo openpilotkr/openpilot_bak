@@ -4,9 +4,28 @@
  - Use fork installer : Type https://opkr.tk/fork/opkr on custom URL window(Short URL. This will install OPKR branch directly.) or you can use Shane's fork installer(https://smiskol.com/fork)
  - Use a command : cd /data; mv openpilot openpilot_bak; git clone https://github.com/openpilotkr/openpilot.git -b OPKR; reboot
 
-2. How to use
- - Under construction...
-
+2. How to use(functions)
+ - Device(Function Name: Explanation)
+   - Driving Camera: You can preview/unview Openpilot Driving Camera.
+ - Network(Function Name: Explanation)
+   - HotSpot on Boot: Turned Hotspot on when boot. (reboot required)
+   - Use Legacy SSH Key: Use old ssh key access(below 0.8.2). (no reboot required)
+ - Toggles(Function Name: Explanation)
+   - Enable Lane selector Mode: Show a button on driving screen including LaneMode/LaneLess/AUTO. AUTO mode is automatically switched by a condition of lane recongnition. (no reboot required)
+   - Enable Driver Monitoring: On/Off driver monitoring for the EON without filterless IR camera or Someone cannot use front cam due to uncertain reasons.(reboot required)
+   - Enable Driving Log Record: Record driving logs to Local, not happen upload to server(reboot required)
+   - Enable Sending Log to Server: Enable uploader to upload to server(reboot required)
+   - Use Comma Stock UI: this use original Comma's UI. This can be applied on driving screen(click MaxSpeed box at top-left corner). (no reboot required)
+ - Software(Function Name: Explanation)
+   - Check for Updates: You can confirm new commits of your fork and also you can update it.
+   - Commit(Local/Remote): commit name of local(EON) and Remote.(run once when boot in manager.py, search gitcommit.sh at the file, internet connection required)
+   - Git Pull On Boot: run 'git pull' command when boot.
+   - Load Preset/Save Preset: Load your Parameters or Save Your Parameters. located /data/preset1 or /data/preset2. This function can save/load your settings of Menu)
+   - Parameter Init: Retrieve you Changes of Menu to initial values.
+   - Git Reset: Remove your local changes and inintalize to the first status of the branch.
+   - Cancel Git Pull: Move ine step back if git pull is not satisfied.
+   - Panda Flashing: Run Panda flashing command manually. Basically this is not necessary on normal operation.
+   - Change Repo/Branch: You can install others fork/branch thru typing Git ID, Git Repository, Git Branch.
 
 
 ![](https://user-images.githubusercontent.com/37757984/127420744-89ca219c-8f8e-46d3-bccf-c1cb53b81bb1.png)
