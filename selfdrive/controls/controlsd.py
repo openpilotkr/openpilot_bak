@@ -298,7 +298,7 @@ class Controls:
                                                  LaneChangeState.laneChangeFinishing]:
       self.events.add(EventName.laneChange)
 
-    if self.ignore_can_error_on_isg and CS.vEgo > 1:
+    if self.can_rcv_error or not CS.canValid and self.ignore_can_error_on_isg and CS.vEgo > 1:
       self.events.add(EventName.canError)
     elif self.can_rcv_error or not CS.canValid and not self.ignore_can_error_on_isg:
       self.events.add(EventName.canError)
