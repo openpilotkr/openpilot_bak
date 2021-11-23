@@ -144,7 +144,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     gapAdjusting @121;
     resCruise @122;
     curvSpeedDown @123;
-	standstillResSwitch @124;
+	  standstillResButton @124;
   }
 }
 
