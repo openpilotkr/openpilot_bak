@@ -283,8 +283,6 @@ def manager_thread():
   sm = messaging.SubMaster(['deviceState'])
   pm = messaging.PubMaster(['managerState'])
 
-  ui_started_prev = False
-
   while True:
     sm.update()
     not_run = ignore[:]
@@ -323,12 +321,6 @@ def manager_thread():
     if shutdown:
       break
 
-    if not managed_processes['ui'].get_process_state_msg().running and not ui_started_prev:
-      ui_started_prev = True
-      managed_processes['ui'].stop()
-      managed_processes['ui'].start()
-    elif managed_processes['ui'].get_process_state_msg().running:
-      ui_started_prev = False
 
 def main():
   prepare_only = os.getenv("PREPAREONLY") is not None
