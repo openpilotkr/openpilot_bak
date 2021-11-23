@@ -165,6 +165,7 @@ def manager_init():
     ("GoogleMapEnabled", "0"),
     ("OPKRServer", "0"),
     ("OPKRMapboxStyleSelect", "0"),
+    ("IgnoreCANErroronISG", "0"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))

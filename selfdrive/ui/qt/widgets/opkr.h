@@ -550,6 +550,18 @@ public:
   }
 };
 
+class IgnoreCanErroronISGToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+  IgnoreCanErroronISGToggle() : ToggleControl("Ignore Can Error on ISG", "Turn this on, if can error occurs on ISG operation.", "../assets/offroad/icon_shell.png", Params().getBool("IgnoreCANErroronISG")) {
+    QObject::connect(this, &IgnoreCanErroronISGToggle::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("IgnoreCANErroronISG", status);
+    });
+  }
+};
+
 // openpilot preview
 class OpenpilotView : public AbstractControl {
   Q_OBJECT

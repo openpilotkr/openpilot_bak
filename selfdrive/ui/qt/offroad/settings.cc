@@ -523,6 +523,7 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new ComIssueToggle());
   layout->addWidget(new WhitePandaSupportToggle());
   layout->addWidget(new SteerWarningFixToggle());
+  layout->addWidget(new IgnoreCanErroronISGToggle());
   layout->addWidget(new BattLessToggle());
   layout->addWidget(new GoogleMapEnabledToggle());
   layout->addWidget(new TimeZoneSelectCombo());

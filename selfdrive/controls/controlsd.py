@@ -219,6 +219,7 @@ class Controls:
     self.auto_enable_speed = max(1, int(Params().get("AutoEnableSpeed", encoding="utf8")))
     self.e2e_long_alert_prev = True
     self.osm_spdlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
+    self.ignore_can_error_on_isg = Params().get_bool("IgnoreCANErroronISG")
 
   def auto_enable(self, CS):
     if CS.cruiseState.available and CS.vEgo >= self.auto_enable_speed * CV.KPH_TO_MS and CS.gearShifter == GearShifter.drive and self.sm['liveCalibration'].calStatus != Calibration.UNCALIBRATED:
@@ -297,7 +298,9 @@ class Controls:
                                                  LaneChangeState.laneChangeFinishing]:
       self.events.add(EventName.laneChange)
 
-    if self.can_rcv_error or not CS.canValid:
+    if self.ignore_can_error_on_isg and CS.vEgo > 1:
+      self.events.add(EventName.canError)
+    elif self.can_rcv_error or not CS.canValid and not self.ignore_can_error_on_isg:
       self.events.add(EventName.canError)
 
     safety_mismatch = self.sm['pandaState'].safetyModel != self.CP.safetyModel or self.sm['pandaState'].safetyParam != self.CP.safetyParam
