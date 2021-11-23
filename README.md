@@ -15,18 +15,42 @@
    - Enable Driver Monitoring: On/Off driver monitoring for the EON without filterless IR camera or Someone cannot use front cam due to uncertain reasons.(reboot required)
    - Enable Driving Log Record: Record driving logs to Local, not happen upload to server(reboot required)
    - Enable Sending Log to Server: Enable uploader to upload to server(reboot required)
-   - Use Comma Stock UI: this use original Comma's UI. This can be applied on driving screen(click MaxSpeed box at top-left corner). (no reboot required)
+   - Use Comma Stock UI: this use original Comma's UI. Also this can be applied on driving screen in realtime(click MaxSpeed box at top-left corner). (no reboot required)
  - Software(Function Name: Explanation)
    - Check for Updates: You can confirm new commits of your fork and also you can update it.
-   - Commit(Local/Remote): commit name of local(EON) and Remote.(run once when boot in manager.py, search gitcommit.sh at the file, internet connection required)
+   - Commit(Local/Remote): Commit name of local(EON) and Remote.(run once when boot in manager.py, search gitcommit.sh at the file, internet connection required)
    - Git Pull On Boot: run 'git pull' command when boot.
    - Load Preset/Save Preset: Load your Parameters or Save Your Parameters. located /data/preset1 or /data/preset2. This function can save/load your settings of Menu)
    - Parameter Init: Retrieve you Changes of Menu to initial values.
    - Git Reset: Remove your local changes and inintalize to the first status of the branch.
-   - Cancel Git Pull: Move ine step back if git pull is not satisfied.
+   - Cancel Git Pull: Move one step back if git pull is not satisfied.
    - Panda Flashing: Run Panda flashing command manually. Basically this is not necessary on normal operation.
    - Change Repo/Branch: You can install others fork/branch thru typing Git ID, Git Repository, Git Branch.
-
+ - UserMenu(Function Name: Explanation)
+   - EON AutoShutdown: At Car ignition off, the device will be shutdown after the time.
+   - EON ForceShutdown: The device will be shutdown by force at offroad status anyway in the time.
+   - EON Volume Control(%): set device volume manually.
+   - EON Brightness Control(%): set device brightness automatically/manually.
+   - EON SCR Off Timer: The screen brigntess will be dark or blank after that time on driving.
+   - Brightness at SCR Off(%): If you use the function(EON SCR Off Timer), you can choose a level of the brightness.
+   - EON Detach Alert Sound: None/KOR/ENG, Turn this on to notify when your car ignition off. Purpose of this, to protect your device away from Sun when you forgot.
+   - Enable Battery Charging Control: battery charging control btw min and max of your setting
+   - Use Auto Screen Record: Screen Record works automatically. at stop, the screen record off, at departure, the screen record on
+   - Number of Recorded Files: Count of files you want to record.
+   - Recording Quality: Low/Mid/High/U-High, changed the resolution and bitrate.
+   - Delete All Recorded Files: /sdcard/videos
+   - Delete All Driving Logs: /sdcard/realdata
+   - Driver Monitoring Mode: Defalut/Unsleep, Default is Comma's. If you choose Unsleep, this will alert warning faster than Comma's one.
+   - E2E EYE Threshold: I'm not sure this factor is being used at code actually.
+   - Normal EYE Threshold: set the value below threshold of your face recognition.
+   - Blink Threshold: I think this is important in the Driver Monitoring. Set the value below the threshold of your eyes blink recognition. Driver Monitoring camera shows the values of your face recognition, eyes and the other things. Preview 'Driver Camera' and then check the recognition value of your eye out and modify the value on Menu.
+   - Navigation Select: Mappy(for Korea), Waze(for Global)
+   - RUN Navigation on Boot: Run Navigation on Boot. If it runs well, will go to background after few seconds.
+   - Display Date on Screen: shows the Device date
+   - Display Time on Screen: shows the Device time
+   - API Server: You can choose 3 servers, Retropilot, Comma, User's
+   - User's API: Set this when you use own
+   - Mapbox Style: Choose three styles of the Mapbox, Comma, opkr(locallized in Korea), User's, if you want to your own, Edit the file with yours(/data/params/d/MapboxStyleCustom). Make your mapbox style at https://studio.mapbox.com/. If you publish the style you can use it.
 
 ![](https://user-images.githubusercontent.com/37757984/127420744-89ca219c-8f8e-46d3-bccf-c1cb53b81bb1.png)
 
