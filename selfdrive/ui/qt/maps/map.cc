@@ -258,12 +258,12 @@ void MapWindow::initializeGL() {
   m_map->setMargins({0, 350, 0, 50});
   m_map->setPitch(MIN_PITCH);
   QString MAPBOX_STYLE = QString::fromStdString(Params().get("OPKRMapboxStyleSelect"));
-  QString MAPBOX_CUSTOM = QString::fromStdString(Params().get("OPKRMapboxStyleCustom")); // set the param with yours(pubulished style from Mapbox website)
+  QString MAPBOX_CUSTOM = QString::fromStdString(Params().get("MapboxStyleCustom")); // set the param with yours(pubulished style from Mapbox website)
   if (MAPBOX_STYLE == "0") {
     m_map->setStyleUrl("mapbox://styles/commaai/ckr64tlwp0azb17nqvr9fj13s"); // comma
   } else if (MAPBOX_STYLE == "1") {
     m_map->setStyleUrl("mapbox://styles/multikyd/ckwbf0oig3swu14lc482wqvfz"); // opkr
-  } else if (MAPBOX_STYLE == "2" && !Params().get("OPKRMapboxStyleCustom").empty()) {
+  } else if (MAPBOX_STYLE == "2" && !Params().get("MapboxStyleCustom").empty()) {
     m_map->setStyleUrl(MAPBOX_CUSTOM); // yours
   } else {
     m_map->setStyleUrl("mapbox://styles/commaai/ckr64tlwp0azb17nqvr9fj13s"); // comma
