@@ -1,10 +1,14 @@
 0. This fork is for all people who love Comma's Openpilot. Thanks to xx979xx, tk211x, xps-genesis, atom, hoya, moksatang, mamul, neokii, oricialworks and everyone helping me or contributing for HKGs.
 
-1. How to Install
+1. Branches
+ - OPKR: main branch, stable, not latest. This will be updated if test branch is done.
+ - _test: test branches, not stable, latest, for testing new fuctions, codes, or the other things.
+
+2. How to Install
  - Use fork installer : Type https://opkr.tk/fork/opkr on custom URL window(Short URL. This will install OPKR branch directly.) or you can use Shane's fork installer(https://smiskol.com/fork)
  - Use a command : cd /data; mv openpilot openpilot_bak; git clone https://github.com/openpilotkr/openpilot.git -b OPKR; reboot
 
-2. How to use(functions)
+3. How to use(functions)
  - Device(Function Name: Explanation)
    - Driving Camera: You can preview/unview Openpilot Driving Camera.
  - Network(Function Name: Explanation)
