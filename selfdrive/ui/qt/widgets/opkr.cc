@@ -5450,6 +5450,7 @@ OPKRMapboxStyle::OPKRMapboxStyle() : AbstractControl("Mapbox Style", "Set the Ma
   });
   QObject::connect(&btn3, &QPushButton::clicked, [=]() {
     params.put("OPKRMapboxStyleSelect", "2");
+    if (ConfirmationDialog::alert("You've chosen own style. Please set your mapbox style to the param <MapboxStyleCustom>. File location: /data/params/d/MapboxStyleCustom", this)) {}
     refresh();
   });
   refresh();

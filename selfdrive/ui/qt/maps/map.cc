@@ -263,7 +263,7 @@ void MapWindow::initializeGL() {
     m_map->setStyleUrl("mapbox://styles/commaai/ckr64tlwp0azb17nqvr9fj13s"); // comma
   } else if (MAPBOX_STYLE == "1") {
     m_map->setStyleUrl("mapbox://styles/multikyd/ckwbf0oig3swu14lc482wqvfz"); // opkr
-  } else if (MAPBOX_STYLE == "2") {
+  } else if (MAPBOX_STYLE == "2" && !Params().get("OPKRMapboxStyleCustom").empty()) {
     m_map->setStyleUrl(MAPBOX_CUSTOM); // yours
   } else {
     m_map->setStyleUrl("mapbox://styles/commaai/ckr64tlwp0azb17nqvr9fj13s"); // comma

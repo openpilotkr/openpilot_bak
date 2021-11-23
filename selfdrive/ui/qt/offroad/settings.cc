@@ -476,7 +476,6 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new OPKRServerSelect());
   layout->addWidget(new OPKRServerAPI());
   layout->addWidget(new OPKRMapboxStyle());
-  //layout->addWidget(new OPKRMapboxStyleCustom());
 
   layout->addWidget(horizontal_line());
   layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 DRIVING 】〓〓〓〓〓〓〓〓", ""));
