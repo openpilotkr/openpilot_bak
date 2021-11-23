@@ -1,3 +1,14 @@
+0. This fork is for all people who love Comma's Openpilot. Thanks to xx979xx, tk211x, xps-genesis, atom, hoya, moksatang, mamul, neokii, oricialworks and everyone helping me or contributing for HKGs.
+
+1. How to Install
+ - Use fork installer : Type https://opkr.tk/fork/opkr on custom URL window(Short URL. This will install OPKR branch directly.) or you can use Shane's fork installer(https://smiskol.com/fork)
+ - Use a command : cd /data; mv openpilot openpilot_bak; git clone https://github.com/openpilotkr/openpilot.git -b OPKR; reboot
+
+2. How to use
+ - Under construction...
+
+
+
 ![](https://user-images.githubusercontent.com/37757984/127420744-89ca219c-8f8e-46d3-bccf-c1cb53b81bb1.png)
 
 Table of Contents
