@@ -2,7 +2,7 @@
 
 1. Branches
  - OPKR: main branch, stable, not latest. This will be updated if test branch is done.
- - _test: test branches, not stable, latest, for testing new fuctions, codes, or the other things.
+ - _test: test branches, not stable, latest, for testing new functions, codes, or the other things.
 
 2. How to Install
  - Use fork installer : Type https://opkr.tk/fork/opkr on custom URL window(Short URL. This will install OPKR branch directly.) or you can use Shane's fork installer(https://smiskol.com/fork)
