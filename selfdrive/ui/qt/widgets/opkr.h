@@ -1787,3 +1787,18 @@ private:
   
   void refresh();
 };
+
+class RESCountatStandstill : public AbstractControl {
+  Q_OBJECT
+
+public:
+  RESCountatStandstill();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+  Params params;
+  
+  void refresh();
+};

@@ -114,6 +114,7 @@ class CarController():
     self.cruise_gap_adjusting = False
     self.standstill_fault_reduce_timer = 0
     self.standstill_res_button = False
+    self.standstill_res_count = int(self.params.get("RESCountatStandstill", encoding="utf8"))
 
     self.standstill_status = 0
     self.standstill_status_timer = 0
@@ -314,9 +315,9 @@ class CarController():
           self.acc_standstill = False
           if (frame - self.last_resume_frame) * DT_CTRL > 0.1:
             self.standstill_res_button = True
-            # send 25 messages at a time to increases the likelihood of resume being accepted
-            can_sends.extend([create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)] * 25) if not self.longcontrol \
-             else can_sends.extend([create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus)] * 25)
+            # send 25 messages at a time to increases the likelihood of resume being accepted, value 25 is not acceptable at some cars.
+            can_sends.extend([create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)] * self.standstill_res_count) if not self.longcontrol \
+             else can_sends.extend([create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus)] * self.standstill_res_count)
             self.last_resume_frame = frame
           self.standstill_fault_reduce_timer += 1
         # gap save after 1sec
@@ -556,6 +557,7 @@ class CarController():
       self.cc_timer = 0
       self.radar_helper_enabled = self.params.get_bool("RadarLongHelper")
       self.stopping_dist_adj_enabled = self.params.get_bool("StoppingDistAdj")
+      self.standstill_res_count = int(self.params.get("RESCountatStandstill", encoding="utf8"))
       if self.params.get_bool("OpkrLiveTunePanelEnable"):
         if CS.CP.lateralTuning.which() == 'pid':
           self.str_log2 = 'T={:0.2f}/{:0.3f}/{:0.1f}/{:0.5f}'.format(float(Decimal(self.params.get("PidKp", encoding="utf8"))*Decimal('0.01')), \

@@ -166,6 +166,7 @@ def manager_init():
     ("OPKRServer", "0"),
     ("OPKRMapboxStyleSelect", "0"),
     ("IgnoreCANErroronISG", "0"),
+    ("RESCountatStandstill", "6"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))
