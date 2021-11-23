@@ -1760,3 +1760,18 @@ private:
 
   void refresh();
 };
+
+class OPKRMapboxStyle : public AbstractControl {
+  Q_OBJECT
+
+public:
+  OPKRMapboxStyle();
+
+private:
+  QPushButton btn1;
+  QPushButton btn2;
+  QPushButton btn3;
+  Params params;
+  
+  void refresh();
+};

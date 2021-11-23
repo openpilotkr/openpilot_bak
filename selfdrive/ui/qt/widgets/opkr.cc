@@ -5404,3 +5404,133 @@ void OPKRServerAPI::refresh() {
     btn.setText("SET");
   }
 }
+
+OPKRMapboxStyle::OPKRMapboxStyle() : AbstractControl("Mapbox Style", "Set the Mapbox sytle to Comma/OPKR/User's", "../assets/offroad/icon_shell.png") {
+  btn1.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btn1.setFixedSize(250, 100);
+  btn2.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btn2.setFixedSize(250, 100);
+  btn3.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btn3.setFixedSize(250, 100);
+  hlayout->addWidget(&btn1);
+  hlayout->addWidget(&btn2);
+  hlayout->addWidget(&btn3);
+  btn1.setText("Comma");
+  btn2.setText("OPKR");
+  btn3.setText("User's");
+
+  QObject::connect(&btn1, &QPushButton::clicked, [=]() {
+    params.put("OPKRMapboxStyleSelect", "0");
+    refresh();
+  });
+  QObject::connect(&btn2, &QPushButton::clicked, [=]() {
+    params.put("OPKRMapboxStyleSelect", "1");
+    refresh();
+  });
+  QObject::connect(&btn3, &QPushButton::clicked, [=]() {
+    params.put("OPKRMapboxStyleSelect", "2");
+    refresh();
+  });
+  refresh();
+}
+
+void OPKRMapboxStyle::refresh() {
+  QString option = QString::fromStdString(params.get("OPKRMapboxStyleSelect"));
+  if (option == "0") {
+    btn1.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #00A12E;
+    )");
+    btn2.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+    btn3.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+  } else if (option == "1") {
+    btn1.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+    btn2.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #00A12E;
+    )");
+    btn3.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+  } else {
+    btn1.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+    btn2.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+    )");
+    btn3.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #00A12E;
+    )");
+  }
+}
