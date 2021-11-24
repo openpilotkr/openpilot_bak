@@ -1,4 +1,4 @@
-0. This fork is for all people who love Comma's Openpilot. Thanks to emmertex, xx979xx, tk211x, xps-genesis, atom, hoya, moksatang, mamul, neokii, oricialworks, sunnyhaibin and everyone helping me or contributing for HKGs.
+0. This fork is for all people who love Comma's Openpilot. Thanks to ku7, xx979xx, tk211x, xps-genesis, atom, hoya, moksatang, mamul, neokii, oricialworks, sunnyhaibin and everyone helping me or contributing for HKGs.
 
 1. Branches
  - OPKR: main branch, stable, not latest. This will be updated if test branch is done.
