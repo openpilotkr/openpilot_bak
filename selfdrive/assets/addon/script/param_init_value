@@ -61,7 +61,7 @@ OpkrTurnSteeringDisable:0
 OpkrHotspotOnBoot:0
 CruiseOverMaxSpeed:0
 JustDoGearD:0
-ComIssueGone:0
+ComIssueGone:1
 SteerThreshold:150
 RecordingCount:200
 RecordingQuality:1
@@ -104,3 +104,5 @@ OCurvOffset:0
 StockNaviSpeedEnabled:0
 E2ELong:0
 OSMSpeedLimitEnable:0
+OPKRMapboxStyleSelect:0
+RESCountatStandstill:20

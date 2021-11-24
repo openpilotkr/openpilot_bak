@@ -339,10 +339,10 @@ class CarInterface(CarInterfaceBase):
       events.add(EventName.brakeUnavailable)
     #if abs(ret.steeringAngle) > 90. and EventName.steerTempUnavailable not in events.events:
     #  events.add(EventName.steerTempUnavailable)
-    if self.low_speed_alert and not self.CS.mdps_bus:
-      events.add(EventName.belowSteerSpeed)
-    if self.mad_mode_enabled and EventName.pedalPressed in events.events:
-      events.events.remove(EventName.pedalPressed)
+    # if self.low_speed_alert:
+    #   events.add(EventName.belowSteerSpeed)
+    # if self.mad_mode_enabled and EventName.pedalPressed in events.events:
+    #   events.events.remove(EventName.pedalPressed)
     if self.CC.lanechange_manual_timer and ret.vEgo > 0.3:
       events.add(EventName.laneChangeManual)
     if self.CC.emergency_manual_timer:
@@ -351,6 +351,8 @@ class CarInterface(CarInterfaceBase):
     #  events.add(EventName.driverSteering)
     if self.CC.need_brake and not self.CC.longcontrol:
       events.add(EventName.needBrake)
+    if self.CC.standstill_res_button:
+      events.add(EventName.standstillResButton)
     if self.CC.cruise_gap_adjusting:
       events.add(EventName.gapAdjusting)
     if self.CC.on_speed_control and ret.vEgo > 0.3:
@@ -366,7 +368,7 @@ class CarInterface(CarInterfaceBase):
       self.CP.standStill = True
     else:
       self.CP.standStill = False
-    if self.CC.v_cruise_kph_auto_res > 30:
+    if self.CC.v_cruise_kph_auto_res > (20 if self.CS.is_set_speed_in_mph else 30):
       self.CP.vCruisekph = self.CC.v_cruise_kph_auto_res
     else:
       self.CP.vCruisekph = 0

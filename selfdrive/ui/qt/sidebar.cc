@@ -3,6 +3,7 @@
 #include <QMouseEvent>
 
 #include "selfdrive/ui/qt/util.h"
+#include "selfdrive/ui/qt/widgets/input.h"
 
 #include <QProcess>
 #include <QSoundEffect>
@@ -77,8 +78,10 @@ void Sidebar::mousePressEvent(QMouseEvent *event) {
 
 void Sidebar::mouseReleaseEvent(QMouseEvent *event) {
   const quint64 pressTime = QDateTime::currentMSecsSinceEpoch() - mLastPressTime;
-  if( pressTime > MY_LONG_PRESS_THRESHOLD && trig_settings){
-      emit openSettings();
+  if ( pressTime > MY_LONG_PRESS_THRESHOLD && trig_settings) {
+    emit openSettings();
+  } else if ( pressTime < 500 && trig_settings) {
+    ConfirmationDialog::alert("Hold 1 sec on the button to enter Setting Menu", this);
   }
 }
 

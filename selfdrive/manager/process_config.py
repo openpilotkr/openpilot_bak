@@ -24,7 +24,7 @@ if EnableLogger and not EnableUploader:
     NativeProcess("sensord", "selfdrive/sensord", ["./sensord"], enabled=not PC, persistent=EON, sigkill=EON),
     NativeProcess("ubloxd", "selfdrive/locationd", ["./ubloxd"], enabled=(not PC or WEBCAM)),
     NativeProcess("ui", "selfdrive/ui", ["./ui"], persistent=True, watchdog_max_dt=(5 if TICI else None)),
-    NativeProcess("soundd", "selfdrive/ui", ["./soundd"]),
+    NativeProcess("soundd", "selfdrive/ui/soundd", ["./soundd"], persistent=True),
     NativeProcess("locationd", "selfdrive/locationd", ["./locationd"]),
     NativeProcess("boardd", "selfdrive/boardd", ["./boardd"], enabled=False),
     PythonProcess("calibrationd", "selfdrive.locationd.calibrationd"),
@@ -46,6 +46,8 @@ if EnableLogger and not EnableUploader:
     # EON only
     PythonProcess("rtshield", "selfdrive.rtshield", enabled=EON),
     PythonProcess("androidd", "selfdrive.hardware.eon.androidd", enabled=EON, persistent=True),
+    PythonProcess("gpxd", "selfdrive.dragonpilot.gpxd"),
+    PythonProcess("otisserv", "selfdrive.dragonpilot.otisserv", persistent=True),
   ]
 elif EnableUploader:
   procs = [
@@ -62,7 +64,7 @@ elif EnableUploader:
     NativeProcess("sensord", "selfdrive/sensord", ["./sensord"], enabled=not PC, persistent=EON, sigkill=EON),
     NativeProcess("ubloxd", "selfdrive/locationd", ["./ubloxd"], enabled=(not PC or WEBCAM)),
     NativeProcess("ui", "selfdrive/ui", ["./ui"], persistent=True, watchdog_max_dt=(5 if TICI else None)),
-    NativeProcess("soundd", "selfdrive/ui", ["./soundd"]),
+    NativeProcess("soundd", "selfdrive/ui/soundd", ["./soundd"], persistent=True),
     NativeProcess("locationd", "selfdrive/locationd", ["./locationd"]),
     NativeProcess("boardd", "selfdrive/boardd", ["./boardd"], enabled=False),
     PythonProcess("calibrationd", "selfdrive.locationd.calibrationd"),
@@ -84,6 +86,8 @@ elif EnableUploader:
     # EON only
     PythonProcess("rtshield", "selfdrive.rtshield", enabled=EON),
     PythonProcess("androidd", "selfdrive.hardware.eon.androidd", enabled=EON, persistent=True),
+    PythonProcess("gpxd", "selfdrive.dragonpilot.gpxd"),
+    PythonProcess("otisserv", "selfdrive.dragonpilot.otisserv", persistent=True),
   ]
 else:
   procs = [
@@ -100,7 +104,7 @@ else:
     NativeProcess("sensord", "selfdrive/sensord", ["./sensord"], enabled=not PC, persistent=EON, sigkill=EON),
     NativeProcess("ubloxd", "selfdrive/locationd", ["./ubloxd"], enabled=(not PC or WEBCAM)),
     NativeProcess("ui", "selfdrive/ui", ["./ui"], persistent=True, watchdog_max_dt=(5 if TICI else None)),
-    NativeProcess("soundd", "selfdrive/ui", ["./soundd"]),
+    NativeProcess("soundd", "selfdrive/ui/soundd", ["./soundd"], persistent=True),
     NativeProcess("locationd", "selfdrive/locationd", ["./locationd"]),
     NativeProcess("boardd", "selfdrive/boardd", ["./boardd"], enabled=False),
     PythonProcess("calibrationd", "selfdrive.locationd.calibrationd"),

@@ -475,6 +475,7 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new KRTimeToggle());
   layout->addWidget(new OPKRServerSelect());
   layout->addWidget(new OPKRServerAPI());
+  layout->addWidget(new OPKRMapboxStyle());
 
   layout->addWidget(horizontal_line());
   layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 DRIVING 】〓〓〓〓〓〓〓〓", ""));
@@ -506,6 +507,7 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new RESChoice());
   layout->addWidget(new AutoResCondition());
   layout->addWidget(new AutoResLimitTime());
+  layout->addWidget(new RESCountatStandstill());
   layout->addWidget(new SteerWindDownToggle());
   layout->addWidget(new MadModeEnabledToggle());
 
@@ -522,6 +524,7 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new ComIssueToggle());
   layout->addWidget(new WhitePandaSupportToggle());
   layout->addWidget(new SteerWarningFixToggle());
+  layout->addWidget(new IgnoreCanErroronISGToggle());
   layout->addWidget(new BattLessToggle());
   layout->addWidget(new GoogleMapEnabledToggle());
   layout->addWidget(new TimeZoneSelectCombo());

@@ -143,6 +143,8 @@ class CarInterfaceBase():
       events.add(EventName.speedTooHigh)
     if cs_out.cruiseState.nonAdaptive:
       events.add(EventName.wrongCruiseMode)
+    #if cs_out.brakeHoldActive and self.CP.openpilotLongitudinalControl:
+    #  events.add(EventName.brakeHold)
 
 
     # Handle permanent and temporary steering faults
@@ -151,22 +153,22 @@ class CarInterfaceBase():
       # if the user overrode recently, show a less harsh alert
       if (cs_out.vEgo < 0.1 or cs_out.standstill) and not self.steer_wind_down_enabled and cs_out.steeringAngleDeg < 90:
         events.add(EventName.isgActive)
-      elif self.silent_steer_warning or cs_out.standstill or self.steering_unpressed < int(1.5 / DT_CTRL):
+      elif self.silent_steer_warning or cs_out.standstill or self.steering_unpressed < int(1.5 / DT_CTRL) and cs_out.vEgo > 1:
         self.silent_steer_warning = True
         events.add(EventName.steerTempUnavailableSilent)
-      else:
+      elif cs_out.vEgo > 1:
         events.add(EventName.steerTempUnavailable)
-    else:
+    elif cs_out.vEgo > 1:
       self.silent_steer_warning = False
-    if cs_out.steerError:
+    if cs_out.steerError and cs_out.vEgo > 1:
       events.add(EventName.steerUnavailable)
 
     # Disable on rising edge of gas or brake. Also disable on brake when speed > 0.
     # Optionally allow to press gas at zero speed to resume.
     # e.g. Chrysler does not spam the resume button yet, so resuming with gas is handy. FIXME!
-    if (cs_out.gasPressed and (not self.CS.out.gasPressed) and cs_out.vEgo > gas_resume_speed) or \
-       (cs_out.brakePressed and (not self.CS.out.brakePressed or not cs_out.standstill)):
-      events.add(EventName.pedalPressed)
+    # if (cs_out.gasPressed and (not self.CS.out.gasPressed) and cs_out.vEgo > gas_resume_speed) or \
+    #    (cs_out.brakePressed and (not self.CS.out.brakePressed or not cs_out.standstill)):
+    #   events.add(EventName.pedalPressed)
 
     # we engage when pcm is active (rising edge)
     if pcm_enable:

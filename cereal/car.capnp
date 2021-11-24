@@ -104,6 +104,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     wideRoadCameraError @102;
     localizerMalfunction @103;
     highCpuUsage @105;
+    cruiseMismatch @106;
 
     driverMonitorLowAccDEPRECATED @68;
     radarCanErrorDEPRECATED @15;
@@ -126,23 +127,24 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     modelLagWarningDEPRECATED @93;
     startupOneplusDEPRECATED @82;
     startupFuzzyFingerprintDEPRECATED @97;
-    laneChangeManual @106;
-    emgButtonManual @107;
-    driverSteering @108;
-    modeChangeOpenpilot @109;
-    modeChangeDistcurv @110;
-    modeChangeDistance @111;
-    modeChangeCurv @112;
-    modeChangeOneway @113;
-    modeChangeMaponly @114;
-    needBrake @115;
-    standStill @116;
-    e2eLongAlert @117;
-    isgActive @118;
-    camSpeedDown @119;
-    gapAdjusting @120;
-    resCruise @121;
-    curvSpeedDown @122;
+    laneChangeManual @107;
+    emgButtonManual @108;
+    driverSteering @109;
+    modeChangeOpenpilot @110;
+    modeChangeDistcurv @111;
+    modeChangeDistance @112;
+    modeChangeCurv @113;
+    modeChangeOneway @114;
+    modeChangeMaponly @115;
+    needBrake @116;
+    standStill @117;
+    e2eLongAlert @118;
+    isgActive @119;
+    camSpeedDown @120;
+    gapAdjusting @121;
+    resCruise @122;
+    curvSpeedDown @123;
+    standstillResButton @124;
   }
 }
 
@@ -167,6 +169,7 @@ struct CarState {
   # brake pedal, 0.0-1.0
   brake @5 :Float32;      # this is user pedal only
   brakePressed @6 :Bool;  # this is user pedal only
+  brakeHoldActive @38 :Bool;
 
   # steering wheel
   steeringAngleDeg @7 :Float32;
@@ -211,26 +214,26 @@ struct CarState {
 
   brakeLights @19 :Bool;
   # opkr-tpms
-  tpmsPressureFl @38 :Float32;
-  tpmsPressureFr @39 :Float32;
-  tpmsPressureRl @40 :Float32;
-  tpmsPressureRr @41 :Float32;
+  tpmsPressureFl @39 :Float32;
+  tpmsPressureFr @40 :Float32;
+  tpmsPressureRl @41 :Float32;
+  tpmsPressureRr @42 :Float32;
 
-  radarDistance @42 :Float32;
-  standStill @43 :Bool;
-  vSetDis @44 :Float32;
-  cruiseButtons @45 :Float32;
-  cruiseAccStatus @46 :Bool;
-  driverAcc @47 :Bool;
-  brakeHold @48 :Bool;    # AutoHold
-  cruiseGapSet @49 :UInt8;
+  radarDistance @43 :Float32;
+  standStill @44 :Bool;
+  vSetDis @45 :Float32;
+  cruiseButtons @46 :Float32;
+  cruiseAccStatus @47 :Bool;
+  driverAcc @48 :Bool;
+  brakeHold @49 :Bool;    # AutoHold
+  cruiseGapSet @50 :UInt8;
 
   # opkr
-  safetyDist @50 :Float32;
-  safetySign @51 :Float32;
-  vEgoOP @52 :Float32;  # openpilot speed
-  electGearStep @53 :Int8;
-  isMph @54 :Bool;
+  safetyDist @51 :Float32;
+  safetySign @52 :Float32;
+  vEgoOP @53 :Float32;  # openpilot speed
+  electGearStep @54 :Int8;
+  isMph @55 :Bool;
 
   struct WheelSpeeds {
     # optional wheel speeds
@@ -333,6 +336,8 @@ struct CarControl {
   active @7 :Bool;
 
   actuators @6 :Actuators;
+  roll @8 :Float32;
+  pitch @9 :Float32;
 
   cruiseControl @4 :CruiseControl;
   hudControl @5 :HUDControl;
@@ -395,11 +400,11 @@ struct CarControl {
       chimeEngage @1;
       chimeDisengage @2;
       chimeError @3;
-      chimeWarning1 @4;
-      chimeWarning2 @5;
-      chimeWarningRepeat @6;
+      chimeWarning1 @4; # unused
+      chimeWarningRepeat @5;
+      chimeWarningRepeatInfinite @6;
       chimePrompt @7;
-      chimeWarning2Repeat @8;
+      chimeWarning2RepeatInfinite @8;
     }
   }
 
@@ -563,9 +568,9 @@ struct CarParams {
     toyota @2;
     elm327 @3;
     gm @4;
-    hondaBoschGiraffe @5;
+    hondaBoschGiraffeDEPRECATED @5;
     ford @6;
-    cadillac @7;
+    cadillacDEPRECATED @7;
     hyundai @8;
     chrysler @9;
     tesla @10;
@@ -574,11 +579,11 @@ struct CarParams {
     mazda @13;
     nissan @14;
     volkswagen @15;
-    toyotaIpas @16;
+    toyotaIpasDEPRECATED @16;
     allOutput @17;
-    gmAscm @18;
+    gmAscmDEPRECATED @18;
     noOutput @19;  # like silent but without silent CAN TXs
-    hondaBoschHarness @20;
+    hondaBosch @20;
     volkswagenPq @21;
     subaruLegacy @22;  # pre-Global platform
     hyundaiLegacy @23;

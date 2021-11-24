@@ -43,49 +43,25 @@ OnroadWindow::OnroadWindow(QWidget *parent) : QWidget(parent) {
 }
 
 void OnroadWindow::updateState(const UIState &s) {
-  SubMaster &sm = *(s.sm);
   QColor bgColor = bg_colors[s.status];
-  if (sm.updated("controlsState")) {
-    const cereal::ControlsState::Reader &cs = sm["controlsState"].getControlsState();
-    alerts->updateAlert({QString::fromStdString(cs.getAlertText1()),
-                 QString::fromStdString(cs.getAlertText2()),
-                 QString::fromStdString(cs.getAlertType()),
-                 cs.getAlertSize(), cs.getAlertSound()}, bgColor);
-  } else if ((sm.frame - s.scene.started_frame) > 5 * UI_FREQ) {
-    // Handle controls timeout
-    if (sm.rcv_frame("controlsState") < s.scene.started_frame) {
-      // car is started, but controlsState hasn't been seen at all
-      if (!s.scene.is_OpenpilotViewEnabled) {
-        alerts->updateAlert(CONTROLS_WAITING_ALERT, bgColor);
-        // opkr
-        if (QFileInfo::exists("/data/log/error.txt") && s.scene.show_error && !s.scene.tmux_error_check) {
-          QFileInfo fileInfo;
-          fileInfo.setFile("/data/log/error.txt");
-          QDateTime modifiedtime = fileInfo.lastModified();
-          QString modified_time = modifiedtime.toString("yyyy-MM-dd hh:mm:ss ");
-          const std::string txt = util::read_file("/data/log/error.txt");
-          if (RichTextDialog::alert(modified_time + QString::fromStdString(txt), this)) {
-            QUIState::ui_state.scene.tmux_error_check = true;
-          }
-        }
-      }
-    } else if ((nanos_since_boot() - sm.rcv_time("controlsState")) / 1e9 > CONTROLS_TIMEOUT) {
-      // car is started, but controls is lagging or died
+  Alert alert = Alert::get(*(s.sm), s.scene.started_frame);
+  if (s.sm->updated("controlsState") || !alert.equal({})) {
+    if (alert.type == "controlsUnresponsive") {
       bgColor = bg_colors[STATUS_ALERT];
-      if (!s.scene.is_OpenpilotViewEnabled) {
-        alerts->updateAlert(CONTROLS_UNRESPONSIVE_ALERT, bgColor);
-        // opkr
-        if (QFileInfo::exists("/data/log/error.txt") && s.scene.show_error && !s.scene.tmux_error_check) {
-          QFileInfo fileInfo;
-          fileInfo.setFile("/data/log/error.txt");
-          QDateTime modifiedtime = fileInfo.lastModified();
-          QString modified_time = modifiedtime.toString("yyyy-MM-dd hh:mm:ss ");
-          const std::string txt = util::read_file("/data/log/error.txt");
-          if (RichTextDialog::alert(modified_time + QString::fromStdString(txt), this)) {
-            QUIState::ui_state.scene.tmux_error_check = true;
-          }
+    }
+    if (!QUIState::ui_state.is_OpenpilotViewEnabled) {
+      // opkr
+      if (QFileInfo::exists("/data/log/error.txt") && s.scene.show_error && !s.scene.tmux_error_check) {
+        QFileInfo fileInfo;
+        fileInfo.setFile("/data/log/error.txt");
+        QDateTime modifiedtime = fileInfo.lastModified();
+        QString modified_time = modifiedtime.toString("yyyy-MM-dd hh:mm:ss ");
+        const std::string txt = util::read_file("/data/log/error.txt");
+        if (RichTextDialog::alert(modified_time + QString::fromStdString(txt), this)) {
+          QUIState::ui_state.scene.tmux_error_check = true;
         }
       }
+	  alerts->updateAlert(alert, bgColor);
     }
   }
   if (bg != bgColor) {
@@ -236,4 +212,10 @@ void NvgWindow::paintGL() {
     LOGW("slow frame time: %.2f", dt);
   }
   prev_draw_t = cur_draw_t;
+}
+
+void NvgWindow::showEvent(QShowEvent *event) {
+  CameraViewWidget::showEvent(event);
+  ui_update_params(&QUIState::ui_state);
+  prev_draw_t = millis_since_boot();
 }

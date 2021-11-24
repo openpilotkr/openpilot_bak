@@ -147,7 +147,7 @@ class LongControl():
       self.pid.reset()
       output_accel = 0.
     elif self.long_control_state == LongCtrlState.off or CS.gasPressed:
-      self.reset(v_ego_pid)
+      self.reset(CS.vEgo)
       output_accel = 0.
 
     # tracking objects and driving
@@ -157,7 +157,7 @@ class LongControl():
       # Toyota starts braking more when it thinks you want to stop
       # Freeze the integrator so we don't accelerate to compensate, and don't allow positive acceleration
       prevent_overshoot = not CP.stoppingControl and CS.vEgo < 1.5 and v_target_future < 0.7
-      deadzone = interp(v_ego_pid, CP.longitudinalTuning.deadzoneBP, CP.longitudinalTuning.deadzoneV)
+      deadzone = interp(CS.vEgo, CP.longitudinalTuning.deadzoneBP, CP.longitudinalTuning.deadzoneV)
       freeze_integrator = prevent_overshoot
 
       # opkr
@@ -171,7 +171,7 @@ class LongControl():
         self.damping_timer -= 1
         self.decel_damping = interp(self.damping_timer, [0., self.damping_timer3], [1., self.decel_damping2])
 
-      output_accel = self.pid.update(self.v_pid, v_ego_pid, speed=v_ego_pid, deadzone=deadzone, feedforward=a_target, freeze_integrator=freeze_integrator)
+      output_accel = self.pid.update(self.v_pid, CS.vEgo, speed=CS.vEgo, deadzone=deadzone, feedforward=a_target, freeze_integrator=freeze_integrator)
       output_accel *= self.decel_damping
 
       if prevent_overshoot or CS.brakeHold:

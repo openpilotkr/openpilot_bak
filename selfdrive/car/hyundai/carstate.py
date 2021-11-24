@@ -280,32 +280,32 @@ class CarState(CarStateBase):
       self.safety_dist = 0
     self.safety_block_remain_dist = cp.vl["NAVI"]["OPKR_SBR_Dist"]
     self.is_highway = cp_scc.vl["SCC11"]["Navi_SCC_Camera_Act"] != 0.
-    if self.safety_sign_check in [24., 25., 26.] and 19 < round(vCruiseMax) <= 69:
-      self.safety_sign = 30.
+    if self.safety_sign_check in [24., 25., 26.] and 19 < round(vCruiseMax) <= (69 if not self.is_set_speed_in_mph else 59):
+      self.safety_sign = 30. if not self.is_set_speed_in_mph else 40.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [0., 1., 2.] and 19 < round(vCruiseMax) <= 79:
-      self.safety_sign = 40.
+    elif self.safety_sign_check in [0., 1., 2.] and 19 < round(vCruiseMax) <= (79 if not self.is_set_speed_in_mph else 64):
+      self.safety_sign = 40. if not self.is_set_speed_in_mph else 45.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [8., 9., 10.] and 19 < round(vCruiseMax) <= 89:
-      self.safety_sign = 50.
+    elif self.safety_sign_check in [8., 9., 10.] and 19 < round(vCruiseMax) <= (89 if not self.is_set_speed_in_mph else 69):
+      self.safety_sign = 50. if not self.is_set_speed_in_mph else 55.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [16., 17., 18.] and 19 < round(vCruiseMax) <= 99:
-      self.safety_sign = 60.
+    elif self.safety_sign_check in [16., 17., 18.] and 19 < round(vCruiseMax) <= (99 if not self.is_set_speed_in_mph else 74):
+      self.safety_sign = 60. if not self.is_set_speed_in_mph else 55.
       self.safety_sign_last = self.safety_sign
-    elif self.safety_sign_check in [24., 25., 26.] and 19 < round(vCruiseMax) <= 109:
-      self.safety_sign = 70.
+    elif self.safety_sign_check in [24., 25., 26.] and 19 < round(vCruiseMax) <= (109 if not self.is_set_speed_in_mph else 79):
+      self.safety_sign = 70. if not self.is_set_speed_in_mph else 60.
       self.safety_sign_last = self.safety_sign
     elif self.safety_sign_check in [0., 1., 2.] and 19 < round(vCruiseMax):
-      self.safety_sign = 80.
+      self.safety_sign = 80. if not self.is_set_speed_in_mph else 65.
       self.safety_sign_last = self.safety_sign
     elif self.safety_sign_check in [8., 9., 10.] and 19 < round(vCruiseMax):
-      self.safety_sign = 90.
+      self.safety_sign = 90. if not self.is_set_speed_in_mph else 70.
       self.safety_sign_last = self.safety_sign
     elif self.safety_sign_check in [16., 17., 18.] and 19 < round(vCruiseMax):
-      self.safety_sign = 100.
+      self.safety_sign = 100. if not self.is_set_speed_in_mph else 75.
       self.safety_sign_last = self.safety_sign
     elif self.safety_sign_check in [24., 25., 26.] and 19 < round(vCruiseMax):
-      self.safety_sign = 110.
+      self.safety_sign = 110. if not self.is_set_speed_in_mph else 80.
       self.safety_sign_last = self.safety_sign
     elif round(self.safety_block_remain_dist) < 255. and self.safety_sign_prev:
       self.safety_sign = self.safety_sign_prev
@@ -438,7 +438,7 @@ class CarState(CarStateBase):
       ("MainMode_ACC", "SCC11", 1),
       ("SCCInfoDisplay", "SCC11", 0),
       ("AliveCounterACC", "SCC11", 0),
-      ("VSetDis", "SCC11", 30),
+      ("VSetDis", "SCC11", 0),
       ("ObjValid", "SCC11", 0),
       ("DriverAlertDisplay", "SCC11", 0),
       ("TauGapSet", "SCC11", 4),
@@ -666,7 +666,7 @@ class CarState(CarStateBase):
         ("MainMode_ACC", "SCC11", 1),
         ("SCCInfoDisplay", "SCC11", 0),
         ("AliveCounterACC", "SCC11", 0),
-        ("VSetDis", "SCC11", 30),
+        ("VSetDis", "SCC11", 0),
         ("ObjValid", "SCC11", 0),
         ("DriverAlertDisplay", "SCC11", 0),
         ("TauGapSet", "SCC11", 4),

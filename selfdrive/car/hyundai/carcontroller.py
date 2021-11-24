@@ -113,6 +113,8 @@ class CarController():
     self.cruise_gap_set_init = 0
     self.cruise_gap_adjusting = False
     self.standstill_fault_reduce_timer = 0
+    self.standstill_res_button = False
+    self.standstill_res_count = int(self.params.get("RESCountatStandstill", encoding="utf8"))
 
     self.standstill_status = 0
     self.standstill_status_timer = 0
@@ -254,7 +256,7 @@ class CarController():
                         left_lane, right_lane, left_lane_depart, right_lane_depart)
 
     clu11_speed = CS.clu11["CF_Clu_Vanz"]
-    enabled_speed = 38 if CS.is_set_speed_in_mph  else 60
+    enabled_speed = 38 if CS.is_set_speed_in_mph else 60
     if clu11_speed > enabled_speed or not lkas_active or CS.out.gearShifter != GearShifter.drive:
       enabled_speed = clu11_speed
 
@@ -307,23 +309,23 @@ class CarController():
         elif self.switch_timer > 0:
           self.switch_timer -= 1
           self.standstill_fault_reduce_timer += 1
-        # at least 1 sec delay after entering the standstill
-        elif 100 < self.standstill_fault_reduce_timer and CS.lead_distance != self.last_lead_distance:
+        # at least 0.1 sec delay after entering the standstill
+        elif 10 < self.standstill_fault_reduce_timer and CS.lead_distance != self.last_lead_distance:
           self.acc_standstill_timer = 0
           self.acc_standstill = False
-          can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)) if not self.longcontrol \
-           else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus))
-          self.resume_cnt += 1
-          if self.resume_cnt > 5:
-            self.resume_cnt = 0
-            self.switch_timer = randint(10, 15)
+          if (frame - self.last_resume_frame) * DT_CTRL > 0.1:
+            self.standstill_res_button = True
+            # send 25 messages at a time to increases the likelihood of resume being accepted, value 25 is not acceptable at some cars.
+            can_sends.extend([create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)] * self.standstill_res_count) if not self.longcontrol \
+             else can_sends.extend([create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus)] * self.standstill_res_count)
+            self.last_resume_frame = frame
           self.standstill_fault_reduce_timer += 1
-        # gap save
-        elif 160 < self.standstill_fault_reduce_timer and self.cruise_gap_prev == 0 and CS.cruiseGapSet != 1.0 and self.opkr_autoresume and self.opkr_cruisegap_auto_adj: 
+        # gap save after 1sec
+        elif 100 < self.standstill_fault_reduce_timer and self.cruise_gap_prev == 0 and CS.cruiseGapSet != 1.0 and self.opkr_autoresume and self.opkr_cruisegap_auto_adj: 
           self.cruise_gap_prev = CS.cruiseGapSet
           self.cruise_gap_set_init = 1
         # gap adjust to 1 for fast start
-        elif 160 < self.standstill_fault_reduce_timer and CS.cruiseGapSet != 1.0 and self.opkr_autoresume and self.opkr_cruisegap_auto_adj:
+        elif 110 < self.standstill_fault_reduce_timer and CS.cruiseGapSet != 1.0 and self.opkr_autoresume and self.opkr_cruisegap_auto_adj:
           can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST)) if not self.longcontrol \
             else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.GAP_DIST, clu11_speed, CS.CP.sccBus))
           self.resume_cnt += 1
@@ -333,10 +335,12 @@ class CarController():
           self.cruise_gap_adjusting = True
         elif self.opkr_autoresume:
           self.cruise_gap_adjusting = False
+          self.standstill_res_button = False
           self.standstill_fault_reduce_timer += 1
     # reset lead distnce after the car starts moving
     elif self.last_lead_distance != 0:
       self.last_lead_distance = 0
+      self.standstill_res_button = False
     elif self.opkr_variablecruise and CS.acc_active and CS.out.cruiseState.modeSel > 0:
       self.on_speed_control = self.NC.onSpeedControl
       self.curv_speed_control = self.NC.curvSpeedControl
@@ -370,6 +374,7 @@ class CarController():
       self.on_speed_control = False
       self.curv_speed_control = False
       self.cruise_gap_adjusting = False
+      self.standstill_res_button = False
       self.auto_res_starting = False
 
     if not enabled:
@@ -377,6 +382,7 @@ class CarController():
     if CS.cruise_buttons == 4:
       self.cancel_counter += 1
       self.auto_res_starting = False
+      self.standstill_res_button = False
     elif CS.cruise_active:
       self.cruise_init = True
       self.cancel_counter = 0
@@ -537,12 +543,12 @@ class CarController():
       self.scc12cnt = CS.scc12init["CR_VSM_Alive"]
       self.scc11cnt = CS.scc11init["AliveCounterACC"]
 
-    setSpeed = set_speed * CV.MS_TO_KPH
+    setSpeed = set_speed * CV.MS_TO_KPH * 1.609344 if CS.is_set_speed_in_mph else set_speed * CV.MS_TO_KPH
     str_log1 = 'MD={}  BS={:1.0f}/{:1.0f}  CV={:03.0f}  TQ={:03.0f}  ST={:03.0f}/{:01.0f}/{:01.0f}  FR={:03.0f}'.format(
       CS.out.cruiseState.modeSel, CS.CP.mdpsBus, CS.CP.sccBus, self.model_speed, abs(new_steer), self.p.STEER_MAX, self.p.STEER_DELTA_UP, self.p.STEER_DELTA_DOWN, self.timer1.sampleTime())
     if CS.out.cruiseState.accActive:
-      str_log2 = 'AQ={:+04.2f}  VF={:03.0f}  TS={:03.0f}  SS={:03.0f}  RD/RV={:04.1f}/{:03.1f}  CG={:1.0f}  FR={:03.0f}'.format(
-       self.aq_value if self.longcontrol else CS.scc12["aReqValue"], v_future, self.NC.ctrl_speed , setSpeed, CS.lead_distance, CS.lead_objspd, CS.cruiseGapSet, self.timer1.sampleTime())
+      str_log2 = 'AQ={:+04.2f}  VF={:03.0f}  TS={:03.0f}  SS/VS={:03.0f}/{:03.0f}  RD/LD={:04.1f}/{:03.1f}  CG={:1.0f}  FR={:03.0f}'.format(
+       self.aq_value if self.longcontrol else CS.scc12["aReqValue"], v_future, self.NC.ctrl_speed , setSpeed, CS.VSetDis, CS.lead_distance, self.last_lead_distance, CS.cruiseGapSet, self.timer1.sampleTime())
     else:
       str_log2 = 'MDPS={}  LKAS={}  LEAD={}  AQ={:+04.2f}  VF={:03.0f}  CG={:1.0f}  FR={:03.0f}'.format(
        CS.out.steerWarning, CS.lkas_button_on, 0 < CS.lead_distance < 149, self.aq_value if self.longcontrol else CS.scc12["aReqValue"], v_future, CS.cruiseGapSet, self.timer1.sampleTime())
@@ -553,6 +559,7 @@ class CarController():
       self.cc_timer = 0
       self.radar_helper_enabled = self.params.get_bool("RadarLongHelper")
       self.stopping_dist_adj_enabled = self.params.get_bool("StoppingDistAdj")
+      self.standstill_res_count = int(self.params.get("RESCountatStandstill", encoding="utf8"))
       if self.params.get_bool("OpkrLiveTunePanelEnable"):
         if CS.CP.lateralTuning.which() == 'pid':
           self.str_log2 = 'T={:0.2f}/{:0.3f}/{:0.1f}/{:0.5f}'.format(float(Decimal(self.params.get("PidKp", encoding="utf8"))*Decimal('0.01')), \

@@ -33,8 +33,8 @@ NetworkType = log.DeviceState.NetworkType
 NetworkStrength = log.DeviceState.NetworkStrength
 CURRENT_TAU = 15.   # 15s time constant
 TEMP_TAU = 5.   # 5s time constant
-DAYS_NO_CONNECTIVITY_MAX = 7  # do not allow to engage after a week without internet
-DAYS_NO_CONNECTIVITY_PROMPT = 4  # send an offroad prompt after 4 days with no internet
+DAYS_NO_CONNECTIVITY_MAX = 14     # do not allow to engage after this many days
+DAYS_NO_CONNECTIVITY_PROMPT = 10  # send an offroad prompt after this many days
 DISCONNECT_TIMEOUT = 3.  # wait 5 seconds before going offroad after disconnect so you get an alert
 
 ThermalBand = namedtuple("ThermalBand", ['min_temp', 'max_temp'])
@@ -136,9 +136,15 @@ def handle_fan_uno(controller, max_cpu_temp, fan_speed, ignition):
   return new_speed
 
 
+last_ignition = False
 def handle_fan_tici(controller, max_cpu_temp, fan_speed, ignition):
+  global last_ignition
+
   controller.neg_limit = -(80 if ignition else 30)
   controller.pos_limit = -(30 if ignition else 0)
+
+  if ignition != last_ignition:
+    controller.reset()
 
   fan_pwr_out = -int(controller.update(
                      setpoint=(75 if ignition else (OFFROAD_DANGER_TEMP - 2)),
@@ -146,6 +152,7 @@ def handle_fan_tici(controller, max_cpu_temp, fan_speed, ignition):
                      feedforward=interp(max_cpu_temp, [60.0, 100.0], [0, -80])
                   ))
 
+  last_ignition = ignition
   return fan_pwr_out
 
 
@@ -162,8 +169,7 @@ def thermald_thread():
 
   pandaState_timeout = int(1000 * 2.5 * DT_TRML)  # 2.5x the expected pandaState frequency
   pandaState_sock = messaging.sub_sock('pandaState', timeout=pandaState_timeout)
-  location_sock = messaging.sub_sock('gpsLocationExternal')
-  managerState_sock = messaging.sub_sock('managerState', conflate=True)
+  sm = messaging.SubMaster(["gpsLocationExternal", "managerState"])
 
   fan_speed = 0
   count = 0
@@ -294,7 +300,7 @@ def thermald_thread():
         network_strength, wifi_ssid = HARDWARE.get_network_strength(network_type)
         network_info = HARDWARE.get_network_info()  # pylint: disable=assignment-from-none
         if TICI:
-          nvme_temps = HARDWARE.get_nvme_temps()
+          nvme_temps = HARDWARE.get_nvme_temperatures()
           modem_temps = HARDWARE.get_modem_temperatures()
 
         # Log modem version once
@@ -337,6 +343,7 @@ def thermald_thread():
     if modem_temps is not None:
       msg.deviceState.modemTempC = modem_temps
 
+    msg.deviceState.screenBrightnessPercent = HARDWARE.get_screen_brightness()
     msg.deviceState.batteryPercent = HARDWARE.get_battery_capacity()
     msg.deviceState.batteryStatus = HARDWARE.get_battery_status()
     msg.deviceState.batteryCurrent = HARDWARE.get_battery_current()
@@ -430,7 +437,7 @@ def thermald_thread():
     set_offroad_alert_if_changed("Offroad_TemperatureTooHigh", (not startup_conditions["device_temp_good"]))
 
     if TICI:
-      set_offroad_alert_if_changed("Offroad_NvmeMissing", (not Path("/data/media").is_mount()))
+      set_offroad_alert_if_changed("Offroad_StorageMissing", (not Path("/data/media").is_mount()))
 
     # Handle offroad/onroad transition
     should_start = all(startup_conditions.values())
@@ -514,12 +521,10 @@ def thermald_thread():
 #      HARDWARE.shutdown()
 
     # If UI has crashed, set the brightness to reasonable non-zero value
-    manager_state = messaging.recv_one_or_none(managerState_sock)
-    if manager_state is not None:
-      ui_running = "ui" in (p.name for p in manager_state.managerState.processes if p.running)
-      if ui_running_prev and not ui_running:
-        HARDWARE.set_screen_brightness(20)
-      ui_running_prev = ui_running
+    ui_running = "ui" in (p.name for p in sm["managerState"].processes if p.running)
+    if ui_running_prev and not ui_running:
+      HARDWARE.set_screen_brightness(20)
+    ui_running_prev = ui_running
 
     msg.deviceState.chargingError = current_filter.x > 0. and msg.deviceState.batteryPercent < 90  # if current is positive, then battery is being discharged
     msg.deviceState.started = started_ts is not None
@@ -547,11 +552,10 @@ def thermald_thread():
       if EON and started_ts is None and msg.deviceState.memoryUsagePercent > 40:
         cloudlog.event("High offroad memory usage", mem=msg.deviceState.memoryUsagePercent)
 
-      location = messaging.recv_sock(location_sock)
       cloudlog.event("STATUS_PACKET",
                      count=count,
                      pandaState=(strip_deprecated_keys(pandaState.to_dict()) if pandaState else None),
-                     location=(strip_deprecated_keys(location.gpsLocationExternal.to_dict()) if location else None),
+                     location=(strip_deprecated_keys(sm["gpsLocationExternal"].to_dict()) if sm.alive["gpsLocationExternal"] else None),
                      deviceState=strip_deprecated_keys(msg.to_dict()))
 
     count += 1

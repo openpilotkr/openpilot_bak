@@ -120,7 +120,7 @@ class NaviControl():
   def ascc_button_control(self, CS, set_speed):
     self.set_point = max(20 if CS.is_set_speed_in_mph else 30, set_speed)
     self.curr_speed = CS.out.vEgo * CV.MS_TO_KPH
-    self.VSetDis = round(CS.VSetDis)
+    self.VSetDis = round(CS.VSetDis * 1.609344 if CS.is_set_speed_in_mph else CS.VSetDis)
     btn_signal = self.switch(self.seq_command)
 
     return btn_signal
@@ -142,7 +142,7 @@ class NaviControl():
       self.onSpeedControl = True
       spdTarget = self.sm['liveMapData'].speedLimit
       cruise_set_speed_kph = spdTarget + round(spdTarget*0.01*self.map_spdlimit_offset)
-    elif CS.map_enabled and self.liveNaviData.speedLimit > 29:  # mappy speedlimit
+    elif CS.map_enabled and self.liveNaviData.speedLimit > 19:  # mappy speedlimit
       self.map_speed_dist = max(0, self.liveNaviData.speedLimitDistance - 30)
       self.map_speed = self.liveNaviData.speedLimit
       if self.map_speed_dist > 1250:
@@ -163,13 +163,13 @@ class NaviControl():
       elif self.map_speed_dist < min_control_dist:
         spdTarget = self.map_speed
         self.onSpeedControl = True
-      elif self.onSpeedControl and self.map_speed > 29:
+      elif self.onSpeedControl and self.map_speed > 19:
         spdTarget = self.map_speed
       else:
         self.onSpeedControl = False
         return cruise_set_speed_kph
       cruise_set_speed_kph = spdTarget + round(spdTarget*0.01*self.map_spdlimit_offset)
-    elif CS.safety_sign > 29 and self.stock_navi_info_enabled:  # cat stock navi speedlimit
+    elif CS.safety_sign > 19 and self.stock_navi_info_enabled:  # cat stock navi speedlimit
       self.map_speed_dist = max(0, CS.safety_dist - 30)
       self.map_speed = CS.safety_sign
       if CS.safety_block_remain_dist < 255:
@@ -190,7 +190,7 @@ class NaviControl():
       elif self.map_speed_dist < min_control_dist:
         spdTarget = self.map_speed
         self.onSpeedControl = True
-      elif self.onSpeedControl and self.map_speed > 29:
+      elif self.onSpeedControl and self.map_speed > 19:
         spdTarget = self.map_speed
       else:
         self.onSpeedControl = False
@@ -230,11 +230,11 @@ class NaviControl():
     #   clu_Vanz = CS.clu_Vanz
     #   ctrl_speed = max(min_control_speed, ctrl_speed, clu_Vanz)
     #   CS.set_cruise_speed(ctrl_speed)
-    elif CS.CP.resSpeed > 30:
+    elif CS.CP.resSpeed > 20:
       res_speed = max(min_control_speed, CS.CP.resSpeed)
       return min(res_speed, navi_speed)
     elif CS.cruise_set_mode in [1,2,4]:
-      if self.lead_0.status and CS.CP.vFuture >= min_control_speed-5:
+      if self.lead_0.status and CS.CP.vFuture >= min_control_speed-7:
         dRel = int(self.lead_0.dRel)
         vRel = int(self.lead_0.vRel * CV.MS_TO_KPH)
         if vRel >= -5:

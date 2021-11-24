@@ -1,15 +1,14 @@
 #pragma once
 
-#include <atomic>
 #include <map>
 #include <memory>
 #include <string>
-#include <iostream>
+#include <optional>
 
 #include <QObject>
 #include <QTimer>
 #include <QColor>
-
+#include <QTransform>
 #include "nanovg.h"
 
 #include "cereal/messaging/messaging.h"
@@ -38,6 +37,11 @@
 #define COLOR_YELLOW_ALPHA(x) nvgRGBA(218, 202, 37, x)
 #define COLOR_GREY nvgRGBA(191, 191, 191, 1)
 
+const int bdr_s = 15;
+const int header_h = 420;
+const int footer_h = 280;
+
+const int UI_FREQ = 20;   // Hz
 typedef cereal::CarControl::HUDControl::AudibleAlert AudibleAlert;
 
 // TODO: this is also hardcoded in common/transformations/camera.py
@@ -56,29 +60,6 @@ typedef struct Rect {
   }
 } Rect;
 
-typedef struct Alert {
-  QString text1;
-  QString text2;
-  QString type;
-  cereal::ControlsState::AlertSize size;
-  AudibleAlert sound;
-  bool equal(const Alert &a2) {
-    return text1 == a2.text1 && text2 == a2.text2 && type == a2.type;
-  }
-} Alert;
-
-const Alert CONTROLS_WAITING_ALERT = {"openpilot Unavailable", "Waiting for controls to start",
-                                      "controlsWaiting", cereal::ControlsState::AlertSize::MID,
-                                      AudibleAlert::NONE};
-
-const Alert CONTROLS_UNRESPONSIVE_ALERT = {"TAKE CONTROL IMMEDIATELY", "Controls Unresponsive",
-                                           "controlsUnresponsive", cereal::ControlsState::AlertSize::FULL,
-                                           AudibleAlert::CHIME_WARNING_REPEAT};
-const int CONTROLS_TIMEOUT = 5;
-
-const int bdr_s = 15;
-const int header_h = 420;
-const int footer_h = 280;
 const Rect map_overlay_btn = {0, 465, 150, 150};
 const Rect map_return_btn = {1770, 465, 150, 150};
 const Rect map_btn = {1425, 905, 140, 140};
@@ -93,7 +74,40 @@ const Rect livetunepanel_right_btn = {1250, 750, 170, 160};
 const Rect livetunepanel_left_above_btn = {500, 575, 170, 160};
 const Rect livetunepanel_right_above_btn = {1250, 575, 170, 160};
 
-const int UI_FREQ = 20;   // Hz
+struct Alert {
+  QString text1;
+  QString text2;
+  QString type;
+  cereal::ControlsState::AlertSize size;
+  AudibleAlert sound;
+  bool equal(const Alert &a2) {
+    return text1 == a2.text1 && text2 == a2.text2 && type == a2.type && sound == a2.sound;
+  }
+
+  static Alert get(const SubMaster &sm, uint64_t started_frame) {
+    if (sm.updated("controlsState")) {
+      const cereal::ControlsState::Reader &cs = sm["controlsState"].getControlsState();
+      return {cs.getAlertText1().cStr(), cs.getAlertText2().cStr(),
+              cs.getAlertType().cStr(), cs.getAlertSize(),
+              cs.getAlertSound()};
+    } else if ((sm.frame - started_frame) > 5 * UI_FREQ) {
+      const int CONTROLS_TIMEOUT = 5;
+      // Handle controls timeout
+      if (sm.rcv_frame("controlsState") < started_frame) {
+        // car is started, but controlsState hasn't been seen at all
+        return {"openpilot Unavailable", "Waiting for controls to start",
+                "controlsWaiting", cereal::ControlsState::AlertSize::MID,
+                AudibleAlert::NONE};
+      } else if ((nanos_since_boot() - sm.rcv_time("controlsState")) / 1e9 > CONTROLS_TIMEOUT) {
+        // car is started, but controls is lagging or died
+        return {"TAKE CONTROL IMMEDIATELY", "Controls Unresponsive",
+                "controlsUnresponsive", cereal::ControlsState::AlertSize::FULL,
+                AudibleAlert::CHIME_WARNING_REPEAT};
+      }
+    }
+    return {};
+  }
+};
 
 typedef enum UIStatus {
   STATUS_DISENGAGED,
@@ -182,7 +196,6 @@ typedef struct UIScene {
   bool monitoring_mode;
   bool forceGearD;
   bool comma_stock_ui, opkr_livetune_ui;
-  bool is_OpenpilotViewEnabled = false;
   bool driving_record;
   float steer_actuator_delay;
   bool batt_less;
@@ -219,7 +232,6 @@ typedef struct UIScene {
   bool tmux_error_check = false;
 
   cereal::DeviceState::Reader deviceState;
-  cereal::RadarState::LeadData::Reader lead_data[2];
   cereal::CarState::Reader car_state;
   cereal::ControlsState::Reader controls_state;
   cereal::CarState::GearShifter getGearShifter;
@@ -310,9 +322,12 @@ typedef struct UIState {
   bool awake;
   bool has_prime = false;
   bool sidebar_view;
+  bool is_OpenpilotViewEnabled = false;
 
-  float car_space_transform[6];
+  QTransform car_space_transform;
   bool wide_camera;
+  
+  float running_time;
 } UIState;
 
 

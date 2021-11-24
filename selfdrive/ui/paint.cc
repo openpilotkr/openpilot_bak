@@ -19,9 +19,7 @@
 #include "selfdrive/common/util.h"
 #include "selfdrive/hardware/hw.h"
 #include "selfdrive/ui/ui.h"
-#include <iostream>
 #include <time.h> // opkr
-#include <string> // opkr
 #include "selfdrive/ui/dashcam.h"
 
 static void ui_print(UIState *s, int x, int y,  const char* fmt, ... )
@@ -93,15 +91,15 @@ static void ui_draw_circle_image(const UIState *s, int center_x, int center_y, i
   }
 }
 
-static void draw_lead(UIState *s, const cereal::ModelDataV2::LeadDataV3::Reader &lead_data, const vertex_data &vd) {
+static void draw_lead(UIState *s, const cereal::RadarState::LeadData::Reader &lead_data, const vertex_data &vd) {
   // Draw lead car indicator
   auto [x, y] = vd;
 
   float fillAlpha = 0;
   float speedBuff = 10.;
   float leadBuff = 40.;
-  float d_rel = lead_data.getX()[0];
-  float v_rel = lead_data.getV()[0];
+  float d_rel = lead_data.getDRel();
+  float v_rel = lead_data.getVRel();
   if (d_rel < leadBuff) {
     fillAlpha = 255*(1.0-(d_rel/leadBuff));
     if (v_rel < 0) {
@@ -204,12 +202,12 @@ static void ui_draw_world(UIState *s) {
   // Draw lead indicators if openpilot is handling longitudinal
   //if (s->scene.longitudinal_control) {
   if (true) {
-    auto lead_one = (*s->sm)["modelV2"].getModelV2().getLeadsV3()[0];
-    auto lead_two = (*s->sm)["modelV2"].getModelV2().getLeadsV3()[1];
-    if (lead_one.getProb() > .5) {
+    auto lead_one = (*s->sm)["radarState"].getRadarState().getLeadOne();
+    auto lead_two = (*s->sm)["radarState"].getRadarState().getLeadTwo();
+    if (lead_one.getStatus()) {
       draw_lead(s, lead_one, s->scene.lead_vertices[0]);
     }
-    if (lead_two.getProb() > .5 && (std::abs(lead_one.getX()[0] - lead_two.getX()[0]) > 3.0)) {
+    if (lead_two.getStatus() && (std::abs(lead_one.getDRel() - lead_two.getDRel()) > 3.0)) {
       draw_lead(s, lead_two, s->scene.lead_vertices[1]);
     }
   }
@@ -421,11 +419,12 @@ static void ui_draw_gear( UIState *s ) {
 
 static void ui_draw_vision_maxspeed_org(UIState *s) {
   const int SET_SPEED_NA = 255;
-  float maxspeed = s->scene.controls_state.getVCruise();
+  float maxspeed = round(s->scene.controls_state.getVCruise());
   float cruise_speed = s->scene.vSetDis;
   const bool is_cruise_set = maxspeed != 0 && maxspeed != SET_SPEED_NA;
-  s->scene.is_speed_over_limit = s->scene.limitSpeedCamera > 19 && ((s->scene.limitSpeedCamera+round(s->scene.limitSpeedCamera*0.01*s->scene.speed_lim_off))+1 < s->scene.car_state.getVEgo()*3.6);
-  if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
+  s->scene.is_speed_over_limit = s->scene.limitSpeedCamera > 19 && ((s->scene.limitSpeedCamera+round(s->scene.limitSpeedCamera*0.01*s->scene.speed_lim_off))+1 < s->scene.car_state.getVEgo() * (s->scene.is_metric ? 3.6 : 2.2369363));
+  //if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
+  if (!s->scene.is_metric) { round(cruise_speed *= 1.609344); }
 
   const Rect rect = {bdr_s, bdr_s, 184, 202};
   NVGcolor color = COLOR_BLACK_ALPHA(100);
@@ -442,7 +441,7 @@ static void ui_draw_vision_maxspeed_org(UIState *s) {
   ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(100), 10, 20.);
 
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
-  if (cruise_speed >= 30 && s->scene.controls_state.getEnabled()) {
+  if (cruise_speed >= 20 && s->scene.controls_state.getEnabled()) {
     const std::string cruise_speed_str = std::to_string((int)std::nearbyint(cruise_speed));
     ui_draw_text(s, rect.centerX(), bdr_s+65, cruise_speed_str.c_str(), 26 * 3.3, COLOR_WHITE_ALPHA(is_cruise_set ? 200 : 100), "sans-bold");
   } else {
@@ -460,7 +459,7 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   const int SET_SPEED_NA = 255;
   float maxspeed = (*s->sm)["controlsState"].getControlsState().getVCruise();
   const bool is_cruise_set = maxspeed != 0 && maxspeed != SET_SPEED_NA && s->scene.controls_state.getEnabled();
-  if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
+  if (!s->scene.is_metric) { round(maxspeed *= 1.609344); }
 
   int viz_max_o = 184; //offset value to move right
   const Rect rect = {bdr_s, bdr_s, 184+viz_max_o, 202};
@@ -482,11 +481,11 @@ static void ui_draw_vision_cruise_speed(UIState *s) {
   float maxspeed = s->scene.controls_state.getVCruise();
   const bool is_cruise_set = maxspeed != 0 && maxspeed != SET_SPEED_NA;
   int limitspeedcamera = s->scene.limitSpeedCamera;
-  if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
-
+  //if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
   float cruise_speed = s->scene.vSetDis;
-  if (!s->scene.is_metric) { cruise_speed *= 0.621371; }
-  s->scene.is_speed_over_limit = s->scene.limitSpeedCamera > 19 && ((s->scene.limitSpeedCamera+round(s->scene.limitSpeedCamera*0.01*s->scene.speed_lim_off))+1 < s->scene.car_state.getVEgo()*3.6);
+  if (!s->scene.is_metric) { round(cruise_speed *= 1.609344); }
+
+  s->scene.is_speed_over_limit = s->scene.limitSpeedCamera > 19 && ((s->scene.limitSpeedCamera+round(s->scene.limitSpeedCamera*0.01*s->scene.speed_lim_off))+1 < s->scene.car_state.getVEgo()*(s->scene.is_metric ? 3.6 : 2.2369363));
   const Rect rect = {bdr_s, bdr_s, 184, 202};
 
   NVGcolor color = COLOR_GREY;
@@ -516,7 +515,7 @@ static void ui_draw_vision_cruise_speed(UIState *s) {
   if (s->scene.controls_state.getEnabled() && !s->scene.cruiseAccStatus && s->scene.limitSpeedCamera > 19) {
     const std::string limitspeedcamera_str = std::to_string((int)std::nearbyint(limitspeedcamera));
     ui_draw_text(s, rect.centerX(), bdr_s+165, limitspeedcamera_str.c_str(), 48 * 2.5, COLOR_WHITE, "sans-bold");
-  } else if (cruise_speed >= 30 && s->scene.controls_state.getEnabled()) {
+  } else if (cruise_speed >= 20 && s->scene.controls_state.getEnabled()) {
     ui_draw_text(s, rect.centerX(), bdr_s+165, cruise_speed_str.c_str(), 48 * 2.5, COLOR_WHITE, "sans-bold");
   } else {
     ui_draw_text(s, rect.centerX(), bdr_s+165, "-", 42 * 2.5, COLOR_WHITE_ALPHA(100), "sans-semibold");
@@ -524,7 +523,7 @@ static void ui_draw_vision_cruise_speed(UIState *s) {
 }
 
 static void ui_draw_vision_speed(UIState *s) {
-  const float speed = std::max(0.0, (*s->sm)["carState"].getCarState().getVEgo() * (s->scene.is_metric ? 3.6 : 2.2369363));
+  const float speed = std::max(0.0, (*s->sm)["carState"].getCarState().getVEgo()*(s->scene.is_metric ? 3.6 : 2.2369363));
   const std::string speed_str = std::to_string((int)std::nearbyint(speed));
   UIScene &scene = s->scene;  
   const int viz_speed_w = 250;
@@ -835,27 +834,27 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
   int label_fontSize=15;
   int uom_fontSize = 15;
   int bb_uom_dx =  (int)(bb_w /2 - uom_fontSize*2.5);
-  auto lead_one = (*s->sm)["modelV2"].getModelV2().getLeadsV3()[0];
+  auto lead_one = (*s->sm)["radarState"].getRadarState().getLeadOne();
 
   //add visual radar relative distance
   if (true) {
     char val_str[16];
     char uom_str[6];
     NVGcolor val_color = COLOR_WHITE_ALPHA(200);
-    if (lead_one.getProb() > .5) {
+    if (lead_one.getStatus()) {
       //show RED if less than 5 meters
       //show orange if less than 15 meters
-      if((int)(lead_one.getX()[0] - 2.5) < 15) {
+      if((int)(lead_one.getDRel()) < 15) {
         val_color = COLOR_ORANGE_ALPHA(200);
       }
-      if((int)(lead_one.getX()[0] - 2.5) < 5) {
+      if((int)(lead_one.getDRel()) < 5) {
         val_color = COLOR_RED_ALPHA(200);
       }
       // lead car relative distance is always in meters
-      if((float)(lead_one.getX()[0] -2.5) < 10) {
-        snprintf(val_str, sizeof(val_str), "%.1f", (float)(lead_one.getX()[0] - 2.5));
+      if((float)(lead_one.getDRel()) < 10) {
+        snprintf(val_str, sizeof(val_str), "%.1f", (float)(lead_one.getDRel()));
       } else {
-        snprintf(val_str, sizeof(val_str), "%d", (int)(lead_one.getX()[0] - 2.5));
+        snprintf(val_str, sizeof(val_str), "%d", (int)(lead_one.getDRel()));
       }
 
     } else {
@@ -873,21 +872,17 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
     char val_str[16];
     char uom_str[6];
     NVGcolor val_color = COLOR_WHITE_ALPHA(200);
-    if (lead_one.getProb() > .5) {
+    if (lead_one.getStatus()) {
       //show Orange if negative speed (approaching)
       //show Orange if negative speed faster than 5mph (approaching fast)
-      if((int)((lead_one.getV()[0] - scene.car_state.getVEgoOP()) * 3.6) < 0) {
+      if((int)(lead_one.getVRel()) < 0) {
         val_color = nvgRGBA(255, 188, 3, 200);
       }
-      if((int)((lead_one.getV()[0] - scene.car_state.getVEgoOP()) * 3.6) < -5) {
+      if((int)(lead_one.getVRel()) < -5) {
         val_color = nvgRGBA(255, 0, 0, 200);
       }
       // lead car relative speed is always in meters
-      if (scene.is_metric) {
-         snprintf(val_str, sizeof(val_str), "%d", (int)((lead_one.getV()[0] - scene.car_state.getVEgoOP()) * 3.6));
-      } else {
-         snprintf(val_str, sizeof(val_str), "%d", (int)((lead_one.getV()[0] - scene.car_state.getVEgoOP()) * 2.2374144));
-      }
+      snprintf(val_str, sizeof(val_str), "%d", (int)(round(lead_one.getVRel() * (scene.is_metric ? 3.6 : 2.2369363))));
     } else {
        snprintf(val_str, sizeof(val_str), "-");
     }
@@ -1013,16 +1008,28 @@ static void draw_safetysign(UIState *s) {
   char safetyDist[32];
   int safety_speed = s->scene.limitSpeedCamera;
   float safety_dist = s->scene.limitSpeedCameraDist;
+  float maxspeed = round(s->scene.controls_state.getVCruise());
   //int safety_speed = s->scene.liveNaviData.opkrspeedlimit;
   //float safety_dist = s->scene.liveNaviData.opkrspeedlimitdist;
 
   snprintf(safetySpeed, sizeof(safetySpeed), "%d", safety_speed);
-  if (safety_dist >= 1000) {
-    snprintf(safetyDist, sizeof(safetyDist), "%.2fkm", safety_dist/1000);
-  } else {
-    snprintf(safetyDist, sizeof(safetyDist), "%.0fm", safety_dist);
+  if (maxspeed != 255.0) {
+    if (s->scene.is_metric) {
+      if (safety_dist >= 1000) {
+        snprintf(safetyDist, sizeof(safetyDist), "%.2fkm", safety_dist/1000);
+      } else {
+        snprintf(safetyDist, sizeof(safetyDist), "%.0fm", safety_dist);
+      }
+      opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
+    } else {
+      if (safety_dist >= 1000) {
+        snprintf(safetyDist, sizeof(safetyDist), "%.2fmi", safety_dist/1000);
+      } else {
+        snprintf(safetyDist, sizeof(safetyDist), "%.0fyd", safety_dist);
+      }
+      opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
+    }
   }
-  opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
 
   if (safety_speed > 19 && !s->scene.comma_stock_ui) {
     ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), diameter2/2);
@@ -1502,12 +1509,10 @@ void ui_resize(UIState *s, int width, int height) {
 
   // Apply transformation such that video pixel coordinates match video
   // 1) Put (0, 0) in the middle of the video
-  nvgTranslate(s->vg, width / 2, height / 2 + y_offset);
   // 2) Apply same scaling as video
-  nvgScale(s->vg, zoom, zoom);
   // 3) Put (0, 0) in top left corner of video
-  nvgTranslate(s->vg, -intrinsic_matrix.v[2], -intrinsic_matrix.v[5]);
-
-  nvgCurrentTransform(s->vg, s->car_space_transform);
-  nvgResetTransform(s->vg);
+  s->car_space_transform.reset();
+  s->car_space_transform.translate(width / 2, height / 2 + y_offset)
+      .scale(zoom, zoom)
+      .translate(-intrinsic_matrix.v[2], -intrinsic_matrix.v[5]);
 }
