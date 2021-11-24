@@ -31,8 +31,7 @@ SwitchOpenpilot::SwitchOpenpilot() : ButtonControl("Change Repo/Branch", "", "Ch
             getBranchID(branchid);
             githubbranch = branchid;
             QString cmd0 = QString::fromStdString("Change repository/branch. It takes a little time to complete. Do you want to proceed?\n") + QString::fromStdString("https://github.com/") + githubid + QString::fromStdString("/") + githubrepo + QString::fromStdString(".git\n") + QString::fromStdString("Branch: ") + githubbranch;
-            const char* p0 = cmd0.toStdString().c_str();
-            if (ConfirmationDialog::confirm(p0, this)) {
+            if (ConfirmationDialog::confirm(cmd0, this)) {
               setText("DONE");
               setEnabled(true);
               QString time_format = "yyyyMMddHHmmss";
