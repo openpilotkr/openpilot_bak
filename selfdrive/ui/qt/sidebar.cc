@@ -81,7 +81,7 @@ void Sidebar::mouseReleaseEvent(QMouseEvent *event) {
   if ( pressTime > MY_LONG_PRESS_THRESHOLD && trig_settings) {
     emit openSettings();
   } else if ( pressTime < 500 && trig_settings) {
-    ConfirmationDialog::alert("Hold 1 sec on button to enter Setting Menu", this);
+    ConfirmationDialog::alert("Hold 1 sec on the button to enter Setting Menu", this);
   }
 }
 
