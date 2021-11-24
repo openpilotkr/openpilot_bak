@@ -1,3 +1,113 @@
+0. This fork is for all people who love Comma's Openpilot. Thanks to ku7, xx979xx, tk211x, xps-genesis, atom, hoya, moksatang, mamul, neokii, oricialworks, sunnyhaibin, dragonpilot, shane, kegman, dnv26, move-fast and everyone helping me or contributing for HKGs.
+
+1. Branches
+ - OPKR: main branch, stable, not latest. This will be updated if test branch is done.
+ - _test: test branches, not stable, latest, for testing new functions, codes, or the other things.
+ - Old branches are in openpilot_bak repository.
+
+2. How to Install
+ - Use fork installer : Type https://opkr.tk/fork/opkr on custom URL window(Short URL. This will install OPKR branch directly.) or you can use Shane's fork installer(https://smiskol.com/fork)
+ - Use a command : cd /data; mv openpilot openpilot_bak; git clone https://github.com/openpilotkr/openpilot.git -b OPKR; reboot
+
+3. How to use(functions)
+ - Device(Function Name: Explanation)
+   - Driving Camera: You can preview/unview Openpilot Driving Camera.
+ - Network(Function Name: Explanation)
+   - HotSpot on Boot: Turned Hotspot on when boot. (reboot required)
+   - Use Legacy SSH Key: Use old ssh key access(below 0.8.2). (no reboot required)
+ - Toggles(Function Name: Explanation)
+   - Enable Lane selector Mode: Show a button on driving screen including LaneMode/LaneLess/AUTO. AUTO mode is automatically switched by a condition of lane recongnition. (no reboot required)
+   - Enable Driver Monitoring: On/Off driver monitoring for the EON without filterless IR camera or Someone cannot use front cam due to uncertain reasons.(reboot required)
+   - Enable Driving Log Record: Record driving logs to Local, not happen upload to server(reboot required)
+   - Enable Sending Log to Server: Enable uploader to upload to server(reboot required)
+   - Use Comma Stock UI: this use original Comma's UI. Also this can be applied on driving screen in realtime(click MaxSpeed box at top-left corner). (no reboot required)
+ - Software(Function Name: Explanation)
+   - Check for Updates: You can confirm new commits of your fork and also you can update it.
+   - Commit(Local/Remote): Commit name of local(EON) and Remote.(run once when boot in manager.py, search gitcommit.sh at the file, internet connection required)
+   - Git Pull On Boot: run 'git pull' command when boot.
+   - Load Preset/Save Preset: Load your Parameters or Save Your Parameters. located /data/preset1 or /data/preset2. This function can save/load your settings of Menu)
+   - Parameter Init: Retrieve you Changes of Menu to initial values.
+   - Git Reset: Remove your local changes and inintalize to the first status of the branch.
+   - Cancel Git Pull: Move one step back if git pull is not satisfied.
+   - Panda Flashing: Run Panda flashing command manually. Basically this is not necessary on normal operation.
+   - Change Repo/Branch: You can install others fork/branch thru typing Git ID, Git Repository, Git Branch.
+ - UserMenu(Function Name: Explanation)
+   - EON AutoShutdown: At Car ignition off, the device will be shutdown after the time.
+   - EON ForceShutdown: The device will be shutdown by force at offroad status anyway in the time.
+   - EON Volume Control(%): set device volume manually.
+   - EON Brightness Control(%): set device brightness automatically/manually.
+   - EON SCR Off Timer: The screen brigntess will be dark or blank after that time on driving.
+   - Brightness at SCR Off(%): If you use the function(EON SCR Off Timer), you can choose a level of the brightness.
+   - EON Detach Alert Sound: None/KOR/ENG, Turn this on to notify when your car ignition off. Purpose of this, to protect your device away from Sun when you forgot.
+   - Enable Battery Charging Control: battery charging control btw min and max of your setting
+   - Use Auto Screen Record: Screen Record works automatically. at stop, the screen record off, at departure, the screen record on
+   - Number of Recorded Files: Count of files you want to record.
+   - Recording Quality: Low/Mid/High/U-High, changed the resolution and bitrate.
+   - Delete All Recorded Files: /sdcard/videos
+   - Delete All Driving Logs: /sdcard/realdata
+   - Driver Monitoring Mode: Defalut/Unsleep, Default is Comma's. If you choose Unsleep, this will alert warning faster than Comma's one. You can switch the Mode in driving screen in realtime(click monitoring face at bottom-left corner), clear back is Default Mode. Light green back is Unsleep Mode.(no reboot required)
+   - E2E EYE Threshold: I'm not sure this factor is being used at code actually.
+   - Normal EYE Threshold: set the value below threshold of your face recognition.
+   - Blink Threshold: I think this is important in the Driver Monitoring. Set the value below the threshold of your eyes blink recognition. Driver Monitoring camera shows the values of your face recognition, eyes and the other things. Preview 'Driver Camera' and then check the recognition value of your eye out and modify the value on Menu.
+   - Navigation Select: Mappy(for Korea), Waze(for Global)
+   - RUN Navigation on Boot: Run Navigation on Boot. If it runs well, will go to background after few seconds.
+   - Display Date on Screen: shows the Device date
+   - Display Time on Screen: shows the Device time
+   - API Server: You can choose 3 servers, Retropilot, Comma, User's
+   - User's API: Set this when you use own
+   - Mapbox Style: Choose three styles of the Mapbox, Comma, OPKR(locallized in Korea), User's, if you want to your own, Edit the file with yours(/data/params/d/MapboxStyleCustom). Make your mapbox style at https://studio.mapbox.com/. If you publish the style you can use it.
+   - Use Auto Resume at Stop: at Standstill, use auto resume when leadcar is moving.
+   - Use Cruise Button Spamming: SCC set speed is changed up and down automatically. should be turn this on to use many functions related to this.
+   - Cruise Start Mode: Set your custom Cruise mode when boot. There are 6 modes. OpenpilotStock/Dist+Curv/Dist/Curv/Oneway/CamSpeed only. OpenpilotStock is nothing to happen with button and not be changed with set speed. Dist+Curv is changed by distance to leadcar and curvature. Dist is distance only. Curv is curvature only. Oneway change camera offset to approach the edge of a road. CamSpeed is changing set speed only by value of camera sign(OSM, Mappy).
+   - LaneChange Speed: minimum lane change speed
+   - LaneChange Delay: Nudge/Nudgeless(adjust delay time to run)
+   - LaneChange Time(km/h: value): How the lanechange fast, to aggressive, upper the value, in oppsite, lower
+   - LeftCurv Offset: if you are unsatisfactory of the drive at Left Curve Section, this can move your car to left or right side.(no reboot required)
+   - RightCurv Offset: if you are unsatisfactory of the drive at Right Curve Section, this can move your car to left or right side.(no reboot required)
+   - Show BSM Status: Show sign when a car approaching from behind. Your car should have the function(BSM)
+   - Max Steering Angle: Default is 90. If you want more, change this up. Some car is not acceptable the vaule above 90.
+   - Str Angle Adjust: When you car keep a straight road, If the value of steering angle is not 0.0, adjust this to be 0.0
+   - Stop Steer Assist on Turn Signals: Openpilot doesn't steer your car at the situation of not process of lane change.
+   - Reset MaxSpeed Over CurrentSpeed: If your car speed upper than OP MaxSpeed, the OP MaxSpeed synchronize to your car speed.
+   - Enable OSM SpeedLimit: Use OSM SpeedLimit(reboot required)
+   - Use Stock SafetyCAM Speed: Some cars have the signal in CAN message. not for all HKG cars.
+   - SpeedLimit Offset(%): If speedlimt is 50, sometimes, you don't want to match exactly the scc set speed to speedlimit.
+   - SafetyCamDist Adj(%): Change the target distance if you are in the decel situation of safetycam.
+   - Change Cruise Gap at Stop: Cruise Gap changed to 1 step for departure faster, it gets back to orignal Gap after few second.
+   - VisionCurvDecel(ModelSpeed: km/h): set speed is changed by Curvature of vision.
+   - OSM CurvDecel(%): If OSM has the value of curv speed, up/down this value if you want to add/subtract.
+   - Use Auto Engagement: When OP is in disengagement status, Auto engagement is enabled when your car is moving. Cruise Standby status is needed at least.
+   - Auto Engage Speed(km/h): Engament is enabled at the speed.
+   - Use Auto RES while Driving: SCC speed automatically set again when releasing SCC.(reboot required)
+   - AutoRES Option: RelBrake/Accel, SCC speed set again when you release from brake pedal.
+   - AutoRES Condition: RelBrake/OnGas, RelBrake: SCC speed set again when you release from brake pedal. OnGas: SCC speed set again when you step gas pedal.
+   - AutoRES Allow(sec): time to allow for AutoRES
+   - RES Count at Standstill: Adjust RES CAN message count to start from StandStill. upper, if the departure is failed. lower, if your car generate cluster error or can error.(no reboot required)
+   - Steer Wind Down: to mitiate torque at error status of your lkas
+   - MainSwitch Openpilot ON/OFF: You can turn on/off OP using Cruise Button on steering wheel.
+   - DEBUG UI 1: Show debug UI on screen. 2 lines bottom of screen.(no reboot required)
+   - DEBUG UI 2: Show debug UI on screen. other lines except 2 lines bottom.(no reboot required)
+   - Show TMUX Error: If you want to show tmux error on screen, related to process such as controlsd, plannerd and so on.(reboot required)
+   - Show LongControl LOG: show long control log at DEBUG UI 1.(no reboot required)
+   - Use Smart Prebuilt: Your device can be booted quickly. The file, Prebuilt is removed when you do push 'CHECK' button on the Menu or type 'gi' command on command line, after then it will be created again when boot complete.(reboot required)
+   - Use FingerPrint 2.0(reboot required)
+   - Set LDWS Vehicles
+   - Set DriveGear by Force: for cars don't have dbc info of gear(reboot required)
+   - Turn Off Communication Issue Alarm: Turn this on if you do not want alert of communication error. Sometimes you could get an alarm with error commuication issue. I don't know actually what error is. seems a bug or uncertain reason.
+   - Support WhitePanda: Turn this on if you use WhitePanda. this is related to issue stopping processes when you turn device off.(reboot required)
+   - Ignore of Steering Warning: Some cars have Steerwarning, so that not engaged.
+   - Ignore Can Error on ISG: for ISG cars. In order to ignore can error, if you want to prevent disengagement.
+   - Set BatteryLess Eon: Screen doesn't show information of battery status.
+   - Use GoogleMap for Mapbox: Use google map when you search your destination at a web browser.
+   - Timezone setting(reboot required)
+   - Enable Calibration by Force: developer for engagment test
+   - Open Android Settings
+   - SoftKey RUN/SET: softkey application
+   - RUN Mixplorer: file manager application
+   - CAR Force Recognition: If your car is not recognized, choose your car at this.(reboot required)
+   - Pand Value Edit: not recommended. enough at current status.
+
+
 ![](https://user-images.githubusercontent.com/37757984/127420744-89ca219c-8f8e-46d3-bccf-c1cb53b81bb1.png)
 
 Table of Contents
