@@ -55,6 +55,56 @@
    - API Server: You can choose 3 servers, Retropilot, Comma, User's
    - User's API: Set this when you use own
    - Mapbox Style: Choose three styles of the Mapbox, Comma, OPKR(locallized in Korea), User's, if you want to your own, Edit the file with yours(/data/params/d/MapboxStyleCustom). Make your mapbox style at https://studio.mapbox.com/. If you publish the style you can use it.
+   - Use Auto Resume at Stop: I'm not sure this factor is being used at code actually.
+   - Use Cruise Button Spamming
+   - Cruise Start Mode
+   - LaneChange Speed
+   - LaneChange Delay
+   - LaneChange Time(km/h: value)
+   - LeftCurv Offset
+   - RightCurv Offset
+   - Show BSM Status
+   - Max Steering Angle
+   - Str Angle Adjust
+   - Stop Steer Assist on Turn Signals
+   - Reset MaxSpeed Over CurrentSpeed
+   - Enable OSM SpeedLimit
+   - Use Stock SafetyCAM Speed
+   - SpeedLimit Offset(%)
+   - SafetyCamDist Adj(%)
+   - Change Cruise Gap at Stop
+   - VisionCurvDecel(ModelSpeed: km/h)
+   - OSM CurvDecel(%)
+   - Use Auto Engagement
+   - Auto Engage Speed(km/h)
+   - Use Auto RES while Driving
+   - AutoRES Option
+   - AutoRES Condition
+   - AutoRES Allow(sec)
+   - RES Count at Standstill
+   - Steer Wind Down
+   - MainSwitch Openpilot ON/OFF
+   - DEBUG UI 1
+   - DEBUG UI 2
+   - Show TMUX Error
+   - Show LongControl LOG
+   - Use Smart Prebuilt
+   - Use FingerPrint 2.0
+   - Set LDWS Vehicles
+   - Set DriveGear by Force
+   - Turn Off Communication Issue Alarm
+   - Support WhitePanda
+   - Ignore of Steering Warning
+   - Ignore Can Error on ISG
+   - Set BatteryLess Eon
+   - Use GoogleMap for Mapbox
+   - Timezone setting
+   - Enable Calibration by Force
+   - Open Android Settings
+   - SoftKey RUN/SET
+   - RUN Mixplorer
+   - CAR Force Recognition
+   - Pand Value Edit
 
 ![](https://user-images.githubusercontent.com/37757984/127420744-89ca219c-8f8e-46d3-bccf-c1cb53b81bb1.png)
 
