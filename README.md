@@ -44,7 +44,7 @@
    - Recording Quality: Low/Mid/High/U-High, changed the resolution and bitrate.
    - Delete All Recorded Files: /sdcard/videos
    - Delete All Driving Logs: /sdcard/realdata
-   - Driver Monitoring Mode: Defalut/Unsleep, Default is Comma's. If you choose Unsleep, this will alert warning faster than Comma's one.
+   - Driver Monitoring Mode: Defalut/Unsleep, Default is Comma's. If you choose Unsleep, this will alert warning faster than Comma's one. You can switch the Mode in driving screen in realtime(click monitoring face at bottom-left corner), clear back is Default Mode. Light green back is Unsleep Mode.(no reboot required)
    - E2E EYE Threshold: I'm not sure this factor is being used at code actually.
    - Normal EYE Threshold: set the value below threshold of your face recognition.
    - Blink Threshold: I think this is important in the Driver Monitoring. Set the value below the threshold of your eyes blink recognition. Driver Monitoring camera shows the values of your face recognition, eyes and the other things. Preview 'Driver Camera' and then check the recognition value of your eye out and modify the value on Menu.
@@ -54,7 +54,7 @@
    - Display Time on Screen: shows the Device time
    - API Server: You can choose 3 servers, Retropilot, Comma, User's
    - User's API: Set this when you use own
-   - Mapbox Style: Choose three styles of the Mapbox, Comma, opkr(locallized in Korea), User's, if you want to your own, Edit the file with yours(/data/params/d/MapboxStyleCustom). Make your mapbox style at https://studio.mapbox.com/. If you publish the style you can use it.
+   - Mapbox Style: Choose three styles of the Mapbox, Comma, OPKR(locallized in Korea), User's, if you want to your own, Edit the file with yours(/data/params/d/MapboxStyleCustom). Make your mapbox style at https://studio.mapbox.com/. If you publish the style you can use it.
 
 ![](https://user-images.githubusercontent.com/37757984/127420744-89ca219c-8f8e-46d3-bccf-c1cb53b81bb1.png)
 
