@@ -55,56 +55,56 @@
    - API Server: You can choose 3 servers, Retropilot, Comma, User's
    - User's API: Set this when you use own
    - Mapbox Style: Choose three styles of the Mapbox, Comma, OPKR(locallized in Korea), User's, if you want to your own, Edit the file with yours(/data/params/d/MapboxStyleCustom). Make your mapbox style at https://studio.mapbox.com/. If you publish the style you can use it.
-   - Use Auto Resume at Stop: I'm not sure this factor is being used at code actually.
-   - Use Cruise Button Spamming
-   - Cruise Start Mode
-   - LaneChange Speed
-   - LaneChange Delay
-   - LaneChange Time(km/h: value)
-   - LeftCurv Offset
-   - RightCurv Offset
-   - Show BSM Status
-   - Max Steering Angle
-   - Str Angle Adjust
-   - Stop Steer Assist on Turn Signals
-   - Reset MaxSpeed Over CurrentSpeed
-   - Enable OSM SpeedLimit
-   - Use Stock SafetyCAM Speed
-   - SpeedLimit Offset(%)
-   - SafetyCamDist Adj(%)
-   - Change Cruise Gap at Stop
-   - VisionCurvDecel(ModelSpeed: km/h)
-   - OSM CurvDecel(%)
-   - Use Auto Engagement
-   - Auto Engage Speed(km/h)
-   - Use Auto RES while Driving
-   - AutoRES Option
-   - AutoRES Condition
-   - AutoRES Allow(sec)
-   - RES Count at Standstill
-   - Steer Wind Down
-   - MainSwitch Openpilot ON/OFF
-   - DEBUG UI 1
-   - DEBUG UI 2
-   - Show TMUX Error
-   - Show LongControl LOG
-   - Use Smart Prebuilt
-   - Use FingerPrint 2.0
+   - Use Auto Resume at Stop: at Standstill, use auto resume when leadcar is moving.
+   - Use Cruise Button Spamming: SCC set speed is changed up and down automatically. should be turn this on to use many functions related to this.
+   - Cruise Start Mode: Set your custom Cruise mode when boot. There are 6 modes. OpenpilotStock/Dist+Curv/Dist/Curv/Oneway/CamSpeed only. OpenpilotStock is nothing to happen with button and not be changed with set speed. Dist+Curv is changed by distance to leadcar and curvature. Dist is distance only. Curv is curvature only. Oneway change camera offset to approach the edge of a road. CamSpeed is changing set speed only by value of camera sign(OSM, Mappy).
+   - LaneChange Speed: minimum lane change speed
+   - LaneChange Delay: Nudge/Nudgeless(adjust delay time to run)
+   - LaneChange Time(km/h: value): How the lanechange fast, to aggressive, upper the value, in oppsite, lower
+   - LeftCurv Offset: if you are unsatisfactory of the drive at Left Curve Section, this can move your car to left or right side.(no reboot required)
+   - RightCurv Offset: if you are unsatisfactory of the drive at Right Curve Section, this can move your car to left or right side.(no reboot required)
+   - Show BSM Status: Show sign when a car approaching from behind. Your car should have the function(BSM)
+   - Max Steering Angle: Default is 90. If you want more, change this up. Some car is not acceptable the vaule above 90.
+   - Str Angle Adjust: When you car keep a straight road, If the value of steering angle is not 0.0, adjust this to be 0.0
+   - Stop Steer Assist on Turn Signals: Openpilot doesn't steer your car at the situation of not process of lane change.
+   - Reset MaxSpeed Over CurrentSpeed: If your car speed upper than OP MaxSpeed, the OP MaxSpeed synchronize to your car speed.
+   - Enable OSM SpeedLimit: Use OSM SpeedLimit(reboot required)
+   - Use Stock SafetyCAM Speed: Some cars have the signal in CAN message. not for all HKG cars.
+   - SpeedLimit Offset(%): If speedlimt is 50, sometimes, you don't want to match exactly the scc set speed to speedlimit.
+   - SafetyCamDist Adj(%): Change the target distance if you are in the decel situation of safetycam.
+   - Change Cruise Gap at Stop: Cruise Gap changed to 1 step for departure faster, it gets back to orignal Gap after few second.
+   - VisionCurvDecel(ModelSpeed: km/h): set speed is changed by Curvature of vision.
+   - OSM CurvDecel(%): If OSM has the value of curv speed, up/down this value if you want to add/subtract.
+   - Use Auto Engagement: When OP is in disengagement status, Auto engagement is enabled when your car is moving. Cruise Standby status is needed at least.
+   - Auto Engage Speed(km/h): Engament is enabled at the speed.
+   - Use Auto RES while Driving: SCC speed automatically set again when releasing SCC.(reboot required)
+   - AutoRES Option: RelBrake/Accel, SCC speed set again when you release from brake pedal.
+   - AutoRES Condition: RelBrake/OnGas, RelBrake: SCC speed set again when you release from brake pedal. OnGas: SCC speed set again when you step gas pedal.
+   - AutoRES Allow(sec): time to allow for AutoRES
+   - RES Count at Standstill: Adjust RES CAN message count to start from StandStill. upper, if the departure is failed. lower, if your car generate cluster error or can error.(no reboot required)
+   - Steer Wind Down: to mitiate torque at error status of your lkas
+   - MainSwitch Openpilot ON/OFF: You can turn on/off OP using Cruise Button on steering wheel.
+   - DEBUG UI 1: Show debug UI on screen. 2 lines bottom of screen.(no reboot required)
+   - DEBUG UI 2: Show debug UI on screen. other lines except 2 lines bottom.(no reboot required)
+   - Show TMUX Error: If you want to show tmux error on screen, related to process such as controlsd, plannerd and so on.(reboot required)
+   - Show LongControl LOG: show long control log at DEBUG UI 1.(no reboot required)
+   - Use Smart Prebuilt: Your device can be booted quickly. The file, Prebuilt is removed when you do push 'CHECK' button on the Menu or type 'gi' command on command line, after then it will be created again when boot complete.(reboot required)
+   - Use FingerPrint 2.0(reboot required)
    - Set LDWS Vehicles
-   - Set DriveGear by Force
-   - Turn Off Communication Issue Alarm
-   - Support WhitePanda
-   - Ignore of Steering Warning
-   - Ignore Can Error on ISG
-   - Set BatteryLess Eon
-   - Use GoogleMap for Mapbox
-   - Timezone setting
-   - Enable Calibration by Force
+   - Set DriveGear by Force: for cars don't have dbc info of gear(reboot required)
+   - Turn Off Communication Issue Alarm: Turn this on if you do not want alert of communication error. Sometimes you could get an alarm with error commuication issue. I don't know actually what error is. seems a bug or uncertain reason.
+   - Support WhitePanda: Turn this on if you use WhitePanda. this is related to issue stopping processes when you turn device off.(reboot required)
+   - Ignore of Steering Warning: Some cars have Steerwarning, so that not engaged.
+   - Ignore Can Error on ISG: for ISG cars. In order to ignore can error, if you want to prevent disengagement.
+   - Set BatteryLess Eon: Screen doesn't show information of battery status.
+   - Use GoogleMap for Mapbox: Use google map when you search your destination at a web browser.
+   - Timezone setting(reboot required)
+   - Enable Calibration by Force: developer for engagment test
    - Open Android Settings
-   - SoftKey RUN/SET
-   - RUN Mixplorer
-   - CAR Force Recognition
-   - Pand Value Edit
+   - SoftKey RUN/SET: softkey application
+   - RUN Mixplorer: file manager application
+   - CAR Force Recognition: If your car is not recognized, choose your car at this.(reboot required)
+   - Pand Value Edit: not recommended. enough at current status.
 
 ![](https://user-images.githubusercontent.com/37757984/127420744-89ca219c-8f8e-46d3-bccf-c1cb53b81bb1.png)
 
