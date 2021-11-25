@@ -703,7 +703,8 @@ class Controls:
       v_future = speeds[-1]
     else:
       v_future = 100.0
-    CC.hudControl.vFuture = float(v_future * (CV.MS_TO_MPH if CS.isMph else CV.MS_TO_KPH))
+    v_future_speed= float((v_future * CV.MS_TO_MPH + 5.0) if CS.isMph else (v_future * CV.MS_TO_KPH))
+    CC.hudControl.vFuture = v_future_speed
 
     recent_blinker = (self.sm.frame - self.last_blinker_frame) * DT_CTRL < 5.0  # 5s blinker cooldown
     ldw_allowed = self.is_ldw_enabled and CS.vEgo > LDW_MIN_SPEED and not recent_blinker \

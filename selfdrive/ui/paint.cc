@@ -424,7 +424,6 @@ static void ui_draw_vision_maxspeed_org(UIState *s) {
   const bool is_cruise_set = maxspeed != 0 && maxspeed != SET_SPEED_NA;
   s->scene.is_speed_over_limit = s->scene.limitSpeedCamera > 19 && ((s->scene.limitSpeedCamera+round(s->scene.limitSpeedCamera*0.01*s->scene.speed_lim_off))+1 < s->scene.car_state.getVEgo() * (s->scene.is_metric ? 3.6 : 2.2369363));
   //if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
-  if (!s->scene.is_metric) { round(cruise_speed *= 1.609344); }
 
   const Rect rect = {bdr_s, bdr_s, 184, 202};
   NVGcolor color = COLOR_BLACK_ALPHA(100);
@@ -457,9 +456,8 @@ static void ui_draw_vision_maxspeed_org(UIState *s) {
 
 static void ui_draw_vision_maxspeed(UIState *s) {
   const int SET_SPEED_NA = 255;
-  float maxspeed = (*s->sm)["controlsState"].getControlsState().getVCruise();
+  float maxspeed = round((*s->sm)["controlsState"].getControlsState().getVCruise());
   const bool is_cruise_set = maxspeed != 0 && maxspeed != SET_SPEED_NA && s->scene.controls_state.getEnabled();
-  if (!s->scene.is_metric) { round(maxspeed *= 1.609344); }
 
   int viz_max_o = 184; //offset value to move right
   const Rect rect = {bdr_s, bdr_s, 184+viz_max_o, 202};
@@ -483,7 +481,6 @@ static void ui_draw_vision_cruise_speed(UIState *s) {
   int limitspeedcamera = s->scene.limitSpeedCamera;
   //if (is_cruise_set && !s->scene.is_metric) { maxspeed *= 0.6225; }
   float cruise_speed = s->scene.vSetDis;
-  if (!s->scene.is_metric) { round(cruise_speed *= 1.609344); }
 
   s->scene.is_speed_over_limit = s->scene.limitSpeedCamera > 19 && ((s->scene.limitSpeedCamera+round(s->scene.limitSpeedCamera*0.01*s->scene.speed_lim_off))+1 < s->scene.car_state.getVEgo()*(s->scene.is_metric ? 3.6 : 2.2369363));
   const Rect rect = {bdr_s, bdr_s, 184, 202};

@@ -4881,8 +4881,8 @@ VCurvSpeed::VCurvSpeed() : AbstractControl("", "", "") {
     }
     if (value >= value2 ) {
       value = value2;
-    } else if (value <= 30 ) {
-      value = 30;
+    } else if (value <= 20 ) {
+      value = 20;
     }
     QString values = QString::number(value);
     params.put("VCurvSpeed30", values.toStdString());
@@ -4991,7 +4991,7 @@ void VCurvSpeed::refresh4() {
   btn4.setText("↕");
 }
 
-VCurvSpeedUD::VCurvSpeedUD() : AbstractControl("VisionCurvDecel(ModelSpeed: km/h)", "Adjust the curve deceleration speed according to the model speed. (interpolation value)", "../assets/offroad/icon_shell.png") {
+VCurvSpeedUD::VCurvSpeedUD() : AbstractControl("VisionCurvDecel(ModelSpeed: CarSpeed)", "Adjust the curve deceleration speed according to the model speed. (interpolation value)", "../assets/offroad/icon_shell.png") {
 
   btn.setStyleSheet(R"(
     padding: 0;
