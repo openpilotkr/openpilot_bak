@@ -1103,7 +1103,14 @@ static void draw_navi_button(UIState *s) {
     nvgFill(s->vg);
   }
   nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
-  nvgText(s->vg,btn_xc1,btn_yc,"NAVI",NULL);
+  if (s->scene.mapbox_running) {
+    nvgFontSize(s->vg, 50);
+    nvgText(s->vg,btn_xc1,btn_yc-17,"MAP",NULL);
+    nvgFontSize(s->vg, 48);
+    nvgText(s->vg,btn_xc1,btn_yc+17,"Search",NULL);
+  } else {
+    nvgText(s->vg,btn_xc1,btn_yc,"NAVI",NULL);
+  }
 }
 
 static void draw_laneless_button(UIState *s) {

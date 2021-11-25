@@ -70,7 +70,7 @@ void HomeWindow::showDriverView(bool show) {
 
 void HomeWindow::mousePressEvent(QMouseEvent* e) {
   // OPKR add map
-  if (QUIState::ui_state.scene.started && map_overlay_btn.ptInRect(e->x(), e->y()) && !QUIState::ui_state.scene.mapbox_running) {
+  if (QUIState::ui_state.scene.started && map_overlay_btn.ptInRect(e->x(), e->y())) {
     QSoundEffect effect1;
     effect1.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/sounds/warning_1.wav"));
     //effect1.setLoopCount(1);
@@ -83,7 +83,14 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     }
     effect1.setVolume(volume1);
     effect1.play();
-    QProcess::execute("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
+    if (!QUIState::ui_state.scene.mapbox_running) {
+      QProcess::execute("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
+    } else if (QUIState::ui_state.scene.mapbox_running && !QUIState::ui_state.scene.map_on_top && QUIState::ui_state.scene.map_on_overlay) {
+      Params().remove("NavDestination");
+    } else {
+      QProcess::execute("pkill com.android.chrome");
+      QProcess::execute("rm -rf /data/data/com.android.chrome/app_tabs/0");
+    }
     QUIState::ui_state.scene.map_on_top = false;
     QUIState::ui_state.scene.map_on_overlay = true;
     return;
@@ -123,6 +130,24 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
       QUIState::ui_state.scene.map_is_running = false;
       Params().putBool("OpkrMapEnable", false);
     }
+    return;
+  }
+  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && mapbox_btn.ptInRect(e->x(), e->y()) && QUIState::ui_state.scene.mapbox_running) {
+    QSoundEffect effect4;
+    effect4.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/sounds/warning_1.wav"));
+    //effect1.setLoopCount(1);
+    //effect1.setLoopCount(QSoundEffect::Infinite);
+    float volume2 = 0.5;
+    if (QUIState::ui_state.scene.nVolumeBoost < 0) {
+      volume2 = 0.0;
+    } else if (QUIState::ui_state.scene.nVolumeBoost > 1) {
+      volume2 = QUIState::ui_state.scene.nVolumeBoost * 0.01;
+    }
+    effect4.setVolume(volume2);
+    effect4.play();
+    QProcess::execute("am start -n com.android.chrome/org.chromium.chrome.browser.ChromeTabbedActivity -d \"http://localhost:8082\" --activity-clear-task");
+    QUIState::ui_state.scene.map_on_top = true;
+    QUIState::ui_state.scene.map_on_overlay = false;
     return;
   }
   if (QUIState::ui_state.scene.started && QUIState::ui_state.scene.map_is_running && map_return_btn.ptInRect(e->x(), e->y()) && !QUIState::ui_state.scene.mapbox_running) {

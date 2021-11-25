@@ -150,7 +150,7 @@ def manager_init():
     ("GitPullOnBoot", "0"),
     ("LiveSteerRatioPercent", "-5"),
     ("StoppingDistAdj", "0"),
-    ("ShowError", "0"),
+    ("ShowError", "1"),
     ("AutoResLimitTime", "0"),
     ("VCurvSpeed30", "40"),
     ("VCurvSpeed50", "50"),
