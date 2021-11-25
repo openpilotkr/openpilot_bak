@@ -5370,8 +5370,7 @@ OPKRServerAPI::OPKRServerAPI() : AbstractControl("User's API", "Set Your API ser
       QString users_api_host = InputDialog::getText("Input Your API(url or ip):", this);
       if (users_api_host.length() > 0) {
         QString cmd0 = QString::fromStdString("Your Input is\n") + users_api_host + QString::fromStdString("\nPress OK to apply&reboot");
-        const char* p1 = cmd0.toStdString().c_str();
-        if (ConfirmationDialog::confirm(p1, this)) {
+        if (ConfirmationDialog::confirm(cmd0, this)) {
           params.put("OPKRServerAPI", users_api_host.toStdString());
           params.put("OPKRServer", "2");
           QProcess::execute("rm -f /data/params/d/DongleId");
