@@ -127,11 +127,11 @@ class LongControl():
       dRel = radarState.leadOne.dRel
       vRel = radarState.leadOne.vRel
     if long_plan.hasLead:
-      if CS.radarDistance <= 149:
+      if 1 < CS.radarDistance <= 149:
         stop = True if (dRel <= 3.5 and radarState.leadOne.status) else False
         radar_target_detected = True
       else:
-        stop = True if (dRel < 5.5 and radarState.leadOne.status) else False
+        stop = True if (dRel < 4.5 and radarState.leadOne.status) else False
         radar_target_detected = False
     else:
       stop = False
@@ -161,18 +161,18 @@ class LongControl():
       freeze_integrator = prevent_overshoot
 
       # opkr
-      if self.vRel_prev != vRel and vRel <= 0 and CS.vEgo > 13. and self.damping_timer <= 0: # decel mitigation for a while
-        if (vRel - self.vRel_prev)*3.6 <= -5:
-          self.damping_timer = 2.5*CS.vEgo
-          self.damping_timer3 = self.damping_timer
-          self.decel_damping2 = interp(abs((vRel - self.vRel_prev)*3.6), [0., 5.], [1., 0.])
-        self.vRel_prev = vRel
-      elif self.damping_timer > 0:
-        self.damping_timer -= 1
-        self.decel_damping = interp(self.damping_timer, [0., self.damping_timer3], [1., self.decel_damping2])
+      # if self.vRel_prev != vRel and vRel <= 0 and CS.vEgo > 13. and self.damping_timer <= 0: # decel mitigation for a while
+      #   if (vRel - self.vRel_prev)*3.6 <= -5:
+      #     self.damping_timer = 2.5*CS.vEgo
+      #     self.damping_timer3 = self.damping_timer
+      #     self.decel_damping2 = interp(abs((vRel - self.vRel_prev)*3.6), [0., 5.], [1., 0.])
+      #   self.vRel_prev = vRel
+      # elif self.damping_timer > 0:
+      #   self.damping_timer -= 1
+      #   self.decel_damping = interp(self.damping_timer, [0., self.damping_timer3], [1., self.decel_damping2])
 
       output_accel = self.pid.update(self.v_pid, CS.vEgo, speed=CS.vEgo, deadzone=deadzone, feedforward=a_target, freeze_integrator=freeze_integrator)
-      output_accel *= self.decel_damping
+      # output_accel *= self.decel_damping
 
       if prevent_overshoot or CS.brakeHold:
         output_accel = min(output_accel, 0.0)
@@ -182,7 +182,7 @@ class LongControl():
       # Keep applying brakes until the car is stopped
       factor = 1
       if long_plan.hasLead:
-        factor = interp(dRel,[2.0,5.5], [6.0,1.0]) if not radar_target_detected else 1
+        factor = interp(dRel,[2.0,4.5], [5.0,1.0]) if not radar_target_detected else 1
       if not CS.standstill or output_accel > CP.stopAccel:
         output_accel -= CP.stoppingDecelRate * DT_CTRL * factor
       elif CS.cruiseState.standstill and output_accel < CP.stopAccel:
@@ -195,7 +195,7 @@ class LongControl():
     elif self.long_control_state == LongCtrlState.starting:
       factor = 1
       if long_plan.hasLead:
-        factor = interp(dRel,[5.5,6.5], [1.0,2.0]) if not radar_target_detected else 1
+        factor = interp(dRel,[4.5,5.5], [1.0,2.0]) if not radar_target_detected else 1
       if output_accel < CP.startAccel:
         output_accel += CP.startingAccelRate * DT_CTRL * factor
       self.reset(CS.vEgo)
