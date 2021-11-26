@@ -230,7 +230,7 @@ static void screen_draw_button(UIState *s) {
   else {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   }
-  if (s->scene.gpsAccuracyUblox == 0.00) {
+  if (s->scene.gpsAccuracyUblox > 99 || s->scene.gpsAccuracyUblox == 0 || s->scene.gpsAccuracyUblox < 0) {
     nvgFontSize(s->vg, 57);
     nvgFontFace(s->vg, "sans-bold");
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);

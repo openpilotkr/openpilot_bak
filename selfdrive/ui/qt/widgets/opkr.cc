@@ -1744,12 +1744,20 @@ void SteerAngleCorrection::refresh() {
   btnplus.setText("＋");
 }
 
-SpeedLimitOffset::SpeedLimitOffset() : AbstractControl("SpeedLimit Offset(%)", "During safetycam deceleration, it decelerates by compensating for the difference between GPS speed and real speed.", "../assets/offroad/icon_shell.png") {
+SpeedLimitOffset::SpeedLimitOffset() : AbstractControl("SpeedLimit Offset", "During safetycam deceleration, it decelerates by compensating for the difference between GPS speed and real speed.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
   hlayout->addWidget(&label);
 
+  btn.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
   btnminus.setStyleSheet(R"(
     padding: 0;
     border-radius: 50px;
@@ -1766,10 +1774,24 @@ SpeedLimitOffset::SpeedLimitOffset() : AbstractControl("SpeedLimit Offset(%)", "
     color: #E4E4E4;
     background-color: #393939;
   )");
+  btn.setFixedSize(110, 100);
   btnminus.setFixedSize(150, 100);
   btnplus.setFixedSize(150, 100);
+  hlayout->addWidget(&btn);
   hlayout->addWidget(&btnminus);
   hlayout->addWidget(&btnplus);
+
+  QObject::connect(&btn, &QPushButton::clicked, [=]() {
+    auto str = QString::fromStdString(params.get("OpkrSpeedLimitOffsetOption"));
+    int value = str.toInt();
+    value = value + 1;
+    if (value >= 2 ) {
+      value = 0;
+    }
+    QString values = QString::number(value);
+    params.put("OpkrSpeedLimitOffsetOption", values.toStdString());
+    refresh();
+  });
 
   QObject::connect(&btnminus, &QPushButton::clicked, [=]() {
     auto str = QString::fromStdString(params.get("OpkrSpeedLimitOffset"));
@@ -1800,6 +1822,12 @@ SpeedLimitOffset::SpeedLimitOffset() : AbstractControl("SpeedLimit Offset(%)", "
 }
 
 void SpeedLimitOffset::refresh() {
+  auto strs = QString::fromStdString(params.get("OpkrSpeedLimitOffsetOption"));
+  if (strs == "0") {
+    btn.setText("%");
+  } else {
+    btn.setText("±");
+  }
   label.setText(QString::fromStdString(params.get("OpkrSpeedLimitOffset")));
   btnminus.setText("－");
   btnplus.setText("＋");

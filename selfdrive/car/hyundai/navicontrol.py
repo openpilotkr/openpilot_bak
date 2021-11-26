@@ -32,6 +32,7 @@ class NaviControl():
     self.gasPressed_old = 0
 
     self.map_spdlimit_offset = int(Params().get("OpkrSpeedLimitOffset", encoding="utf8"))
+    self.map_spdlimit_offset_option = int(Params().get("OpkrSpeedLimitOffsetOption", encoding="utf8"))
     self.safetycam_decel_dist_gain = int(Params().get("SafetyCamDecelDistGain", encoding="utf8"))
 
     self.map_speed_block = False
@@ -141,7 +142,10 @@ class NaviControl():
     if int(self.sm['liveMapData'].speedLimit) and self.osm_speedlimit_enabled:  # osm speedlimit
       self.onSpeedControl = True
       spdTarget = self.sm['liveMapData'].speedLimit
-      cruise_set_speed_kph = spdTarget + round(spdTarget*0.01*self.map_spdlimit_offset)
+      if self.map_spdlimit_offset_option == 0:
+        cruise_set_speed_kph = spdTarget + round(spdTarget*0.01*self.map_spdlimit_offset)
+      else:
+        cruise_set_speed_kph = spdTarget + self.map_spdlimit_offset
     elif CS.map_enabled and self.liveNaviData.speedLimit > 19:  # mappy speedlimit
       self.map_speed_dist = max(0, self.liveNaviData.speedLimitDistance - 30)
       self.map_speed = self.liveNaviData.speedLimit
@@ -168,7 +172,10 @@ class NaviControl():
       else:
         self.onSpeedControl = False
         return cruise_set_speed_kph
-      cruise_set_speed_kph = spdTarget + round(spdTarget*0.01*self.map_spdlimit_offset)
+      if self.map_spdlimit_offset_option == 0:
+        cruise_set_speed_kph = spdTarget + round(spdTarget*0.01*self.map_spdlimit_offset)
+      else:
+        cruise_set_speed_kph = spdTarget + self.map_spdlimit_offset
     elif CS.safety_sign > 19 and self.stock_navi_info_enabled:  # cat stock navi speedlimit
       self.map_speed_dist = max(0, CS.safety_dist - 30)
       self.map_speed = CS.safety_sign
@@ -195,7 +202,10 @@ class NaviControl():
       else:
         self.onSpeedControl = False
         return cruise_set_speed_kph
-      cruise_set_speed_kph = spdTarget + round(spdTarget*0.01*self.map_spdlimit_offset)
+      if self.map_spdlimit_offset_option == 0:
+        cruise_set_speed_kph = spdTarget + round(spdTarget*0.01*self.map_spdlimit_offset)
+      else:
+        cruise_set_speed_kph = spdTarget + self.map_spdlimit_offset
     else:
       spdTarget = cruise_set_speed_kph
       self.onSpeedControl = False

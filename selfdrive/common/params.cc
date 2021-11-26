@@ -319,6 +319,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"MapboxStyleCustom", PERSISTENT},
     {"IgnoreCANErroronISG", PERSISTENT},
     {"RESCountatStandstill", PERSISTENT},
+    {"OpkrSpeedLimitOffsetOption", PERSISTENT},
 };
 
 } // namespace
