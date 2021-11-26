@@ -1775,8 +1775,8 @@ SpeedLimitOffset::SpeedLimitOffset() : AbstractControl("SpeedLimit Offset(%)", "
     auto str = QString::fromStdString(params.get("OpkrSpeedLimitOffset"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
+    if (value <= -30 ) {
+      value = -30;
     }
     QString values = QString::number(value);
     //QUIState::ui_state.speed_lim_off = value;
@@ -1788,8 +1788,8 @@ SpeedLimitOffset::SpeedLimitOffset() : AbstractControl("SpeedLimit Offset(%)", "
     auto str = QString::fromStdString(params.get("OpkrSpeedLimitOffset"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 10 ) {
-      value = 10;
+    if (value >= 30 ) {
+      value = 30;
     }
     QString values = QString::number(value);
     //QUIState::ui_state.speed_lim_off = value;
