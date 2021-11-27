@@ -418,6 +418,7 @@ static void update_status(UIState *s) {
     s->scene.kr_time_show = params.getBool("KRTimeShow");
     s->scene.steer_wind_down = params.getBool("SteerWindDown");
     s->scene.show_error = params.getBool("ShowError");
+    s->scene.limitSCOffsetOption = params.getBool("OpkrSpeedLimitOffsetOption");
 
     if (s->scene.autoScreenOff > 0) {
       s->scene.nTime = s->scene.autoScreenOff * 60 * UI_FREQ;
