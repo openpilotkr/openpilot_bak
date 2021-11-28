@@ -63,7 +63,7 @@ class LanePlanner:
     else:
       lean_offset = 0
 
-    if (self.left_curv_offset != 0 or self.left_curv_offset != 0) and v_ego > 8:
+    if (self.left_curv_offset != 0 or self.right_curv_offset != 0) and v_ego > 8:
       if curvature > 0.0008 and self.left_curv_offset < 0 and lane_differ >= 0: # left curve
         if lane_differ > 0.6:
           lane_differ = 0.6          
