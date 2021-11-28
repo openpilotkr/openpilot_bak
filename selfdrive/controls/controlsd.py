@@ -163,6 +163,7 @@ class Controls:
     self.v_cruise_kph = 255
     self.v_cruise_kph_last = 0
     self.mismatch_counter = 0
+    self.cruise_mismatch_counter = 0
     self.can_error_counter = 0
     self.last_blinker_frame = 0
     self.saturated_count = 0
