@@ -216,7 +216,7 @@ static void ui_draw_world(UIState *s) {
 
 // TPMS code added from OPKR
 static void ui_draw_tpms(UIState *s) {
-  const UIScene &scene = s->scene;
+  UIScene &scene = s->scene;
   char tpmsFl[64];
   char tpmsFr[64];
   char tpmsRl[64];
