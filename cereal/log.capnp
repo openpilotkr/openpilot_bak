@@ -291,11 +291,6 @@ struct DeviceState @0xa4d8b5af2aa492eb {
   networkStrength @24 :NetworkStrength;
   lastAthenaPingTime @32 :UInt64;
 
-  # atom
-  wifiIpAddress @38 :Text;
-  # opkr
-  wifiSSID @39 :Text;
-
   started @11 :Bool;
   startedMonoTime @13 :UInt64;
 
@@ -307,26 +302,31 @@ struct DeviceState @0xa4d8b5af2aa492eb {
 
   # power
   batteryPercent @8 :Int16;
-  batteryStatus @9 :Text;
   batteryCurrent @15 :Int32;
-  batteryVoltage @16 :Int32;
   chargingError @17 :Bool;
   chargingDisabled @18 :Bool;
   offroadPowerUsageUwh @23 :UInt32;
   carBatteryCapacityUwh @25 :UInt32;
+  powerDrawW @40 :Float32;
 
   # device thermals
   cpuTempC @26 :List(Float32);
   gpuTempC @27 :List(Float32);
   memoryTempC @28 :Float32;
-  batteryTempC @29 :Float32;
   ambientTempC @30 :Float32;
   nvmeTempC @35 :List(Float32);
   modemTempC @36 :List(Float32);
+  pmicTempC @39 :List(Float32);
+  thermalZones @38 :List(ThermalZone);
   thermalStatus @14 :ThermalStatus;
 
   fanSpeedPercentDesired @10 :UInt16;
   screenBrightnessPercent @37 :Int8;
+
+  struct ThermalZone {
+    name @0 :Text;
+    temp @1 :Float32;
+  }
 
   enum ThermalStatus {
     green @0;
@@ -372,23 +372,24 @@ struct DeviceState @0xa4d8b5af2aa492eb {
   batDEPRECATED @6 :UInt32;
   pa0DEPRECATED @21 :UInt16;
   cpuUsagePercentDEPRECATED @20 :Int8;
+  batteryStatus @9 :Text;
+  batteryVoltage @16 :Int32;
+  batteryTempC @29 :Float32;
+  # atom
+  wifiIpAddress @38 :Text;
+  # opkr
+  wifiSSID @39 :Text;
 }
 
 struct PandaState @0xa7649e2575e4591e {
-  # from can health
-  voltage @0 :UInt32;
-  current @1 :UInt32;
   ignitionLine @2 :Bool;
   controlsAllowed @3 :Bool;
   gasInterceptorDetected @4 :Bool;
-  hasGps @6 :Bool;
   canSendErrs @7 :UInt32;
   canFwdErrs @8 :UInt32;
   canRxErrs @19 :UInt32;
   gmlanSendErrs @9 :UInt32;
   pandaType @10 :PandaType;
-  fanSpeedRpm @11 :UInt16;
-  usbPowerMode @12 :UsbPowerMode;
   ignitionCan @13 :Bool;
   safetyModel @14 :Car.CarParams.SafetyModel;
   safetyParam @20 :Int16;
@@ -442,13 +443,6 @@ struct PandaState @0xa7649e2575e4591e {
     redPanda @7;
   }
 
-  enum UsbPowerMode {
-    none @0;
-    client @1;
-    cdp @2;
-    dcp @3;
-  }
-
   enum HarnessStatus {
     notConnected @0;
     normal @1;
@@ -456,6 +450,18 @@ struct PandaState @0xa7649e2575e4591e {
   }
 
   startedSignalDetectedDEPRECATED @5 :Bool;
+  voltage @0 :UInt32;
+  current @1 :UInt32;
+  hasGps @6 :Bool;
+  fanSpeedRpm @11 :UInt16;
+  usbPowerMode @12 :UsbPowerMode;
+
+  enum UsbPowerMode {
+    none @0;
+    client @1;
+    cdp @2;
+    dcp @3;
+  }
 }
 
 struct RadarState @0x9a185389d6fdd05f {
@@ -1527,6 +1533,7 @@ struct Event {
     # navigation
     navInstruction @82 :NavInstruction;
     navRoute @83 :NavRoute;
+    navThumbnail @84: Thumbnail;
 
     # *********** debug ***********
     testJoystick @52 :Joystick;
