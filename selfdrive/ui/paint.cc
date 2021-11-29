@@ -820,6 +820,7 @@ static void bb_ui_draw_measures_left(UIState *s, int bb_x, int bb_y, int bb_w ) 
   //finally draw the frame
   if (!scene.batt_less) {bb_h += -(bb_y_offset*1);} else {bb_h += -(bb_y_offset*2);}
   if (scene.gpsAccuracyUblox != 0.00) {bb_h += -(bb_y_offset*3);} else {bb_h += -(bb_y_offset*1);}
+  if (scene.batt_less && scene.gpsAccuracyUblox != 0.00) {bb_h += (bb_y_offset*2);}
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, bb_x, bb_y, bb_w, bb_h, 20);
   nvgStrokeColor(s->vg, COLOR_WHITE_ALPHA(80));
