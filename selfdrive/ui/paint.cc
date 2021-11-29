@@ -289,7 +289,6 @@ static void ui_draw_tpms(UIState *s) {
   } else {
     ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 55, COLOR_GREEN_ALPHA(200), "sans-semibold");
   }
-  }
   if (scene.tpmsPressureFl < 32 || scene.tpmsPressureFr < 32 || scene.tpmsPressureRl < 32 || scene.tpmsPressureRr < 32) {
     scene.tpms_blinkingrate -= 5;
     if(scene.tpms_blinkingrate < 0) scene.tpms_blinkingrate = 120;
