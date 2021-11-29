@@ -253,33 +253,46 @@ static void ui_draw_tpms(UIState *s) {
   snprintf(tpmsFr, sizeof(tpmsFr), "%.1f", scene.tpmsPressureFr);
   snprintf(tpmsRl, sizeof(tpmsRl), "%.1f", scene.tpmsPressureRl);
   snprintf(tpmsRr, sizeof(tpmsRr), "%.1f", scene.tpmsPressureRr);
-  if (scene.tpmsPressureFl < 33) {
-    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 55, COLOR_RED, "sans-bold");
+  if (scene.tpmsPressureFl < 32) {
+    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 55, nvgRGBA(201, 34, 49, (scene.tpms_blinkingrate>=50)?255:0), "sans-bold");
   } else if (scene.tpmsPressureFl > 50) {
     ui_draw_text(s, pos_x-45, pos_y+45, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+  } else if (scene.tpmsPressureFl > 45) {
+    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 55, COLOR_RED, "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+45, tpmsFl, 55, COLOR_GREEN_ALPHA(200), "sans-semibold");
   }
-  if (scene.tpmsPressureFr < 33) {
-    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 55, COLOR_RED, "sans-bold");
+  if (scene.tpmsPressureFr < 32) {
+    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 55, nvgRGBA(201, 34, 49, (scene.tpms_blinkingrate>=50)?255:0), "sans-bold");
   } else if (scene.tpmsPressureFr > 50) {
     ui_draw_text(s, pos_x+45, pos_y+45, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+  } else if (scene.tpmsPressureFr > 45) {
+    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 55, COLOR_RED, "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+45, tpmsFr, 55, COLOR_GREEN_ALPHA(200), "sans-semibold");
   }
-  if (scene.tpmsPressureRl < 33) {
-    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 55, COLOR_RED, "sans-bold");
+  if (scene.tpmsPressureRl < 32) {
+    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 55, nvgRGBA(201, 34, 49, (scene.tpms_blinkingrate>=50)?255:0), "sans-bold");
   } else if (scene.tpmsPressureRl > 50) {
     ui_draw_text(s, pos_x-45, pos_y+90, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+  } else if (scene.tpmsPressureRl > 45) {
+    ui_draw_text(s, pos_x-45, pos_y+90, tpmsFr, 55, COLOR_RED, "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x-45, pos_y+90, tpmsRl, 55, COLOR_GREEN_ALPHA(200), "sans-semibold");
   }
-  if (scene.tpmsPressureRr < 33) {
-    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 55, COLOR_RED, "sans-bold");
+  if (scene.tpmsPressureRr < 32) {
+    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 55, nvgRGBA(201, 34, 49, (scene.tpms_blinkingrate>=50)?255:0), "sans-bold");
   } else if (scene.tpmsPressureRr > 50) {
     ui_draw_text(s, pos_x+45, pos_y+90, "N/A", 50, COLOR_WHITE_ALPHA(200), "sans-semibold");
+  } else if (scene.tpmsPressureRr > 45) {
+    ui_draw_text(s, pos_x+45, pos_y+90, tpmsFr, 55, COLOR_RED, "sans-semibold");
   } else {
-    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 55, COLOR_WHITE_ALPHA(200), "sans-semibold");
+    ui_draw_text(s, pos_x+45, pos_y+90, tpmsRr, 55, COLOR_GREEN_ALPHA(200), "sans-semibold");
+  }
+  }
+  if (scene.tpmsPressureFl < 32 || scene.tpmsPressureFr < 32 || scene.tpmsPressureRl < 32 || scene.tpmsPressureRr < 32) {
+    scene.tpms_blinkingrate -= 5;
+    if(scene.tpms_blinkingrate < 0) scene.tpms_blinkingrate = 120;
   }
 }
 
@@ -611,6 +624,8 @@ static void ui_draw_vision_speed(UIState *s) {
   	val_color = COLOR_RED;
   } else if (scene.brakeLights && !scene.comma_stock_ui) {
   	val_color = nvgRGBA(201, 34, 49, 100);
+  } else if (scene.gasPress && !scene.comma_stock_ui) {
+    val_color = nvgRGBA(0, 240, 0, 255);
   }
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   ui_draw_text(s, s->fb_w/2, 210, speed_str.c_str(), 96 * 2.5, val_color, "sans-bold");

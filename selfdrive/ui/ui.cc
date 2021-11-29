@@ -148,6 +148,7 @@ static void update_state(UIState *s) {
       scene.blinker_blinkingrate = 120;
     }
     scene.brakePress = cs_data.getBrakePressed();
+    scene.gasPress = cs_data.getGasPressed();
     scene.brakeLights = cs_data.getBrakeLights();
     scene.getGearShifter = cs_data.getGearShifter();
     scene.leftBlinker = cs_data.getLeftBlinker();
