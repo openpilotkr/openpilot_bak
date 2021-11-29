@@ -1055,7 +1055,6 @@ static void draw_safetysign(UIState *s) {
     if (s->scene.speedlimit_signtype) {
       ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), 20.);
       ui_draw_rect(s->vg, rect_s, COLOR_BLACK_ALPHA(200), 10, 20.);
-      nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-50, "SPEED", 45, COLOR_GREEN_ALPHA(150), "sans-bold");
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-35, "LIMIT", 45, COLOR_GREEN_ALPHA(150), "sans-bold");
     } else {
