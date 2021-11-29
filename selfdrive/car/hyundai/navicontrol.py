@@ -139,7 +139,7 @@ class NaviControl():
     #if not mapValid or trafficType == 0:
     #  return  cruise_set_speed_kph
 
-    if int(self.sm['liveMapData'].speedLimit) and self.osm_speedlimit_enabled:  # osm speedlimit
+    if int(self.sm['liveMapData'].speedLimit) > 19 and self.osm_speedlimit_enabled:  # osm speedlimit
       self.onSpeedControl = True
       spdTarget = self.sm['liveMapData'].speedLimit
       if self.map_spdlimit_offset_option == 0:
