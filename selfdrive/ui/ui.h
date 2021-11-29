@@ -234,6 +234,7 @@ typedef struct UIScene {
   bool mapbox_running;
   int navi_select;
   bool tmux_error_check = false;
+  bool speedlimit_signtype = false;
 
   cereal::DeviceState::Reader deviceState;
   cereal::CarState::Reader car_state;
