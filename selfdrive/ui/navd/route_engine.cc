@@ -91,24 +91,22 @@ static void parse_banner(cereal::NavInstruction::Builder &instruction, const QMa
       }
     }
   }
+
 }
 
 RouteEngine::RouteEngine() {
-  sm = new SubMaster({"liveLocationKalman", "managerState"});
+  sm = new SubMaster({"liveLocationKalman"});
   pm = new PubMaster({"navInstruction", "navRoute"});
 
   // Timers
-  route_timer = new QTimer(this);
-  QObject::connect(route_timer, SIGNAL(timeout()), this, SLOT(routeUpdate()));
-  route_timer->start(1000);
-
-  msg_timer = new QTimer(this);
-  QObject::connect(msg_timer, SIGNAL(timeout()), this, SLOT(msgUpdate()));
-  msg_timer->start(50);
+  timer = new QTimer(this);
+  QObject::connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
+  timer->start(1000);
 
   // Build routing engine
   QVariantMap parameters;
-  parameters["mapbox.access_token"] = get_mapbox_token();
+  QString token = MAPBOX_TOKEN.isEmpty() ? CommaApi::create_jwt({}, 4 * 7 * 24 * 3600) : MAPBOX_TOKEN;
+  parameters["mapbox.access_token"] = token;
   parameters["mapbox.directions_api_url"] = MAPS_HOST + "/directions/v5/mapbox/";
 
   geoservice_provider = new QGeoServiceProvider("mapbox", parameters);
@@ -126,46 +124,23 @@ RouteEngine::RouteEngine() {
   }
 }
 
-void RouteEngine::msgUpdate() {
-  sm->update(1000);
-  if (!sm->updated("liveLocationKalman")) {
-    active = false;
-    return;
-  }
-
-
-  if (sm->updated("managerState")) {
-    for (auto const &p : (*sm)["managerState"].getManagerState().getProcesses()) {
-      if (p.getName() == "ui" && p.getRunning()) {
-        if (ui_pid && *ui_pid != p.getPid()){
-          qWarning() << "UI restarting, sending route";
-          QTimer::singleShot(5000, this, &RouteEngine::sendRoute);
-        }
-        ui_pid = p.getPid();
-      }
-    }
-  }
+void RouteEngine::timerUpdate() {
+  sm->update(0);
+  // if (!sm->updated("liveLocationKalman")) {
+  //   return;
+  // }
 
   auto location = (*sm)["liveLocationKalman"].getLiveLocationKalman();
-  auto pos = location.getPositionGeodetic();
-  auto orientation = location.getCalibratedOrientationNED();
-
   gps_ok = location.getGpsOK();
 
-  localizer_valid = (location.getStatus() == cereal::LiveLocationKalman::Status::VALID) && pos.getValid();
+  localizer_valid = location.getStatus() == cereal::LiveLocationKalman::Status::VALID;
 
   if (localizer_valid) {
+    auto pos = location.getPositionGeodetic();
+    auto orientation = location.getCalibratedOrientationNED();
+
     last_bearing = RAD2DEG(orientation.getValue()[2]);
     last_position = QMapbox::Coordinate(pos.getValue()[0], pos.getValue()[1]);
-    emit positionUpdated(*last_position, *last_bearing);
-  }
-
-  active = true;
-}
-
-void RouteEngine::routeUpdate() {
-  if (!active) {
-    return;
   }
 
   recomputeRoute();
@@ -241,7 +216,6 @@ void RouteEngine::routeUpdate() {
 }
 
 void RouteEngine::clearRoute() {
-  route = QGeoRoute();
   segment = QGeoRouteSegment();
   nav_destination = QMapbox::Coordinate();
 }
@@ -274,10 +248,6 @@ bool RouteEngine::shouldRecompute() {
 }
 
 void RouteEngine::recomputeRoute() {
-  if (!last_position) {
-    return;
-  }
-
   auto new_destination = coordinate_from_param("NavDestination");
   if (!new_destination) {
     clearRoute();
@@ -319,6 +289,10 @@ void RouteEngine::calculateRoute(QMapbox::Coordinate destination) {
 }
 
 void RouteEngine::routeCalculated(QGeoRouteReply *reply) {
+  MessageBuilder msg;
+  cereal::Event::Builder evt = msg.initEvent();
+  cereal::NavRoute::Builder nav_route = evt.initNavRoute();
+
   if (reply->error() == QGeoRouteReply::NoError) {
     if (reply->routes().size() != 0) {
       qWarning() << "Got route response";
@@ -327,7 +301,15 @@ void RouteEngine::routeCalculated(QGeoRouteReply *reply) {
       segment = route.firstRouteSegment();
 
       auto path = route.path();
-      emit routeUpdated(path);
+      auto coordinates = nav_route.initCoordinates(path.size());
+
+      size_t i = 0;
+      for (auto const &c : route.path()) {
+        coordinates[i].setLatitude(c.latitude());
+        coordinates[i].setLongitude(c.longitude());
+        i++;
+      }
+
     } else {
       qWarning() << "Got empty route response";
     }
@@ -335,25 +317,7 @@ void RouteEngine::routeCalculated(QGeoRouteReply *reply) {
     qWarning() << "Got error in route reply" << reply->errorString();
   }
 
-  sendRoute();
+  pm->send("navRoute", msg);
 
   reply->deleteLater();
-}
-
-void RouteEngine::sendRoute() {
-  MessageBuilder msg;
-  cereal::Event::Builder evt = msg.initEvent();
-  cereal::NavRoute::Builder nav_route = evt.initNavRoute();
-
-  auto path = route.path();
-  auto coordinates = nav_route.initCoordinates(path.size());
-
-  size_t i = 0;
-  for (auto const &c : route.path()) {
-    coordinates[i].setLatitude(c.latitude());
-    coordinates[i].setLongitude(c.longitude());
-    i++;
-  }
-
-  pm->send("navRoute", msg);
 }

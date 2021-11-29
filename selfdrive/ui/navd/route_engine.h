@@ -1,7 +1,5 @@
 #pragma once
 
-#include <optional>
-
 #include <QThread>
 #include <QGeoCoordinate>
 #include <QGeoManeuver>
@@ -23,10 +21,7 @@ public:
   SubMaster *sm;
   PubMaster *pm;
 
-  QTimer* msg_timer;
-  QTimer* route_timer;
-
-  std::optional<int> ui_pid;
+  QTimer* timer;
 
   // Route
   bool gps_ok = false;
@@ -42,7 +37,6 @@ public:
   bool localizer_valid = false;
 
   // Route recompute
-  bool active = false;
   int recompute_backoff = 0;
   int recompute_countdown = 0;
   void calculateRoute(QMapbox::Coordinate destination);
@@ -50,13 +44,7 @@ public:
   bool shouldRecompute();
 
 private slots:
-  void routeUpdate();
-  void msgUpdate();
+  void timerUpdate();
   void routeCalculated(QGeoRouteReply *reply);
   void recomputeRoute();
-  void sendRoute();
-
-signals:
-  void positionUpdated(QMapbox::Coordinate position, float bearing);
-  void routeUpdated(QList<QGeoCoordinate> coordinates);
 };
