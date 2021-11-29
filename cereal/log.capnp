@@ -376,9 +376,9 @@ struct DeviceState @0xa4d8b5af2aa492eb {
   batteryVoltage @16 :Int32;
   batteryTempC @29 :Float32;
   # atom
-  wifiIpAddress @40 :Text;
+  wifiIpAddress @41 :Text;
   # opkr
-  wifiSSID @41 :Text;
+  wifiSSID @42 :Text;
 }
 
 struct PandaState @0xa7649e2575e4591e {
