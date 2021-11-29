@@ -1046,20 +1046,23 @@ static void draw_safetysign(UIState *s) {
     } else {
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 115, COLOR_BLACK_ALPHA(200), "sans-bold");
     }
-    ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity), 20.);
-    ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 8, 20);
-    nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 78, COLOR_WHITE_ALPHA(200), "sans-bold");
+    if (safety_dist != 0) {
+      ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity), 20.);
+      ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 8, 20);
+      nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+      ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 78, COLOR_WHITE_ALPHA(200), "sans-bold");
+    }
   } else if ((s->scene.mapSign == 195 || s->scene.mapSign == 197) && safety_speed == 0 && safety_dist != 0 && !s->scene.comma_stock_ui) {
     ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), diameter2/2);
     ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 20, diameter/2);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), "VAR\nSEC", 108, COLOR_BLACK_ALPHA(200), "sans-bold");
-
-    ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity), 20.);
-    ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 8, 20);
-    nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 78, COLOR_WHITE_ALPHA(200), "sans-bold");
+    if (safety_dist != 0) {
+      ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity), 20.);
+      ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200), 8, 20);
+      nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
+      ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 78, COLOR_WHITE_ALPHA(200), "sans-bold");
+    }
   }
 }
 
@@ -1176,8 +1179,8 @@ static void ui_draw_vision_header(UIState *s) {
     ui_draw_tpms(s);
     if (s->scene.controls_state.getEnabled()) {
       ui_draw_standstill(s);
+      draw_safetysign(s);
     }
-    draw_safetysign(s);
     draw_compass(s);
     draw_navi_button(s);
     if (s->scene.end_to_end) {
