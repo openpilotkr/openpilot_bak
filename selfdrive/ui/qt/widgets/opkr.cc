@@ -1399,8 +1399,8 @@ LaneChangeSpeed::LaneChangeSpeed() : AbstractControl("LaneChange Speed", "Set th
     auto str = QString::fromStdString(params.get("OpkrLaneChangeSpeed"));
     int value = str.toInt();
     value = value - 5;
-    if (value <= 30 ) {
-      value = 30;
+    if (value <= 20 ) {
+      value = 20;
     }
     QString values = QString::number(value);
     params.put("OpkrLaneChangeSpeed", values.toStdString());
