@@ -1056,8 +1056,8 @@ static void draw_safetysign(UIState *s) {
   //if (safety_speed > 19 && !s->scene.comma_stock_ui) {
   if (true) {
     if (s->scene.speedlimit_signtype) {
-      ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), 20.);
-      ui_draw_rect(s->vg, rect_s, COLOR_BLACK_ALPHA(200), 10, 17.);
+      ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), 16.);
+      ui_draw_rect(s->vg, rect_s, COLOR_BLACK_ALPHA(200), 9, 17.);
       ui_draw_rect(s->vg, rect_so, COLOR_WHITE_ALPHA(200), 6, 20.);
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-45, "SPEED", 55, COLOR_BLACK_ALPHA(200), "sans-bold");
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-10, "LIMIT", 55, COLOR_BLACK_ALPHA(200), "sans-bold");
