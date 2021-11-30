@@ -1056,15 +1056,15 @@ static void draw_safetysign(UIState *s) {
     if (s->scene.speedlimit_signtype) {
       ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), 20.);
       ui_draw_rect(s->vg, rect_s, COLOR_BLACK_ALPHA(200), 10, 20.);
-      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-55, "SPEED", 50, COLOR_BLACK_ALPHA(200), "sans-bold");
-      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-30, "LIMIT", 50, COLOR_BLACK_ALPHA(200), "sans-bold");
+      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-55, "SPEED", 55, COLOR_BLACK_ALPHA(200), "sans-bold");
+      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-20, "LIMIT", 55, COLOR_BLACK_ALPHA(200), "sans-bold");
     } else {
       ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), diameter2/2);
       ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200), 20, diameter/2);
     }
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (safety_speed < 100) {
-      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()+30, "65", 140, COLOR_BLACK_ALPHA(200), "sans-bold");
+      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()+30, "100", 115, COLOR_BLACK_ALPHA(200), "sans-bold");
       //ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 160, COLOR_BLACK_ALPHA(200), "sans-bold");
     } else {
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY()+30, "65", 140, COLOR_BLACK_ALPHA(200), "sans-bold");
