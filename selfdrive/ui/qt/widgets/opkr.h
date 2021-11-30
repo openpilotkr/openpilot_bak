@@ -1803,3 +1803,18 @@ private:
   
   void refresh();
 };
+
+class SpeedLimitSignType : public AbstractControl {
+  Q_OBJECT
+
+public:
+  SpeedLimitSignType();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+  Params params;
+  
+  void refresh();
+};
