@@ -5684,3 +5684,69 @@ void SpeedLimitSignType::refresh() {
   btnminus.setText("◀");
   btnplus.setText("▶");
 }
+
+RadarLongHelperOption::RadarLongHelperOption() : AbstractControl("Radar Long Assist", "Vision Only, Vision+Radar, Radar Only", "../assets/offroad/icon_shell.png") {
+
+  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
+  label.setStyleSheet("color: #e0e879");
+  hlayout->addWidget(&label);
+
+  btnminus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnplus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnminus.setFixedSize(150, 100);
+  btnplus.setFixedSize(150, 100);
+  hlayout->addWidget(&btnminus);
+  hlayout->addWidget(&btnplus);
+
+  QObject::connect(&btnminus, &QPushButton::clicked, [=]() {
+    auto str = QString::fromStdString(params.get("RadarLongHelper"));
+    int value = str.toInt();
+    value = value - 1;
+    if (value <= 0 ) {
+      value = 0;
+    }
+    QString values = QString::number(value);
+    params.put("RadarLongHelper", values.toStdString());
+    refresh();
+  });
+  
+  QObject::connect(&btnplus, &QPushButton::clicked, [=]() {
+    auto str = QString::fromStdString(params.get("RadarLongHelper"));
+    int value = str.toInt();
+    value = value + 1;
+    if (value >= 2 ) {
+      value = 2;
+    }
+    QString values = QString::number(value);
+    params.put("RadarLongHelper", values.toStdString());
+    refresh();
+  });
+  refresh();
+}
+
+void RadarLongHelperOption::refresh() {
+  QString option = QString::fromStdString(params.get("RadarLongHelper"));
+  if (option == "0") {
+    label.setText(QString::fromStdString("Vison Only"));
+  } else if (option == "1") {
+    label.setText(QString::fromStdString("Vision+Radar"));
+  } else {
+    label.setText(QString::fromStdString("Radar Only"));
+  }
+  btnminus.setText("◀");
+  btnplus.setText("▶");
+}

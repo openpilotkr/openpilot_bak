@@ -449,18 +449,6 @@ public:
   }
 };
 
-class RadarLongHelperToggle : public ToggleControl {
-  Q_OBJECT
-
-public:
-  RadarLongHelperToggle() : ToggleControl("Use Radar Long Assist", "During vision SCC use, radar value + comma vision long (interpolation) is used at a short distance of 25m or less. Vision SCC uses radar values to make sure it stops when it does not stop enough. Radar is used only to recognize the car in front, and if the car in front is not recognized (green chevron), it is decelerated only to the comma vision long. When this function is turned off, it means that the comma vision is always used. (When radar recognition is performed, radar values are forced to be used for safety less than 4m in front of the car.)", "../assets/offroad/icon_shell.png", Params().getBool("RadarLongHelper")) {
-    QObject::connect(this, &RadarLongHelperToggle::toggleFlipped, [=](int state) {
-      bool status = state ? true : false;
-      Params().putBool("RadarLongHelper", status);
-    });
-  }
-};
-
 class GitPullOnBootToggle : public ToggleControl {
   Q_OBJECT
 
@@ -1809,6 +1797,21 @@ class SpeedLimitSignType : public AbstractControl {
 
 public:
   SpeedLimitSignType();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+  Params params;
+  
+  void refresh();
+};
+
+class RadarLongHelperOption : public AbstractControl {
+  Q_OBJECT
+
+public:
+  RadarLongHelperOption();
 
 private:
   QPushButton btnplus;

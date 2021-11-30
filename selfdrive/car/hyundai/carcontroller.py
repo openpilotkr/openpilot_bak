@@ -94,7 +94,7 @@ class CarController():
     self.opkr_maxanglelimit = float(int(self.params.get("OpkrMaxAngleLimit", encoding="utf8")))
     self.mad_mode_enabled = self.params.get_bool("MadModeEnabled")
     self.ldws_fix = self.params.get_bool("LdwsCarFix")
-    self.radar_helper_enabled = self.params.get_bool("RadarLongHelper")
+    self.radar_helper_option = int(self.params.get("RadarLongHelper", encoding="utf8"))
     self.stopping_dist_adj_enabled = self.params.get_bool("StoppingDistAdj")
 
     self.longcontrol = CP.openpilotLongitudinalControl
@@ -506,7 +506,7 @@ class CarController():
         aReqValue = CS.scc12["aReqValue"]
         accel = actuators.accel if enabled else 0
         #accel = clip(accel, CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX)
-        if 0 < CS.out.radarDistance <= 149 and self.radar_helper_enabled:
+        if 0 < CS.out.radarDistance <= 149 and self.radar_helper_option == 1:
           # neokii's logic, opkr mod
           stock_weight = 0.
           if aReqValue > 0.:
@@ -518,7 +518,9 @@ class CarController():
           else:
             stock_weight = 0.
           accel = accel * (1. - stock_weight) + aReqValue * stock_weight
-        elif 0 < CS.out.radarDistance <= 3.5: # use radar by force to stop anyway below 3.5m
+        elif self.radar_helper_option == 2:
+          accel = aReqValue
+        elif 0 < CS.out.radarDistance <= 3.5: # use radar by force to stop anyway below 3.5m if lead car is recognized.
           stock_weight = interp(CS.out.radarDistance, [2., 3.5], [1., 0.])
           accel = accel * (1. - stock_weight) + aReqValue * stock_weight
         else:
@@ -557,7 +559,7 @@ class CarController():
     self.cc_timer += 1
     if self.cc_timer > 100:
       self.cc_timer = 0
-      self.radar_helper_enabled = self.params.get_bool("RadarLongHelper")
+      self.radar_helper_option = int(self.params.get("RadarLongHelper", encoding="utf8"))
       self.stopping_dist_adj_enabled = self.params.get_bool("StoppingDistAdj")
       self.standstill_res_count = int(self.params.get("RESCountatStandstill", encoding="utf8"))
       if self.params.get_bool("OpkrLiveTunePanelEnable"):
