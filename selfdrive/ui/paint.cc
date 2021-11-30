@@ -1012,7 +1012,7 @@ static void bb_ui_draw_UI(UIState *s) {
 static void draw_safetysign(UIState *s) {
   const int diameter = 185;
   const int diameter2 = 170;
-  const int diameter3 = 193;
+  const int diameter3 = 197;
   int s_center_x = bdr_s + 305 + (s->scene.display_maxspeed_time>0 ? 184 : 0);
   const int s_center_y = bdr_s + 100;
   
@@ -1057,8 +1057,8 @@ static void draw_safetysign(UIState *s) {
   if (true) {
     if (s->scene.speedlimit_signtype) {
       ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), 20.);
-      ui_draw_rect(s->vg, rect_s, COLOR_BLACK_ALPHA(200), 10, 20.);
-      ui_draw_rect(s->vg, rect_so, COLOR_WHITE_ALPHA(200), 4, 20.);
+      ui_draw_rect(s->vg, rect_s, COLOR_BLACK_ALPHA(200), 10, 17.);
+      ui_draw_rect(s->vg, rect_so, COLOR_WHITE_ALPHA(200), 6, 20.);
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-45, "SPEED", 55, COLOR_BLACK_ALPHA(200), "sans-bold");
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-10, "LIMIT", 55, COLOR_BLACK_ALPHA(200), "sans-bold");
     } else {
