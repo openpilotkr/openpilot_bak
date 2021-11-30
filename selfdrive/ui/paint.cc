@@ -1053,8 +1053,7 @@ static void draw_safetysign(UIState *s) {
     }
   }
 
-  //if (safety_speed > 19 && !s->scene.comma_stock_ui) {
-  if (true) {
+  if (safety_speed > 19 && !s->scene.comma_stock_ui) {
     if (s->scene.speedlimit_signtype) {
       ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), 16.);
       ui_draw_rect(s->vg, rect_s, COLOR_BLACK_ALPHA(200), 9, 17.);
@@ -1212,8 +1211,8 @@ static void ui_draw_vision_header(UIState *s) {
     ui_draw_tpms(s);
     if (s->scene.controls_state.getEnabled()) {
       ui_draw_standstill(s);
+      draw_safetysign(s);
     }
-    draw_safetysign(s);
     draw_compass(s);
     draw_navi_button(s);
     if (s->scene.end_to_end) {
