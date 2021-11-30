@@ -1064,10 +1064,10 @@ static void draw_safetysign(UIState *s) {
     }
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (safety_speed < 100) {
-      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()+30, "100", 115, COLOR_BLACK_ALPHA(200), "sans-bold");
+      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()+35, "100", 115, COLOR_BLACK_ALPHA(200), "sans-bold");
       //ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 160, COLOR_BLACK_ALPHA(200), "sans-bold");
     } else {
-      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()+30, "65", 140, COLOR_BLACK_ALPHA(200), "sans-bold");
+      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()+35, "65", 140, COLOR_BLACK_ALPHA(200), "sans-bold");
       //ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 115, COLOR_BLACK_ALPHA(200), "sans-bold");
     }
     if (safety_dist != 0) {
