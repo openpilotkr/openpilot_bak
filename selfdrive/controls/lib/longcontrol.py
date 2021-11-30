@@ -129,13 +129,10 @@ class LongControl():
     if long_plan.hasLead:
       if 1 < CS.radarDistance <= 149:
         stop = True if (dRel <= 3.5 and radarState.leadOne.status) else False
-        radar_target_detected = True
       else:
         stop = True if (dRel < 4.5 and radarState.leadOne.status) else False
-        radar_target_detected = False
     else:
       stop = False
-      radar_target_detected = False
     self.long_control_state = long_control_state_trans(CP, active, self.long_control_state, CS.vEgo,
                                                        v_target_future, self.v_pid, output_accel,
                                                        CS.brakePressed, CS.cruiseState.standstill, CP.minSpeedCan, stop, CS.gasPressed)
@@ -180,12 +177,9 @@ class LongControl():
     # Intention is to stop, switch to a different brake control until we stop
     elif self.long_control_state == LongCtrlState.stopping:
       # Keep applying brakes until the car is stopped
-      factor = 1
-      if long_plan.hasLead:
-        factor = interp(dRel,[2.0,4.5], [5.0,1.0]) if not radar_target_detected else 1
       if not CS.standstill or output_accel > CP.stopAccel:
-        output_accel -= CP.stoppingDecelRate * DT_CTRL * factor
-      elif CS.cruiseState.standstill and output_accel < CP.stopAccel:
+        output_accel -= CP.stoppingDecelRate * DT_CTRL
+      elif CS.cruiseState.standstill and output_accel < -0.5: # loosen brake at standstill, to mitigate load of brake
         output_accel += CP.stoppingDecelRate * DT_CTRL
       output_accel = clip(output_accel, accel_limits[0], accel_limits[1])
 
@@ -193,11 +187,8 @@ class LongControl():
 
     # Intention is to move again, release brake fast before handing control to PID
     elif self.long_control_state == LongCtrlState.starting:
-      factor = 1
-      if long_plan.hasLead:
-        factor = interp(dRel,[4.5,5.5], [1.0,2.0]) if not radar_target_detected else 1
       if output_accel < CP.startAccel:
-        output_accel += CP.startingAccelRate * DT_CTRL * factor
+        output_accel += CP.startingAccelRate * DT_CTRL
       self.reset(CS.vEgo)
 
     self.last_output_accel = output_accel
