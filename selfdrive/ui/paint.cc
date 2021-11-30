@@ -1012,6 +1012,7 @@ static void bb_ui_draw_UI(UIState *s) {
 static void draw_safetysign(UIState *s) {
   const int diameter = 185;
   const int diameter2 = 170;
+  const int diameter3 = 193;
   int s_center_x = bdr_s + 305 + (s->scene.display_maxspeed_time>0 ? 184 : 0);
   const int s_center_y = bdr_s + 100;
   
@@ -1023,6 +1024,7 @@ static void draw_safetysign(UIState *s) {
 
   const Rect rect_s = {s_center_x - diameter/2, s_center_y - diameter/2, diameter, diameter};
   const Rect rect_si = {s_center_x - diameter2/2, s_center_y - diameter2/2, diameter2, diameter2};
+  const Rect rect_so = {s_center_x - diameter3/2, s_center_y - diameter3/2, diameter3, diameter3};
   const Rect rect_d = {d_center_x - d_width/2, d_center_y - d_height/2, d_width, d_height};
   char safetySpeed[16];
   char safetyDist[32];
@@ -1051,10 +1053,12 @@ static void draw_safetysign(UIState *s) {
     }
   }
 
-  if (safety_speed > 19 && !s->scene.comma_stock_ui) {
+  //if (safety_speed > 19 && !s->scene.comma_stock_ui) {
+  if (true) {
     if (s->scene.speedlimit_signtype) {
       ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200), 20.);
       ui_draw_rect(s->vg, rect_s, COLOR_BLACK_ALPHA(200), 10, 20.);
+      ui_draw_rect(s->vg, rect_so, COLOR_WHITE_ALPHA(200), 4, 20.);
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-45, "SPEED", 55, COLOR_BLACK_ALPHA(200), "sans-bold");
       ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-10, "LIMIT", 55, COLOR_BLACK_ALPHA(200), "sans-bold");
     } else {
