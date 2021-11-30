@@ -252,9 +252,9 @@ class LongitudinalMpc():
     # 1.2-1.8 TR succeeds at all tests with no FCW
 
     TRs = [1.2, 1.8, 2.7]
-    x_ego_obstacle_cost_multiplier = interp(self.desired_TR, TRs, [3., 1.0, 0.1])
-    j_ego_cost_multiplier = interp(self.desired_TR, TRs, [0.5, 1.0, 1.0])
-    d_zone_cost_multiplier = interp(self.desired_TR, TRs, [4., 1.0, 1.0])
+    x_ego_obstacle_cost_multiplier = 1 #interp(self.desired_TR, TRs, [3., 1.0, 0.1])
+    j_ego_cost_multiplier = 1 #interp(self.desired_TR, TRs, [0.5, 1.0, 1.0])
+    d_zone_cost_multiplier = 1 #interp(self.desired_TR, TRs, [4., 1.0, 1.0])
 
     W = np.asfortranarray(np.diag([X_EGO_OBSTACLE_COST * x_ego_obstacle_cost_multiplier, X_EGO_COST, V_EGO_COST, A_EGO_COST, A_CHANGE_COST, J_EGO_COST * j_ego_cost_multiplier]))
     for i in range(N):
@@ -346,7 +346,7 @@ class LongitudinalMpc():
     lead_xv_1 = self.process_lead(radarstate.leadTwo)
 
     cruise_gap = int(clip(carstate.cruiseGapSet, 1., 4.))
-    self.dynamic_TR = interp(self.v_ego*3.6, [0, 20, 40, 60, 110], [1.1, 1.4, 1.5, 1.7, 1.9] )
+    self.dynamic_TR = interp(self.v_ego*3.6, [0, 20, 40, 60, 110], [1.0, 1.3, 1.4, 1.6, 1.8] )
     self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
     if self.dynamic_TR_mode == 1:
       self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.dynamic_TR, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
