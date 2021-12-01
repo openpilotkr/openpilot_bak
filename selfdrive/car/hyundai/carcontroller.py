@@ -512,7 +512,7 @@ class CarController():
           if aReqValue > 0.:
             stock_weight = interp(CS.out.radarDistance, [4.5, 15., 30.], [0., 1., 0.])
           elif aReqValue < 0. and self.stopping_dist_adj_enabled:
-            stock_weight = interp(CS.out.radarDistance, [2., 4.5, 5.5, 15., 30.], [1., 0., 1., 1., 0.])
+            stock_weight = interp(CS.out.radarDistance, [2., 4.5, 5.5, 15., 30.], [1., 0.1, 1., 1., 0.])
           elif aReqValue < 0.:
             stock_weight = interp(CS.out.radarDistance, [3., 15., 30.], [1., 1., 0.])
           else:
@@ -562,6 +562,7 @@ class CarController():
       self.radar_helper_option = int(self.params.get("RadarLongHelper", encoding="utf8"))
       self.stopping_dist_adj_enabled = self.params.get_bool("StoppingDistAdj")
       self.standstill_res_count = int(self.params.get("RESCountatStandstill", encoding="utf8"))
+      self.opkr_cruisegap_auto_adj = self.params.get_bool("CruiseGapAdjust")
       if self.params.get_bool("OpkrLiveTunePanelEnable"):
         if CS.CP.lateralTuning.which() == 'pid':
           self.str_log2 = 'T={:0.2f}/{:0.3f}/{:0.1f}/{:0.5f}'.format(float(Decimal(self.params.get("PidKp", encoding="utf8"))*Decimal('0.01')), \
