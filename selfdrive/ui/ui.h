@@ -74,6 +74,7 @@ const Rect livetunepanel_left_btn = {500, 750, 170, 160};
 const Rect livetunepanel_right_btn = {1250, 750, 170, 160};
 const Rect livetunepanel_left_above_btn = {500, 575, 170, 160};
 const Rect livetunepanel_right_above_btn = {1250, 575, 170, 160};
+const Rect speedlimit_btn = {220, 15, 190, 190};
 
 struct Alert {
   QString text1;
@@ -235,6 +236,8 @@ typedef struct UIScene {
   int navi_select;
   bool tmux_error_check = false;
   bool speedlimit_signtype;
+  int sl_opacity = 1;
+  bool sl_decel_off;
 
   cereal::DeviceState::Reader deviceState;
   cereal::CarState::Reader car_state;

@@ -173,6 +173,7 @@ def manager_init():
     ("OpkrSpeedLimitOffsetOption", "0"),
     ("OpkrSpeedLimitSignType", "0"),
     ("StockLKASEnabled", "1"),
+    ("SpeedLimitDecelOff", "0"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))

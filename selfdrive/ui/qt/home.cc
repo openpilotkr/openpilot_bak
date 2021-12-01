@@ -203,7 +203,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     return;
   }
   // Stock UI Toggle
-  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && stockui_btn.ptInRect(e->x(), e->y()) && !QUIState::ui_state.scene.mapbox_running) {
+  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && stockui_btn.ptInRect(e->x(), e->y())) {
     QUIState::ui_state.scene.comma_stock_ui = !QUIState::ui_state.scene.comma_stock_ui;
     if (QUIState::ui_state.scene.comma_stock_ui) {
       Params().putBool("CommaStockUI", true);
@@ -221,6 +221,18 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     } else {
       Params().putBool("OpkrLiveTunePanelEnable", false);
       QUIState::ui_state.scene.live_tune_panel_enable = false;
+    }
+    return;
+  }
+  // SpeedLimit Decel on/off Toggle
+  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && speedlimit_btn.ptInRect(e->x(), e->y())) {
+    QUIState::ui_state.scene.sl_decel_off = !QUIState::ui_state.scene.sl_decel_off;
+    if (QUIState::ui_state.scene.sl_decel_off) {
+      Params().putBool("SpeedLimitDecelOff", true);
+      QUIState::ui_state.scene.sl_opacity = 2;
+    } else {
+      Params().putBool("SpeedLimitDecelOff", false);
+      QUIState::ui_state.scene.sl_opacity = 1;
     }
     return;
   }

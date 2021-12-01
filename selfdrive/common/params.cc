@@ -324,6 +324,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrSpeedLimitOffsetOption", PERSISTENT},
     {"OpkrSpeedLimitSignType", PERSISTENT},
     {"StockLKASEnabled", PERSISTENT},
+    {"SpeedLimitDecelOff", PERSISTENT},
 };
 
 } // namespace

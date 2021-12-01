@@ -221,6 +221,7 @@ class Controls:
     self.auto_enable_speed = max(1, int(Params().get("AutoEnableSpeed", encoding="utf8")))
     self.e2e_long_alert_prev = True
     self.osm_spdlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
+    self.stock_navi_info_enabled = Params().get_bool("StockNaviSpeedEnabled")
     self.ignore_can_error_on_isg = Params().get_bool("IgnoreCANErroronISG")
 
   def auto_enable(self, CS):
@@ -799,7 +800,10 @@ class Controls:
     controlsState.alertTextMsg1 = self.log_alertTextMsg1
     controlsState.alertTextMsg2 = self.log_alertTextMsg2
     if int(self.sm['liveMapData'].speedLimit) and self.osm_spdlimit_enabled:
-      controlsState.limitSpeedCamera = int(round(self.sm['liveMapData'].speedLimit))
+      if self.stock_navi_info_enabled and int(CS.safetySign):
+        controlsState.limitSpeedCamera = min(int(round(self.sm['liveMapData'].speedLimit)), int(CS.safetySign))
+      else:
+        controlsState.limitSpeedCamera = int(round(self.sm['liveMapData'].speedLimit))
       controlsState.limitSpeedCameraDist = float(self.sm['liveMapData'].speedLimitAheadDistance)
     elif self.map_enabled:
       controlsState.limitSpeedCamera = int(round(self.sm['liveNaviData'].speedLimit))
