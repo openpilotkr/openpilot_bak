@@ -170,12 +170,6 @@ DevicePanel::DevicePanel(SettingsWindow *parent) : ListWidget(parent) {
     addItem(regulatoryBtn);
   }
 
-  QObject::connect(parent, &SettingsWindow::offroadTransition, [=](bool offroad) {
-    for (auto btn : findChildren<ButtonControl *>()) {
-      btn->setEnabled(offroad);
-    }
-  });
-
   auto resetCalibBtn = new ButtonControl("Reset Calibration", "RESET", " ");
   connect(resetCalibBtn, &ButtonControl::showDescription, this, &DevicePanel::updateCalibDescription);
   connect(resetCalibBtn, &ButtonControl::clicked, [&]() {
@@ -187,8 +181,14 @@ DevicePanel::DevicePanel(SettingsWindow *parent) : ListWidget(parent) {
       });
     }
   });
-  resetCalibBtn->setEnabled(true);
   addItem(resetCalibBtn);
+
+  QObject::connect(parent, &SettingsWindow::offroadTransition, [=](bool offroad) {
+    for (auto btn : findChildren<ButtonControl *>()) {
+      btn->setEnabled(offroad);
+    }
+    resetCalibBtn->setEnabled(true);
+  });
 
   // power buttons
   QHBoxLayout *power_layout = new QHBoxLayout();
