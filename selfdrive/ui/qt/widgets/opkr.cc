@@ -65,7 +65,7 @@ void SwitchOpenpilot::refresh() {
 
 void SwitchOpenpilot::getUserID(const QString &userid) {
   HttpRequest *request = new HttpRequest(this, false);
-  QObject::connect(request, &HttpRequest::requestDone, [=](requestconst QString &resp, bool success) {
+  QObject::connect(request, &HttpRequest::requestDone, [=](const QString &resp, bool success) {
     if (success) {
       if (!resp.isEmpty()) {
         githubid = userid;
@@ -88,7 +88,7 @@ void SwitchOpenpilot::getUserID(const QString &userid) {
 
 void SwitchOpenpilot::getRepoID(const QString &repoid) {
   HttpRequest *request = new HttpRequest(this, false);
-  QObject::connect(request, &HttpRequest::requestDone, [=](requestconst QString &resp, bool success) {
+  QObject::connect(request, &HttpRequest::requestDone, [=](const QString &resp, bool success) {
     if (success) {
       if (!resp.isEmpty()) {
         githubrepo = repoid;
@@ -111,7 +111,7 @@ void SwitchOpenpilot::getRepoID(const QString &repoid) {
 
 void SwitchOpenpilot::getBranchID(const QString &branchid) {
   HttpRequest *request = new HttpRequest(this, false);
-  QObject::connect(request, &HttpRequest::requestDone, [=](requestconst QString &resp, bool success) {
+  QObject::connect(request, &HttpRequest::requestDone, [=](const QString &resp, bool success) {
     if (success) {
       if (!resp.isEmpty()) {
         githubbranch = branchid;
