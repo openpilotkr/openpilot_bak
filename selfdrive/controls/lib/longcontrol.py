@@ -135,7 +135,6 @@ class LongControl():
                                                        CS.brakePressed, CS.cruiseState.standstill, CP.minSpeedCan, stop, CS.gasPressed)
 
     if (self.long_control_state == LongCtrlState.off or (CS.brakePressed or CS.gasPressed)) and self.candidate not in [CAR.NIRO_EV]:
-      self.v_pid = v_pid
       self.pid.reset()
       output_accel = 0.
     elif self.long_control_state == LongCtrlState.off or CS.gasPressed:
