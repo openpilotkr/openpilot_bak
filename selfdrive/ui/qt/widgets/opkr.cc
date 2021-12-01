@@ -65,20 +65,21 @@ void SwitchOpenpilot::refresh() {
 
 void SwitchOpenpilot::getUserID(const QString &userid) {
   HttpRequest *request = new HttpRequest(this, false);
-  QObject::connect(request, &HttpRequest::receivedResponse, [=](const QString &resp) {
-    if (!resp.isEmpty()) {
-      githubid = userid;
+  QObject::connect(request, &HttpRequest::requestDone, [=](requestconst QString &resp, bool success) {
+    if (success) {
+      if (!resp.isEmpty()) {
+        githubid = userid;
+      } else {
+        ConfirmationDialog::alert(userid + " The ID does not exist. Return to the input window, press the cancel button, and try again from the beginning.", this);
+      }
+    } else {
+      if (request->timeout()) {
+        ConfirmationDialog::alert("The requested time has exceeded.", this);
+      } else {
+        ConfirmationDialog::alert("The ID does not exist. Return to the input window, press the cancel button, and try again from the beginning.", this);
+      }
     }
-    refresh();
-    request->deleteLater();
-  });
-  QObject::connect(request, &HttpRequest::failedResponse, [=] {
-    ConfirmationDialog::alert(userid + " The ID does not exist. Return to the input window, press the cancel button, and try again from the beginning.", this);
-    refresh();
-    request->deleteLater();
-  });
-  QObject::connect(request, &HttpRequest::timeoutResponse, [=] {
-    ConfirmationDialog::alert("The requested time has exceeded.", this);
+
     refresh();
     request->deleteLater();
   });
@@ -87,20 +88,21 @@ void SwitchOpenpilot::getUserID(const QString &userid) {
 
 void SwitchOpenpilot::getRepoID(const QString &repoid) {
   HttpRequest *request = new HttpRequest(this, false);
-  QObject::connect(request, &HttpRequest::receivedResponse, [=](const QString &resp) {
-    if (!resp.isEmpty()) {
-      githubrepo = repoid;
+  QObject::connect(request, &HttpRequest::requestDone, [=](requestconst QString &resp, bool success) {
+    if (success) {
+      if (!resp.isEmpty()) {
+        githubrepo = repoid;
+      } else {
+        ConfirmationDialog::alert(repoid + " The repository does not exist. Return to the input window, press the cancel button, and try again from the beginning.", this);
+      }
+    } else {
+      if (request->timeout()) {
+        ConfirmationDialog::alert("The requested time has exceeded.", this);
+      } else {
+        ConfirmationDialog::alert("The Repository does not exist. Return to the input window, press the cancel button, and try again from the beginning.", this);
+      }
     }
-    refresh();
-    request->deleteLater();
-  });
-  QObject::connect(request, &HttpRequest::failedResponse, [=] {
-    ConfirmationDialog::alert(repoid + " The repository does not exist. Return to the input window, press the cancel button, and try again from the beginning.", this);
-    refresh();
-    request->deleteLater();
-  });
-  QObject::connect(request, &HttpRequest::timeoutResponse, [=] {
-    ConfirmationDialog::alert("The requested time has exceeded.", this);
+
     refresh();
     request->deleteLater();
   });
@@ -109,20 +111,21 @@ void SwitchOpenpilot::getRepoID(const QString &repoid) {
 
 void SwitchOpenpilot::getBranchID(const QString &branchid) {
   HttpRequest *request = new HttpRequest(this, false);
-  QObject::connect(request, &HttpRequest::receivedResponse, [=](const QString &resp) {
-    if (!resp.isEmpty()) {
-      githubbranch = branchid;
+  QObject::connect(request, &HttpRequest::requestDone, [=](requestconst QString &resp, bool success) {
+    if (success) {
+      if (!resp.isEmpty()) {
+        githubbranch = branchid;
+      } else {
+        ConfirmationDialog::alert(branchid + " The branch does not exist. Press the cancel button and try again from the beginning.", this);
+      }
+    } else {
+      if (request->timeout()) {
+        ConfirmationDialog::alert("The requested time has exceeded.", this);
+      } else {
+        ConfirmationDialog::alert("The Branch does not exist. Return to the input window, press the cancel button, and try again from the beginning.", this);
+      }
     }
-    refresh();
-    request->deleteLater();
-  });
-  QObject::connect(request, &HttpRequest::failedResponse, [=] {
-    ConfirmationDialog::alert(branchid + " The branch does not exist. Press the cancel button and try again from the beginning.", this);
-    refresh();
-    request->deleteLater();
-  });
-  QObject::connect(request, &HttpRequest::timeoutResponse, [=] {
-    ConfirmationDialog::alert("The requested time has exceeded.", this);
+
     refresh();
     request->deleteLater();
   });
