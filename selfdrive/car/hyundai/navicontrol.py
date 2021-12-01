@@ -251,14 +251,14 @@ class NaviControl():
     #   clu_Vanz = CS.clu_Vanz
     #   ctrl_speed = max(min_control_speed, ctrl_speed, clu_Vanz)
     #   CS.set_cruise_speed(ctrl_speed)
-    elif CS.CP.resSpeed > 20:
+    elif CS.CP.resSpeed > 19:
       res_speed = max(min_control_speed, CS.CP.resSpeed)
       return min(res_speed, navi_speed)
     elif CS.cruise_set_mode in [1,2,4]:
-      if self.lead_0.status and CS.CP.vFuture >= min_control_speed-7:
+      if self.lead_0.status and CS.CP.vFuture >= (min_control_speed-(4 if CS.is_set_speed_in_mph else 7)):
         dRel = int(self.lead_0.dRel)
-        vRel = int(self.lead_0.vRel * CV.MS_TO_KPH)
-        if vRel >= -5:
+        vRel = int(self.lead_0.vRel * (CV.MS_TO_MPH if CS.is_set_speed_in_mph else CV.MS_TO_KPH))
+        if vRel >= (-3 if CS.is_set_speed_in_mph else -5):
           var_speed = min(CS.CP.vFuture + max(0, dRel*0.2+vRel), navi_speed)
         else:
           var_speed = min(CS.CP.vFuture, navi_speed)
