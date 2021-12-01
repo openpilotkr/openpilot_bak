@@ -249,7 +249,7 @@ class NaviControl():
     self.lead_1 = self.sm['radarState'].leadTwo
 
     if CS.driverAcc_time:
-      return min(CS.clu_Vanz + 3, navi_speed)
+      return min(CS.clu_Vanz + (2 if CS.is_set_speed_in_mph else 3), navi_speed)
     # elif self.gasPressed_old:
     #   clu_Vanz = CS.clu_Vanz
     #   ctrl_speed = max(min_control_speed, ctrl_speed, clu_Vanz)
