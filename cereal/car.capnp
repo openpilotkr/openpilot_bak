@@ -212,7 +212,6 @@ struct CarState {
   leftBlindspot @33 :Bool; # Is there something blocking the left lane change
   rightBlindspot @34 :Bool; # Is there something blocking the right lane change
 
-  brakeLights @19 :Bool;
   # opkr-tpms
   tpmsPressureFl @39 :Float32;
   tpmsPressureFr @40 :Float32;
@@ -292,6 +291,7 @@ struct CarState {
   }
 
   errorsDEPRECATED @0 :List(CarEvent.EventName);
+  brakeLights @19 :Bool;
 }
 
 # ******* radar state @ 20hz *******

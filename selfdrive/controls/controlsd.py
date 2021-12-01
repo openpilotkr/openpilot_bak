@@ -32,7 +32,7 @@ from decimal import Decimal
 
 import common.log as trace1
 
-LDW_MIN_SPEED = 50 * CV.KPH_TO_MS
+LDW_MIN_SPEED = 50 * CV.KPH_TO_MS if Params().get_bool("IsMetric") else 31 * CV.MPH_TO_MS
 LANE_DEPARTURE_THRESHOLD = 0.1
 STEER_ANGLE_SATURATION_TIMEOUT = 1.0 / DT_CTRL
 STEER_ANGLE_SATURATION_THRESHOLD = 2.5  # Degrees
@@ -111,6 +111,7 @@ class Controls:
     self.batt_less = params.get_bool("OpkrBattLess")
     self.variable_cruise = params.get_bool('OpkrVariableCruise')
     self.cruise_over_maxspeed = params.get_bool('CruiseOverMaxSpeed')
+    self.stock_lkas_on_disengaged_status = params.get_bool('StockLKASEnabled')
 
     # detect sound card presence and ensure successful init
     sounds_available = HARDWARE.get_sound_card_online()
@@ -736,22 +737,27 @@ class Controls:
     self.AM.process_alerts(self.sm.frame, clear_event)
     CC.hudControl.visualAlert = self.AM.visual_alert
 
-    if self.enabled:
-      self.hkg_stock_lkas = False
-      self.hkg_stock_lkas_timer = 0
-    elif not self.enabled and not self.hkg_stock_lkas:
-      self.hkg_stock_lkas_timer += 1
-      if self.hkg_stock_lkas_timer > 300:
+    if self.stock_lkas_on_disengaged_status:
+      if self.enabled:
+        self.hkg_stock_lkas = False
         self.hkg_stock_lkas_timer = 0
-        self.hkg_stock_lkas = True
-      elif CS.gearShifter != GearShifter.drive and self.hkg_stock_lkas_timer > 150:
-        self.hkg_stock_lkas_timer = 0
-        self.hkg_stock_lkas = True
-
-    if not self.hkg_stock_lkas:
-      # send car controls over can
-      can_sends = self.CI.apply(CC)
-      self.pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
+      elif not self.enabled and not self.hkg_stock_lkas:
+        self.hkg_stock_lkas_timer += 1
+        if self.hkg_stock_lkas_timer > 300:
+          self.hkg_stock_lkas_timer = 0
+          self.hkg_stock_lkas = True
+        elif CS.gearShifter != GearShifter.drive and self.hkg_stock_lkas_timer > 150:
+          self.hkg_stock_lkas_timer = 0
+          self.hkg_stock_lkas = True
+      if not self.hkg_stock_lkas:
+        # send car controls over can
+        can_sends = self.CI.apply(CC)
+        self.pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
+    else:
+      if not self.read_only and self.initialized:
+        # send car controls over can
+        can_sends = self.CI.apply(CC)
+        self.pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
 
     force_decel = (self.sm['driverMonitoringState'].awarenessStatus < 0.) or \
                   (self.state == State.softDisabling)

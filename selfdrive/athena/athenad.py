@@ -30,7 +30,7 @@ from selfdrive.hardware import HARDWARE, PC
 from selfdrive.loggerd.config import ROOT
 from selfdrive.loggerd.xattr_cache import getxattr, setxattr
 from selfdrive.swaglog import cloudlog, SWAGLOG_DIR
-from selfdrive.version import version, get_version, get_git_remote, get_git_branch, get_git_commit
+from selfdrive.version import get_version, get_origin, get_short_branch, get_commit
 
 if Params().get("OPKRServer", encoding="utf8") == "0":
   ATHENA_HOST = os.getenv('ATHENA_HOST', 'wss://api.retropilot.org:4040')
@@ -184,9 +184,9 @@ def getMessage(service=None, timeout=1000):
 def getVersion():
   return {
     "version": get_version(),
-    "remote": get_git_remote(),
-    "branch": get_git_branch(),
-    "commit": get_git_commit(),
+    "remote": get_origin(),
+    "branch": get_short_branch(),
+    "commit": get_commit(),
   }
 
 

@@ -130,6 +130,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"JoystickDebugMode", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_OFF},
     {"LastAthenaPingTime", CLEAR_ON_MANAGER_START},
     {"LastGPSPosition", PERSISTENT},
+    {"LastPowerDropDetected", CLEAR_ON_MANAGER_START},
     {"LastUpdateException", PERSISTENT},
     {"LastUpdateTime", PERSISTENT},
     {"LiveParameters", PERSISTENT},
@@ -322,6 +323,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"RESCountatStandstill", PERSISTENT},
     {"OpkrSpeedLimitOffsetOption", PERSISTENT},
     {"OpkrSpeedLimitSignType", PERSISTENT},
+    {"StockLKASEnabled", PERSISTENT},
 };
 
 } // namespace

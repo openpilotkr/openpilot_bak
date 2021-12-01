@@ -550,6 +550,18 @@ public:
   }
 };
 
+class StockLKASEnabledatDisenagedStatusToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+  StockLKASEnabledatDisenagedStatusToggle() : ToggleControl("StockLKAS Enabled at Disengagement", "Turn this on, if you want to use Stock LKAS at OP disengaged status. Seems this related to cluster error when OP active because Stock CAN messages over PANDA or not.", "../assets/offroad/icon_shell.png", Params().getBool("StockLKASEnabled")) {
+    QObject::connect(this, &StockLKASEnabledatDisenagedStatusToggle::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("StockLKASEnabled", status);
+    });
+  }
+};
+
 // openpilot preview
 class OpenpilotView : public AbstractControl {
   Q_OBJECT

@@ -24,7 +24,7 @@ from selfdrive.loggerd.config import get_available_percent
 from selfdrive.pandad import get_expected_signature
 from selfdrive.swaglog import cloudlog
 from selfdrive.thermald.power_monitoring import PowerMonitoring
-from selfdrive.version import tested_branch, terms_version, training_version
+from selfdrive.version import get_tested_branch, terms_version, training_version
 
 FW_SIGNATURE = get_expected_signature()
 
