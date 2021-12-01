@@ -53,7 +53,6 @@ private:
   bool showQr = false;
 
 private slots:
-  void parseError(const QString &response);
-  void replyFinished(const QString &response);
+  void replyFinished(const QString &response, bool success);
   void showQrCode();
 };

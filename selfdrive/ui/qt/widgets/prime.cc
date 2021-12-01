@@ -8,6 +8,7 @@
 #include <QStackedWidget>
 #include <QTimer>
 #include <QVBoxLayout>
+
 #include <QrCode.hpp>
 
 #include "selfdrive/common/params.h"
@@ -130,7 +131,7 @@ PrimeUserWidget::PrimeUserWidget(QWidget* parent) : QWidget(parent) {
   if (auto dongleId = getDongleId()) {
     QString url = TARGET_SERVER + "/v1/devices/" + *dongleId + "/owner";
     RequestRepeater *repeater = new RequestRepeater(this, url, "ApiCache_Owner", 6);
-    QObject::connect(repeater, &RequestRepeater::receivedResponse, this, &PrimeUserWidget::replyFinished);
+    QObject::connect(repeater, &RequestRepeater::requestDone, this, &PrimeUserWidget::replyFinished);
   }
 }
 
@@ -190,19 +191,7 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   hkg->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
   finishRegistationLayout->addWidget(hkg, 0, Qt::AlignCenter);
 
-  //QLabel* registrationDescription = new QLabel("QR코드 스캐너를 이용하여\n장치를 페어링 하세요");
-  //QLabel* registrationDescription = new QLabel("COMMA CONNECT 앱을 이용하여 장치를 페어링 하세요");
-  //registrationDescription->setWordWrap(true);
-  //registrationDescription->setAlignment(Qt::AlignCenter);
-  //registrationDescription->setStyleSheet(R"(
-  //  font-size: 45px;
-  //  font-weight: 400;
-  //)");
-
-  //finishRegistationLayout->addWidget(registrationDescription);
-
   QPushButton* finishButton = new QPushButton("Show QR Code");
-  //QPushButton* finishButton = new QPushButton("설정 및 완료");
   finishButton->setFixedHeight(150);
   finishButton->setStyleSheet(R"(
     border-radius: 30px;
@@ -279,16 +268,9 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
     QString url = TARGET_SERVER + "/v1.1/devices/" + *dongleId + "/";
     RequestRepeater* repeater = new RequestRepeater(this, url, "ApiCache_Device", 5);
 
-    QObject::connect(repeater, &RequestRepeater::receivedResponse, this, &SetupWidget::replyFinished);
-    QObject::connect(repeater, &RequestRepeater::failedResponse, this, &SetupWidget::parseError);
+    QObject::connect(repeater, &RequestRepeater::requestDone, this, &SetupWidget::replyFinished);
   }
   hide(); // Only show when first request comes back
-}
-
-void SetupWidget::parseError(const QString &response) {
-  show();
-  showQr = false;
-  mainLayout->setCurrentIndex(0);
 }
 
 void SetupWidget::showQrCode() {
@@ -296,8 +278,10 @@ void SetupWidget::showQrCode() {
   mainLayout->setCurrentIndex(1);
 }
 
-void SetupWidget::replyFinished(const QString &response) {
+void SetupWidget::replyFinished(const QString &response, bool success) {
   show();
+  if (!success) return;
+
   QJsonDocument doc = QJsonDocument::fromJson(response.toUtf8());
   if (doc.isNull()) {
     qDebug() << "JSON Parse failed on getting pairing and prime status";
