@@ -226,7 +226,7 @@ class Controls:
 
   def auto_enable(self, CS):
     if CS.cruiseState.available and CS.vEgo >= self.auto_enable_speed * CV.KPH_TO_MS and CS.gearShifter == GearShifter.drive and self.sm['liveCalibration'].calStatus != Calibration.UNCALIBRATED:
-      if self.sm.all_alive_and_valid() and self.state != State.enabled and self.initialized:
+      if self.state != State.enabled and self.initialized:
         self.events.add( EventName.pcmEnable )
 
   def update_events(self, CS):
@@ -417,7 +417,6 @@ class Controls:
     #  and self.CP.openpilotLongitudinalControl and CS.vEgo < 0.3:
     #  self.events.add(EventName.noTarget)
 
-    print("auto_enabled={},  cruise_state={},  v_ego/enablespeed={:.1f}/{:.1f},  gear={},  cal_stat={},  can_valid={},  state={}".format(self.auto_enabled, CS.cruiseState.available, CS.vEgo, self.auto_enable_speed * CV.KPH_TO_MS, CS.gearShifter, self.sm['liveCalibration'].calStatus, self.sm.all_alive_and_valid(), self.state))
     # atom
     if self.auto_enabled:
       self.auto_enable( CS )
