@@ -246,6 +246,7 @@ class CarState(CarStateBase):
     ret.espDisabled = (cp.vl["TCS15"]["ESC_Off_Step"] != 0)
 
     self.parkBrake = cp.vl["TCS13"]["PBRAKE_ACT"] == 1
+    self.gasPressed = ret.gasPressed
 
     # TPMS code added from OPKR
     if cp.vl["TPMS11"]["UNIT"] == 0.0:
