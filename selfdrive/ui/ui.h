@@ -238,6 +238,7 @@ typedef struct UIScene {
   bool speedlimit_signtype;
   int sl_opacity = 1;
   bool sl_decel_off;
+  float a_req_value;
 
   cereal::DeviceState::Reader deviceState;
   cereal::CarState::Reader car_state;

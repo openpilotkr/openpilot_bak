@@ -381,6 +381,7 @@ class CarState(CarStateBase):
     
     ret.cruiseAccStatus = cp_scc.vl["SCC12"]["ACCMode"] == 1
     ret.driverAcc = self.driverOverride == 1
+    ret.aReqValue = cp_scc.vl["SCC12"]["aReqValue"]
 
     return ret
 

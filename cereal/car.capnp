@@ -233,6 +233,7 @@ struct CarState {
   vEgoOP @53 :Float32;  # openpilot speed
   electGearStep @54 :Int8;
   isMph @55 :Bool;
+  aReqValue @56 :Float32;
 
   struct WheelSpeeds {
     # optional wheel speeds

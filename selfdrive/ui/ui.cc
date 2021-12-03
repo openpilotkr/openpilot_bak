@@ -168,6 +168,7 @@ static void update_state(UIState *s) {
     scene.brakeHold = cs_data.getBrakeHold();
     scene.steer_warning = cs_data.getSteerWarning();
     scene.stand_still = cs_data.getStandstill();
+    scene.a_req_value = cs_data.getAReqValue();
   }
 
   if (sm.updated("liveParameters")) {
