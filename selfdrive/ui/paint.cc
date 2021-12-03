@@ -618,7 +618,7 @@ static void ui_draw_vision_speed(UIState *s) {
   }
 
   NVGcolor val_color = COLOR_WHITE;
-  float gas_opacity = scene.a_req_value*150>255?255:scene.a_req_value*150;
+  float gas_opacity = scene.a_req_value*160>255?255:scene.a_req_value*150;
 
   if (scene.brakePress && !scene.comma_stock_ui) {
   	val_color = COLOR_RED;
@@ -627,7 +627,7 @@ static void ui_draw_vision_speed(UIState *s) {
   } else if (scene.gasPress && !scene.comma_stock_ui) {
     val_color = nvgRGBA(0, 240, 0, 255);
   } else if (scene.a_req_value > 0 && !scene.comma_stock_ui) {
-    val_color = nvgRGBA((255-int(gas_opacity)), 255, (255-int(gas_opacity)), 255);
+    val_color = nvgRGBA((255-int(gas_opacity)), (255-int((scene.a_req_value*9))), (255-int(gas_opacity)), 255);
   }
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
   ui_draw_text(s, s->fb_w/2, 210, speed_str.c_str(), 96 * 2.5, val_color, "sans-bold");
