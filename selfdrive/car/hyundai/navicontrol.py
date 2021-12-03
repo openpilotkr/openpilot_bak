@@ -302,7 +302,7 @@ class NaviControl():
       self.osm_wait_timer = 0
 
     # self.gasPressed_old = CS.gasPressed
-    if var_speed > min(v_curv_speed, o_curv_speed):
+    if var_speed > min(v_curv_speed, o_curv_speed)+1:
       self.curvSpeedControl = True
     else:
       self.curvSpeedControl = False
