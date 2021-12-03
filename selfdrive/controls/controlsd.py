@@ -809,9 +809,12 @@ class Controls:
       controlsState.limitSpeedCamera = int(round(self.sm['liveNaviData'].speedLimit))
       controlsState.limitSpeedCameraDist = float(self.sm['liveNaviData'].speedLimitDistance)
       controlsState.mapSign = int(self.sm['liveNaviData'].safetySign)
-    else:
+    elif self.stock_navi_info_enabled and int(CS.safetySign):
       controlsState.limitSpeedCamera = int(CS.safetySign)
       controlsState.limitSpeedCameraDist = float(CS.safetyDist)
+    else:
+      controlsState.limitSpeedCamera = 0
+      controlsState.limitSpeedCameraDist = 0
     controlsState.lateralControlMethod = int(self.lateral_control_method)
     controlsState.steerRatio = float(self.steerRatio_to_send)
     controlsState.dynamicTRMode = int(self.sm['longitudinalPlan'].dynamicTRMode)
