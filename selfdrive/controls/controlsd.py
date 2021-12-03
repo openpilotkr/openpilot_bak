@@ -226,7 +226,7 @@ class Controls:
 
   def auto_enable(self, CS):
     if CS.cruiseState.available and CS.vEgo >= self.auto_enable_speed * CV.KPH_TO_MS and CS.gearShifter == GearShifter.drive and self.sm['liveCalibration'].calStatus != Calibration.UNCALIBRATED:
-      if self.sm.all_alive_and_valid() and self.state != State.enabled and self.enabled != self.controlsAllowed:
+      if self.sm.all_alive_and_valid() and self.state != State.enabled and self.initialized:
         self.events.add( EventName.pcmEnable )
 
   def update_events(self, CS):
