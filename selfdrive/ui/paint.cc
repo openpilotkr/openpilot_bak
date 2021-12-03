@@ -618,7 +618,7 @@ static void ui_draw_vision_speed(UIState *s) {
   }
 
   NVGcolor val_color = COLOR_WHITE;
-  float gas_opacity = min(255, scene.a_req_value*150);
+  float gas_opacity = scene.a_req_value*150>255?255:scene.a_req_value*150;
 
   if (scene.brakePress && !scene.comma_stock_ui) {
   	val_color = COLOR_RED;
