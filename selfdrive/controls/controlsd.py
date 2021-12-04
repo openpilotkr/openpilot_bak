@@ -223,13 +223,12 @@ class Controls:
     self.osm_spdlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
     self.stock_navi_info_enabled = Params().get_bool("StockNaviSpeedEnabled")
     self.ignore_can_error_on_isg = Params().get_bool("IgnoreCANErroronISG")
-    self.ready = False
+    self.ready_timer = 0
 
   def auto_enable(self, CS):
     if self.state != State.enabled:
       if CS.cruiseState.available and CS.vEgo >= self.auto_enable_speed * CV.KPH_TO_MS and CS.gearShifter == GearShifter.drive and \
-       self.sm['liveCalibration'].calStatus != Calibration.UNCALIBRATED and self.initialized and (self.sm.all_alive_and_valid() or self.ready):
-        self.ready = True
+       self.sm['liveCalibration'].calStatus != Calibration.UNCALIBRATED and self.initialized and self.ready_timer > 300:
         self.events.add( EventName.pcmEnable )
 
   def update_events(self, CS):
@@ -422,6 +421,7 @@ class Controls:
 
     # atom
     if self.auto_enabled:
+      self.ready_timer += 1 if self.ready_timer < 350 else 350
       self.auto_enable( CS )
 
   def data_sample(self):
