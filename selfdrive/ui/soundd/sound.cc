@@ -49,7 +49,13 @@ void Sound::update() {
     float volume = util::map_val(sm["carState"].getCarState().getVEgo(), 0.f, 20.f,
                                  Hardware::MIN_VOLUME, Hardware::MAX_VOLUME);
     for (auto &[s, loops] : sounds) {
-      s->setVolume(std::round(100 * volume) / 100);
+      if ((std::stof(Params().get("OpkrUIVolumeBoost")) * 0.01) < -0.03) {
+        s->setVolume(0.0);
+      } else if ((std::stof(Params().get("OpkrUIVolumeBoost")) * 0.01) > 0.03) {
+        s->setVolume(std::stof(Params().get("OpkrUIVolumeBoost")) * 0.01);
+      } else {
+        s->setVolume(std::round(100 * volume) / 100);
+      }
     }
   }
 
@@ -71,11 +77,6 @@ void Sound::setAlert(const Alert &alert) {
     if (alert.sound != AudibleAlert::NONE) {
       auto &[s, loops] = sounds[alert.sound];
       s->setLoopCount(loops);
-      if ((std::stof(Params().get("OpkrUIVolumeBoost")) * 0.01) < -0.03) {
-        s->setVolume(0.0);
-      } else if ((std::stof(Params().get("OpkrUIVolumeBoost")) * 0.01) > 0.03) {
-        s->setVolume(std::stof(Params().get("OpkrUIVolumeBoost")) * 0.01);
-      }
       s->play();
     }
   }
