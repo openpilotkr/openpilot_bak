@@ -167,7 +167,7 @@ class NaviControl():
         else:
           self.map_speed_block = False
         cam_distance_calc = 0
-        cam_distance_calc = interp(v_ego_kph, [30, 60, 110], [2.6, 3.1, 3.9]) if CS.CP.sccBus == 0 else interp(v_ego_kph, [30, 60, 110], [2.5, 3.0, 3.8])
+        cam_distance_calc = interp(self.map_speed, [30, 60, 110], [2.6, 3.1, 3.9])
         consider_speed = interp((v_ego_kph - self.map_speed), [0, 50], [1, 2])
         min_control_dist = interp(self.map_speed, [30, 110], [40, 250])
         final_cam_decel_start_dist = cam_distance_calc*consider_speed*v_ego_kph * (1 + self.safetycam_decel_dist_gain*0.01)
@@ -199,7 +199,7 @@ class NaviControl():
         else:
           self.map_speed_block = False
         cam_distance_calc = 0
-        cam_distance_calc = interp(v_ego_kph, [30, 60, 110], [2.6, 3.1, 3.9])  if CS.CP.sccBus == 0 else interp(v_ego_kph, [30, 60, 110], [2.5, 3.0, 3.8])
+        cam_distance_calc = interp(self.map_speed, [30, 60, 110], [2.5, 3.0, 3.8])
         consider_speed = interp((v_ego_kph - (self.map_speed * (CV.MPH_TO_KPH if CS.is_set_speed_in_mph else 1))), [0, 50], [1, 2])
         min_control_dist = interp(self.map_speed, [30, 110], [40, 250])
         final_cam_decel_start_dist = cam_distance_calc*consider_speed*v_ego_kph * (1 + self.safetycam_decel_dist_gain*0.01)
