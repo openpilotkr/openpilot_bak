@@ -228,7 +228,7 @@ class Controls:
   def auto_enable(self, CS):
     if self.state != State.enabled:
       if CS.cruiseState.available and CS.vEgo >= self.auto_enable_speed * CV.KPH_TO_MS and CS.gearShifter == GearShifter.drive and \
-       self.sm['liveCalibration'].calStatus != Calibration.UNCALIBRATED and self.initialized and self.ready_timer > 300:
+       self.sm['liveCalibration'].calStatus != Calibration.UNCALIBRATED and self.initialized and self.ready_timer > 200:
         self.events.add( EventName.pcmEnable )
 
   def update_events(self, CS):
@@ -421,7 +421,7 @@ class Controls:
 
     # atom
     if self.auto_enabled:
-      self.ready_timer += 1 if self.ready_timer < 350 else 350
+      self.ready_timer += 1 if self.ready_timer < 250 else 250
       self.auto_enable( CS )
 
   def data_sample(self):
@@ -478,7 +478,7 @@ class Controls:
         self.v_cruise_kph = self.v_cruise_kph_last
         if int(CS.vSetDis)-1 > self.v_cruise_kph:
           self.v_cruise_kph = int(CS.vSetDis)
-      elif CS.cruiseButtons in [Buttons.RES_ACCEL, Buttons.SET_DECEL] and self.variable_cruise and CS.cruiseState.modeSel != 0 and t_speed <= self.v_cruise_kph_last <= round(CS.vEgo*m_unit):
+      elif CS.cruiseButtons == Buttons.RES_ACCEL and self.variable_cruise and CS.cruiseState.modeSel != 0 and t_speed <= self.v_cruise_kph_last <= round(CS.vEgo*m_unit):
         self.v_cruise_kph = round(CS.vEgo*m_unit)
         if int(CS.vSetDis)-1 > self.v_cruise_kph:
           self.v_cruise_kph = int(CS.vSetDis)
