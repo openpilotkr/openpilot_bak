@@ -1833,3 +1833,18 @@ private:
   
   void refresh();
 };
+
+class CurvDecelSelect : public AbstractControl {
+  Q_OBJECT
+
+public:
+  CurvDecelSelect();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+  Params params;
+  
+  void refresh();
+};

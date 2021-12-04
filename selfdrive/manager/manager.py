@@ -174,6 +174,7 @@ def manager_init():
     ("OpkrSpeedLimitSignType", "0"),
     ("StockLKASEnabled", "1"),
     ("SpeedLimitDecelOff", "0"),
+    ("CurvDecelOption", "1"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))

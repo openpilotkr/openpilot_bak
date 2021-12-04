@@ -1008,8 +1008,8 @@ RecordQuality::RecordQuality() : AbstractControl("Recording Quality", "Set the r
     auto str = QString::fromStdString(params.get("RecordingQuality"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
+    if (value <= -1 ) {
+      value = 3;
     }
     QString values = QString::number(value);
     params.put("RecordingQuality", values.toStdString());
@@ -1020,8 +1020,8 @@ RecordQuality::RecordQuality() : AbstractControl("Recording Quality", "Set the r
     auto str = QString::fromStdString(params.get("RecordingQuality"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 3 ) {
-      value = 3;
+    if (value >= 4 ) {
+      value = 0;
     }
     QString values = QString::number(value);
     params.put("RecordingQuality", values.toStdString());
@@ -1076,8 +1076,8 @@ MonitoringMode::MonitoringMode() : AbstractControl("Driver Monitoring Mode", "Se
     auto str = QString::fromStdString(params.get("OpkrMonitoringMode"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
+    if (value <= -1 ) {
+      value = 1;
     }
     QString values = QString::number(value);
     params.put("OpkrMonitoringMode", values.toStdString());
@@ -1088,8 +1088,8 @@ MonitoringMode::MonitoringMode() : AbstractControl("Driver Monitoring Mode", "Se
     auto str = QString::fromStdString(params.get("OpkrMonitoringMode"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 1 ) {
-      value = 1;
+    if (value >= 2 ) {
+      value = 0;
     }
     QString values = QString::number(value);
     params.put("OpkrMonitoringMode", values.toStdString());
@@ -1330,8 +1330,8 @@ CruisemodeSelInit::CruisemodeSelInit() : AbstractControl("Cruise Start Mode", "S
     auto str = QString::fromStdString(params.get("CruiseStatemodeSelInit"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
+    if (value <= -1 ) {
+      value = 5;
     }
     QString values = QString::number(value);
     params.put("CruiseStatemodeSelInit", values.toStdString());
@@ -1342,8 +1342,8 @@ CruisemodeSelInit::CruisemodeSelInit() : AbstractControl("Cruise Start Mode", "S
     auto str = QString::fromStdString(params.get("CruiseStatemodeSelInit"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 5 ) {
-      value = 5;
+    if (value >= 6 ) {
+      value = 0;
     }
     QString values = QString::number(value);
     params.put("CruiseStatemodeSelInit", values.toStdString());
@@ -1867,8 +1867,8 @@ RESChoice::RESChoice() : AbstractControl("AutoRES Option", "Sets the auto RES op
     auto str = QString::fromStdString(params.get("AutoResOption"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
+    if (value <= -1 ) {
+      value = 2;
     }
     QString values = QString::number(value);
     params.put("AutoResOption", values.toStdString());
@@ -1879,8 +1879,8 @@ RESChoice::RESChoice() : AbstractControl("AutoRES Option", "Sets the auto RES op
     auto str = QString::fromStdString(params.get("AutoResOption"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 2 ) {
-      value = 2;
+    if (value >= 3 ) {
+      value = 0;
     }
     QString values = QString::number(value);
     params.put("AutoResOption", values.toStdString());
@@ -1933,8 +1933,8 @@ AutoResCondition::AutoResCondition() : AbstractControl("AutoRES Condition", "Set
     auto str = QString::fromStdString(params.get("AutoResCondition"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
+    if (value <= -1 ) {
+      value = 1;
     }
     QString values = QString::number(value);
     params.put("AutoResCondition", values.toStdString());
@@ -1945,8 +1945,8 @@ AutoResCondition::AutoResCondition() : AbstractControl("AutoRES Condition", "Set
     auto str = QString::fromStdString(params.get("AutoResCondition"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 1 ) {
-      value = 1;
+    if (value >= 2 ) {
+      value = 0;
     }
     QString values = QString::number(value);
     params.put("AutoResCondition", values.toStdString());
@@ -4451,8 +4451,8 @@ DynamicTR::DynamicTR() : AbstractControl("Use DynamicTR", "Use DynamicTR and ass
     auto str = QString::fromStdString(params.get("DynamicTR"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
+    if (value <= -1 ) {
+      value = 4;
     }
     QString values = QString::number(value);
     params.put("DynamicTR", values.toStdString());
@@ -4463,8 +4463,8 @@ DynamicTR::DynamicTR() : AbstractControl("Use DynamicTR", "Use DynamicTR and ass
     auto str = QString::fromStdString(params.get("DynamicTR"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 4 ) {
-      value = 4;
+    if (value >= 5 ) {
+      value = 0;
     }
     QString values = QString::number(value);
     params.put("DynamicTR", values.toStdString());
@@ -5150,8 +5150,8 @@ GetOffAlert::GetOffAlert() : AbstractControl("EON Detach Alert Sound", "Device a
     auto str = QString::fromStdString(params.get("OpkrEnableGetoffAlert"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
+    if (value <= -1 ) {
+      value = 2;
     }
     QString values = QString::number(value);
     params.put("OpkrEnableGetoffAlert", values.toStdString());
@@ -5162,8 +5162,8 @@ GetOffAlert::GetOffAlert() : AbstractControl("EON Detach Alert Sound", "Device a
     auto str = QString::fromStdString(params.get("OpkrEnableGetoffAlert"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 2 ) {
-      value = 2;
+    if (value >= 3 ) {
+      value = 0;
     }
     QString values = QString::number(value);
     params.put("OpkrEnableGetoffAlert", values.toStdString());
@@ -5216,8 +5216,8 @@ OPKRNaviSelect::OPKRNaviSelect() : AbstractControl("Navigation Select", "Select 
     auto str = QString::fromStdString(params.get("OPKRNaviSelect"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
+    if (value <= -1 ) {
+      value = 1;
     }
     QString values = QString::number(value);
     params.put("OPKRNaviSelect", values.toStdString());
@@ -5228,8 +5228,8 @@ OPKRNaviSelect::OPKRNaviSelect() : AbstractControl("Navigation Select", "Select 
     auto str = QString::fromStdString(params.get("OPKRNaviSelect"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 1 ) {
-      value = 1;
+    if (value >= 2 ) {
+      value = 0;
     }
     QString values = QString::number(value);
     params.put("OPKRNaviSelect", values.toStdString());
@@ -5655,8 +5655,8 @@ SpeedLimitSignType::SpeedLimitSignType() : AbstractControl("SafetyCam SignType",
     auto str = QString::fromStdString(params.get("OpkrSpeedLimitSignType"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
+    if (value <= -1 ) {
+      value = 1;
     }
     QString values = QString::number(value);
     params.put("OpkrSpeedLimitSignType", values.toStdString());
@@ -5667,8 +5667,8 @@ SpeedLimitSignType::SpeedLimitSignType() : AbstractControl("SafetyCam SignType",
     auto str = QString::fromStdString(params.get("OpkrSpeedLimitSignType"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 1 ) {
-      value = 1;
+    if (value >= 2 ) {
+      value = 0;
     }
     QString values = QString::number(value);
     params.put("OpkrSpeedLimitSignType", values.toStdString());
@@ -5719,8 +5719,8 @@ RadarLongHelperOption::RadarLongHelperOption() : AbstractControl("Radar Long Ass
     auto str = QString::fromStdString(params.get("RadarLongHelper"));
     int value = str.toInt();
     value = value - 1;
-    if (value <= 0 ) {
-      value = 0;
+    if (value <= -1 ) {
+      value = 2;
     }
     QString values = QString::number(value);
     params.put("RadarLongHelper", values.toStdString());
@@ -5731,8 +5731,8 @@ RadarLongHelperOption::RadarLongHelperOption() : AbstractControl("Radar Long Ass
     auto str = QString::fromStdString(params.get("RadarLongHelper"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 2 ) {
-      value = 2;
+    if (value >= 3 ) {
+      value = 0;
     }
     QString values = QString::number(value);
     params.put("RadarLongHelper", values.toStdString());
@@ -5744,11 +5744,79 @@ RadarLongHelperOption::RadarLongHelperOption() : AbstractControl("Radar Long Ass
 void RadarLongHelperOption::refresh() {
   QString option = QString::fromStdString(params.get("RadarLongHelper"));
   if (option == "0") {
-    label.setText(QString::fromStdString("Vison Only"));
+    label.setText(QString::fromStdString("Vision Only"));
   } else if (option == "1") {
     label.setText(QString::fromStdString("Vision+Radar"));
   } else {
     label.setText(QString::fromStdString("Radar Only"));
+  }
+  btnminus.setText("◀");
+  btnplus.setText("▶");
+}
+
+CurvDecelSelect::CurvDecelSelect() : AbstractControl("Curv Decel Option", "None, Vision+OSM, Vision Only, OSM Only", "../assets/offroad/icon_shell.png") {
+
+  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
+  label.setStyleSheet("color: #e0e879");
+  hlayout->addWidget(&label);
+
+  btnminus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnplus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnminus.setFixedSize(150, 100);
+  btnplus.setFixedSize(150, 100);
+  hlayout->addWidget(&btnminus);
+  hlayout->addWidget(&btnplus);
+
+  QObject::connect(&btnminus, &QPushButton::clicked, [=]() {
+    auto str = QString::fromStdString(params.get("CurvDecelOption"));
+    int value = str.toInt();
+    value = value - 1;
+    if (value <= -1 ) {
+      value = 3;
+    }
+    QString values = QString::number(value);
+    params.put("CurvDecelOption", values.toStdString());
+    refresh();
+  });
+  
+  QObject::connect(&btnplus, &QPushButton::clicked, [=]() {
+    auto str = QString::fromStdString(params.get("CurvDecelOption"));
+    int value = str.toInt();
+    value = value + 1;
+    if (value >= 4 ) {
+      value = 0;
+    }
+    QString values = QString::number(value);
+    params.put("CurvDecelOption", values.toStdString());
+    refresh();
+  });
+  refresh();
+}
+
+void CurvDecelSelect::refresh() {
+  QString option = QString::fromStdString(params.get("CurvDecelOption"));
+  if (option == "0") {
+    label.setText(QString::fromStdString("None"));
+  } else if (option == "1") {
+    label.setText(QString::fromStdString("Vision+OSM"));
+  } else if (option == "2") {
+    label.setText(QString::fromStdString("Vision Only"));
+  } else {
+    label.setText(QString::fromStdString("OSM Only"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");
