@@ -330,8 +330,10 @@ class NaviControl():
     elif CS.cruise_active:
       cruiseState_speed = self.sm['controlsState'].vCruise
       kph_set_vEgo = self.get_navi_speed(self.sm, CS, cruiseState_speed) # camspeed
-      navi_speed = min(cruiseState_speed, kph_set_vEgo)
-
+      if self.osm_speedlimit_enabled:
+        navi_speed = kph_set_vEgo
+      else:
+        navi_speed = min(cruiseState_speed, kph_set_vEgo)
       if CS.cruise_set_mode != 5:
         self.ctrl_speed = self.auto_speed_control(CS, navi_speed, path_plan) # lead, curve speed
       else:
