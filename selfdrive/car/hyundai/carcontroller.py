@@ -138,6 +138,7 @@ class CarController():
     self.steerMax = 0
     self.steerDeltaUp = 0
     self.steerDeltaDown = 0
+    self.steer_wind_down = 0
 
     self.variable_steer_max = self.params.get_bool("OpkrVariableSteerMax")
     self.variable_steer_delta = self.params.get_bool("OpkrVariableSteerDelta")
