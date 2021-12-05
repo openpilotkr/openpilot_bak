@@ -8,7 +8,7 @@ from selfdrive.swaglog import cloudlog
 from common.spinner import Spinner
 import time
 
-android_packages = ("com.opkr.maphack", "com.mixplorer", "com.mnsoft.mappyobn", "com.waze", "com.google.android.inputmethod.korean", "com.gmd.hidesoftkeys", "com.android.chrome",)
+android_packages = ("com.opkr.maphack", "com.mixplorer", "com.mnsoft.mappyobn", "com.waze", "com.google.android.inputmethod.korean", "com.gmd.hidesoftkeys", "com.android.chrome","REBIT A Keyboard_vREBIT A-Keyboard_0.9.161_378_apkpure.com")
 
 def get_installed_apks():
   dat = subprocess.check_output(["pm", "list", "packages", "-f"], encoding='utf8').strip().split("\n")
