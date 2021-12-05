@@ -261,12 +261,14 @@ class NaviControl():
     self.lead_1 = self.sm['radarState'].leadTwo
 
     if CS.driverAcc_time:
+      self.t_interval = 10 if CS.is_set_speed_in_mph else 7
       return min(CS.clu_Vanz + (2 if CS.is_set_speed_in_mph else 3), navi_speed)
     # elif self.gasPressed_old:
     #   clu_Vanz = CS.clu_Vanz
     #   ctrl_speed = max(min_control_speed, ctrl_speed, clu_Vanz)
     #   CS.set_cruise_speed(ctrl_speed)
     elif CS.CP.resSpeed > 19:
+      self.t_interval = 10 if CS.is_set_speed_in_mph else 7
       res_speed = max(min_control_speed, CS.CP.resSpeed)
       return min(res_speed, navi_speed)
     elif CS.cruise_set_mode in [1,2,4]:
@@ -275,17 +277,22 @@ class NaviControl():
         vRel = int(self.lead_0.vRel * (CV.MS_TO_MPH if CS.is_set_speed_in_mph else CV.MS_TO_KPH))
         if vRel >= (-2 if CS.is_set_speed_in_mph else -4):
           var_speed = min(CS.CP.vFuture + max(0, dRel*0.2+vRel), navi_speed)
-          self.t_interval = int(interp(dRel, [15, 50], [7, 75])) if not (self.onSpeedControl or self.curvSpeedControl) else 7
+          ttime = 100 if CS.is_set_speed_in_mph else 70
+          self.t_interval = int(interp(dRel, [15, 50], [7, ttime])) if not (self.onSpeedControl or self.curvSpeedControl) else 10 if CS.is_set_speed_in_mph else 7
         else:
           var_speed = min(CS.CP.vFuture, navi_speed)
+          self.t_interval = 10 if CS.is_set_speed_in_mph else 7
       elif self.lead_0.status and CS.CP.vFuture < min_control_speed:
         var_speed = min(CS.CP.vFuture, navi_speed)
+        self.t_interval = 10 if CS.is_set_speed_in_mph else 7
       else:
         var_speed = navi_speed
-        self.t_interval = 50 if not (self.onSpeedControl or self.curvSpeedControl) else 7
+        ttime = 70 if CS.is_set_speed_in_mph else 50
+        self.t_interval = ttime if not (self.onSpeedControl or self.curvSpeedControl) else 10 if CS.is_set_speed_in_mph else 7
     else:
       var_speed = navi_speed
-      self.t_interval = 50 if not (self.onSpeedControl or self.curvSpeedControl) else 7
+      ttime = 70 if CS.is_set_speed_in_mph else 50
+      self.t_interval = ttime if not (self.onSpeedControl or self.curvSpeedControl) else 10 if CS.is_set_speed_in_mph else 7
 
     if CS.cruise_set_mode in [1,3,4] and self.curv_decel_option in [1,2]:
       if CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and path_plan.laneChangeState == LaneChangeState.off and \
