@@ -51,6 +51,7 @@ class NaviControl():
     self.curv_decel_option = int(Params().get("CurvDecelOption", encoding="utf8"))
 
     self.na_timer = 0
+    self.t_interval = 7
 
   def update_lateralPlan(self):
     self.sm.update(0)
@@ -118,7 +119,7 @@ class NaviControl():
       self.btn_cnt += 1
       #if self.btn_cnt == 1:
       #  btn_signal = Buttons.NONE
-      if self.btn_cnt > 7:    # 버튼 클릭후 일정시간 기다린다.  (반드시 필요함)
+      if self.btn_cnt > self.t_interval:    # 버튼 클릭후 일정시간 기다린다.  (반드시 필요함)
         self.seq_command = 0   # case_0 번으로 이동.  (다음 명령을 실행) 
       return btn_signal
 
@@ -274,14 +275,17 @@ class NaviControl():
         vRel = int(self.lead_0.vRel * (CV.MS_TO_MPH if CS.is_set_speed_in_mph else CV.MS_TO_KPH))
         if vRel >= (-2 if CS.is_set_speed_in_mph else -4):
           var_speed = min(CS.CP.vFuture + max(0, dRel*0.2+vRel), navi_speed)
+          self.t_interval = int(interp(dRel, [15, 50], [7, 75])) if not (self.onSpeedControl or self.curvSpeedControl) else 7
         else:
           var_speed = min(CS.CP.vFuture, navi_speed)
       elif self.lead_0.status and CS.CP.vFuture < min_control_speed:
         var_speed = min(CS.CP.vFuture, navi_speed)
       else:
         var_speed = navi_speed
+        self.t_interval = 50 if not (self.onSpeedControl or self.curvSpeedControl) else 7
     else:
       var_speed = navi_speed
+      self.t_interval = 50 if not (self.onSpeedControl or self.curvSpeedControl) else 7
 
     if CS.cruise_set_mode in [1,3,4] and self.curv_decel_option in [1,2]:
       if CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and path_plan.laneChangeState == LaneChangeState.off and \
