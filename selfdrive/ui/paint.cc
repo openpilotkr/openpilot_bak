@@ -177,10 +177,10 @@ static void ui_draw_vision_lane_lines(UIState *s) {
   }
   if (scene.controls_state.getEnabled() && !scene.comma_stock_ui) {
     if (steerOverride) {
-      track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h * .4,
+      track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.4,
         COLOR_BLACK_ALPHA(80), COLOR_BLACK_ALPHA(20));
     } else {
-      track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h * .4,
+      track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.4,
         nvgRGBA(red_lvl, green_lvl, 0, 150), nvgRGBA((int)(0.7*red_lvl), (int)(0.7*green_lvl), 0, 20));
     }
   } else {
@@ -629,7 +629,7 @@ static void ui_draw_vision_speed(UIState *s) {
 
   NVGcolor val_color = COLOR_WHITE;
   float gas_opacity = scene.a_req_value*255>255?255:scene.a_req_value*255;
-  float brake_opacity = scene.a_req_value*150<0?0:scene.a_req_value*150;
+  float brake_opacity = abs(scene.a_req_value*175)>255?255:abs(scene.a_req_value*175);
 
   if (scene.brakePress && !scene.comma_stock_ui) {
   	val_color = COLOR_RED;
@@ -638,7 +638,7 @@ static void ui_draw_vision_speed(UIState *s) {
   } else if (scene.gasPress && !scene.comma_stock_ui) {
     val_color = nvgRGBA(0, 240, 0, 255);
   } else if (scene.a_req_value < 0 && !scene.comma_stock_ui) {
-    val_color = nvgRGBA((255-int((scene.a_req_value*10))), (255-int(brake_opacity)), (255-int(brake_opacity)), 255);
+    val_color = nvgRGBA((255-int(abs(scene.a_req_value*8))), (255-int(brake_opacity)), (255-int(brake_opacity)), 255);
   } else if (scene.a_req_value > 0 && !scene.comma_stock_ui) {
     val_color = nvgRGBA((255-int(gas_opacity)), (255-int((scene.a_req_value*10))), (255-int(gas_opacity)), 255);
   }
