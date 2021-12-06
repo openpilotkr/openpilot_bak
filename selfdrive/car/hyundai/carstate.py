@@ -128,6 +128,14 @@ class CarState(CarStateBase):
     self.cruise_set_speed_kph = set_speed_kph
     return  set_speed_kph
 
+  def get_tpms(self, unit, fl, fr, rl, rr):
+    factor = 0.72519 if unit == 1 else 1.45038 if unit == 2 else 1
+    tpms = car.CarState.TPMS.new_message()
+    tpms.fl = fl * factor
+    tpms.fr = fr * factor
+    tpms.rl = rl * factor
+    tpms.rr = rr * factor
+    return tpms
 
   def update(self, cp, cp2, cp_cam):
     cp_mdps = cp2 if self.CP.mdpsBus == 1 else cp
@@ -146,10 +154,12 @@ class CarState(CarStateBase):
 
     ret.seatbeltUnlatched = cp.vl["CGW1"]["CF_Gway_DrvSeatBeltSw"] == 0
 
-    ret.wheelSpeeds.fl = cp.vl["WHL_SPD11"]["WHL_SPD_FL"] * CV.KPH_TO_MS
-    ret.wheelSpeeds.fr = cp.vl["WHL_SPD11"]["WHL_SPD_FR"] * CV.KPH_TO_MS
-    ret.wheelSpeeds.rl = cp.vl["WHL_SPD11"]["WHL_SPD_RL"] * CV.KPH_TO_MS
-    ret.wheelSpeeds.rr = cp.vl["WHL_SPD11"]["WHL_SPD_RR"] * CV.KPH_TO_MS
+    ret.wheelSpeeds = self.get_wheel_speeds(
+      cp.vl["WHL_SPD11"]["WHL_SPD_FL"],
+      cp.vl["WHL_SPD11"]["WHL_SPD_FR"],
+      cp.vl["WHL_SPD11"]["WHL_SPD_RL"],
+      cp.vl["WHL_SPD11"]["WHL_SPD_RR"],
+    )
     ret.vEgoRaw = (ret.wheelSpeeds.fl + ret.wheelSpeeds.fr + ret.wheelSpeeds.rl + ret.wheelSpeeds.rr) / 4.
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
     ret.vEgoOP = ret.vEgo
@@ -248,23 +258,14 @@ class CarState(CarStateBase):
     self.parkBrake = cp.vl["TCS13"]["PBRAKE_ACT"] == 1
     self.gasPressed = ret.gasPressed
 
-    # TPMS code added from OPKR
-    ret.tpmsUnit = cp.vl["TPMS11"]["UNIT"]
-    if ret.tpmsUnit == 0:
-      ret.tpmsPressureFl = cp.vl["TPMS11"]["PRESSURE_FL"]
-      ret.tpmsPressureFr = cp.vl["TPMS11"]["PRESSURE_FR"]
-      ret.tpmsPressureRl = cp.vl["TPMS11"]["PRESSURE_RL"]
-      ret.tpmsPressureRr = cp.vl["TPMS11"]["PRESSURE_RR"]
-    elif ret.tpmsUnit == 1:
-      ret.tpmsPressureFl = cp.vl["TPMS11"]["PRESSURE_FL"] * 5 * 0.145038
-      ret.tpmsPressureFr = cp.vl["TPMS11"]["PRESSURE_FR"] * 5 * 0.145038
-      ret.tpmsPressureRl = cp.vl["TPMS11"]["PRESSURE_RL"] * 5 * 0.145038
-      ret.tpmsPressureRr = cp.vl["TPMS11"]["PRESSURE_RR"] * 5 * 0.145038
-    elif ret.tpmsUnit == 2:
-      ret.tpmsPressureFl = cp.vl["TPMS11"]["PRESSURE_FL"] / 10 * 14.5038
-      ret.tpmsPressureFr = cp.vl["TPMS11"]["PRESSURE_FR"] / 10 * 14.5038
-      ret.tpmsPressureRl = cp.vl["TPMS11"]["PRESSURE_RL"] / 10 * 14.5038
-      ret.tpmsPressureRr = cp.vl["TPMS11"]["PRESSURE_RR"] / 10 * 14.5038
+    # opkr
+    ret.tpms = self.get_tpms(
+      cp.vl["TPMS11"]["UNIT"]
+      cp.vl["TPMS11"]["PRESSURE_FL"],
+      cp.vl["TPMS11"]["PRESSURE_FR"],
+      cp.vl["TPMS11"]["PRESSURE_RL"],
+      cp.vl["TPMS11"]["PRESSURE_RR"],
+    )
 
     # OPKR
     self.cs_timer += 1
