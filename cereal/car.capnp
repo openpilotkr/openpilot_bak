@@ -434,7 +434,7 @@ struct CarParams {
   enableDsu @5 :Bool;        # driving support unit
   enableApgs @6 :Bool;       # advanced parking guidance system
   enableBsm @56 :Bool;       # blind spot monitoring
-  flags @64 :UInt32;         # flags for car specific quirks
+  flags @63 :UInt32;         # flags for car specific quirks
 
   minEnableSpeed @7 :Float32;
   minSteerSpeed @8 :Float32;
@@ -502,20 +502,20 @@ struct CarParams {
 
   wheelSpeedFactor @62 :Float32; # Multiplier on wheels speeds to computer actual speeds
 
-  mdpsBus @63: Int8;
-  sasBus @64: Int8;
-  sccBus @65: Int8;
-  fcaBus @66: Int8;
-  bsmAvailable @67: Bool;
-  lfaAvailable @68: Bool;
-  lvrAvailable @69: Bool;
-  evgearAvailable @70: Bool;
-  emsAvailable @71: Bool;
-  standStill @72: Bool;
-  vCruisekph @73: Float32;
-  resSpeed @74: Float32;
-  vFuture @75: Float32;
-  aqValue @76: Float32;
+  mdpsBus @64: Int8;
+  sasBus @65: Int8;
+  sccBus @66: Int8;
+  fcaBus @67: Int8;
+  bsmAvailable @68: Bool;
+  lfaAvailable @69: Bool;
+  lvrAvailable @70: Bool;
+  evgearAvailable @71: Bool;
+  emsAvailable @72: Bool;
+  standStill @73: Bool;
+  vCruisekph @74: Float32;
+  resSpeed @75: Float32;
+  vFuture @76: Float32;
+  aqValue @77: Float32;
 
   struct LateralParams {
     torqueBP @0 :List(Int32);
