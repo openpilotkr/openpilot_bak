@@ -56,13 +56,13 @@ T_FOLLOW = 1.45
 COMFORT_BRAKE = 2.5
 STOP_DISTANCE = 6.0
 
-def get_stopped_equivalence_factor(v_lead, t_react=T_REACT):
+def get_stopped_equivalence_factor(v_lead, t_react=T_FOLLOW):
   return t_react * v_lead + (v_lead*v_lead) / (2 * MAX_BRAKE)
 
-def get_safe_obstacle_distance(v_ego, t_react=T_REACT):
+def get_safe_obstacle_distance(v_ego, t_react=T_FOLLOW):
   return 2 * t_react * v_ego + (v_ego*v_ego) / (2 * MAX_BRAKE) + 4.0
 
-def desired_follow_distance(v_ego, v_lead, t_react=T_REACT):
+def desired_follow_distance(v_ego, v_lead, t_react=T_FOLLOW):
   return get_safe_obstacle_distance(v_ego, t_react) - get_stopped_equivalence_factor(v_lead, t_react)
 
 
@@ -158,7 +158,7 @@ def gen_long_mpc_solver():
 
   x0 = np.zeros(X_DIM)
   ocp.constraints.x0 = x0
-  ocp.parameter_values = np.array([-1.2, 1.2, 0.0, 0.0, T_REACT])  # defaults
+  ocp.parameter_values = np.array([-1.2, 1.2, 0.0, 0.0, T_FOLLOW])  # defaults
 
   # We put all constraint cost weights to 0 and only set them at runtime
   cost_weights = np.zeros(CONSTR_DIM)
@@ -196,7 +196,7 @@ def gen_long_mpc_solver():
 
 
 class LongitudinalMpc():
-  def __init__(self, e2e=False, desired_TR=T_REACT):
+  def __init__(self, e2e=False, desired_TR=T_FOLLOW):
     self.e2e = e2e
     self.desired_TR = desired_TR
     self.v_ego = 0.
@@ -405,7 +405,7 @@ class LongitudinalMpc():
     self.accel_limit_arr[:,0] = -10.
     self.accel_limit_arr[:,1] = 10.
     x_obstacle = 1e5*np.ones((N+1))
-    desired_TR = T_REACT*np.ones((N+1))
+    desired_TR = T_FOLLOW*np.ones((N+1))
     self.params = np.concatenate([self.accel_limit_arr,
                              x_obstacle[:,None],
                              self.prev_a, desired_TR[:,None]], axis=1)
