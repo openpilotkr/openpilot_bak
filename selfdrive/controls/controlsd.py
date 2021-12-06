@@ -224,6 +224,10 @@ class Controls:
     self.stock_navi_info_enabled = Params().get_bool("StockNaviSpeedEnabled")
     self.ignore_can_error_on_isg = Params().get_bool("IgnoreCANErroronISG")
     self.ready_timer = 0
+    self.osm_spdlimit_offset = int(Params().get("OpkrSpeedLimitOffset", encoding="utf8"))
+    self.osm_spdlimit_offset_option = int(Params().get("OpkrSpeedLimitOffsetOption", encoding="utf8"))
+    self.osm_speedlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
+    self.speedlimit_decel_off = Params().get_bool("SpeedLimitDecelOff")
 
   def auto_enable(self, CS):
     if self.state != State.enabled:
@@ -317,6 +321,7 @@ class Controls:
       self.map_enabled = Params().get_bool("OpkrMapEnable")
       self.live_sr = Params().get_bool("OpkrLiveSteerRatio")
       self.live_sr_percent = int(Params().get("LiveSteerRatioPercent", encoding="utf8"))
+      self.speedlimit_decel_off = Params().get_bool("SpeedLimitDecelOff")
       # E2ELongAlert
       if Params().get_bool("E2ELong") and self.e2e_long_alert_prev:
         self.events.add(EventName.e2eLongAlert)
@@ -489,6 +494,15 @@ class Controls:
       elif CS.driverAcc and self.variable_cruise and self.cruise_over_maxspeed and t_speed <= self.v_cruise_kph < int(round(CS.vEgo*m_unit)):
         self.v_cruise_kph = int(round(CS.vEgo*m_unit))
         self.v_cruise_kph_last = self.v_cruise_kph
+      elif self.variable_cruise and CS.cruiseState.modeSel != 0 and self.osm_speedlimit_enabled and not self.speedlimit_decel_off:
+        osm_speedlimit = int(self.sm['liveMapData'].speedLimit)
+        if osm_speedlimit > 19 osm_speedlimit != self.v_cruise_kph:
+          if self.osm_spdlimit_offset_option == 0:
+            self.v_cruise_kph = osm_speedlimit + round(osm_speedlimit*0.01*self.osm_spdlimit_offset)
+            self.v_cruise_kph_last = self.v_cruise_kph
+          else:
+            self.v_cruise_kph = osm_speedlimit + self.osm_spdlimit_offset
+            self.v_cruise_kph_last = self.v_cruise_kph
 
     # decrement the soft disable timer at every step, as it's reset on
     # entrance in SOFT_DISABLING state
