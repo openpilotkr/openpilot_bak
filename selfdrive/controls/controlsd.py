@@ -496,7 +496,7 @@ class Controls:
         self.v_cruise_kph_last = self.v_cruise_kph
       elif self.variable_cruise and CS.cruiseState.modeSel != 0 and self.osm_speedlimit_enabled and not self.speedlimit_decel_off:
         osm_speedlimit = int(self.sm['liveMapData'].speedLimit)
-        if osm_speedlimit > 19 osm_speedlimit and osm_speedlimit != self.v_cruise_kph:
+        if osm_speedlimit > 19 and osm_speedlimit != self.v_cruise_kph:
           if self.osm_spdlimit_offset_option == 0:
             self.v_cruise_kph = osm_speedlimit + round(osm_speedlimit*0.01*self.osm_spdlimit_offset)
             self.v_cruise_kph_last = self.v_cruise_kph
