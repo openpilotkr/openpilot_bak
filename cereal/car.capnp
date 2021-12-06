@@ -213,27 +213,28 @@ struct CarState {
   rightBlindspot @34 :Bool; # Is there something blocking the right lane change
 
   # opkr-tpms
-  tpmsPressureFl @39 :Float32;
-  tpmsPressureFr @40 :Float32;
-  tpmsPressureRl @41 :Float32;
-  tpmsPressureRr @42 :Float32;
+  tpmsUnit @39 :Int8;
+  tpmsPressureFl @40 :Float32;
+  tpmsPressureFr @41 :Float32;
+  tpmsPressureRl @42 :Float32;
+  tpmsPressureRr @43 :Float32;
 
-  radarDistance @43 :Float32;
-  standStill @44 :Bool;
-  vSetDis @45 :Float32;
-  cruiseButtons @46 :Float32;
-  cruiseAccStatus @47 :Bool;
-  driverAcc @48 :Bool;
-  brakeHold @49 :Bool;    # AutoHold
-  cruiseGapSet @50 :UInt8;
+  radarDistance @44 :Float32;
+  standStill @45 :Bool;
+  vSetDis @46 :Float32;
+  cruiseButtons @47 :Float32;
+  cruiseAccStatus @48 :Bool;
+  driverAcc @49 :Bool;
+  brakeHold @50 :Bool;    # AutoHold
+  cruiseGapSet @51 :UInt8;
 
   # opkr
-  safetyDist @51 :Float32;
-  safetySign @52 :Float32;
-  vEgoOP @53 :Float32;  # openpilot speed
-  electGearStep @54 :Int8;
-  isMph @55 :Bool;
-  aReqValue @56 :Float32;
+  safetyDist @52 :Float32;
+  safetySign @53 :Float32;
+  vEgoOP @54 :Float32;  # openpilot speed
+  electGearStep @55 :Int8;
+  isMph @56 :Bool;
+  aReqValue @57 :Float32;
 
   struct WheelSpeeds {
     # optional wheel speeds
