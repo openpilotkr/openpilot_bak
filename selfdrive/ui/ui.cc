@@ -155,7 +155,7 @@ static void update_state(UIState *s) {
     scene.rightBlinker = cs_data.getRightBlinker();
     scene.leftblindspot = cs_data.getLeftBlindspot();
     scene.rightblindspot = cs_data.getRightBlindspot();
-    scene.tpmsUnit = cs_data.getTpms().unit();
+    scene.tpmsUnit = cs_data.getTpms().getUnit();
     scene.tpmsPressureFl = cs_data.getTpms().getFl();
     scene.tpmsPressureFr = cs_data.getTpms().getFr();
     scene.tpmsPressureRl = cs_data.getTpms().getRl();
