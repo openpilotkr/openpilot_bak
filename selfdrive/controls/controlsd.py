@@ -496,13 +496,11 @@ class Controls:
         self.v_cruise_kph_last = self.v_cruise_kph
       elif self.variable_cruise and CS.cruiseState.modeSel != 0 and self.osm_speedlimit_enabled and not self.speedlimit_decel_off:
         osm_speedlimit = int(self.sm['liveMapData'].speedLimit)
-        if osm_speedlimit > 19 and osm_speedlimit != self.v_cruise_kph:
-          if self.osm_spdlimit_offset_option == 0:
-            self.v_cruise_kph = osm_speedlimit + round(osm_speedlimit*0.01*self.osm_spdlimit_offset)
-            self.v_cruise_kph_last = self.v_cruise_kph
-          else:
-            self.v_cruise_kph = osm_speedlimit + self.osm_spdlimit_offset
-            self.v_cruise_kph_last = self.v_cruise_kph
+        osm_speedlimit = osm_speedlimit + round(osm_speedlimit*0.01*self.osm_spdlimit_offset) if self.osm_spdlimit_offset_option == 0 else \
+         osm_speedlimit + self.osm_spdlimit_offset
+        if int(self.sm['liveMapData'].speedLimit) > 19 and osm_speedlimit != self.v_cruise_kph:
+          self.v_cruise_kph = osm_speedlimit
+          self.v_cruise_kph_last = self.v_cruise_kph
 
     # decrement the soft disable timer at every step, as it's reset on
     # entrance in SOFT_DISABLING state
