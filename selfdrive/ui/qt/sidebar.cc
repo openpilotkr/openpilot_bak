@@ -58,7 +58,7 @@ void Sidebar::mousePressEvent(QMouseEvent *event) {
   trig_settings = false;
   if (overlay_btn.contains(event->pos()) && QUIState::ui_state.scene.started && !QUIState::ui_state.scene.mapbox_running) {
     QSoundEffect effect;
-    effect.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/addon/sound/ding.wav"));
+    effect.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/addon/sound/click.wav"));
     //effect.setLoopCount(1);
     //effect.setLoopCount(QSoundEffect::Infinite);
     //effect.setVolume(0.1);
