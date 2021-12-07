@@ -229,10 +229,8 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     QUIState::ui_state.scene.sl_decel_off = !QUIState::ui_state.scene.sl_decel_off;
     if (QUIState::ui_state.scene.sl_decel_off) {
       Params().putBool("SpeedLimitDecelOff", true);
-      QUIState::ui_state.scene.sl_opacity = 3;
     } else {
       Params().putBool("SpeedLimitDecelOff", false);
-      QUIState::ui_state.scene.sl_opacity = 1;
     }
     return;
   }
