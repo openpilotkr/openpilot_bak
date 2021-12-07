@@ -578,6 +578,7 @@ struct ControlsState @0x97ff69c53601abf1 {
   mapSign @66 :Float32;
   dynamicTRMode @67 :UInt8;
   dynamicTRValue @68 :Float32;
+  osmOffSpdLimit @69 :Bool;
 
   lateralControlState :union {
     indiState @52 :LateralINDIState;

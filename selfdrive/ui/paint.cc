@@ -1049,6 +1049,14 @@ static void draw_safetysign(UIState *s) {
   float maxspeed = round(s->scene.controls_state.getVCruise());
   //int safety_speed = s->scene.liveNaviData.opkrspeedlimit;
   //float safety_dist = s->scene.liveNaviData.opkrspeedlimitdist;
+  int sl_opacity;
+  if (s->scene.sl_decel_off) {
+    sl_opacity = 3;
+  } else if (s->scene.controls_state.getOsmOffSpdLimit()) {
+    sl_opacity = 3;
+  } else {
+    sl_opacity = 1;
+  }
 
   snprintf(safetySpeed, sizeof(safetySpeed), "%d", safety_speed);
   if (maxspeed != 255.0) {
@@ -1071,45 +1079,45 @@ static void draw_safetysign(UIState *s) {
 
   if (safety_speed > 19 && !s->scene.comma_stock_ui) {
     if (s->scene.speedlimit_signtype) {
-      ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200/s->scene.sl_opacity), 16.);
-      ui_draw_rect(s->vg, rect_s, COLOR_BLACK_ALPHA(200/s->scene.sl_opacity), 9, 17.);
-      ui_draw_rect(s->vg, rect_so, COLOR_WHITE_ALPHA(200/s->scene.sl_opacity), 6, 20.);
-      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-45, "SPEED", 55, COLOR_BLACK_ALPHA(200/s->scene.sl_opacity), "sans-bold");
-      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-10, "LIMIT", 55, COLOR_BLACK_ALPHA(200/s->scene.sl_opacity), "sans-bold");
+      ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200/sl_opacity), 16.);
+      ui_draw_rect(s->vg, rect_s, COLOR_BLACK_ALPHA(200/sl_opacity), 9, 17.);
+      ui_draw_rect(s->vg, rect_so, COLOR_WHITE_ALPHA(200/sl_opacity), 6, 20.);
+      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-45, "SPEED", 55, COLOR_BLACK_ALPHA(200/sl_opacity), "sans-bold");
+      ui_draw_text(s, rect_s.centerX(), rect_s.centerY()-10, "LIMIT", 55, COLOR_BLACK_ALPHA(200/sl_opacity), "sans-bold");
     } else {
-      ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200/s->scene.sl_opacity), diameter2/2);
-      ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200/s->scene.sl_opacity), 20, diameter/2);
+      ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200/sl_opacity), diameter2/2);
+      ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200/sl_opacity), 20, diameter/2);
     }
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     if (safety_speed < 100) {
       if (s->scene.speedlimit_signtype) {
-        ui_draw_text(s, rect_s.centerX(), rect_s.centerY()+35, safetySpeed, 140, COLOR_BLACK_ALPHA(200/s->scene.sl_opacity), "sans-bold");
+        ui_draw_text(s, rect_s.centerX(), rect_s.centerY()+35, safetySpeed, 140, COLOR_BLACK_ALPHA(200/sl_opacity), "sans-bold");
       } else {
-        ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 160, COLOR_BLACK_ALPHA(200/s->scene.sl_opacity), "sans-bold");
+        ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 160, COLOR_BLACK_ALPHA(200/sl_opacity), "sans-bold");
       }
     } else {
       if (s->scene.speedlimit_signtype) {
-        ui_draw_text(s, rect_s.centerX(), rect_s.centerY()+35, safetySpeed, 115, COLOR_BLACK_ALPHA(200/s->scene.sl_opacity), "sans-bold");
+        ui_draw_text(s, rect_s.centerX(), rect_s.centerY()+35, safetySpeed, 115, COLOR_BLACK_ALPHA(200/sl_opacity), "sans-bold");
       } else {
-        ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 115, COLOR_BLACK_ALPHA(200/s->scene.sl_opacity), "sans-bold");
+        ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), safetySpeed, 115, COLOR_BLACK_ALPHA(200/sl_opacity), "sans-bold");
       }
     }
     if (safety_dist != 0) {
-      ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity/s->scene.sl_opacity), 20.);
-      ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200/s->scene.sl_opacity), 8, 20);
+      ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity/sl_opacity), 20.);
+      ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200/sl_opacity), 8, 20);
       nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-      ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 78, COLOR_WHITE_ALPHA(200/s->scene.sl_opacity), "sans-bold");
+      ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 78, COLOR_WHITE_ALPHA(200/sl_opacity), "sans-bold");
     }
   } else if ((s->scene.mapSign == 195 || s->scene.mapSign == 197) && safety_speed == 0 && safety_dist != 0 && !s->scene.comma_stock_ui) {
-    ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200/s->scene.sl_opacity), diameter2/2);
-    ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200/s->scene.sl_opacity), 20, diameter/2);
+    ui_fill_rect(s->vg, rect_si, COLOR_WHITE_ALPHA(200/sl_opacity), diameter2/2);
+    ui_draw_rect(s->vg, rect_s, COLOR_RED_ALPHA(200/sl_opacity), 20, diameter/2);
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), "VAR\nSEC", 108, COLOR_BLACK_ALPHA(200/s->scene.sl_opacity), "sans-bold");
+    ui_draw_text(s, rect_s.centerX(), rect_s.centerY(), "VAR\nSEC", 108, COLOR_BLACK_ALPHA(200/sl_opacity), "sans-bold");
     if (safety_dist != 0) {
-      ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity/s->scene.sl_opacity), 20.);
-      ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200/s->scene.sl_opacity), 8, 20);
+      ui_fill_rect(s->vg, rect_d, COLOR_RED_ALPHA(opacity/sl_opacity), 20.);
+      ui_draw_rect(s->vg, rect_d, COLOR_WHITE_ALPHA(200/sl_opacity), 8, 20);
       nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-      ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 78, COLOR_WHITE_ALPHA(200/s->scene.sl_opacity), "sans-bold");
+      ui_draw_text(s, rect_d.centerX(), rect_d.centerY(), safetyDist, 78, COLOR_WHITE_ALPHA(200/sl_opacity), "sans-bold");
     }
   }
 }
@@ -1193,11 +1201,11 @@ static void draw_laneless_button(UIState *s) {
   if (s->scene.laneless_mode == 0) {
     nvgFontSize(s->vg, 50);
     nvgText(s->vg,btn_xc1,btn_yc-17,"LANE",NULL);
-    nvgText(s->vg,btn_xc1,btn_yc+17,"Mode",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc+17,"LINE",NULL);
   } else if (s->scene.laneless_mode == 1) {
     nvgFontSize(s->vg, 50);
     nvgText(s->vg,btn_xc1,btn_yc-17,"LANE",NULL);
-    nvgText(s->vg,btn_xc1,btn_yc+17,"Less",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc+17,"LESS",NULL);
   } else if (s->scene.laneless_mode == 2) {
     nvgText(s->vg,btn_xc1,btn_yc,"AUTO",NULL);
   }

@@ -237,7 +237,6 @@ typedef struct UIScene {
   int navi_select;
   bool tmux_error_check = false;
   bool speedlimit_signtype;
-  int sl_opacity = 1;
   bool sl_decel_off;
   float a_req_value;
 

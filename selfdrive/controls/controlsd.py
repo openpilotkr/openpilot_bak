@@ -228,6 +228,8 @@ class Controls:
     self.osm_spdlimit_offset_option = int(Params().get("OpkrSpeedLimitOffsetOption", encoding="utf8"))
     self.osm_speedlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
     self.speedlimit_decel_off = Params().get_bool("SpeedLimitDecelOff")
+    self.osm_speedlimit = 255
+    self.osm_off_spdlimit = False
 
   def auto_enable(self, CS):
     if self.state != State.enabled:
@@ -483,24 +485,39 @@ class Controls:
         self.v_cruise_kph = self.v_cruise_kph_last
         if int(CS.vSetDis)-1 > self.v_cruise_kph:
           self.v_cruise_kph = int(CS.vSetDis)
+        if self.osm_speedlimit_enabled:
+          self.osm_speedlimit = int(self.sm['liveMapData'].speedLimit)
       elif CS.cruiseButtons == Buttons.RES_ACCEL and self.variable_cruise and CS.cruiseState.modeSel != 0 and t_speed <= self.v_cruise_kph_last <= round(CS.vEgo*m_unit):
         self.v_cruise_kph = round(CS.vEgo*m_unit)
         if int(CS.vSetDis)-1 > self.v_cruise_kph:
           self.v_cruise_kph = int(CS.vSetDis)
         self.v_cruise_kph_last = self.v_cruise_kph
+        if self.osm_speedlimit_enabled:
+          self.osm_speedlimit = int(self.sm['liveMapData'].speedLimit)
       elif CS.cruiseButtons == Buttons.RES_ACCEL or CS.cruiseButtons == Buttons.SET_DECEL:
         self.v_cruise_kph = round(CS.cruiseState.speed * m_unit)
         self.v_cruise_kph_last = self.v_cruise_kph
+        if self.osm_speedlimit_enabled:
+          self.osm_speedlimit = int(self.sm['liveMapData'].speedLimit)
       elif CS.driverAcc and self.variable_cruise and self.cruise_over_maxspeed and t_speed <= self.v_cruise_kph < int(round(CS.vEgo*m_unit)):
         self.v_cruise_kph = int(round(CS.vEgo*m_unit))
         self.v_cruise_kph_last = self.v_cruise_kph
       elif self.variable_cruise and CS.cruiseState.modeSel != 0 and self.osm_speedlimit_enabled and not self.speedlimit_decel_off:
-        osm_speedlimit = int(self.sm['liveMapData'].speedLimit)
-        osm_speedlimit = osm_speedlimit + round(osm_speedlimit*0.01*self.osm_spdlimit_offset) if self.osm_spdlimit_offset_option == 0 else \
-         osm_speedlimit + self.osm_spdlimit_offset
-        if int(self.sm['liveMapData'].speedLimit) > 19 and osm_speedlimit != self.v_cruise_kph:
+        osm_speedlimit_ = int(self.sm['liveMapData'].speedLimit)
+        osm_speedlimit = osm_speedlimit_ + round(osm_speedlimit_*0.01*self.osm_spdlimit_offset) if self.osm_spdlimit_offset_option == 0 else \
+         osm_speedlimit_ + self.osm_spdlimit_offset
+        if self.osm_speedlimit == osm_speedlimit_:
+          self.osm_off_spdlimit = True
+        elif int(self.sm['liveMapData'].speedLimit) > 19 and osm_speedlimit != self.v_cruise_kph:
+          self.osm_speedlimit = 255
+          self.osm_off_spdlimit = False
           self.v_cruise_kph = osm_speedlimit
           self.v_cruise_kph_last = self.v_cruise_kph
+        else:
+          self.osm_off_spdlimit = False
+      elif self.speedlimit_decel_off:
+        self.osm_off_spdlimit = True
+        
 
     # decrement the soft disable timer at every step, as it's reset on
     # entrance in SOFT_DISABLING state
@@ -821,6 +838,7 @@ class Controls:
       else:
         controlsState.limitSpeedCamera = int(round(self.sm['liveMapData'].speedLimit))
       controlsState.limitSpeedCameraDist = float(self.sm['liveMapData'].speedLimitAheadDistance)
+      controlsState.osmOffSpdLimit = self.osm_off_spdlimit
     elif self.map_enabled:
       controlsState.limitSpeedCamera = int(round(self.sm['liveNaviData'].speedLimit))
       controlsState.limitSpeedCameraDist = float(self.sm['liveNaviData'].speedLimitDistance)
