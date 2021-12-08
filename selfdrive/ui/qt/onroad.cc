@@ -130,6 +130,7 @@ void OnroadWindow::paintEvent(QPaintEvent *event) {
 
 // ***** onroad widgets *****
 
+// OnroadAlerts
 void OnroadAlerts::updateAlert(const Alert &a, const QColor &color) {
   if (!alert.equal(a) || color != bg) {
     alert = a;

@@ -19,7 +19,7 @@ from selfdrive.manager.process import ensure_running
 from selfdrive.manager.process_config import managed_processes
 from selfdrive.athena.registration import register, UNREGISTERED_DONGLE_ID
 from selfdrive.swaglog import cloudlog, add_file_handler
-from selfdrive.version import get_dirty, get_commit, get_version, get_origin, get_branch, \
+from selfdrive.version import get_dirty, get_commit, get_version, get_origin, get_short_branch, \
                               terms_version, training_version, get_comma_remote
 
 
@@ -212,7 +212,7 @@ def manager_init():
   params.put("TermsVersion", terms_version)
   params.put("TrainingVersion", training_version)
   params.put("GitCommit", get_commit(default=""))
-  params.put("GitBranch", get_branch(default=""))
+  params.put("GitBranch", get_short_branch(default=""))
   params.put("GitRemote", get_origin(default=""))
 
   # set dongle id
@@ -246,7 +246,7 @@ def manager_init():
     os.chmod(os.path.join(BASEDIR, "cereal", "libmessaging_shared.so"), 0o755)
 
   crash.bind_user(id=dongle_id)
-  crash.bind_extra(dirty=get_dirty(), origin=get_origin(), branch=get_branch(), commit=get_commit(),
+  crash.bind_extra(dirty=get_dirty(), origin=get_origin(), branch=get_short_branch(), commit=get_commit(),
                    device=HARDWARE.get_device_type())
 
   os.system("/data/openpilot/selfdrive/assets/addon/script/gitcommit.sh")
@@ -312,8 +312,8 @@ def manager_thread():
 
     started_prev = started
 
-    running = ' '.join(["%s%s\u001b[0m" % ("\u001b[32m" if p.proc.is_alive() else "\u001b[31m", p.name)
-                       for p in managed_processes.values() if p.proc])
+    running = ' '.join("%s%s\u001b[0m" % ("\u001b[32m" if p.proc.is_alive() else "\u001b[31m", p.name)
+                       for p in managed_processes.values() if p.proc)
     print(running)
     cloudlog.debug(running)
 

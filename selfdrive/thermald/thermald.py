@@ -24,7 +24,7 @@ from selfdrive.loggerd.config import get_available_percent
 from selfdrive.pandad import get_expected_signature
 from selfdrive.swaglog import cloudlog
 from selfdrive.thermald.power_monitoring import PowerMonitoring
-from selfdrive.version import get_tested_branch, terms_version, training_version
+from selfdrive.version import terms_version, training_version
 
 FW_SIGNATURE = get_expected_signature()
 
@@ -175,10 +175,11 @@ def thermald_thread():
   fan_speed = 0
   count = 0
 
-  startup_conditions = {
+  onroad_conditions = {
     "ignition": False,
   }
-  startup_conditions_prev = startup_conditions.copy()
+  startup_conditions = {}
+  startup_conditions_prev = {}
 
   off_ts = None
   started_ts = None
@@ -252,13 +253,13 @@ def thermald_thread():
       if pandaState.pandaState.pandaType == log.PandaState.PandaType.unknown:
         no_panda_cnt += 1
         if no_panda_cnt > DISCONNECT_TIMEOUT / DT_TRML:
-          if startup_conditions["ignition"]:
+          if onroad_conditions["ignition"]:
             cloudlog.error("Lost panda connection while onroad")
-          startup_conditions["ignition"] = False
+          onroad_conditions["ignition"] = False
           shutdown_trigger = 1
       else:
         no_panda_cnt = 0
-        startup_conditions["ignition"] = pandaState.pandaState.ignitionLine or pandaState.pandaState.ignitionCan
+        onroad_conditions["ignition"] = pandaState.pandaState.ignitionLine or pandaState.pandaState.ignitionCan
         sound_trigger == 1
       #startup_conditions["hardware_supported"] = pandaState.pandaState.pandaType not in [log.PandaState.PandaType.whitePanda,
       #                                                                                   log.PandaState.PandaType.greyPanda]
@@ -287,12 +288,12 @@ def thermald_thread():
       pandaState_prev = pandaState
     elif params.get_bool("IsOpenpilotViewEnabled") and not params.get_bool("IsDriverViewEnabled") and is_openpilot_view_enabled == 0:
       is_openpilot_view_enabled = 1
-      startup_conditions["ignition"] = True
+      onroad_conditions["ignition"] = True
     elif not params.get_bool("IsOpenpilotViewEnabled") and not params.get_bool("IsDriverViewEnabled") and is_openpilot_view_enabled == 1:
       shutdown_trigger = 0
       sound_trigger == 0
       is_openpilot_view_enabled = 0
-      startup_conditions["ignition"] = False
+      onroad_conditions["ignition"] = False
 
     # these are expensive calls. update every 10s
     if (count % int(10. / DT_TRML)) == 0:
@@ -359,7 +360,7 @@ def thermald_thread():
     bat_temp = msg.deviceState.batteryTempC
 
     if handle_fan is not None:
-      fan_speed = handle_fan(controller, max_comp_temp, fan_speed, startup_conditions["ignition"])
+      fan_speed = handle_fan(controller, max_comp_temp, fan_speed, onroad_conditions["ignition"])
       msg.deviceState.fanSpeedPercentDesired = fan_speed
 
     is_offroad_for_5_min = (started_ts is None) and ((not started_seen) or (off_ts is None) or (sec_since_boot() - off_ts > 60 * 5))
@@ -377,10 +378,8 @@ def thermald_thread():
 
     # **** starting logic ****
 
-    # Check for last update time and display alerts if needed
+    # Ensure date/time are valid
     now = datetime.datetime.utcnow()
-
-    # show invalid date/time alert
     startup_conditions["time_valid"] = True if ((now.year > 2020) or (now.year == 2020 and now.month >= 10)) else True # set True for battery less EON otherwise, set False.
     set_offroad_alert_if_changed("Offroad_InvalidTime", (not startup_conditions["time_valid"]))
 
@@ -434,14 +433,17 @@ def thermald_thread():
     startup_conditions["not_taking_snapshot"] = not params.get_bool("IsTakingSnapshot")
     # if any CPU gets above 107 or the battery gets above 63, kill all processes
     # controls will warn with CPU above 95 or battery above 60
-    startup_conditions["device_temp_good"] = thermal_status < ThermalStatus.danger
-    set_offroad_alert_if_changed("Offroad_TemperatureTooHigh", (not startup_conditions["device_temp_good"]))
+    onroad_conditions["device_temp_good"] = thermal_status < ThermalStatus.danger
+    set_offroad_alert_if_changed("Offroad_TemperatureTooHigh", (not onroad_conditions["device_temp_good"]))
 
     if TICI:
       set_offroad_alert_if_changed("Offroad_StorageMissing", (not Path("/data/media").is_mount()))
 
     # Handle offroad/onroad transition
-    should_start = all(startup_conditions.values())
+    should_start = all(onroad_conditions.values())
+    if started_ts is None:
+      should_start = should_start and all(startup_conditions.values())
+
     if should_start != should_start_prev or (count == 0):
       params.put_bool("IsOnroad", should_start)
       params.put_bool("IsOffroad", not should_start)
@@ -453,8 +455,8 @@ def thermald_thread():
         started_ts = sec_since_boot()
         started_seen = True
     else:
-      if startup_conditions["ignition"] and (startup_conditions != startup_conditions_prev):
-        cloudlog.event("Startup blocked", startup_conditions=startup_conditions)
+      if onroad_conditions["ignition"] and (startup_conditions != startup_conditions_prev):
+        cloudlog.event("Startup blocked", startup_conditions=startup_conditions, onroad_conditions=onroad_conditions)
 
       started_ts = None
       if off_ts is None:
