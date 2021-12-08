@@ -131,6 +131,7 @@ class CarState(CarStateBase):
   def get_tpms(self, unit, fl, fr, rl, rr):
     factor = 0.72519 if unit == 1 else 1.45038 if unit == 2 else 1
     tpms = car.CarState.TPMS.new_message()
+    tpms.unit = unit
     tpms.fl = fl * factor
     tpms.fr = fr * factor
     tpms.rl = rl * factor
