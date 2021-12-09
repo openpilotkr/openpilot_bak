@@ -2,6 +2,8 @@
 
 #include "selfdrive/ui/soundd/sound.h"
 
+#include <cmath>
+
 #include <QAudio>
 #include <QAudioDeviceInfo>
 #include <QDebug>

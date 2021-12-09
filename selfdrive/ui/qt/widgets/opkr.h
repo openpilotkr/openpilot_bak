@@ -169,7 +169,7 @@ class SteerWindDownToggle : public ToggleControl {
   Q_OBJECT
 
 public:
-  SteerWindDownToggle() : ToggleControl("Steer Wind Down", "Slowly lower the talk when Steer Warning is performed. In some vehicles, steering angle limit lamps may appear, so turn off the function to use the maximum steering angle regardless of error.", "../assets/offroad/icon_shell.png", Params().getBool("SteerWindDown")) {
+  SteerWindDownToggle() : ToggleControl("Steer Wind Down", "Slowly lower the torq when Steer Warning is performed. In some vehicles, steering angle limit lamps may appear, so turn off the function to use the maximum steering angle regardless of error.", "../assets/offroad/icon_shell.png", Params().getBool("SteerWindDown")) {
     QObject::connect(this, &SteerWindDownToggle::toggleFlipped, [=](int state) {
       bool status = state ? true : false;
       Params().putBool("SteerWindDown", status);
