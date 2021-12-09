@@ -562,6 +562,18 @@ public:
   }
 };
 
+class FCA11MessageToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+  FCA11MessageToggle() : ToggleControl("Enable FCA11 Message", "Turn this on, if you get an error with forward collision error.(reboot required)", "../assets/offroad/icon_shell.png", Params().getBool("FCA11Message")) {
+    QObject::connect(this, &FCA11MessageToggle::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("FCA11Message", status);
+    });
+  }
+};
+
 // openpilot preview
 class OpenpilotView : public AbstractControl {
   Q_OBJECT

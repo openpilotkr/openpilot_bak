@@ -326,6 +326,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"StockLKASEnabled", PERSISTENT},
     {"SpeedLimitDecelOff", PERSISTENT},
     {"CurvDecelOption", PERSISTENT},
+    {"FCA11Message", PERSISTENT},
 };
 
 } // namespace

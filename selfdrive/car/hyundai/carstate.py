@@ -38,6 +38,7 @@ class CarState(CarStateBase):
     self.steer_anglecorrection = float(int(Params().get("OpkrSteerAngleCorrection", encoding="utf8")) * 0.1)
     self.gear_correction = Params().get_bool("JustDoGearD")
     self.steer_wind_down = Params().get_bool("SteerWindDown")
+    self.fca11_message = Params().get_bool("FCA11Message")
     self.brake_check = False
     self.cancel_check = False
     self.safety_sign_check = 0
@@ -343,12 +344,13 @@ class CarState(CarStateBase):
     else:
       ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(gear))
 
-    if self.CP.fcaBus != -1 or self.CP.carFingerprint in FEATURES["use_fca"]:
-      ret.stockAeb = cp_fca.vl["FCA11"]["FCA_CmdAct"] != 0
-      ret.stockFcw = cp_fca.vl["FCA11"]["CF_VSM_Warn"] == 2
-    elif not self.CP.radarOffCan:
-      ret.stockAeb = cp_scc.vl["SCC12"]["AEB_CmdAct"] != 0
-      ret.stockFcw = cp_scc.vl["SCC12"]["CF_VSM_Warn"] == 2
+    if self.CP.sccBus != -1:
+      if self.CP.carFingerprint in FEATURES["use_fca"] or self.fca11_message:
+        ret.stockAeb = cp_fca.vl["FCA11"]["FCA_CmdAct"] != 0
+        ret.stockFcw = cp_fca.vl["FCA11"]["CF_VSM_Warn"] == 2
+      else:
+        ret.stockAeb = cp_scc.vl["SCC12"]["AEB_CmdAct"] != 0
+        ret.stockFcw = cp_scc.vl["SCC12"]["CF_VSM_Warn"] == 2
 
     # Blind Spot Detection and Lane Change Assist signals
     if self.CP.bsmAvailable or self.CP.enableBsm:

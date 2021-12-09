@@ -570,6 +570,7 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new BattLessToggle());
   layout->addWidget(new GoogleMapEnabledToggle());
   layout->addWidget(new StockLKASEnabledatDisenagedStatusToggle());
+  layout->addWidget(new FCA11MessageToggle());
   layout->addWidget(new TimeZoneSelectCombo());
   const char* cal_ok = "cp -f /data/openpilot/selfdrive/assets/addon/param/CalibrationParams /data/params/d/";
   auto calokbtn = new ButtonControl("Enable Calibration by Force", "RUN");
