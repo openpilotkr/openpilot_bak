@@ -1,0 +1,1033 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pad
+    name="opKeyboard.en_us.QwertyLand"
+    padHeight="158dp"
+    paddingBottom="3.0dp"
+    paddingTop="3.0dp"
+    recognizablePattern="true"
+    useDynamic="1"
+    useNumber="true">
+
+    <!-- 숫자 키 -->
+    <div number="true">
+
+        <key
+            codes="1"
+            ends="top"
+            label="1"
+            labelSizePortrait="20sp"
+            mode="all"
+            position="133"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes="2"
+            ends="top"
+            label="2"
+            labelSizePortrait="20sp"
+            mode="all"
+            position="134"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes="3"
+            ends="top"
+            label="3"
+            labelSizePortrait="20sp"
+            mode="all"
+            position="135"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes="4"
+            ends="top"
+            label="4"
+            labelSizePortrait="20sp"
+            mode="all"
+            position="136"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes="5"
+            ends="top"
+            label="5"
+            labelSizePortrait="20sp"
+            mode="all"
+            position="137"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes="6"
+            ends="top"
+            label="6"
+            labelSizePortrait="20sp"
+            mode="all"
+            position="138"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes="7"
+            ends="top"
+            label="7"
+            labelSizePortrait="20sp"
+            mode="all"
+            position="139"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes="8"
+            ends="top"
+            label="8"
+            labelSizePortrait="20sp"
+            mode="all"
+            position="140"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes="9"
+            ends="top"
+            label="9"
+            labelSizePortrait="20sp"
+            mode="all"
+            position="141"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes="0"
+            ends="top"
+            label="0"
+            labelSizePortrait="20sp"
+            mode="all"
+            position="142"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+    </div>
+
+    <!-- 첫 째줄 -->
+    <div
+        below="#prev"
+        height="25%">
+        <!-- 1페이지 -->
+        <key
+            codes="q"
+            height="100%"
+            keys="c:1;c:~"
+            label="q"
+            longTab="minikbd"
+            position="0"
+            shiftCodes="Q"
+            shortTab="char"
+            passwordHint="ㅂ"
+            width="10%" />
+
+        <key
+            codes="w"
+            keys="c:2;c:`"
+            label="w"
+            longTab="minikbd"
+            position="1"
+            rightOf="#prev"
+            shiftCodes="W"
+            shortTab="char"
+            passwordHint="ㅈ"
+            width="10%" />
+
+        <key
+            codes="e"
+            keys="c:3;c:_;c:è;c:é;c:ê;c:ë;c:ě;c:ę;c:ė"
+            label="e"
+            longTab="minikbd"
+            position="2"
+            rightOf="#prev"
+            shiftCodes="E"
+            shortTab="char"
+            passwordHint="ㄷ"
+            width="10%" />
+
+        <key
+            codes="r"
+            keys="c:4;c:^;c:ř"
+            label="r"
+            longTab="minikbd"
+            position="3"
+            rightOf="#prev"
+            shiftCodes="R"
+            shortTab="char"
+            passwordHint="ㄱ"
+            width="10%" />
+
+        <key
+            codes="t"
+            keys="c:5;c:+;c:ť;c:ț"
+            label="t"
+            longTab="minikbd"
+            position="4"
+            rightOf="#prev"
+            shiftCodes="T"
+            shortTab="char"
+            passwordHint="ㅅ"
+            width="10%" />
+
+        <key
+            codes="y"
+            keys="c:6;c:×;c:ý;c:ÿ"
+            label="y"
+            longTab="minikbd"
+            position="5"
+            rightOf="#prev"
+            shiftCodes="Y"
+            shortTab="char"
+            passwordHint="ㅛ"
+            width="10%" />
+
+        <key
+            codes="u"
+            keys="c:7;c:÷;c:ù;c:ú;c:û;c:ü;c:ů;c:ű"
+            label="u"
+            longTab="minikbd"
+            position="6"
+            rightOf="#prev"
+            shiftCodes="U"
+            shortTab="char"
+            passwordHint="ㅕ"
+            width="10%" />
+
+        <key
+            codes="i"
+            keys="c:8;c:=;c:ì;c:í;c:î;c:ï;c:ı"
+            label="i"
+            longTab="minikbd"
+            position="7"
+            rightOf="#prev"
+            shiftCodes="I"
+            shortTab="char"
+            passwordHint="ㅑ"
+            width="10%" />
+        <key
+            codes="o"
+            keys="c:9;c:|;c:ò;c:ó;c:ô;c:õ;c:ö;c:œ;c:ø;c:ō"
+            label="o"
+            longTab="minikbd"
+            position="8"
+            rightOf="#prev"
+            shiftCodes="O"
+            shortTab="char"
+            passwordHint="ㅐ"
+            width="10%" />
+        <key
+            codes="p"
+            keys="c:0;c:\"
+            label="p"
+            longTab="minikbd"
+            position="9"
+            rightOf="#prev"
+            shiftCodes="P"
+            shortTab="char"
+            passwordHint="ㅔ"
+            width="10%" />
+
+        <!-- 2페이지 -->
+        <key
+            codes="Q"
+            keys="c:1;c:~"
+            label="Q"
+            longTab="minikbd"
+            mode="shift"
+            position="0"
+            shortTab="char"
+            passwordHint="ㅃ"
+            width="10%" />
+        <key
+            codes="W"
+            height="100%"
+            keys="c:2;c:`"
+            label="W"
+            longTab="minikbd"
+            mode="shift"
+            position="1"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅉ"
+            width="10%" />
+        <key
+            codes="E"
+            keys="c:3;c:_;c:È;c:É;c:Ê;c:Ë;c:Ě"
+            label="E"
+            longTab="minikbd"
+            mode="shift"
+            position="2"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㄸ"
+            width="10%" />
+        <key
+            codes="R"
+            keys="c:4;c:^c:Ř"
+            label="R"
+            longTab="minikbd"
+            mode="shift"
+            position="3"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㄲ"
+            width="10%" />
+        <key
+            codes="T"
+            keys="c:5;c:+;c:Ť;c:Ț"
+            label="T"
+            longTab="minikbd"
+            mode="shift"
+            position="4"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅆ"
+            width="10%" />
+        <key
+            codes="Y"
+            keys="c:6;c:×;c:Ý;c:Ÿ"
+            label="Y"
+            longTab="minikbd"
+            mode="shift"
+            position="5"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅛ"
+            width="10%" />
+        <key
+            codes="U"
+            keys="c:7;c:÷;c:Ù;c:Ú;c:Û;c:Ü;c:Ű;c:Ů"
+            label="U"
+            longTab="minikbd"
+            mode="shift"
+            position="6"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅕ"
+            width="10%" />
+        <key
+            codes="I"
+            keys="c:8;c:=:c:Ì;c:Í;c:İ;c:Ï;c:Î"
+            label="I"
+            longTab="minikbd"
+            mode="shift"
+            position="7"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅑ"
+            width="10%" />
+        <key
+            codes="O"
+            keys="c:9;c:|;c:Ò;c:Ó;c:Ô;c:Õ;c:Ö;c:Œ;c:Ø"
+            label="O"
+            longTab="minikbd"
+            mode="shift"
+            position="8"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅒ"
+            width="10%" />
+        <key
+            codes="P"
+            keys="c:0;c:\"
+            label="P"
+            longTab="minikbd"
+            mode="shift"
+            position="9"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅖ"
+            width="10%" />
+    </div>
+
+    <!-- 둘 째줄 -->
+    <div
+        below="#prev"
+        height="25%">
+
+        <!-- 1페이지 -->
+        <key
+            bgEdges="right"
+            bgWidth="10%@pad"
+            codes="a"
+            keys="c:@;c:à;c:á;c:â;c:ã;c:ä;c:å;c:æ;c:ą;c:ă"
+            label="a"
+            longTab="minikbd"
+            position="10"
+            shiftCodes="A"
+            shortTab="char"
+            passwordHint="ㅁ"
+            width="15%" />
+        <key
+            codes="s"
+            keys="c:#;c:§;c:ß;c:ș;c:š;c:ş;c:ś"
+            label="s"
+            longTab="minikbd"
+            position="11"
+            rightOf="#prev"
+            shiftCodes="S"
+            shortTab="char"
+            passwordHint="ㄴ"
+            width="10%" />
+        <key
+            codes="d"
+            keys="c:$;c:ð;c:ď"
+            label="d"
+            longTab="minikbd"
+            position="12"
+            rightOf="#prev"
+            shiftCodes="D"
+            shortTab="char"
+            passwordHint="ㅇ"
+            width="10%" />
+        <key
+            codes="f"
+            keys="c:0x0026"
+            label="f"
+            longTab="minikbd"
+            position="13"
+            rightOf="#prev"
+            shiftCodes="F"
+            shortTab="char"
+            passwordHint="ㄹ"
+            width="10%" />
+        <key
+            codes="g"
+            keys="c:%;c:ğ"
+            label="g"
+            longTab="minikbd"
+            position="14"
+            rightOf="#prev"
+            shiftCodes="G"
+            shortTab="char"
+            passwordHint="ㅎ"
+            width="10%" />
+        <key
+            codes="h"
+            keys="c:-"
+            label="h"
+            longTab="minikbd"
+            position="15"
+            rightOf="#prev"
+            shiftCodes="H"
+            shortTab="char"
+            passwordHint="ㅗ"
+            width="10%" />
+        <key
+            codes="j"
+            keys="c:("
+            label="j"
+            longTab="minikbd"
+            position="16"
+            rightOf="#prev"
+            shiftCodes="J"
+            shortTab="char"
+            passwordHint="ㅓ"
+            width="10%" />
+        <key
+            codes="k"
+            keys="c:)"
+            label="k"
+            longTab="minikbd"
+            position="17"
+            rightOf="#prev"
+            shiftCodes="K"
+            shortTab="char"
+            passwordHint="ㅏ"
+            width="10%" />
+        <key
+            bgWidth="10%@pad"
+            codes="l"
+            keys="c:*;c:ĺ;c:ľ;c:ł"
+            label="l"
+            longTab="minikbd"
+            position="18"
+            rightOf="#prev"
+            shiftCodes="L"
+            shortTab="char"
+            passwordHint="ㅣ"
+            width="15%" />
+
+        <!-- 2페이지 -->
+        <key
+            bgEdges="right"
+            bgWidth="10%@pad"
+            codes="A"
+            keys="c:@;c:À;c:Á;c:Â;c:Ã;c:Ä;c:Å;c:Æ;c:Ą;c:Ă"
+            label="A"
+            longTab="minikbd"
+            mode="shift"
+            position="10"
+            shortTab="char"
+            passwordHint="ㅁ"
+            width="15%" />
+        <key
+            codes="S"
+            keys="c:#;c:§;c:ß;c:Ś;c:Ș;c:Š;c:Ş"
+            label="S"
+            longTab="minikbd"
+            mode="shift"
+            position="11"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㄴ"
+            width="10%" />
+        <key
+            codes="D"
+            keys="c:$;c:Ď"
+            label="D"
+            longTab="minikbd"
+            mode="shift"
+            position="12"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅇ"
+            width="10%" />
+        <key
+            codes="F"
+            keys="c:0x0026"
+            label="F"
+            longTab="minikbd"
+            mode="shift"
+            position="13"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㄹ"
+            width="10%" />
+        <key
+            codes="G"
+            keys="c:%;c:Ğ"
+            label="G"
+            longTab="minikbd"
+            mode="shift"
+            position="14"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅎ"
+            width="10%" />
+        <key
+            codes="H"
+            keys="c:-"
+            label="H"
+            longTab="minikbd"
+            mode="shift"
+            position="15"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅗ"
+            width="10%" />
+        <key
+            codes="J"
+            keys="c:("
+            label="J"
+            longTab="minikbd"
+            mode="shift"
+            position="16"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅓ"
+            width="10%" />
+        <key
+            codes="K"
+            keys="c:)"
+            label="K"
+            longTab="minikbd"
+            mode="shift"
+            position="17"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅏ"
+            width="10%" />
+        <key
+            bgWidth="10%@pad"
+            codes="L"
+            keys="c:*;c:Ľ;c:Ł"
+            label="L"
+            longTab="minikbd"
+            mode="shift"
+            position="18"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅣ"
+            width="15%" />
+    </div>
+
+    <!-- 셋 째줄 -->
+    <div
+        below="#prev"
+        height="25%">
+
+        <!-- 1페이지 -->
+        <key
+            background="inputview_bg_shift"
+            bgWidth="12.5%@pad"
+            codes="shift"
+            icon="inputview_ic_shift"
+            id="shift"
+            maxPage="3"
+            mode="all"
+            position="19"
+            previewable="false"
+            shortTab="func"
+            width="15%" />
+        <key
+            codes="z"
+            keys="c:·;c:ź;c:ž;c:ż"
+            label="z"
+            longTab="minikbd"
+            position="20"
+            rightOf="#prev"
+            shiftCodes="Z"
+            shortTab="char"
+            passwordHint="ㅋ"
+            width="10%" />
+        <key
+            codes="x"
+            keys="c:'"
+            label="x"
+            longTab="minikbd"
+            position="21"
+            rightOf="#prev"
+            shiftCodes="X"
+            shortTab="char"
+            passwordHint="ㅌ"
+            width="10%" />
+        <key
+            codes="c"
+            keys="c:0x0022;c:ç;c:č;c:ć"
+            label="c"
+            longTab="minikbd"
+            position="22"
+            rightOf="#prev"
+            shiftCodes="C"
+            shortTab="char"
+            passwordHint="ㅊ"
+            width="10%" />
+        <key
+            codes="v"
+            keys="c::"
+            label="v"
+            longTab="minikbd"
+            position="23"
+            rightOf="#prev"
+            shiftCodes="V"
+            shortTab="char"
+            passwordHint="ㅍ"
+            width="10%" />
+        <key
+            codes="b"
+            keys="c:\;"
+            label="b"
+            longTab="minikbd"
+            position="24"
+            rightOf="#prev"
+            shiftCodes="B"
+            shortTab="char"
+            passwordHint="ㅠ"
+            width="10%" />
+        <key
+            codes="n"
+            keys="c:!;c:ñ;c:ň;c:ń"
+            label="n"
+            longTab="minikbd"
+            position="25"
+            rightOf="#prev"
+            shiftCodes="N"
+            shortTab="char"
+            passwordHint="ㅜ"
+            width="10%" />
+        <key
+            codes="m"
+            keys="c:?"
+            label="m"
+            longTab="minikbd"
+            position="26"
+            rightOf="#prev"
+            shiftCodes="M"
+            shortTab="char"
+            passwordHint="ㅡ"
+            width="10%" />
+        <key
+            background="inputview_bg_function"
+            bgEdges="right"
+            bgWidth="12.5%@pad"
+            codes="backspace"
+            icon="inputview_ic_backspace"
+            longTab="repeatAccel"
+            mode="all"
+            position="27"
+            preoutput="true"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="func"
+            width="15%" />
+
+        <!-- 2페이지 -->
+        <key
+            codes="Z"
+            keys="c:·;c:Ź;c:Ž;c:Ż"
+            label="Z"
+            longTab="minikbd"
+            mode="shift"
+            position="20"
+            rightOf="@shift"
+            shortTab="char"
+            passwordHint="ㅋ"
+            width="10%" />
+        <key
+            codes="X"
+            keys="c:'"
+            label="X"
+            longTab="minikbd"
+            mode="shift"
+            position="21"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅌ"
+            width="10%" />
+        <key
+            codes="C"
+            keys="c:0x0022;c:Ç;c:Č;c:Ć"
+            label="C"
+            longTab="minikbd"
+            mode="shift"
+            position="22"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅊ"
+            width="10%" />
+        <key
+            codes="V"
+            keys="c::"
+            label="V"
+            longTab="minikbd"
+            mode="shift"
+            position="23"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅍ"
+            width="10%" />
+        <key
+            codes="B"
+            keys="c:\;"
+            label="B"
+            longTab="minikbd"
+            mode="shift"
+            position="24"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅠ"
+            width="10%" />
+        <key
+            codes="N"
+            keys="c:!;c:Ñ;c:Ň;c:Ń"
+            label="N"
+            longTab="minikbd"
+            mode="shift"
+            position="25"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅜ"
+            width="10%" />
+        <key
+            codes="M"
+            keys="c:?"
+            label="M"
+            longTab="minikbd"
+            mode="shift"
+            position="26"
+            rightOf="#prev"
+            shortTab="char"
+            passwordHint="ㅡ"
+            width="10%" />
+    </div>
+
+    <!-- 넷 째줄 -->
+    <div
+        below="#prev"
+        height="25%">
+
+        <!-- 모든 페이지, 기본 -->
+        <key
+            background="inputview_bg_setting"
+            codes="settingsresize"
+            ends="bottom"
+            input="none"
+            keys="f:voice;f:size;f:setlang"
+            label="123"
+            labelSizeLandscape="14sp"
+            longTab="minikbd"
+            mode="all"
+            position="28"
+            preoutputable="false"
+            previewable="false"
+            shortTab="func"
+            width="12.5%" />
+
+        <key
+            background="inputview_bg_function"
+            codes="language"
+            ends="bottom"
+            icon="inputview_ic_language"
+            input="none"
+            longTab="voiceresize"
+            mode="all"
+            position="30"
+            preoutputable="false"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="func"
+            width="12.5%" />
+        <key
+            background="inputview_bg_function"
+            codes=","
+            etc="14"
+            input="none"
+            label=","
+            longTab="symbols"
+            mode="all"
+            position="31"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes=" "
+            id="space_image"
+            input="none"
+            longTab="repeat"
+            mode="all"
+            position="32"
+            preoutputable="false"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="40%" />
+        <key
+            background="inputview_bg_function"
+            codes="."
+            id="symbol"
+            input="none"
+            label="."
+            longTab="symbols"
+            mode="all"
+            position="33"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            background="inputview_bg_function"
+            codes="\n"
+            id="enter"
+            input="none"
+            longTab="commons"
+            mode="all"
+            position="34"
+            preoutputable="false"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="15%" />
+
+        <!-- 모든 페이지, url -->
+        <key
+            background="inputview_bg_setting"
+            codes="settingsresize"
+            ends="bottom"
+            input="url"
+            keys="f:voice;f:size;f:setlang"
+            label="123"
+            labelSizeLandscape="14sp"
+            longTab="minikbd"
+            mode="all"
+            position="28"
+            preoutputable="false"
+            previewable="false"
+            shortTab="func"
+            width="12.5%" />
+
+        <key
+            background="inputview_bg_function"
+            codes="language"
+            ends="bottom"
+            icon="inputview_ic_language"
+            input="url"
+            longTab="voiceresize"
+            mode="all"
+            position="30"
+            preoutputable="false"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="func"
+            width="12.5%" />
+
+
+        <key
+            background="inputview_bg_function"
+            codes="/"
+            input="url"
+            label="/"
+            mode="all"
+            position="31"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes=" "
+            input="url"
+            longTab="repeat"
+            mode="all"
+            position="32"
+            preoutputable="false"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="30%" />
+        <key
+            background="inputview_bg_function"
+            input="url"
+            keys="t:.net;t:.co.kr;t:.org;t:.or.kr;t:.edu;t:.ac.kr;t:.gov;t:.go.kr"
+            label=".com"
+            labelSizeLandscape="12sp"
+            longTab="minikbd"
+            mode="all"
+            position="33"
+            preoutputable="false"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="text"
+            texts=".com"
+            width="10%" />
+        <key
+            background="inputview_bg_function"
+            codes="."
+            input="url"
+            label="."
+            longTab="symbols"
+            mode="all"
+            position="34"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            background="inputview_bg_function"
+            codes="\n"
+            input="url"
+            longTab="commons"
+            mode="all"
+            position="35"
+            preoutputable="false"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="15%" />
+
+        <!-- 모든 페이지, email -->
+        <key
+            background="inputview_bg_setting"
+            codes="settingsresize"
+            ends="bottom"
+            input="email"
+            keys="f:voice;f:size;f:setlang"
+            label="123"
+            labelSizeLandscape="14sp"
+            longTab="minikbd"
+            mode="all"
+            position="28"
+            preoutputable="false"
+            previewable="false"
+            shortTab="func"
+            width="12.5%" />
+
+        <key
+            background="inputview_bg_function"
+            codes="language"
+            ends="bottom"
+            icon="inputview_ic_language"
+            input="email"
+            longTab="voiceresize"
+            mode="all"
+            position="30"
+            preoutputable="false"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="func"
+            width="12.5%" />
+
+        <key
+            background="inputview_bg_function"
+            codes="@"
+            input="email"
+            label="@"
+            mode="all"
+            position="31"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            codes=" "
+            input="email"
+            longTab="repeat"
+            mode="all"
+            position="32"
+            preoutputable="false"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="30%" />
+        <key
+            background="inputview_bg_function"
+            input="email"
+            keys="t:.net;t:.co.kr;t:.org;t:.or.kr;t:.edu;t:.ac.kr;t:.gov;t:.go.kr"
+            label=".com"
+            labelSize="12sp"
+            labelSizeLandscape="12sp"
+            longTab="minikbd"
+            mode="all"
+            position="33"
+            preoutputable="false"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="text"
+            texts=".com"
+            width="10%" />
+        <key
+            background="inputview_bg_function"
+            codes="."
+            input="email"
+            label="."
+            longTab="symbols"
+            mode="all"
+            position="34"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="10%" />
+        <key
+            background="inputview_bg_function"
+            codes="\n"
+            input="email"
+            longTab="commons"
+            mode="all"
+            position="35"
+            preoutputable="false"
+            previewable="false"
+            rightOf="#prev"
+            shortTab="char"
+            width="15%" />
+
+    </div>
+
+</pad>
