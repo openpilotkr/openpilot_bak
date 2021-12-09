@@ -8,7 +8,7 @@ from selfdrive.swaglog import cloudlog
 from common.spinner import Spinner
 import time
 
-android_packages = ("com.opkr.maphack", "com.mixplorer", "com.mnsoft.mappyobn", "com.waze", "com.phillit.akeyboard", "com.gmd.hidesoftkeys", "com.android.chrome",)
+android_packages = ("com.opkr.maphack", "com.mixplorer", "com.mnsoft.mappyobn", "com.waze", "com.gmd.hidesoftkeys", "com.android.chrome", "com.phillit.akeyboard",)
 
 def get_installed_apks():
   dat = subprocess.check_output(["pm", "list", "packages", "-f"], encoding='utf8').strip().split("\n")
@@ -94,21 +94,6 @@ def update_apks(show_spinner=False):
       if app == "com.waze":
         pm_grant("com.waze", "android.permission.ACCESS_FINE_LOCATION")
         pm_grant("com.waze", "android.permission.SYSTEM_ALERT_WINDOW")
-      if app == "com.phillit.akeyboard":
-        pm_grant("com.phillit.akeyboard", "android.permission.READ_EXTERNAL_STORAGE")
-        pm_grant("com.phillit.akeyboard", "android.permission.WRITE_EXTERNAL_STORAGE")
-        pm_grant("com.phillit.akeyboard", "android.permission.RECORD_AUDIO")
-        system("am start com.phillit.akeyboard/rcs.akbd.imguide.ImGuideActivity")
-        time.sleep(3)
-        system("pkill com.phillit.akeyboard")
-        system("settings put secure enabled_input_methods com.phillit.akeyboard/rcs.akbd.imservice.Aservice")
-        system("settings put secure default_input_method com.phillit.akeyboard/rcs.akbd.imservice.Aservice")
-        system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.google.android.gms.measurement.prefs.xml /data/data/com.phillit.akeyboard/shared_prefs/")
-        system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.phillit.akeyboard* /data/data/com.phillit.akeyboard/shared_prefs/")
-        time.sleep(1)
-        system("am start com.phillit.akeyboard/rcs.akbd.imguide.ImGuideActivity")
-        time.sleep(3)
-        system("reboot")
       if app == "com.gmd.hidesoftkeys":
         appops_set("com.gmd.hidesoftkeys", "SU", "allow")
         pm_grant("com.gmd.hidesoftkeys", "android.permission.SYSTEM_ALERT_WINDOW")
@@ -122,6 +107,11 @@ def update_apks(show_spinner=False):
         system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
         time.sleep(5)
         system("reboot")
+      if app == "com.phillit.akeyboard":
+        pm_grant("com.phillit.akeyboard", "android.permission.READ_EXTERNAL_STORAGE")
+        pm_grant("com.phillit.akeyboard", "android.permission.WRITE_EXTERNAL_STORAGE")
+        pm_grant("com.phillit.akeyboard", "android.permission.RECORD_AUDIO")
+        system("am start com.phillit.akeyboard/rcs.akbd.imguide.ImGuideActivity")
 
       assert success
 
