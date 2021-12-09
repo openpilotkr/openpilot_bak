@@ -229,7 +229,7 @@ class Controls:
     self.osm_speedlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
     self.speedlimit_decel_off = Params().get_bool("SpeedLimitDecelOff")
     self.osm_speedlimit = 255
-    self.osm_off_spdlimit = True
+    self.osm_off_spdlimit = False
     self.osm_off_spdlimit_init = False
 
   def auto_enable(self, CS):
