@@ -94,18 +94,13 @@ def update_apks(show_spinner=False):
       if app == "com.waze":
         pm_grant("com.waze", "android.permission.ACCESS_FINE_LOCATION")
         pm_grant("com.waze", "android.permission.SYSTEM_ALERT_WINDOW")
-      # if app == "com.google.android.inputmethod.korean":
-      #   pm_grant("com.google.android.inputmethod.korean", "android.permission.BIND_INPUT_METHOD")
-      #   system("am start com.google.android.inputmethod.korean/com.google.android.apps.inputmethod.libs.framework.core.LauncherActivity")
-      #   time.sleep(3)
-      #   system("pkill com.google.android.inputmethod.korean")        
-      #   system("settings put secure enabled_input_methods com.google.android.inputmethod.korean/.KoreanIme")
-      #   system("settings put secure default_input_method com.google.android.inputmethod.korean/.KoreanIme")
-      #   system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.google.android.inputmethod.korean*.xml /data/data/com.google.android.inputmethod.korean/shared_prefs/")
-      #   time.sleep(1)
-      #   system("am start com.google.android.inputmethod.korean/com.google.android.apps.inputmethod.libs.framework.core.LauncherActivity")
-      #   time.sleep(3)
-      #   system("reboot")
+      if app == "com.phillit.akeyboard":
+        pm_grant("com.phillit.akeyboard", "android.permission.READ_EXTERNAL_STORAGE")
+        pm_grant("com.phillit.akeyboard", "android.permission.WRITE_EXTERNAL_STORAGE")
+        pm_grant("com.phillit.akeyboard", "android.permission.RECORD_AUDIO")
+        system("settings put secure enabled_input_methods com.phillit.akeyboard/rcs.akbd.imservice.Aservice")
+        system("settings put secure default_input_method com.phillit.akeyboard/rcs.akbd.imservice.Aservice")
+        system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.phillit.akeyboard_preferences.xml /data/data/com.phillit.akeyboard/shared_prefs/")
       if app == "com.gmd.hidesoftkeys":
         appops_set("com.gmd.hidesoftkeys", "SU", "allow")
         pm_grant("com.gmd.hidesoftkeys", "android.permission.SYSTEM_ALERT_WINDOW")
