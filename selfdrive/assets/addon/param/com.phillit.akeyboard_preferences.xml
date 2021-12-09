@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
 <map>
     <string name="opKeyboard.et_ee.Default">true</string>
-    <string name="opSymbol12_9">;</string>
     <string name="opSymbol3_2">/</string>
+    <string name="opSymbol12_9">;</string>
     <string name="opLanguagePack.az_az_layout">Default@3x4</string>
     <string name="opLanguagePack.ms_my_layout">QWERTY@3x4</string>
     <string name="opLanguagePack.prs_af_name">Dari</string>
@@ -23,8 +23,8 @@
     <string name="opSymbol13_4">@</string>
     <string name="opLanguagePack.ko_kr_name">Korean</string>
     <string name="opSymbol15_6">+</string>
-    <string name="opSymbol15_2">`</string>
     <string name="opSymbol2_6">+</string>
+    <string name="opSymbol15_2">`</string>
     <string name="opKeyboard.prs_af.Default">true</string>
     <string name="opSymbol3_5">★</string>
     <string name="opLanguagePack.ts_za_name">Tsonga</string>
@@ -41,8 +41,8 @@
     <string name="opSymbol14_7">×</string>
     <string name="opAutoCompletion">true</string>
     <string name="opLanguagePack.xh_za_layout">QWERTY@3x4</string>
-    <string name="opSymbol14_10">%</string>
     <string name="opSymbol9_0">۔</string>
+    <string name="opSymbol14_10">%</string>
     <string name="opKeyboard.hu_hu.Qwertz">true</string>
     <string name="opLanguagePack.gl_es_name">Galician</string>
     <string name="opSymbol12_7">'</string>
@@ -75,13 +75,12 @@
     <string name="opUnderlineHiding">false</string>
     <string name="opKeyboard.brx_in.Default">true</string>
     <string name="opLanguagePack.zh_hk_layout">Cangjie (Standard)@Sucheng (Standard)@Stroke@Cangjie (QWERTY)@Sucheng (QWERTY)</string>
-    <string name="opSymbol6_12">_</string>
     <string name="opSymbol4_2">≤</string>
+    <string name="opSymbol6_12">_</string>
     <string name="opLanguagePack.lt_lt_name">Lithuanian</string>
     <string name="opSymbol8_5">@</string>
     <string name="opLanguagePack.bug_id_layout">QWERTY@3x4</string>
     <string name="opAutoPunctuation">false</string>
-    <string name="getLanguagCode">opLanguagePack.en_us</string>
     <string name="opFirstAPK">true</string>
     <string name="opPattern_recordpaint_switch_checked">false</string>
     <string name="opLanguagePack.ja_jp_layout">QWERTY@3x4@3x4 flick</string>
@@ -115,8 +114,8 @@
     <string name="opSymbol5_4">@</string>
     <string name="opSound">true</string>
     <string name="opLanguagePack.ca_es_layout">Default@QWERTY@QWERTZ@AZERTY@3x4</string>
-    <boolean name="opCustomTheme" value="false" />
     <string name="opSymbol3_0">?</string>
+    <boolean name="opCustomTheme" value="false" />
     <string name="opSymbol5_6">&quot;</string>
     <string name="opKeyboard.sw_tz.Qwerty">true</string>
     <string name="opLanguagePack.kok_in_layout">Default@QWERTY(Phonetic)</string>
@@ -126,8 +125,8 @@
     <string name="opLanguagePack.ne_np_name">Nepali</string>
     <string name="opKeyboard.az_az.Default">true</string>
     <string name="opKeyboard.xh_za.Qwerty">true</string>
-    <string name="deviceId">f5f58294</string>
     <string name="opSymbol1_4">♡</string>
+    <string name="deviceId">f5f58294</string>
     <string name="opLanguagePack.ln_cd_name">Lingala</string>
     <string name="opLanguagePack.hi_in_layout">Default@QWERTY(Phonetic)</string>
     <string name="opLanguagePack.pa_in_name">Punjabi</string>
@@ -136,11 +135,10 @@
     <string name="opSymbol11_11">*</string>
     <string name="opSymbol1_8">:</string>
     <string name="opLanguagePack.szl_pl_layout">QWERTY@3x4</string>
-    <string name="getChangeScreenKeypad">0</string>
     <string name="opLanguagePack.sa_in_layout">Default@QWERTY(Phonetic)</string>
     <string name="pref_device_sim_operator_name"></string>
-    <string name="opSymbol11_8">÷</string>
     <string name="opSymbol11_0">،</string>
+    <string name="opSymbol11_8">÷</string>
     <string name="opRightToggle">false</string>
     <string name="opLanguagePack.si_lk_layout">Default</string>
     <string name="opKeyboard.ts_za.Qwerty">true</string>
@@ -153,8 +151,8 @@
     <string name="opLanguagePack.zh_hk_name">Traditional Chinese (Hong Kong)</string>
     <string name="opKeyboard.ne_np.Default">true</string>
     <string name="opLanguagePack.sat_in_name">Santali</string>
-    <string name="opSymbol9_4">!</string>
     <string name="opKeyboard.en_us.Qwerty">true</string>
+    <string name="opSymbol9_4">!</string>
     <string name="opLanguagePack.ga_ie_layout">QWERTY@3x4</string>
     <string name="opSymbol6_3">@</string>
     <string name="opLanguagePack.bg_bg_name">Bulgarian</string>
@@ -186,19 +184,18 @@
     <string name="opLanguagePack.mni_in_layout">Default@QWERTY(Phonetic)</string>
     <string name="opSymbol11_4">(</string>
     <string name="opKeyboard.ta_in.Default">true</string>
-    <string name="opSymbol11_1">~</string>
     <string name="opPreview">true</string>
+    <string name="opSymbol11_1">~</string>
     <string name="opKeyboard.ceb_ph.Default">true</string>
     <string name="opTouchAreaDrawing">false</string>
     <string name="opSymbol14_6">+</string>
     <string name="opLanguagePack.sl_si_name">Slovenian</string>
     <string name="opLeftToggle">false</string>
     <string name="opSymbol11_2">`</string>
-    <string name="opSymbol7_3">!</string>
     <string name="opSymbol3_4">☆</string>
+    <string name="opSymbol7_3">!</string>
     <string name="opLanguagePack.vi_vn_name">Vietnamese</string>
     <string name="opLanguagePack.th_th_name">Thai</string>
-    <int name="typingMaxCount" value="0" />
     <string name="opSymbol14_1">~</string>
     <string name="opLanguagePack.uz_uz_layout">Default@3x4</string>
     <string name="opLanguagePack.pl_pl_layout">QWERTY@3x4</string>
@@ -217,8 +214,8 @@
     <string name="opKeyboard.mg_mg.Qwerty">true</string>
     <string name="opLanguagePack.bn_in_layout">Default@QWERTY(Phonetic)</string>
     <string name="opLanguagePack.ceb_ph_layout">Default@QWERTY</string>
-    <string name="opSymbol17_2">&amp;</string>
     <int name="opToolbarList0" value="1" />
+    <string name="opSymbol17_2">&amp;</string>
     <string name="opKeyboard.mr_in.Default">true</string>
     <string name="opSymbol9_7">&quot;</string>
     <string name="opKeyboard.in_id.Qwerty">true</string>
@@ -247,8 +244,8 @@
     <string name="opSymbol5_5">/</string>
     <string name="opKeyboard.fr_ca.Qwerty">true</string>
     <string name="opKeyboard.zh_hk.Cangjie">true</string>
-    <string name="opAutoReplacement">false</string>
     <string name="opSymbol10_7">&quot;</string>
+    <string name="opAutoReplacement">false</string>
     <string name="opSymbol14_11">*</string>
     <string name="opKeyboard.si_lk.Default">true</string>
     <string name="opLanguagePack.hu_hu_name">Hungarian</string>
@@ -261,8 +258,8 @@
     <string name="opKeyboard.nb_no.Default">true</string>
     <string name="opSymbol15_3">^</string>
     <string name="opKeyboard.pt_br.Qwerty">true</string>
-    <string name="opSymbol17_4">☆</string>
     <string name="opSymbol14_8">÷</string>
+    <string name="opSymbol17_4">☆</string>
     <string name="opKeyboard.ha_ng.Default">true</string>
     <string name="opKeyboard.pa_in.Default">true</string>
     <string name="opLanguagePack.es_es_layout">QWERTY@3x4</string>
@@ -294,8 +291,8 @@
     <string name="opSymbol13_3">!</string>
     <string name="opKeyboard.hi_in.Default">true</string>
     <string name="opSymbol12_3">!</string>
-    <string name="opSymbol9_9">؛</string>
     <string name="opSymbol3_11">♬</string>
+    <string name="opSymbol9_9">؛</string>
     <string name="opLanguagePack.ka_ge_layout">Default@3x4</string>
     <string name="opSymbol9_6">؍</string>
     <string name="opLanguagePack.pa_in_layout">Default@QWERTY(Phonetic)</string>
@@ -318,9 +315,9 @@
     <string name="opSymbol4_11">}</string>
     <string name="opLanguagePack.ha_ng_layout">Default@QWERTY</string>
     <string name="opLanguagePack.el_gr_name">Greek</string>
-    <string name="opSymbol16_11">-</string>
-    <string name="opSymbol2_11">*</string>
     <string name="opSymbol2_4">(</string>
+    <string name="opSymbol2_11">*</string>
+    <string name="opSymbol16_11">-</string>
     <string name="opKeyboard.my_mm.Default">true</string>
     <string name="opLanguagePack.fr_fr_layout">AZERTY@3x4</string>
     <string name="opLanguagePack.bug_id_name">Bugis</string>
@@ -349,8 +346,8 @@
     <string name="opLanguagePack.kk_kz_layout">Default@3x4</string>
     <string name="opSymbol4_6">&lt;</string>
     <string name="opKeyboard.btx_id.Qwerty">true</string>
-    <string name="opSymbol17_8">◀</string>
     <string name="opSymbol8_3">?</string>
+    <string name="opSymbol17_8">◀</string>
     <string name="opKeyboard.it_it.Qwerty">true</string>
     <string name="opKeyboard.en_ca.Qwerty">true</string>
     <string name="opLanguagePack.hu_hu_layout">QWERTZ@3x4</string>
@@ -391,11 +388,11 @@
     <string name="opSymbol5_7">'</string>
     <string name="opSymbol7_7">'</string>
     <string name="opKeyboard.min_id.Qwerty">true</string>
-    <string name="opSymbol4_9">]</string>
     <int name="opToolbarList3" value="4" />
+    <string name="opSymbol4_9">]</string>
     <string name="opKeyboard.fr_fr.Azerty">true</string>
-    <string name="opSymbol10_0">.</string>
     <string name="opPortraitResizeBottomLevel">0</string>
+    <string name="opSymbol10_0">.</string>
     <string name="opSymbol15_5">)</string>
     <string name="opSymbol7_5">/</string>
     <string name="opLanguagePack.en_us_layout">QWERTY@3x4</string>
@@ -408,13 +405,13 @@
     <string name="opLanguagePack.or_in_name">Oriya</string>
     <string name="opSymbol16_1">·</string>
     <string name="opLanguagePack.in_id_name">Indonesian</string>
-    <string name="opSymbol6_2">·</string>
     <string name="opSymbol2_1">~</string>
+    <string name="opSymbol6_2">·</string>
     <string name="opLanguagePack.lus_in_name">Mizo</string>
     <string name="opKeyboard.iw_il.Default">true</string>
     <string name="opContinuousInputAlgorithm">low</string>
-    <string name="opSymbol15_1">~</string>
     <string name="opSymbol0_1">·</string>
+    <string name="opSymbol15_1">~</string>
     <string name="opKeyboard.sat_in.Default">true</string>
     <string name="opAutoCapitalization">true</string>
     <string name="opLanguagePack.kk_kz_name">Kazakh</string>
@@ -422,8 +419,8 @@
     <string name="opLanguagePack.ug_cn_layout">Default@3x4</string>
     <string name="opContinuousInput"></string>
     <string name="opLanguagePack.sr_rs_name">Serbian</string>
-    <string name="opLanguagePack.en_gb_name">English (UK)</string>
     <string name="pref_device_network_operator_name"></string>
+    <string name="opLanguagePack.en_gb_name">English (UK)</string>
     <string name="opLanguagePack.sv_se_layout">Default@3x4</string>
     <string name="opKeyboard.lv_lv.Qwerty">true</string>
     <string name="opLanguagePack.da_dk_layout">Default@3x4</string>
@@ -431,7 +428,6 @@
     <string name="opLanguagePack.kon_in_name">Konkani (Kannada)</string>
     <string name="opSymbol8_6">/</string>
     <string name="opPortraitPaddingRight">0</string>
-    <int name="typingAmountMaxCount" value="0" />
     <string name="opLanguagePack.mr_in_name">Marathi</string>
     <string name="opKeyBgAlpha">50</string>
     <string name="opKeyboard.or_in.Default">true</string>
@@ -458,12 +454,11 @@
     <boolean name="opSuggestCloudMobile" value="false" />
     <string name="opSymbol1_6">'</string>
     <string name="opKeyboard.sn_zw.Qwerty">true</string>
-    <string name="typingCountRequestDate"></string>
     <string name="opSymbol17_11">♬</string>
     <string name="opKeyboard.yo_ng.Qwerty">true</string>
     <string name="opKeyboard.st_za.Qwerty">true</string>
-    <string name="opSymbol17_1">!</string>
     <string name="opSymbol9_8">٬</string>
+    <string name="opSymbol17_1">!</string>
     <string name="opKeyboard.de_de.Default">true</string>
     <string name="opLanguagePack.sq_al_layout">Default@3x4</string>
     <string name="opSymbol17_5">★</string>
@@ -489,8 +484,8 @@
     <string name="opSymbol13_6">&quot;</string>
     <string name="opSymbol15_4">(</string>
     <string name="opShowPasswordHint">false</string>
-    <boolean name="opSuggestCloudWifi" value="false" />
     <string name="opSymbol6_8">&quot;</string>
+    <boolean name="opSuggestCloudWifi" value="false" />
     <string name="opKeyboard.sl_si.Qwertz">true</string>
     <string name="opKeyboard.szl_pl.Qwerty">true</string>
     <string name="opSymbol8_4">!</string>
@@ -503,8 +498,8 @@
     <string name="opSymbol16_10">፤</string>
     <string name="opKeyboard.vi_vn.Default">true</string>
     <string name="opSymbol0_2">@</string>
-    <string name="opSymbol8_11">_</string>
     <string name="optionInitialized">true</string>
+    <string name="opSymbol8_11">_</string>
     <string name="opSymbol10_9">;</string>
     <string name="opLanguagePack.lt_lt_layout">QWERTY@3x4</string>
     <string name="opLanguagePack.ml_in_name">Malayalam</string>
@@ -521,23 +516,22 @@
     <string name="opLanguagePack.in_id_layout">QWERTY@3x4</string>
     <string name="opKeyboard.ro_ro.Qwerty">true</string>
     <string name="opLanguagePack.kn_in_layout">Default@QWERTY(Phonetic)</string>
-    <string name="opSymbol13_10">-</string>
     <string name="opSymbol2_5">)</string>
+    <string name="opSymbol13_10">-</string>
     <string name="opKeyboard.pt_pt.Qwerty">true</string>
-    <string name="opSymbol16_0">።</string>
     <string name="opSymbol0_0">.</string>
+    <string name="opSymbol16_0">።</string>
     <string name="opLanguagePack.zu_za_name">Zulu</string>
-    <string name="opSymbol16_8">፥</string>
     <string name="opLandscapePaddingRight">0</string>
-    <string name="opSymbol10_4">!</string>
+    <string name="opSymbol16_8">፥</string>
     <string name="opSymbol6_7">‘</string>
+    <string name="opSymbol10_4">!</string>
     <string name="opSymbol3_7">●</string>
     <string name="opKeyboard.ur_pk.Default">true</string>
     <string name="opKeyboard.mad_id.Qwerty">true</string>
     <string name="opKeyboard.sv_se.Default">true</string>
     <string name="opCustomThemeEnable">false</string>
     <string name="opKeyboard.th_th.Default">true</string>
-    <int name="opRecentLangIdx" value="0" />
     <string name="opLanguagePack.ar_eg_layout">Default</string>
     <string name="languagenamesortKO_KR">@AfrikaansopLanguagePack.af_za@AlbanianopLanguagePack.sq_al@AmharicopLanguagePack.am_et@ArabicopLanguagePack.ar_sa@Arabic(eg)opLanguagePack.ar_eg@ArmenianopLanguagePack.hy_am@AssameseopLanguagePack.as_in@AzerbaijaniopLanguagePack.az_az@BaliopLanguagePack.ban_id@BanjaropLanguagePack.bjn_id@BasqueopLanguagePack.eu_es@Batak KaroopLanguagePack.btx_id@BelarusianopLanguagePack.be_by@BengaliopLanguagePack.bn_in@BodoopLanguagePack.brx_in@BugisopLanguagePack.bug_id@BulgarianopLanguagePack.bg_bg@BurmeseopLanguagePack.my_mm@CatalanopLanguagePack.ca_es@CebuanoopLanguagePack.ceb_ph@ChewaopLanguagePack.ny_mw@ChhattisgarhiopLanguagePack.hne_in@CroatianopLanguagePack.hr_hr@CzechopLanguagePack.cs_cz@DanishopLanguagePack.da_dk@DariopLanguagePack.prs_af@DogriopLanguagePack.doi_in@DutchopLanguagePack.nl_nl@English (AU)opLanguagePack.en_au@English (UK)opLanguagePack.en_gb@English (US)opLanguagePack.en_us@English(CA)opLanguagePack.en_ca@EstonianopLanguagePack.et_ee@FilipinoopLanguagePack.tl_ph@FinnishopLanguagePack.fi_fi@French (CA)opLanguagePack.fr_ca@French (FR)opLanguagePack.fr_fr@GalicianopLanguagePack.gl_es@GeorgianopLanguagePack.ka_ge@GermanopLanguagePack.de_de@GreekopLanguagePack.el_gr@GujaratiopLanguagePack.gu_in@HausaopLanguagePack.ha_ng@HebrewopLanguagePack.iw_il@hindiopLanguagePack.hi_in@HinglishopLanguagePack.en_in@HungarianopLanguagePack.hu_hu@IcelandicopLanguagePack.is_is@IgboopLanguagePack.ig_ng@IndonesianopLanguagePack.in_id@IrishopLanguagePack.ga_ie@ItalianopLanguagePack.it_it@JapaneseopLanguagePack.ja_jp@JavaneseopLanguagePack.jv_id@KabyleopLanguagePack.kab_dz@KannadaopLanguagePack.kn_in@KashmiriopLanguagePack.ks_in@KazakhopLanguagePack.kk_kz@KhasiopLanguagePack.kha_in@KhmeropLanguagePack.km_kh@Konkani (Devanagari)opLanguagePack.kok_in@Konkani (Kannada)opLanguagePack.kon_in@KoreanopLanguagePack.ko_kr@Kurdish(Kurmanji)opLanguagePack.kmr_tr@Kurdish(Sorani)opLanguagePack.ckb_iq@KyrgyzopLanguagePack.ky_kg@LaoopLanguagePack.lo_la@LatvianopLanguagePack.lv_lv@LingalaopLanguagePack.ln_cd@LithuanianopLanguagePack.lt_lt@MacedonianopLanguagePack.mk_mk@MadureseopLanguagePack.mad_id@MaithiliopLanguagePack.mai_in@Malagasy opLanguagePack.mg_mg@MalayopLanguagePack.ms_my@MalayalamopLanguagePack.ml_in@ManipuriopLanguagePack.mni_in@MarathiopLanguagePack.mr_in@MarwariopLanguagePack.rwr_in@MinangkabauopLanguagePack.min_id@MizoopLanguagePack.lus_in@MongolianopLanguagePack.mn_mn@NepaliopLanguagePack.ne_np@Northern SothoopLanguagePack.nso_za@NorwegianopLanguagePack.nb_no@OriyaopLanguagePack.or_in@OromoopLanguagePack.om_et@PersianopLanguagePack.fa_ir@PolishopLanguagePack.pl_pl@Portuguese (BR)opLanguagePack.pt_br@Portuguese (PT)opLanguagePack.pt_pt@PunjabiopLanguagePack.pa_in@RomanianopLanguagePack.ro_ro@RussianopLanguagePack.ru_ru@SanskritopLanguagePack.sa_in@SantaliopLanguagePack.sat_in@SerbianopLanguagePack.sr_rs@ShonaopLanguagePack.sn_zw@SilesianopLanguagePack.szl_pl@Simplified ChineseopLanguagePack.zh_cn@Sindhi (Arabic)opLanguagePack.sd_in@SinhalaopLanguagePack.si_lk@SlovakopLanguagePack.sk_sk@SlovenianopLanguagePack.sl_si@SothoopLanguagePack.st_za@Spanish (ES)opLanguagePack.es_es@Spanish (US)opLanguagePack.es_us@SundaneseopLanguagePack.su_id@SwahiliopLanguagePack.sw_tz@SwedishopLanguagePack.sv_se@TajikopLanguagePack.tg_tj@TamilopLanguagePack.ta_in@TeluguopLanguagePack.te_in@ThaiopLanguagePack.th_th@TibetanopLanguagePack.bo_cn@Traditional Chinese (Hong Kong)opLanguagePack.zh_hk@Traditional Chinese (Taiwan)opLanguagePack.zh_tw@TsongaopLanguagePack.ts_za@TswanaopLanguagePack.tn_bw@TurkishopLanguagePack.tr_tr@TurkmenopLanguagePack.tk_tm@UkrainianopLanguagePack.uk_ua@UrduopLanguagePack.ur_pk@UyghuropLanguagePack.ug_cn@UzbekopLanguagePack.uz_uz@VietnameseopLanguagePack.vi_vn@XhosaopLanguagePack.xh_za@YorubaopLanguagePack.yo_ng@ZhuangopLanguagePack.za_cn@ZuluopLanguagePack.zu_za</string>
     <string name="opLanguagePack.fr_ca_layout">QWERTY@3x4</string>
@@ -546,17 +540,16 @@
     <string name="opNumberBar">true</string>
     <string name="opSymbol13_1">՝</string>
     <string name="opKeyboard.zh_cn.Qwerty">true</string>
-    <string name="opLanguagePack.ceb_ph_name">Cebuano</string>
     <string name="pref_device_network_operator">00000</string>
+    <string name="opLanguagePack.ceb_ph_name">Cebuano</string>
     <int name="opApkVersionCodeForPlmChecking" value="378" />
     <string name="opKeyboard.mai_in.Default">true</string>
     <string name="opLanguagePack.sa_in_name">Sanskrit</string>
     <string name="opLanguagePack.en_us_reset_init">/data/user/0/com.phillit.akeyboard/databases/en_us/en_us.plm</string>
     <string name="opKeyboard.ug_cn.Default">true</string>
     <string name="opLanguagePack.mad_id_layout">QWERTY@3x4</string>
-    <int name="typingCount" value="0" />
-    <int name="opThemeSeq" value="1" />
     <string name="opSymbol14_5">)</string>
+    <int name="opThemeSeq" value="1" />
     <string name="opLanguagePack.xh_za_name">Xhosa</string>
     <string name="opSymbol16_7">&quot;</string>
     <string name="opLanguagePack.et_ee_layout">Default@3x4</string>
@@ -585,8 +578,8 @@
     <string name="opNumberAndSymbol">0</string>
     <string name="opSymbol2_7">×</string>
     <string name="opKeyboard.ru_ru.Default">true</string>
-    <string name="opSymbol8_10">-</string>
     <string name="opSymbol1_10">-</string>
+    <string name="opSymbol8_10">-</string>
     <string name="opLanguagePack.ug_cn_name">Uyghur</string>
     <string name="opLanguagePack.jv_id_layout">QWERTY@3x4</string>
     <string name="opLanguagePack.brx_in_layout">Default@QWERTY(Phonetic)</string>
@@ -626,8 +619,8 @@
     <string name="opKeyboard.tl_ph.Qwerty">true</string>
     <string name="opSymbol14_4">(</string>
     <string name="opLanguagePack.kha_in_name">Khasi</string>
-    <string name="opPattern_areapaint_switch_checked">false</string>
     <string name="opSymbol1_1">·</string>
+    <string name="opPattern_areapaint_switch_checked">false</string>
     <string name="opKeyboard.hy_am.Default">true</string>
     <string name="opKeyboard.en_au.Qwerty">true</string>
     <string name="opSymbol4_7">&gt;</string>
@@ -642,8 +635,8 @@
     <string name="opLanguagePack.it_it_layout">QWERTY@3x4</string>
     <string name="opSymbol12_4">@</string>
     <string name="pref_device_sim_operator"></string>
-    <string name="opSymbol16_9">፦</string>
     <string name="opSuggestEmoticon">false</string>
+    <string name="opSymbol16_9">፦</string>
     <string name="opSymbol8_7">&quot;</string>
     <string name="opLanguagePack.szl_pl_name">Silesian</string>
     <string name="opSymbol5_11">_</string>
@@ -653,7 +646,6 @@
     <string name="opSymbol12_5">/</string>
     <string name="opSymbol12_10">-</string>
     <string name="opNumberOfCommons">5</string>
-    <int name="rewardPointsUsed" value="0" />
     <string name="opSymbol11_7">×</string>
     <string name="opLanguagePack.pl_pl_name">Polish</string>
     <string name="opLanguagePack.kab_dz_name">Kabyle</string>
@@ -668,16 +660,16 @@
     <string name="opLanguagePack.tn_bw_layout">QWERTY</string>
     <string name="opSymbol11_10">%</string>
     <string name="opLanguagePack.doi_in_name">Dogri</string>
-    <string name="opTouchLogDrawing">false</string>
     <string name="opSymbol7_10">-</string>
-    <string name="opSymbol6_9">:</string>
+    <string name="opTouchLogDrawing">false</string>
     <string name="opSymbol6_1">॥</string>
+    <string name="opSymbol6_9">:</string>
     <string name="opLanguagePack.zh_cn_layout">QWERTY@Stroke@3x4</string>
     <string name="opKeyboard.lt_lt.Qwerty">true</string>
     <string name="opLanguagePack.th_th_layout">Default@3line@3x4</string>
+    <int name="pref_device_os_version" value="23" />
     <string name="opKeyboard.ml_in.Default">true</string>
     <string name="opLanguagePack.ru_ru_layout">Default@3x4</string>
-    <int name="pref_device_os_version" value="23" />
     <string name="opLanguagePack.am_et_name">Amharic</string>
     <string name="opLanguagePack.ha_ng_name">Hausa</string>
     <string name="opLanguagePack.ln_cd_layout">QWERTY</string>
@@ -699,13 +691,13 @@
     <string name="opSymbol3_9">▶</string>
     <string name="opKeyboard.is_is.Default">true</string>
     <string name="opLanguagePack.ckb_iq_layout">Default</string>
-    <string name="opSymbol16_3">፠</string>
     <string name="opLongTabDelay">300</string>
+    <string name="opSymbol16_3">፠</string>
     <string name="opLandscapeResizeBottomLevel">0</string>
-    <string name="opSymbol0_8">:</string>
     <string name="opMultiTabDelay">250</string>
-    <string name="opKeyboard.hr_hr.Qwertz">true</string>
+    <string name="opSymbol0_8">:</string>
     <boolean name="darkMode" value="false" />
+    <string name="opKeyboard.hr_hr.Qwertz">true</string>
     <string name="opSymbol13_2">՞</string>
     <string name="opLanguagePack.hr_hr_layout">QWERTZ@3x4</string>
 </map>
