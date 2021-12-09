@@ -94,6 +94,10 @@ def update_apks(show_spinner=False):
       if app == "com.waze":
         pm_grant("com.waze", "android.permission.ACCESS_FINE_LOCATION")
         pm_grant("com.waze", "android.permission.SYSTEM_ALERT_WINDOW")
+      if app == "com.phillit.akeyboard":
+        pm_grant("com.phillit.akeyboard", "android.permission.READ_EXTERNAL_STORAGE")
+        pm_grant("com.phillit.akeyboard", "android.permission.WRITE_EXTERNAL_STORAGE")
+        pm_grant("com.phillit.akeyboard", "android.permission.RECORD_AUDIO")
       if app == "com.gmd.hidesoftkeys":
         appops_set("com.gmd.hidesoftkeys", "SU", "allow")
         pm_grant("com.gmd.hidesoftkeys", "android.permission.SYSTEM_ALERT_WINDOW")
@@ -107,11 +111,6 @@ def update_apks(show_spinner=False):
         system("am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity")
         time.sleep(5)
         system("reboot")
-      if app == "com.phillit.akeyboard":
-        pm_grant("com.phillit.akeyboard", "android.permission.READ_EXTERNAL_STORAGE")
-        pm_grant("com.phillit.akeyboard", "android.permission.WRITE_EXTERNAL_STORAGE")
-        pm_grant("com.phillit.akeyboard", "android.permission.RECORD_AUDIO")
-        system("am start com.phillit.akeyboard/rcs.akbd.imguide.ImGuideActivity")
 
       assert success
 
