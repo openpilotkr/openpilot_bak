@@ -238,6 +238,7 @@ typedef struct UIScene {
   bool tmux_error_check = false;
   bool speedlimit_signtype;
   bool sl_decel_off;
+  bool osm_off_spdlimit;
   float a_req_value;
 
   cereal::DeviceState::Reader deviceState;

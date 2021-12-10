@@ -137,6 +137,7 @@ static void update_state(UIState *s) {
     scene.steerRatio = scene.controls_state.getSteerRatio();
     scene.dynamic_tr_mode = scene.controls_state.getDynamicTRMode();
     scene.dynamic_tr_value = scene.controls_state.getDynamicTRValue();
+    scene.osm_off_spdlimit = scene.controls_state.getOsmOffSpdLimit();
   }
   if (sm.updated("carState")) {
     scene.car_state = sm["carState"].getCarState();

@@ -1049,11 +1049,11 @@ static void draw_safetysign(UIState *s) {
   float maxspeed = round(s->scene.controls_state.getVCruise());
   //int safety_speed = s->scene.liveNaviData.opkrspeedlimit;
   //float safety_dist = s->scene.liveNaviData.opkrspeedlimitdist;
-  int sl_opacity;
+  int sl_opacity = 0;
   if (s->scene.sl_decel_off) {
     sl_opacity = 3;
-  } else if (s->scene.controls_state.getOsmOffSpdLimit()) {
-    sl_opacity = 3;
+  } else if (s->scene.osm_off_spdlimit) {
+    sl_opacity = 2;
   } else {
     sl_opacity = 1;
   }
