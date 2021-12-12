@@ -1,6 +1,5 @@
 #pragma once
 
-#include <map>
 #include <memory>
 #include <string>
 #include <optional>
@@ -9,33 +8,27 @@
 #include <QTimer>
 #include <QColor>
 #include <QTransform>
-#include "nanovg.h"
 
 #include "cereal/messaging/messaging.h"
-#include "common/transformations/orientation.hpp"
-#include "selfdrive/camerad/cameras/camera_common.h"
-#include "selfdrive/common/mat.h"
 #include "selfdrive/common/modeldata.h"
 #include "selfdrive/common/params.h"
-#include "selfdrive/common/util.h"
+#include "selfdrive/common/timing.h"
 
-#define COLOR_BLACK nvgRGBA(0, 0, 0, 255)
-#define COLOR_BLACK_ALPHA(x) nvgRGBA(0, 0, 0, x)
-#define COLOR_WHITE nvgRGBA(255, 255, 255, 255)
-#define COLOR_WHITE_ALPHA(x) nvgRGBA(255, 255, 255, x)
-#define COLOR_RED_ALPHA(x) nvgRGBA(201, 34, 49, x)
-#define COLOR_YELLOW nvgRGBA(218, 202, 37, 255)
-#define COLOR_RED nvgRGBA(201, 34, 49, 255)
-#define COLOR_OCHRE nvgRGBA(218, 111, 37, 255)
-#define COLOR_OCHRE_ALPHA(x) nvgRGBA(218, 111, 37, x)
-#define COLOR_GREEN nvgRGBA(0, 255, 0, 255)
-#define COLOR_GREEN_ALPHA(x) nvgRGBA(0, 255, 0, x)
-#define COLOR_BLUE nvgRGBA(0, 0, 255, 255)
-#define COLOR_BLUE_ALPHA(x) nvgRGBA(0, 0, 255, x)
-#define COLOR_ORANGE nvgRGBA(255, 175, 3, 255)
-#define COLOR_ORANGE_ALPHA(x) nvgRGBA(255, 175, 3, x)
-#define COLOR_YELLOW_ALPHA(x) nvgRGBA(218, 202, 37, x)
-#define COLOR_GREY nvgRGBA(191, 191, 191, 1)
+const QRect map_overlay_btn = QRect(0, 465, 150, 150);
+const QRect map_return_btn = QRect(1770, 465, 150, 150);
+const QRect map_btn = QRect(1425, 905, 140, 140);
+const QRect mapbox_btn = QRect(465, 905, 140, 140);
+const QRect rec_btn = QRect(1745, 905, 140, 140);
+const QRect laneless_btn = QRect(1585, 905, 140, 140);
+const QRect monitoring_btn = QRect(50, 830, 140, 140);
+const QRect ml_btn = QRect(1265, 905, 140, 140);
+const QRect stockui_btn = QRect(15, 15, 184, 202);
+const QRect tuneui_btn = QRect(1720, 15, 184, 202);
+const QRect livetunepanel_left_btn = QRect(500, 750, 170, 160);
+const QRect livetunepanel_right_btn = QRect(1250, 750, 170, 160);
+const QRect livetunepanel_left_above_btn = QRect(500, 575, 170, 160);
+const QRect livetunepanel_right_above_btn = QRect(1250, 575, 170, 160);
+const QRect speedlimit_btn = QRect(220, 15, 190, 190);
 
 const int bdr_s = 15;
 const int header_h = 420;
@@ -48,33 +41,6 @@ typedef cereal::CarControl::HUDControl::AudibleAlert AudibleAlert;
 // TODO: choose based on frame input size
 const float y_offset = Hardware::EON() ? 0.0 : 150.0;
 const float ZOOM = Hardware::EON() ? 2138.5 : 2912.8;
-
-typedef struct Rect {
-  int x, y, w, h;
-  int centerX() const { return x + w / 2; }
-  int centerY() const { return y + h / 2; }
-  int right() const { return x + w; }
-  int bottom() const { return y + h; }
-  bool ptInRect(int px, int py) const {
-    return px >= x && px < (x + w) && py >= y && py < (y + h);
-  }
-} Rect;
-
-const Rect map_overlay_btn = {0, 465, 150, 150};
-const Rect map_return_btn = {1770, 465, 150, 150};
-const Rect map_btn = {1425, 905, 140, 140};
-const Rect mapbox_btn = {465, 905, 140, 140};
-const Rect rec_btn = {1745, 905, 140, 140};
-const Rect laneless_btn = {1585, 905, 140, 140};
-const Rect monitoring_btn = {50, 830, 140, 140};
-const Rect ml_btn = {1265, 905, 140, 140};
-const Rect stockui_btn = {15, 15, 184, 202};
-const Rect tuneui_btn = {1720, 15, 184, 202};
-const Rect livetunepanel_left_btn = {500, 750, 170, 160};
-const Rect livetunepanel_right_btn = {1250, 750, 170, 160};
-const Rect livetunepanel_left_above_btn = {500, 575, 170, 160};
-const Rect livetunepanel_right_above_btn = {1250, 575, 170, 160};
-const Rect speedlimit_btn = {220, 15, 190, 190};
 
 struct Alert {
   QString text1;
@@ -126,16 +92,11 @@ const QColor bg_colors [] = {
 };
 
 typedef struct {
-  float x, y;
-} vertex_data;
-
-typedef struct {
-  vertex_data v[TRAJECTORY_SIZE * 2];
+  QPointF v[TRAJECTORY_SIZE * 2];
   int cnt;
 } line_vertices_data;
 
 typedef struct UIScene {
-
   mat3 view_from_calib;
   bool world_objects_visible;
 
@@ -260,10 +221,8 @@ typedef struct UIScene {
   line_vertices_data lane_line_vertices[4];
   line_vertices_data road_edge_vertices[2];
 
-  bool dm_active, engageable;
-
   // lead
-  vertex_data lead_vertices[2];
+  QPointF lead_vertices[2];
 
   float light_sensor, accel_sensor, gyro_sensor;
   bool started, ignition, is_metric, longitudinal_control, end_to_end;
@@ -319,10 +278,6 @@ typedef struct UIScene {
 
 typedef struct UIState {
   int fb_w = 0, fb_h = 0;
-  NVGcontext *vg;
-
-  // images
-  std::map<std::string, int> images;
 
   std::unique_ptr<SubMaster> sm;
 
@@ -395,3 +350,5 @@ public slots:
   void setAwake(bool on, bool reset);
   void update(const UIState &s);
 };
+
+void ui_update_params(UIState *s);

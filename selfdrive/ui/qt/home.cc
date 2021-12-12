@@ -70,7 +70,7 @@ void HomeWindow::showDriverView(bool show) {
 
 void HomeWindow::mousePressEvent(QMouseEvent* e) {
   // OPKR add map
-  if (QUIState::ui_state.scene.started && map_overlay_btn.ptInRect(e->x(), e->y())) {
+  if (QUIState::ui_state.scene.started && map_overlay_btn.contains(e->pos())) {
     QSoundEffect effect1;
     effect1.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/addon/sound/click.wav"));
     //effect1.setLoopCount(1);
@@ -95,7 +95,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     QUIState::ui_state.scene.map_on_overlay = true;
     return;
   }
-  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && map_btn.ptInRect(e->x(), e->y()) && !QUIState::ui_state.scene.mapbox_running) {
+  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && map_btn.contains(e->pos()) && !QUIState::ui_state.scene.mapbox_running) {
     QSoundEffect effect2;
     effect2.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/addon/sound/click.wav"));
     //effect1.setLoopCount(1);
@@ -132,7 +132,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     }
     return;
   }
-  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && mapbox_btn.ptInRect(e->x(), e->y()) && QUIState::ui_state.scene.mapbox_running) {
+  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && mapbox_btn.contains(e->pos()) && QUIState::ui_state.scene.mapbox_running) {
     QSoundEffect effect4;
     effect4.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/addon/sound/click.wav"));
     //effect1.setLoopCount(1);
@@ -150,7 +150,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     QUIState::ui_state.scene.map_on_overlay = false;
     return;
   }
-  if (QUIState::ui_state.scene.started && QUIState::ui_state.scene.map_is_running && map_return_btn.ptInRect(e->x(), e->y()) && !QUIState::ui_state.scene.mapbox_running) {
+  if (QUIState::ui_state.scene.started && QUIState::ui_state.scene.map_is_running && map_return_btn.contains(e->pos()) && !QUIState::ui_state.scene.mapbox_running) {
     QSoundEffect effect3;
     effect3.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/addon/sound/click.wav"));
     //effect1.setLoopCount(1);
@@ -173,12 +173,12 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     return;
   }
   // OPKR REC
-  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && !QUIState::ui_state.scene.comma_stock_ui && rec_btn.ptInRect(e->x(), e->y()) && !QUIState::ui_state.scene.mapbox_running) {
+  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && !QUIState::ui_state.scene.comma_stock_ui && rec_btn.contains(e->pos()) && !QUIState::ui_state.scene.mapbox_running) {
     QUIState::ui_state.scene.touched = true;
     return;
   }
   // Laneless mode
-  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && QUIState::ui_state.scene.end_to_end && !QUIState::ui_state.scene.comma_stock_ui && laneless_btn.ptInRect(e->x(), e->y()) && !QUIState::ui_state.scene.mapbox_running) {
+  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && QUIState::ui_state.scene.end_to_end && !QUIState::ui_state.scene.comma_stock_ui && laneless_btn.contains(e->pos()) && !QUIState::ui_state.scene.mapbox_running) {
     QUIState::ui_state.scene.laneless_mode = QUIState::ui_state.scene.laneless_mode + 1;
     if (QUIState::ui_state.scene.laneless_mode > 2) {
       QUIState::ui_state.scene.laneless_mode = 0;
@@ -193,7 +193,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     return;
   }
   // Monitoring mode
-  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && monitoring_btn.ptInRect(e->x(), e->y()) && !QUIState::ui_state.scene.mapbox_running) {
+  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && monitoring_btn.contains(e->pos()) && !QUIState::ui_state.scene.mapbox_running) {
     QUIState::ui_state.scene.monitoring_mode = !QUIState::ui_state.scene.monitoring_mode;
     if (QUIState::ui_state.scene.monitoring_mode) {
       Params().putBool("OpkrMonitoringMode", true);
@@ -203,7 +203,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     return;
   }
   // Stock UI Toggle
-  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && stockui_btn.ptInRect(e->x(), e->y())) {
+  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && stockui_btn.contains(e->pos())) {
     QUIState::ui_state.scene.comma_stock_ui = !QUIState::ui_state.scene.comma_stock_ui;
     if (QUIState::ui_state.scene.comma_stock_ui) {
       Params().putBool("CommaStockUI", true);
@@ -213,7 +213,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     return;
   }
   // LiveTune UI Toggle
-  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && tuneui_btn.ptInRect(e->x(), e->y()) && !QUIState::ui_state.scene.mapbox_running) {
+  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && tuneui_btn.contains(e->pos()) && !QUIState::ui_state.scene.mapbox_running) {
     QUIState::ui_state.scene.opkr_livetune_ui = !QUIState::ui_state.scene.opkr_livetune_ui;
     if (QUIState::ui_state.scene.opkr_livetune_ui) {
       Params().putBool("OpkrLiveTunePanelEnable", true);
@@ -225,7 +225,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     return;
   }
   // SpeedLimit Decel on/off Toggle
-  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && speedlimit_btn.ptInRect(e->x(), e->y())) {
+  if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && speedlimit_btn.contains(e->pos())) {
     QUIState::ui_state.scene.sl_decel_off = !QUIState::ui_state.scene.sl_decel_off;
     if (QUIState::ui_state.scene.sl_decel_off) {
       Params().putBool("SpeedLimitDecelOff", true);
@@ -236,7 +236,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
   }
   // opkr live ui tune
   if (QUIState::ui_state.scene.live_tune_panel_enable) {
-    if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && livetunepanel_left_btn.ptInRect(e->x(), e->y())) {
+    if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && livetunepanel_left_btn.contains(e->pos())) {
       if (QUIState::ui_state.scene.live_tune_panel_list == 0) {
         QUIState::ui_state.scene.cameraOffset = QUIState::ui_state.scene.cameraOffset - 5;
         if (QUIState::ui_state.scene.cameraOffset <= -1000) QUIState::ui_state.scene.cameraOffset = -1000;
@@ -326,7 +326,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
         return;
       }
     }
-    if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && livetunepanel_right_btn.ptInRect(e->x(), e->y())) {
+    if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && livetunepanel_right_btn.contains(e->pos())) {
       if (QUIState::ui_state.scene.live_tune_panel_list == 0) {
         QUIState::ui_state.scene.cameraOffset = QUIState::ui_state.scene.cameraOffset + 5;
         if (QUIState::ui_state.scene.cameraOffset >= 1000) QUIState::ui_state.scene.cameraOffset = 1000;
@@ -416,7 +416,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
         return;
       }
     }
-    if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && livetunepanel_left_above_btn.ptInRect(e->x(), e->y())) {
+    if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && livetunepanel_left_above_btn.contains(e->pos())) {
       QUIState::ui_state.scene.live_tune_panel_list = QUIState::ui_state.scene.live_tune_panel_list - 1;
       if (QUIState::ui_state.scene.lateralControlMethod == 2 && QUIState::ui_state.scene.live_tune_panel_list < 0) {
         QUIState::ui_state.scene.live_tune_panel_list = QUIState::ui_state.scene.list_count+2;
@@ -425,7 +425,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
       }
       return;
     }
-    if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && livetunepanel_right_above_btn.ptInRect(e->x(), e->y())) {
+    if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && livetunepanel_right_above_btn.contains(e->pos())) {
       QUIState::ui_state.scene.live_tune_panel_list = QUIState::ui_state.scene.live_tune_panel_list + 1;
       if (QUIState::ui_state.scene.lateralControlMethod == 2 && QUIState::ui_state.scene.live_tune_panel_list > (QUIState::ui_state.scene.list_count+2)) {
         QUIState::ui_state.scene.live_tune_panel_list = 0;

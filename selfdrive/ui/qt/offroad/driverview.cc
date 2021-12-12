@@ -24,7 +24,7 @@ DriverViewWindow::DriverViewWindow(QWidget* parent) : QWidget(parent) {
 }
 
 void DriverViewWindow::mousePressEvent(QMouseEvent* e) {
-  if (d_rec_btn.ptInRect(e->x(), e->y())) {
+  if (d_rec_btn.contains(e->pos())) {
     infill = !infill;
     if (infill) {
       system(qPrintable("screenrecord --size 960x540 --bit-rate 3000000 /storage/emulated/0/videos/drv_mon_preview.mp4&"));
