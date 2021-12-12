@@ -146,7 +146,7 @@ class NaviControl():
     #  return  cruise_set_speed_kph
 
     if not self.speedlimit_decel_off:
-      if int(self.sm['liveMapData'].speedLimit) > 19 and self.osm_speedlimit_enabled:  # osm speedlimit
+      if int(self.sm['liveMapData'].speedLimit) > 19 and self.osm_speedlimit_enabled and not self.sm['controlsState'].osmOffSpdLimit:  # osm speedlimit
         if self.stock_navi_info_enabled and CS.safety_sign > 19:
           spdTarget = min(self.sm['liveMapData'].speedLimit, CS.safety_sign)
         else:
@@ -292,7 +292,7 @@ class NaviControl():
     else:
       var_speed = navi_speed
       ttime = 70 if CS.is_set_speed_in_mph else 50
-      self.t_interval = ttime if not (self.onSpeedControl or self.curvSpeedControl) else 10 if CS.is_set_speed_in_mph else 7
+      self.t_interval = ttime if not ((self.onSpeedControl or self.curvSpeedControl) and self.sm['controlsState'].osmOffSpdLimit) else 10 if CS.is_set_speed_in_mph else 7
 
     if CS.cruise_set_mode in [1,3,4] and self.curv_decel_option in [1,2]:
       if CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and path_plan.laneChangeState == LaneChangeState.off and \

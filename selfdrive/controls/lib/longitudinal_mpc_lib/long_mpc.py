@@ -52,18 +52,18 @@ T_IDXS_LST = [index_function(idx, max_val=MAX_T, max_idx=N+1) for idx in range(N
 T_IDXS = np.array(T_IDXS_LST)
 T_DIFFS = np.diff(T_IDXS, prepend=[0.])
 MIN_ACCEL = -3.5
-T_REACT = 1.8
-MAX_BRAKE = 9.81
+T_FOLLOW = 1.45
+COMFORT_BRAKE = 2.5
+STOP_DISTANCE = 6.0
 
+def get_stopped_equivalence_factor(v_lead):
+  return (v_lead**2) / (2 * COMFORT_BRAKE)
 
-def get_stopped_equivalence_factor(v_lead, t_react=T_REACT):
-  return t_react * v_lead + (v_lead*v_lead) / (2 * MAX_BRAKE)
+def get_safe_obstacle_distance(v_ego, t_react=T_FOLLOW):
+  return (v_ego**2) / (2 * COMFORT_BRAKE) + t_react * v_ego + STOP_DISTANCE
 
-def get_safe_obstacle_distance(v_ego, t_react=T_REACT):
-  return 2 * t_react * v_ego + (v_ego*v_ego) / (2 * MAX_BRAKE) + 4.0
-
-def desired_follow_distance(v_ego, v_lead, t_react=T_REACT):
-  return get_safe_obstacle_distance(v_ego, t_react) - get_stopped_equivalence_factor(v_lead, t_react)
+def desired_follow_distance(v_ego, v_lead, t_react=T_FOLLOW):
+  return get_safe_obstacle_distance(v_ego, t_react) - get_stopped_equivalence_factor(v_lead)
 
 
 def gen_long_model():
@@ -158,7 +158,7 @@ def gen_long_mpc_solver():
 
   x0 = np.zeros(X_DIM)
   ocp.constraints.x0 = x0
-  ocp.parameter_values = np.array([-1.2, 1.2, 0.0, 0.0, T_REACT])  # defaults
+  ocp.parameter_values = np.array([-1.2, 1.2, 0.0, 0.0, T_FOLLOW])  # defaults
 
   # We put all constraint cost weights to 0 and only set them at runtime
   cost_weights = np.zeros(CONSTR_DIM)
@@ -196,7 +196,7 @@ def gen_long_mpc_solver():
 
 
 class LongitudinalMpc():
-  def __init__(self, e2e=False, desired_TR=T_REACT):
+  def __init__(self, e2e=False, desired_TR=T_FOLLOW):
     self.e2e = e2e
     self.desired_TR = desired_TR
     self.v_ego = 0.
@@ -283,7 +283,7 @@ class LongitudinalMpc():
       self.solver.cost_set(i, 'Zl', Zl)
 
   def set_cur_state(self, v, a):
-    if abs(self.x0[1] - v) > 1.:
+    if abs(self.x0[1] - v) > 2.:
       self.x0[1] = v
       self.x0[2] = a
       for i in range(0, N+1):
@@ -330,9 +330,10 @@ class LongitudinalMpc():
     self.desired_TR = desired_TR
     self.set_weights()
 
-  def update(self, carstate, radarstate, v_cruise):
+  def update(self, carstate, radarstate, v_cruise, prev_accel_constraint=False):
     self.v_ego = carstate.vEgo
     v_ego = self.x0[1]
+    a_ego = self.x0[2]
 
     # opkr
     self.lo_timer += 1
@@ -346,7 +347,7 @@ class LongitudinalMpc():
     lead_xv_1 = self.process_lead(radarstate.leadTwo)
 
     cruise_gap = int(clip(carstate.cruiseGapSet, 1., 4.))
-    self.dynamic_TR = interp(self.v_ego*3.6, [0, 20, 40, 60, 110], [1.0, 1.3, 1.4, 1.6, 1.8] )
+    self.dynamic_TR = interp(self.v_ego*3.6, [0, 20, 40, 60, 110], [0.9, 1.2, 1.3, 1.4, 1.5] )
     self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
     if self.dynamic_TR_mode == 1:
       self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.dynamic_TR, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
@@ -366,22 +367,25 @@ class LongitudinalMpc():
     # To estimate a safe distance from a moving lead, we calculate how much stopping
     # distance that lead needs as a minimum. We can add that to the current distance
     # and then treat that as a stopped car/obstacle at this new distance.
-    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(lead_xv_0[:,1], self.desired_TR)
-    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(lead_xv_1[:,1], self.desired_TR)
+    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(lead_xv_0[:,1])
+    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(lead_xv_1[:,1])
 
     # Fake an obstacle for cruise, this ensures smooth acceleration to set speed
     # when the leads are no factor.
-    cruise_lower_bound = v_ego + (3/4) * self.cruise_min_a * T_IDXS
-    cruise_upper_bound = v_ego + (3/4) * self.cruise_max_a * T_IDXS
+    v_lower = v_ego + (T_IDXS * self.cruise_min_a * 1.05)
+    v_upper = v_ego + (T_IDXS * self.cruise_max_a * 1.05)
     v_cruise_clipped = np.clip(v_cruise * np.ones(N+1),
-                               cruise_lower_bound,
-                               cruise_upper_bound)
-    cruise_obstacle = T_IDXS*v_cruise_clipped + get_safe_obstacle_distance(v_cruise_clipped, self.desired_TR)
+                               v_lower,
+                               v_upper)
+    cruise_obstacle = np.cumsum(T_DIFFS * v_cruise_clipped) + get_safe_obstacle_distance(v_cruise_clipped, self.desired_TR)
 
     x_obstacles = np.column_stack([lead_0_obstacle, lead_1_obstacle, cruise_obstacle])
     self.source = SOURCES[np.argmin(x_obstacles[0])]
     self.params[:,2] = np.min(x_obstacles, axis=1)
-    self.params[:,3] = np.copy(self.prev_a)
+    if prev_accel_constraint:
+      self.params[:,3] = np.copy(self.prev_a)
+    else:
+      self.params[:,3] = a_ego
     self.params[:,4] = self.desired_TR
 
     self.run()
@@ -401,7 +405,7 @@ class LongitudinalMpc():
     self.accel_limit_arr[:,0] = -10.
     self.accel_limit_arr[:,1] = 10.
     x_obstacle = 1e5*np.ones((N+1))
-    desired_TR = T_REACT*np.ones((N+1))
+    desired_TR = T_FOLLOW*np.ones((N+1))
     self.params = np.concatenate([self.accel_limit_arr,
                              x_obstacle[:,None],
                              self.prev_a, desired_TR[:,None]], axis=1)

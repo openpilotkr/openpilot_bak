@@ -72,7 +72,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
   // OPKR add map
   if (QUIState::ui_state.scene.started && map_overlay_btn.ptInRect(e->x(), e->y())) {
     QSoundEffect effect1;
-    effect1.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/sounds/warning_1.wav"));
+    effect1.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/addon/sound/click.wav"));
     //effect1.setLoopCount(1);
     //effect1.setLoopCount(QSoundEffect::Infinite);
     float volume1 = 0.5;
@@ -97,7 +97,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
   }
   if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && map_btn.ptInRect(e->x(), e->y()) && !QUIState::ui_state.scene.mapbox_running) {
     QSoundEffect effect2;
-    effect2.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/sounds/warning_1.wav"));
+    effect2.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/addon/sound/click.wav"));
     //effect1.setLoopCount(1);
     //effect1.setLoopCount(QSoundEffect::Infinite);
     float volume2 = 0.5;
@@ -134,7 +134,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
   }
   if (QUIState::ui_state.scene.started && !sidebar->isVisible() && !QUIState::ui_state.scene.map_on_top && mapbox_btn.ptInRect(e->x(), e->y()) && QUIState::ui_state.scene.mapbox_running) {
     QSoundEffect effect4;
-    effect4.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/sounds/warning_1.wav"));
+    effect4.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/addon/sound/click.wav"));
     //effect1.setLoopCount(1);
     //effect1.setLoopCount(QSoundEffect::Infinite);
     float volume2 = 0.5;
@@ -152,7 +152,7 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
   }
   if (QUIState::ui_state.scene.started && QUIState::ui_state.scene.map_is_running && map_return_btn.ptInRect(e->x(), e->y()) && !QUIState::ui_state.scene.mapbox_running) {
     QSoundEffect effect3;
-    effect3.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/sounds/warning_1.wav"));
+    effect3.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/addon/sound/click.wav"));
     //effect1.setLoopCount(1);
     //effect1.setLoopCount(QSoundEffect::Infinite);
     float volume3 = 0.5;
@@ -229,10 +229,8 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     QUIState::ui_state.scene.sl_decel_off = !QUIState::ui_state.scene.sl_decel_off;
     if (QUIState::ui_state.scene.sl_decel_off) {
       Params().putBool("SpeedLimitDecelOff", true);
-      QUIState::ui_state.scene.sl_opacity = 3;
     } else {
       Params().putBool("SpeedLimitDecelOff", false);
-      QUIState::ui_state.scene.sl_opacity = 1;
     }
     return;
   }

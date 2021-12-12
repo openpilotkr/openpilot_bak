@@ -213,27 +213,32 @@ struct CarState {
   rightBlindspot @34 :Bool; # Is there something blocking the right lane change
 
   # opkr-tpms
-  tpmsPressureFl @39 :Float32;
-  tpmsPressureFr @40 :Float32;
-  tpmsPressureRl @41 :Float32;
-  tpmsPressureRr @42 :Float32;
+  tpms @39 :TPMS;
 
-  radarDistance @43 :Float32;
-  standStill @44 :Bool;
-  vSetDis @45 :Float32;
-  cruiseButtons @46 :Float32;
-  cruiseAccStatus @47 :Bool;
-  driverAcc @48 :Bool;
-  brakeHold @49 :Bool;    # AutoHold
-  cruiseGapSet @50 :UInt8;
+  radarDistance @40 :Float32;
+  standStill @41 :Bool;
+  vSetDis @42 :Float32;
+  cruiseButtons @43 :Float32;
+  cruiseAccStatus @44 :Bool;
+  driverAcc @45 :Bool;
+  brakeHold @46 :Bool;    # AutoHold
+  cruiseGapSet @47 :UInt8;
 
   # opkr
-  safetyDist @51 :Float32;
-  safetySign @52 :Float32;
-  vEgoOP @53 :Float32;  # openpilot speed
-  electGearStep @54 :Int8;
-  isMph @55 :Bool;
-  aReqValue @56 :Float32;
+  safetyDist @48 :Float32;
+  safetySign @49 :Float32;
+  vEgoOP @50 :Float32;  # openpilot speed
+  electGearStep @51 :Int8;
+  isMph @52 :Bool;
+  aReqValue @53 :Float32;
+
+  struct TPMS {
+    unit @0 :Int8;
+    fl @1 :Float32;
+    fr @2 :Float32;
+    rl @3 :Float32;
+    rr @4 :Float32;
+  }
 
   struct WheelSpeeds {
     # optional wheel speeds
@@ -398,14 +403,17 @@ struct CarControl {
 
     enum AudibleAlert {
       none @0;
-      chimeEngage @1;
-      chimeDisengage @2;
-      chimeError @3;
-      chimeWarning1 @4; # unused
-      chimeWarningRepeat @5;
-      chimeWarningRepeatInfinite @6;
-      chimePrompt @7;
-      chimeWarning2RepeatInfinite @8;
+
+      engage @1;
+      disengage @2;
+      refuse @3;
+
+      warningSoft @4;
+      warningImmediate @5;
+
+      prompt @6;
+      promptRepeat @7;
+      promptDistracted @8;
     }
   }
 
@@ -426,6 +434,7 @@ struct CarParams {
   enableDsu @5 :Bool;        # driving support unit
   enableApgs @6 :Bool;       # advanced parking guidance system
   enableBsm @56 :Bool;       # blind spot monitoring
+  flags @63 :UInt32;         # flags for car specific quirks
 
   minEnableSpeed @7 :Float32;
   minSteerSpeed @8 :Float32;
@@ -490,20 +499,23 @@ struct CarParams {
   communityFeature @46: Bool;  # true if a community maintained feature is detected
   fingerprintSource @49: FingerprintSource;
   networkLocation @50 :NetworkLocation;  # Where Panda/C2 is integrated into the car's CAN network
-  mdpsBus @62: Int8;
-  sasBus @63: Int8;
-  sccBus @64: Int8;
-  fcaBus @65: Int8;
-  bsmAvailable @66: Bool;
-  lfaAvailable @67: Bool;
-  lvrAvailable @68: Bool;
-  evgearAvailable @69: Bool;
-  emsAvailable @70: Bool;
-  standStill @71: Bool;
-  vCruisekph @72: Float32;
-  resSpeed @73: Float32;
-  vFuture @74: Float32;
-  aqValue @75: Float32;
+
+  wheelSpeedFactor @62 :Float32; # Multiplier on wheels speeds to computer actual speeds
+
+  mdpsBus @64: Int8;
+  sasBus @65: Int8;
+  sccBus @66: Int8;
+  fcaBus @67: Int8;
+  bsmAvailable @68: Bool;
+  lfaAvailable @69: Bool;
+  lvrAvailable @70: Bool;
+  evgearAvailable @71: Bool;
+  emsAvailable @72: Bool;
+  standStill @73: Bool;
+  vCruisekph @74: Float32;
+  resSpeed @75: Float32;
+  vFuture @76: Float32;
+  aqValue @77: Float32;
 
   struct LateralParams {
     torqueBP @0 :List(Int32);

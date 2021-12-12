@@ -224,6 +224,12 @@ class Controls:
     self.stock_navi_info_enabled = Params().get_bool("StockNaviSpeedEnabled")
     self.ignore_can_error_on_isg = Params().get_bool("IgnoreCANErroronISG")
     self.ready_timer = 0
+    self.osm_spdlimit_offset = int(Params().get("OpkrSpeedLimitOffset", encoding="utf8"))
+    self.osm_spdlimit_offset_option = int(Params().get("OpkrSpeedLimitOffsetOption", encoding="utf8"))
+    self.osm_speedlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
+    self.osm_speedlimit = 255
+    self.osm_off_spdlimit = False
+    self.osm_off_spdlimit_init = False
 
   def auto_enable(self, CS):
     if self.state != State.enabled:
@@ -478,17 +484,37 @@ class Controls:
         self.v_cruise_kph = self.v_cruise_kph_last
         if int(CS.vSetDis)-1 > self.v_cruise_kph:
           self.v_cruise_kph = int(CS.vSetDis)
+        if self.osm_speedlimit_enabled:
+          self.osm_off_spdlimit_init = True
+          self.osm_speedlimit = int(self.sm['liveMapData'].speedLimit)
       elif CS.cruiseButtons == Buttons.RES_ACCEL and self.variable_cruise and CS.cruiseState.modeSel != 0 and t_speed <= self.v_cruise_kph_last <= round(CS.vEgo*m_unit):
         self.v_cruise_kph = round(CS.vEgo*m_unit)
         if int(CS.vSetDis)-1 > self.v_cruise_kph:
           self.v_cruise_kph = int(CS.vSetDis)
         self.v_cruise_kph_last = self.v_cruise_kph
+        if self.osm_speedlimit_enabled:
+          self.osm_off_spdlimit_init = True
+          self.osm_speedlimit = int(self.sm['liveMapData'].speedLimit)
       elif CS.cruiseButtons == Buttons.RES_ACCEL or CS.cruiseButtons == Buttons.SET_DECEL:
         self.v_cruise_kph = round(CS.cruiseState.speed * m_unit)
         self.v_cruise_kph_last = self.v_cruise_kph
+        if self.osm_speedlimit_enabled:
+          self.osm_off_spdlimit_init = True
+          self.osm_speedlimit = int(self.sm['liveMapData'].speedLimit)
       elif CS.driverAcc and self.variable_cruise and self.cruise_over_maxspeed and t_speed <= self.v_cruise_kph < int(round(CS.vEgo*m_unit)):
         self.v_cruise_kph = int(round(CS.vEgo*m_unit))
         self.v_cruise_kph_last = self.v_cruise_kph
+      elif self.variable_cruise and CS.cruiseState.modeSel != 0 and self.osm_speedlimit_enabled and self.osm_off_spdlimit_init:
+        osm_speedlimit_ = int(self.sm['liveMapData'].speedLimit)
+        osm_speedlimit = osm_speedlimit_ + round(osm_speedlimit_*0.01*self.osm_spdlimit_offset) if self.osm_spdlimit_offset_option == 0 else \
+         osm_speedlimit_ + self.osm_spdlimit_offset
+        if self.osm_speedlimit == osm_speedlimit_:
+          self.osm_off_spdlimit = True
+        elif int(self.sm['liveMapData'].speedLimit) > 19 and osm_speedlimit != self.v_cruise_kph:
+          self.osm_speedlimit = 255
+          self.osm_off_spdlimit = False
+          self.v_cruise_kph = osm_speedlimit
+          self.v_cruise_kph_last = self.v_cruise_kph        
 
     # decrement the soft disable timer at every step, as it's reset on
     # entrance in SOFT_DISABLING state
@@ -648,8 +674,9 @@ class Controls:
 
       if len(lat_plan.dPathPoints):
         # Check if we deviated from the path
-        left_deviation = actuators.steer > 0 and lat_plan.dPathPoints[0] < -0.1
-        right_deviation = actuators.steer < 0 and lat_plan.dPathPoints[0] > 0.1
+        # TODO use desired vs actual curvature
+        left_deviation = actuators.steer > 0 and lat_plan.dPathPoints[0] < -0.20
+        right_deviation = actuators.steer < 0 and lat_plan.dPathPoints[0] > 0.20
 
         if left_deviation or right_deviation:
           self.events.add(EventName.steerSaturated)
@@ -802,6 +829,7 @@ class Controls:
     controlsState.canErrorCounter = self.can_error_counter
     controlsState.alertTextMsg1 = self.log_alertTextMsg1
     controlsState.alertTextMsg2 = self.log_alertTextMsg2
+    controlsState.osmOffSpdLimit = self.osm_off_spdlimit
     if int(self.sm['liveMapData'].speedLimit) and self.osm_spdlimit_enabled:
       if self.stock_navi_info_enabled and int(CS.safetySign):
         controlsState.limitSpeedCamera = min(int(round(self.sm['liveMapData'].speedLimit)), int(CS.safetySign))
