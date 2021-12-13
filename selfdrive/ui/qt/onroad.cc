@@ -359,7 +359,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
 
   // opkr debug info
   int width = 180;
-  int sp_x = rect().right() - bdr_s - width / 2;
+  int sp_x = rect().right() - bdr_s - width / 2 - 10;
   int sp_y = bdr_s + 260;
   int num = 5;
   QRect right_panel(rect().right() - bdr_s - width, bdr_s + 200, width, 120*num);  
@@ -368,9 +368,9 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   p.drawRoundedRect(right_panel, 20, 20);
   p.setPen(QColor(255, 255, 255, 200));
   p.setRenderHint(QPainter::TextAntialiasing);
-  debugText(p, sp_x, sp_y, QString::number(s->scene.cpuTemp, 'f', 0) + "°C", 150, 58);
-  debugText(p, sp_x, sp_y + 35, QString("CPU TEMP"), 150, 26);
-  p.translate(sp_x + 80, sp_y + 20);
+  debugText(p, sp_x, sp_y, QString::number(s->scene.cpuTemp, 'f', 0) + "°C", 150, 59);
+  debugText(p, sp_x, sp_y + 35, QString("CPU TEMP"), 150, 27);
+  p.translate(sp_x + 90, sp_y + 20);
   p.rotate(-90);
   p.drawText(0, 0, QString::number(s->scene.cpuPerc, 'f', 0) + "%");
   p.resetMatrix();
