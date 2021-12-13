@@ -298,8 +298,8 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // engage-ability icon
   //if (engageable) {
   if (true) {
-    drawIcon(p, rect().right() - radius / 2 - bdr_s * 3, radius / 2 + bdr_s,
-             engage_img, bg_colors[status], 1.0, true, s->scene.angleSteers);
+    drawIcon(p, rect().right() - radius / 2 - bdr_s, radius / 2 + bdr_s / 2,
+             engage_img, bg_colors[status], 1.0, false, s->scene.angleSteers);
   }
 
   // dm icon
