@@ -298,14 +298,14 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // engage-ability icon
   //if (engageable) {
   if (true) {
-    drawIcon(p, rect().right() - radius / 2 - bdr_s * 2, radius / 2 + int(bdr_s * 1.5),
+    drawIcon(p, rect().right() - radius / 2 - bdr_s * 3, radius / 2 + bdr_s,
              engage_img, bg_colors[status], 1.0);
   }
 
   // dm icon
   if (!hideDM) {
-    drawIcon(p, radius / 2, rect().bottom() - footer_h / 2 - bdr_s*2,
-             dm_img, QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
+    drawIcon(p, radius / 2 + bdr_s, rect().bottom() - footer_h / 2 - bdr_s*2,
+             dm_img, scene.monitoring_mode ? QColor(10, 120, 20, 70) : QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
   }
 
   p.setBrush(QColor(0, 0, 0, 0));
