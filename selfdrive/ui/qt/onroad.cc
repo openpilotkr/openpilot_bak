@@ -360,7 +360,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // opkr debug info
   int width = 180;
   int sp_x = rect().right() - bdr_s - width / 2;
-  int sp_y = bdr + 210;
+  int sp_y = bdr_s + 210;
   int num = 5;
   QRect right_panel(rect().right() - bdr_s - width, bdr_s + 200, width, 120*num);  
   p.setOpacity(0.8);
@@ -467,7 +467,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIScene &scene) {
         red_lvl_line = 1.0;
         green_lvl_line = fmin(1.0, 1.0 - ((0.4 - scene.lane_line_probs[i]) * 2.5));
       }
-      if (!comma_stock_ui) {
+      if (!scene.comma_stock_ui) {
         painter.setBrush(QColor::fromRgbF(red_lvl_line, green_lvl_line, 0.0, 1.0));
         painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
       } else {
@@ -483,7 +483,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIScene &scene) {
   }
   // paint path
   QLinearGradient bg(0, height(), 0, height() / 4);
-  if (scene.controls_state.getEnabled() && !comma_stock_ui) {
+  if (scene.controls_state.getEnabled() && !scene.comma_stock_ui) {
     if (steerOverride) {
       bg.setColorAt(0, blackColor(80));
       bg.setColorAt(1, blackColor(20));
