@@ -372,7 +372,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   debugText(p, sp_x, sp_y+35, QString("CPU TEMP"), 150, 30);
   p.save();
   p.rotate(-90);
-  p.drawText(QRect(sp_x+, sp_y, 90, 90), Qt::AlignCenter, QString::number(s->scene.cpuPerc, 'f', 0) + "%");
+  p.drawText(QRect(sp_x, sp_y, 90, 90), Qt::AlignCenter, QString::number(s->scene.cpuPerc, 'f', 0) + "%");
   p.restore();
   // P.drawText(p, sp_x+20, sp_y+500, QString::number(s->scene.cpuPerc, 'f', 0) + "%", 150, 60);
 }
