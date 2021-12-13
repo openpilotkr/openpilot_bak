@@ -13,72 +13,72 @@
  - Device(Function Name: Explanation)
    - Driving Camera: You can preview/unview Openpilot Driving Camera.
  - Network(Function Name: Explanation)
-   - HotSpot on Boot: Turned Hotspot on when boot. (reboot required)
+   - HotSpot on Boot: Turn on Hotspot when boot. (reboot required)
    - Use Legacy SSH Key: Use old ssh key access(below 0.8.2). (no reboot required)
  - Toggles(Function Name: Explanation)
-   - Enable Lane selector Mode: Show a button on driving screen including LaneMode/LaneLess/AUTO. AUTO mode is automatically switched by a condition of lane recongnition. (no reboot required)
-   - Enable Driver Monitoring: On/Off driver monitoring for the EON without filterless IR camera or Someone cannot use front cam due to uncertain reasons.(reboot required)
-   - Enable Driving Log Record: Record driving logs to Local, not happen upload to server(reboot required)
-   - Enable Sending Log to Server: Enable uploader to upload to server(reboot required)
-   - Use Comma Stock UI: this use original Comma's UI. Also this can be applied on driving screen in realtime(click MaxSpeed box at top-left corner). (no reboot required)
+   - Enable Lane selector Mode: Show a lane mode button on driving screen Laneline/LaneLess/AUTO. AUTO will automatically switch based on presents of lane marker. (no reboot required)
+   - Enable Driver Monitoring: On/Off driver monitoring for the EON without filterless IR camera or Someone cannot use front cam due to certain reasons.(reboot required)
+   - Enable Driving Log Record: Record driving logs to Local, not to online server. (reboot required)
+   - Enable Sending Log to Server: Enable log upload to online server. (reboot required)
+   - Use Comma Stock UI: this use original Comma's UI. Also this can be applied on driving screen in realtime (click MaxSpeed box at top-left corner). (no reboot required)
  - Software(Function Name: Explanation)
-   - Check for Updates: You can confirm new commits of your fork and also you can update it.
+   - Check for Updates: You can confirm new commits of your fork, press ok will update and reboot.(like git pull).
    - Commit(Local/Remote): Commit name of local(EON) and Remote.(run once when boot in manager.py, search gitcommit.sh at the file, internet connection required)
    - Git Pull On Boot: run 'git pull' command when boot.
-   - Load Preset/Save Preset: Load your Parameters or Save Your Parameters. located /data/preset1 or /data/preset2. This function can save/load your settings of Menu)
-   - Parameter Init: Retrieve you Changes of Menu to initial values.
-   - Git Reset: Remove your local changes and inintalize to the first status of the branch.
-   - Cancel Git Pull: Move one step back if git pull is not satisfied.
+   - Load Preset/Save Preset: Load your Parameters or Save Your Parameters. located /data/preset1 or /data/preset2. This function can save/load your settings)
+   - Parameter Init: Remove your settings changes and restore initial values.
+   - Git Reset: Remove your local changes and inintalize to the original status of the branch.
+   - Cancel Git Pull: Move back to previous version of fork if last update is not desired.
    - Panda Flashing: Run Panda flashing command manually. Basically this is not necessary on normal operation.
    - Change Repo/Branch: You can install others fork/branch thru typing Git ID, Git Repository, Git Branch.
  - UserMenu(Function Name: Explanation)
-   - EON AutoShutdown: At Car ignition off, the device will be shutdown after the time.
-   - EON ForceShutdown: The device will be shutdown by force at offroad status anyway in the time.
+   - EON AutoShutdown: When car ignition is turned off, the device will be shutdown after the set time.
+   - EON ForceShutdown: The device will be shutdown by force at offroad status after set time.
    - EON Volume Control(%): set device volume manually.
-   - EON Brightness Control(%): set device brightness automatically/manually.
-   - EON SCR Off Timer: The screen brigntess will be dark or blank after that time on driving.
-   - Brightness at SCR Off(%): If you use the function(EON SCR Off Timer), you can choose a level of the brightness.
-   - EON Detach Alert Sound: None/KOR/ENG, Turn this on to notify when your car ignition off. Purpose of this, to protect your device away from Sun when you forgot.
-   - Enable Battery Charging Control: battery charging control btw min and max of your setting
-   - Use Auto Screen Record: Screen Record works automatically. at stop, the screen record off, at departure, the screen record on
-   - Number of Recorded Files: Count of files you want to record.
-   - Recording Quality: Low/Mid/High/U-High, changed the resolution and bitrate.
-   - Delete All Recorded Files: /sdcard/videos
-   - Delete All Driving Logs: /sdcard/realdata
-   - Driver Monitoring Mode: Defalut/Unsleep, Default is Comma's. If you choose Unsleep, this will alert warning faster than Comma's one. You can switch the Mode in driving screen in realtime(touch monitoring face at bottom-left corner), clear back is Default Mode. Light green back is Unsleep Mode.(no reboot required)
-   - E2E EYE Threshold: I'm not sure this factor is being used at code actually.
+   - EON Brightness Control(%): set device brightness automatically or manually.
+   - EON SCR Off Timer: The Brightness at SCR Off(%) will be in effect after set time when driving.
+   - Brightness at SCR Off(%): Work with (EON SCR Off Timer) setting, set screen brightness level %.
+   - EON Detach Alert Sound: None/KOR/ENG, Will play alert sound when your car ignition is turned off. Can be used as a reminder to        remove device from mount to protect from sun, theft, etc in case you forgot.
+   - Enable Battery Charging Control: battery charging control, min and max eon battery setting, not applicable for batteryless unit.
+   - Use Auto Screen Record: At departure, screen recording starts automatically, when vehicle is stationary, screen recording stop.
+   - Number of Recorded Files: Max mp4 files that will be recorded before oldest file is overwritten. (to prevent device storage full)
+   - Recording Quality: Low/Mid/High/U-High, Video quality of recordings.
+   - Delete All Recorded Files: from device /sdcard/videos
+   - Delete All Driving Logs: from device/sdcard/realdata
+   - Driver Monitoring Mode: Defalut/Unsleep, Default is Comma's. If you choose Unsleep, dm will be more sensitive than default. You can switch the Mode on driving screen in realtime (touch monitoring face at bottom-left corner), no background is Default Mode. Light green background is Unsleep Mode. (no reboot required)
+   - E2E EYE Threshold: Experimental setting.
    - Normal EYE Threshold: set the value below threshold of your face recognition.
-   - Blink Threshold: I think this is important in the Driver Monitoring. Set the value below the threshold of your eyes blink recognition. Driver Monitoring camera shows the values of your face recognition, eyes and the other things. Preview 'Driver Camera' and then check the recognition value of your eye out and modify the value on Menu.
+   - Blink Threshold: For Driver Monitoring. Set the value below the threshold of your eyes blink recognition. Driver Monitoring camera shows the values of your face recognition, eyes and the other things. Preview 'Driver Camera' and then check the recognition value of your eye blink to modify the value on menu.
    - Navigation Select: Mappy(for Korea), Waze(for Global)
-   - RUN Navigation on Boot: Run Navigation on Boot. If it runs well, will go to background after few seconds.
-   - Display Date on Screen: shows the Device date
-   - Display Time on Screen: shows the Device time
-   - API Server: You can choose 3 servers, Retropilot, Comma, User's
-   - User's API: Set this when you use own
+   - RUN Navigation on Boot: Run your selected Mappy or Waze on boot. If it runs well, will go to background after few seconds.
+   - Display Date on Screen: shows the device date
+   - Display Time on Screen: shows the device time
+   - API Server: Choose driver log server, Retropilot, Comma, User's
+   - User's API: Set User driver log server url.
    - Mapbox Style: Choose three styles of the Mapbox, Comma, OPKR(locallized in Korea), User's, if you want to your own, Edit the file with yours(/data/params/d/MapboxStyleCustom). Make your mapbox style at https://studio.mapbox.com/. If you publish the style you can use it.
-   - Use Auto Resume at Stop: at Standstill, use auto resume when leadcar is moving.
-   - Use Cruise Button Spamming: SCC set speed is changed up and down automatically. should be turn this on to use many functions related to this.
-   - Cruise Start Mode: Set your custom Cruise mode when boot. There are 6 modes. OpenpilotStock/Dist+Curv/Dist/Curv/Oneway/CamSpeed only. OpenpilotStock is nothing to happen with button and not be changed with set speed. Dist+Curv is changed by distance to leadcar and curvature. Dist is distance only. Curv is curvature only. Oneway change camera offset to approach the edge of a road. CamSpeed is changing set speed only by value of camera sign(OSM, Mappy).
+   - Use Auto Resume at Stop: after standstill, op will auto resume when leadcar start moving.
+   - Use Cruise Button Spamming: SCC set speed is changed up and down automatically. turn on to use many functions related to auto speed control.
+   - Cruise Start Mode: Set your custom Cruise mode when boot. There are 6 modes. OpenpilotStock/Dist+Curv/Dist/Curv/Oneway/CamSpeed only. OpenpilotStock : Scc button will set scc speed, will work like stock button to set op. Dist+Curv is changed by distance to leadcar and curvature. Dist is distance only. Curv is curvature only. Oneway change camera offset to approach the edge of a road. CamSpeed is changing set speed only by value of speed sign (OSM, Mappy).
    - LaneChange Speed: minimum lane change speed
-   - LaneChange Delay: Nudge/Nudgeless(adjust delay time to run)
-   - LaneChange Time(km/h: value): How the lanechange fast, to aggressive, upper the value, in oppsite, lower
-   - LeftCurv Offset: if you are unsatisfactory of the drive at Left Curve Section, this can move your car to left or right side.(no reboot required)
-   - RightCurv Offset: if you are unsatisfactory of the drive at Right Curve Section, this can move your car to left or right side.(no reboot required)
-   - Show BSM Status: Show sign when a car approaching from behind. Your car should have the function(BSM)
-   - Max Steering Angle: Default is 90. If you want more, change this up. Some car is not acceptable the vaule above 90.
-   - Str Angle Adjust: When you car keep a straight road, If the value of steering angle is not 0.0, adjust this to be 0.0
-   - Stop Steer Assist on Turn Signals: Openpilot doesn't steer your car at the situation of not process of lane change.
-   - Reset MaxSpeed Over CurrentSpeed: If your car speed upper than OP MaxSpeed, the OP MaxSpeed synchronize to your car speed.
-   - Enable OSM SpeedLimit: Use OSM SpeedLimit(reboot required)
+   - LaneChange Delay: Nudge/Nudgeless (adjust delay time before lane change)
+   - LaneChange Time(km/h: value): How quick should lane change be completed, faster, increase the value, decrease for slower.
+   - LeftCurv Offset: if you are not satisfy with Left Curve Section, this can move your car to left or right side.(no reboot required)
+   - RightCurv Offset: if you are not satisfy with Right Curve Section, this can move your car to left or right side.(no reboot required)
+   - Show BSM Status: Show when a car is in blindspot. need car BSM function.
+   - Max Steering Angle: Default is 90. If you want more, increase this. Some car will not accept value above 90.
+   - Str Angle Adjust: To keep car on a straight road, If the value of steering angle is not 0.0, adjust this to be 0.0
+   - Stop Steer Assist on Turn Signals: Openpilot doesn't steer your car when turn signal is active.
+   - Reset MaxSpeed Over CurrentSpeed: Sync scc speed with car current speed, the OP MaxSpeed synchronize to your car speed.
+   - Enable OSM SpeedLimit: Use OSM SpeedLimit, active internet required. (reboot required).
    - Use Stock SafetyCAM Speed: Some cars have the signal in CAN message. not for all HKG cars.
-   - SpeedLimit Offset(% or +-): let speedlimt is 50, sometimes, you don't want to match exactly the scc set speed to the speedlimit 50. it can be up and down instead of original speedlimit.
-   - SafetyCam SignType: You can select 2 options to show on the screen, circular type and retangular type of speedlimit sign.
+   - SpeedLimit Offset (% or +-): Use to set scc speed above or below the OSM or Stock can reported speed. This can be % or Speed amount + or -. This work with OSM and Stock Can Auto Speeedlimit function.
+   - SafetyCam SignType: You can select 2 options to show on the screen, circular (EU) type and retangular (US) type of speedlimit sign.
    - SafetyCamDist Adj(%): Change the target distance if you are in the decel situation of safetycam.
    - Change Cruise Gap at Stop: Cruise Gap changed to 1 step for departure faster, it gets back to orignal Gap after few second.
    - VisionCurvDecel(ModelSpeed: CarSpeed): set speed is changed by Curvature of vision.
    - OSM CurvDecel(%): If OSM has the value of curv speed, up/down this value if you want to add/subtract.
    - Use Auto Engagement: When OP is in disengagement status, Auto engagement is enabled when your car is moving. Cruise Standby status is needed at least.
-   - Auto Engage Speed(km/h): Engagement is enabled at the speed.
+   - Auto Engage Speed(km/h): Auto Engagement is enabled at this speed.
    - Use Auto RES while Driving: SCC speed automatically set again when releasing SCC.(reboot required)
    - AutoRES Option: CruiseSet/MaxSpeedSet, MaxSpeedSet: Your OP MAX Speed set with RES Set speed. CruiseSet:only set to current set speed, not changed OP MAX Speed.
    - AutoRES Condition: RelBrake/OnGas, RelBrake: SCC speed set again when you release from brake pedal. OnGas: SCC speed set again when you step gas pedal.
