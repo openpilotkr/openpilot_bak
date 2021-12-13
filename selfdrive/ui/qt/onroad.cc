@@ -360,19 +360,21 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // opkr debug info
   int width = 180;
   int sp_x = rect().right() - bdr_s - width / 2;
-  int sp_y = bdr_s + 250;
+  int sp_y = bdr_s + 260;
   int num = 5;
   QRect right_panel(rect().right() - bdr_s - width, bdr_s + 200, width, 120*num);  
   p.setOpacity(0.8);
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawRoundedRect(right_panel, 20, 20);
-  p.setPen(QColor(255, 255, 255, 150));
+  p.setPen(QColor(255, 255, 255, 200));
   p.setRenderHint(QPainter::TextAntialiasing);
   debugText(p, sp_x, sp_y, QString::number(s->scene.cpuTemp, 'f', 0) + "°C", 150, 60);
   debugText(p, sp_x, sp_y+35, QString("CPU TEMP"), 150, 30);
+  p.save();
   p.rotate(-90);
-  debugText(p, sp_x-500, sp_y+500, QString::number(s->scene.cpuPerc, 'f', 0) + "%", 150, 60);
-  p.rotate(90);
+  p.drawText(sp_x+10, sp_y+60, Qt::AlignCenter, QString::number(s->scene.cpuPerc, 'f', 0) + "%");
+  p.restore();
+  // P.drawText(p, sp_x+20, sp_y+500, QString::number(s->scene.cpuPerc, 'f', 0) + "%", 150, 60);
 }
 
 void OnroadHud::drawText(QPainter &p, int x, int y, const QString &text, int alpha) {
