@@ -368,10 +368,10 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   p.drawRoundedRect(right_panel, 20, 20);
   p.setPen(QColor(255, 255, 255, 150));
   p.setRenderHint(QPainter::TextAntialiasing);
-  p.debugText(p, sp_x, sp_y, QString::number(s->scene.cpuTemp, 'f', 0) + "°C", 150, 40);
-  p.debugText(p, sp_x, sp_y+30, QString("CPU TEMP"), 150, 20);
+  debugText(p, sp_x, sp_y, QString::number(s->scene.cpuTemp, 'f', 0) + "°C", 150, 40);
+  debugText(p, sp_x, sp_y+30, QString("CPU TEMP"), 150, 20);
   p.rotate(45);
-  p.debugText(p, sp_x+30, sp_y+15, QString::number(s->scene.cpuPerc, 'f', 0) + "%", 150, 20);
+  debugText(p, sp_x+30, sp_y+15, QString::number(s->scene.cpuPerc, 'f', 0) + "%", 150, 20);
   p.rotate(-45);
 }
 
