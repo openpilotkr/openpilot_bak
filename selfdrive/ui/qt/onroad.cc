@@ -299,13 +299,13 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   //if (engageable) {
   if (true) {
     drawIcon(p, rect().right() - radius / 2 - bdr_s * 3, radius / 2 + bdr_s,
-             engage_img, bg_colors[status], 1.0);
+             engage_img, bg_colors[status], 1.0, true, s->scene.car_state.getSteeringAngleDeg());
   }
 
   // dm icon
   if (!hideDM) {
     drawIcon(p, radius / 2 + bdr_s, rect().bottom() - footer_h / 2 - bdr_s*2,
-             dm_img, scene.monitoring_mode ? QColor(10, 120, 20, 70) : QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
+             dm_img, s->scene.monitoring_mode ? QColor(10, 120, 20, 70) : QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
   }
 
   p.setBrush(QColor(0, 0, 0, 0));
@@ -407,12 +407,23 @@ void OnroadHud::uiText(QPainter &p, int x, int y, const QString &text, int alpha
   p.drawText(real_rect.x(), real_rect.bottom(), text);
 }
 
-void OnroadHud::drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity) {
-  p.setPen(Qt::NoPen);
-  p.setBrush(bg);
-  p.drawEllipse(x - radius / 2, y - radius / 2, radius, radius);
-  p.setOpacity(opacity);
-  p.drawPixmap(x - img_size / 2, y - img_size / 2, img);
+void OnroadHud::drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity, bool rotation = false, int angle = 0) {
+  if (rotation) {
+    p.setPen(Qt::NoPen);
+    p.setBrush(bg);
+    p.translate(x, y);
+    p.drawEllipse(x - radius / 2, y - radius / 2, radius, radius);
+    p.setOpacity(opacity);
+    p.drawPixmap(x - img_size / 2, y - img_size / 2, img);
+    p.rotate(angle);
+    p.resetMatrix();
+  } else {
+    p.setPen(Qt::NoPen);
+    p.setBrush(bg);
+    p.drawEllipse(x - radius / 2, y - radius / 2, radius, radius);
+    p.setOpacity(opacity);
+    p.drawPixmap(x - img_size / 2, y - img_size / 2, img);
+  }
 }
 
 // NvgWindow
