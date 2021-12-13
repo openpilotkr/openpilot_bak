@@ -308,7 +308,8 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
              dm_img, QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
   }
 
-  p.setPen(QColor(255, 255, 255, 200));
+  p.setBrush(QColor(0, 0, 0, 0));
+  p.setPen(QColor(255, 255, 255, 150));
   p.setRenderHint(QPainter::TextAntialiasing);
   p.setOpacity(0.7);
   int ui_viz_rx = bdr_s + 190;
@@ -316,9 +317,9 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   int ui_viz_rx_center = s->fb_w/2;
   // debug
   if (s->scene.nDebugUi1 && !comma_stock_ui) {
-    configFont(p, "Open Sans", s->scene.mapbox_running?20:40, "Semibold");
-    uiText(p, 0, 1010-bdr_s+(s->scene.mapbox_running?18:0), s->scene.alertTextMsg1.c_str(), 125);
-    uiText(p, 0, 1050-bdr_s+(s->scene.mapbox_running?3:0), s->scene.alertTextMsg2.c_str(), 125);
+    configFont(p, "Open Sans", s->scene.mapbox_running?25:35, "Semibold");
+    uiText(p, 0, 1010-bdr_s+(s->scene.mapbox_running?15:0), s->scene.alertTextMsg1.c_str(), 150);
+    uiText(p, 0, 1050-bdr_s+(s->scene.mapbox_running?3:0), s->scene.alertTextMsg2.c_str(), 150);
   }
   if (s->scene.nDebugUi2 && !comma_stock_ui) {
     configFont(p, "Open Sans", s->scene.mapbox_running?25:35, "Semibold");
@@ -352,21 +353,26 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     } else if (s->scene.lateralControlMethod == 1) {
       drawText(p, ui_viz_rx_center, bdr_s+310, "INDI");
     } else if (s->scene.lateralControlMethod == 2) {
-      drawText(p, ui_viz_rx_center, bdr_s+30, "LQR");
+      drawText(p, ui_viz_rx_center, bdr_s+310, "LQR");
     }
   }
 
-  // info
+  // opkr debug info
   int width = 180;
+  int sp_x = rect().right() - bdr_s - width / 2;
+  int sp_y = bdr + 210;
   int num = 5;
-  QRect right_panel(rect().right() - bdr_s - width, bdr_s + 200, width, 150*num);  
-  configFont(p, "Open Sans", 35, "Regular");
-  p.setOpacity(1.0);
+  QRect right_panel(rect().right() - bdr_s - width, bdr_s + 200, width, 120*num);  
+  p.setOpacity(0.8);
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawRoundedRect(right_panel, 20, 20);
-  p.setPen(QColor(255, 255, 255, 200));
+  p.setPen(QColor(255, 255, 255, 150));
   p.setRenderHint(QPainter::TextAntialiasing);
-  p.drawText(right_panel, Qt::AlignCenter, QString("CPU TEMP"));
+  p.debugText(p, sp_x, sp_y, QString::number(s->scene.cpuTemp, 'f', 0) + "°C", 150, 40);
+  p.debugText(p, sp_x, sp_y+30, QString("CPU TEMP"), 150, 20);
+  p.rotate(45);
+  p.debugText(p, sp_x+30, sp_y+15, QString::number(s->scene.cpuPerc, 'f', 0) + "%", 150, 20);
+  p.rotate(-45);
 }
 
 void OnroadHud::drawText(QPainter &p, int x, int y, const QString &text, int alpha) {
@@ -375,6 +381,17 @@ void OnroadHud::drawText(QPainter &p, int x, int y, const QString &text, int alp
   QRect real_rect = fm.boundingRect(init_rect, 0, text);
   real_rect.moveCenter({x, y - real_rect.height() / 2});
 
+  p.setPen(QColor(0xff, 0xff, 0xff, alpha));
+  p.drawText(real_rect.x(), real_rect.bottom(), text);
+}
+
+void OnroadHud::debugText(QPainter &p, int x, int y, const QString &text, int alpha, int fontsize) {
+  QFontMetrics fm(p.font());
+  QRect init_rect = fm.boundingRect(text);
+  QRect real_rect = fm.boundingRect(init_rect, 0, text);
+  real_rect.moveCenter({x, y - real_rect.height() / 2});
+
+  configFont(p, "Open Sans", fontsize, "Regular");
   p.setPen(QColor(0xff, 0xff, 0xff, alpha));
   p.drawText(real_rect.x(), real_rect.bottom(), text);
 }
@@ -450,7 +467,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIScene &scene) {
         red_lvl_line = 1.0;
         green_lvl_line = fmin(1.0, 1.0 - ((0.4 - scene.lane_line_probs[i]) * 2.5));
       }
-      if (!scene.comma_stock_ui) {
+      if (!comma_stock_ui) {
         painter.setBrush(QColor::fromRgbF(red_lvl_line, green_lvl_line, 0.0, 1.0));
         painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
       } else {
@@ -466,7 +483,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIScene &scene) {
   }
   // paint path
   QLinearGradient bg(0, height(), 0, height() / 4);
-  if (scene.controls_state.getEnabled() && !scene.comma_stock_ui) {
+  if (scene.controls_state.getEnabled() && !comma_stock_ui) {
     if (steerOverride) {
       bg.setColorAt(0, blackColor(80));
       bg.setColorAt(1, blackColor(20));
@@ -509,7 +526,7 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::RadarState::LeadData::
   float g_yo = sz / 10;
 
   // opkr
-  configFont(painter, "Open Sans", 60, "SemiBold");
+  configFont(painter, "Open Sans", 35, "SemiBold");
   if (s->scene.radarDistance < 149) {
     QPointF glow[] = {{x + (sz * 1.35) + g_xo, y + sz + g_yo}, {x, y - g_xo}, {x - (sz * 1.35) - g_xo, y + sz + g_yo}};
     painter.setBrush(QColor(218, 202, 37, 255));
@@ -519,7 +536,7 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::RadarState::LeadData::
     QPointF chevron[] = {{x + (sz * 1.25), y + sz}, {x, y}, {x - (sz * 1.25), y + sz}};
     painter.setBrush(redColor(fillAlpha));
     painter.drawPolygon(chevron, std::size(chevron));
-    painter.drawText(QRect(x, (y + sz/2), 0, 0), Qt::AlignCenter, "R");
+    painter.drawText(QRect(x - (sz * 1.25), y, 2 * (sz * 1.25), sz), Qt::AlignCenter, QString("R")); // opkr
   } else {
     QPointF glow[] = {{x + (sz * 1.35) + g_xo, y + sz + g_yo}, {x, y - g_xo}, {x - (sz * 1.35) - g_xo, y + sz + g_yo}};
     painter.setBrush(QColor(0, 255, 0, 255));
@@ -529,7 +546,7 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::RadarState::LeadData::
     QPointF chevron[] = {{x + (sz * 1.25), y + sz}, {x, y}, {x - (sz * 1.25), y + sz}};
     painter.setBrush(greenColor(fillAlpha));
     painter.drawPolygon(chevron, std::size(chevron));
-    painter.drawText(QRect(x, (y + sz/2), 0, 0), Qt::AlignCenter, "V");
+    painter.drawText(QRect(x - (sz * 1.25), y, 2 * (sz * 1.25), sz), Qt::AlignCenter, QString("V")); // opkr
   }
 }
 
