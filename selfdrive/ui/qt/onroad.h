@@ -28,7 +28,7 @@ public:
   void updateState(const UIState &s);
 
 private:
-  void drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity, bool rotation = false, int angle = 0);
+  void drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity, bool rotation = false, float angle = 0);
   void drawText(QPainter &p, int x, int y, const QString &text, int alpha = 255);
   void uiText(QPainter &p, int x, int y, const QString &text, int alpha = 255);
   void debugText(QPainter &p, int x, int y, const QString &text, int alpha = 255, int fontsize = 30);

@@ -407,7 +407,7 @@ void OnroadHud::uiText(QPainter &p, int x, int y, const QString &text, int alpha
   p.drawText(real_rect.x(), real_rect.bottom(), text);
 }
 
-void OnroadHud::drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity, bool rotation, int angle) {
+void OnroadHud::drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity, bool rotation, float angle) {
   if (rotation) {
     p.setPen(Qt::NoPen);
     p.setBrush(bg);
@@ -416,7 +416,7 @@ void OnroadHud::drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, flo
     p.translate(x, y);
     p.rotate(angle);
     p.drawPixmap(x - img_size / 2, y - img_size / 2, img);
-    //p.resetMatrix();
+    p.resetMatrix();
   } else {
     p.setPen(Qt::NoPen);
     p.setBrush(bg);
