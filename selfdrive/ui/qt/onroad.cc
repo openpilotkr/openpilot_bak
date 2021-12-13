@@ -360,7 +360,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // opkr debug info
   int width = 180;
   int sp_x = rect().right() - bdr_s - width / 2;
-  int sp_y = bdr_s + 230;
+  int sp_y = bdr_s + 250;
   int num = 5;
   QRect right_panel(rect().right() - bdr_s - width, bdr_s + 200, width, 120*num);  
   p.setOpacity(0.8);
@@ -371,7 +371,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   debugText(p, sp_x, sp_y, QString::number(s->scene.cpuTemp, 'f', 0) + "°C", 150, 60);
   debugText(p, sp_x, sp_y+35, QString("CPU TEMP"), 150, 30);
   p.rotate(-90);
-  debugText(p, sp_x, sp_y+70, QString::number(s->scene.cpuPerc, 'f', 0) + "%", 150, 30);
+  debugText(p, sp_x-500, sp_y+500, QString::number(s->scene.cpuPerc, 'f', 0) + "%", 150, 60);
   p.rotate(90);
 }
 
