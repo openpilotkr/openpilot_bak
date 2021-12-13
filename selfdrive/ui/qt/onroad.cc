@@ -386,12 +386,12 @@ void OnroadHud::drawText(QPainter &p, int x, int y, const QString &text, int alp
 }
 
 void OnroadHud::debugText(QPainter &p, int x, int y, const QString &text, int alpha, int fontsize) {
+  configFont(p, "Open Sans", fontsize, "Regular");
   QFontMetrics fm(p.font());
   QRect init_rect = fm.boundingRect(text);
   QRect real_rect = fm.boundingRect(init_rect, 0, text);
   real_rect.moveCenter({x, y - real_rect.height() / 2});
 
-  configFont(p, "Open Sans", fontsize, "Regular");
   p.setPen(QColor(0xff, 0xff, 0xff, alpha));
   p.drawText(real_rect.x(), real_rect.bottom(), text);
 }
