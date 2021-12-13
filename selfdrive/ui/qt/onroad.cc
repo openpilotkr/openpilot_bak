@@ -469,7 +469,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIScene &scene) {
         green_lvl_line = fmin(1.0, 1.0 - ((0.4 - scene.lane_line_probs[i]) * 2.5));
       }
       if (!scene.comma_stock_ui) {
-        painter.setBrush(QColor::fromRgbF(red_lvl_line, green_lvl_line, 0.0, 1.0));
+        painter.setBrush(QColor::fromRgbF(fmax(0.0, red_lvl_line), fmax(0.0, green_lvl_line), 0.0, 1.0));
         painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
       } else {
         painter.setBrush(QColor::fromRgbF(1.0, 1.0, 1.0, scene.lane_line_probs[i]));
