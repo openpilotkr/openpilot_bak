@@ -299,7 +299,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   //if (engageable) {
   if (true) {
     drawIcon(p, rect().right() - radius / 2 - bdr_s * 3, radius / 2 + bdr_s,
-             engage_img, bg_colors[status], 1.0, true, s->scene.car_state.getSteeringAngleDeg());
+             engage_img, bg_colors[status], 1.0, true, s->scene.angleSteers);
   }
 
   // dm icon
