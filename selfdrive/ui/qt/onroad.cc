@@ -704,7 +704,6 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::RadarState::LeadData::
   float g_yo = sz / 10;
 
   // opkr
-  configFont(painter, "Open Sans", 35, "SemiBold");
   if (s->scene.radarDistance < 149) {
     QPointF glow[] = {{x + (sz * 1.35) + g_xo, y + sz + g_yo}, {x, y - g_xo}, {x - (sz * 1.35) - g_xo, y + sz + g_yo}};
     painter.setBrush(QColor(218, 202, 37, 255));
@@ -714,6 +713,9 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::RadarState::LeadData::
     QPointF chevron[] = {{x + (sz * 1.25), y + sz}, {x, y}, {x - (sz * 1.25), y + sz}};
     painter.setBrush(redColor(fillAlpha));
     painter.drawPolygon(chevron, std::size(chevron));
+    painter.setPen(QColor(0xff, 0xff, 0xff));
+    painter.setRenderHint(QPainter::TextAntialiasing);
+    configFont(painter, "Open Sans", 35, "SemiBold");
     painter.drawText(QRect(x - (sz * 1.25), y, 2 * (sz * 1.25), sz), Qt::AlignCenter, QString("R")); // opkr
   } else {
     QPointF glow[] = {{x + (sz * 1.35) + g_xo, y + sz + g_yo}, {x, y - g_xo}, {x - (sz * 1.35) - g_xo, y + sz + g_yo}};
@@ -724,6 +726,9 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::RadarState::LeadData::
     QPointF chevron[] = {{x + (sz * 1.25), y + sz}, {x, y}, {x - (sz * 1.25), y + sz}};
     painter.setBrush(greenColor(fillAlpha));
     painter.drawPolygon(chevron, std::size(chevron));
+    painter.setPen(QColor(0xff, 0xff, 0xff));
+    painter.setRenderHint(QPainter::TextAntialiasing);
+    configFont(painter, "Open Sans", 35, "SemiBold");
     painter.drawText(QRect(x - (sz * 1.25), y, 2 * (sz * 1.25), sz), Qt::AlignCenter, QString("V")); // opkr
   }
 }
@@ -732,7 +737,8 @@ void NvgWindow::paintGL() {
   CameraViewWidget::paintGL();
 
   UIState *s = &QUIState::ui_state;
-  if (s->scene.world_objects_visible) {
+  //if (s->scene.world_objects_visible) {
+  if (true) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::NoPen);
