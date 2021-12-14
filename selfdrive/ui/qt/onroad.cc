@@ -230,7 +230,7 @@ void OnroadHud::updateState(const UIState &s) {
   QString cruisespeed_str = QString::number(std::nearbyint(cruisespeed));
   float cur_speed = std::max(0.0, sm["carState"].getCarState().getVEgo() * (s.scene.is_metric ? MS_TO_KPH : MS_TO_MPH));
 
-  auto lead_one = (*s->sm)["radarState"].getRadarState().getLeadOne();
+  auto lead_one = sm["radarState"].getRadarState().getLeadOne();
   float drel = lead_one.getDRel();
   float vrel = lead_one.getVRel();
   bool leadstat = lead_one.getStatus();
@@ -247,7 +247,7 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("lead_stat", leadstat);
   setProperty("dist_rel", drel);
   setProperty("vel_rel", vrel);
-  setProperty("ang_str", s->scene.angleSteers);
+  setProperty("ang_str", s.scene.angleSteers);
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
