@@ -308,7 +308,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   //if (engageable) {
   if (true) {
     drawIcon(p, rect().right() - radius / 2 - bdr_s, radius / 2 + bdr_s,
-             engage_img, bg_colors[status], 1.0, false, s->scene.angleSteers);
+             engage_img, bg_colors[status], 1.0, true, 90); // s->scene.angleSteers
   }
 
   // dm icon
@@ -632,10 +632,12 @@ void OnroadHud::drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, flo
     p.setBrush(bg);
     p.drawEllipse(x - radius / 2, y - radius / 2, radius, radius);
     p.setOpacity(opacity);
-    p.translate(x, y);
+    //p.translate(x, y);
+    p.save();
     p.rotate(angle);
     p.drawPixmap(x - img_size / 2, y - img_size / 2, img);
-    p.resetMatrix();
+    p.restore();
+    //p.resetMatrix();
   } else {
     p.setPen(Qt::NoPen);
     p.setBrush(bg);
