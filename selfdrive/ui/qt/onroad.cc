@@ -361,11 +361,11 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // opkr debug info(left panel)
   int width_l = 180;
   int sp_xl = rect().left() + bdr_s + width_l / 2 - 10;
-  int sp_yl = bdr_s + 260;
+  int sp_yl = bdr_s + 270;
   int num_l = 4;
   auto lead_one = (*s->sm)["radarState"].getRadarState().getLeadOne();
   if (s->scene.longitudinal_control) {num_l = num_l + 1;}
-  QRect left_panel(rect().left() + bdr_s, bdr_s + 200, width_l, 120*num_l);  
+  QRect left_panel(rect().left() + bdr_s, bdr_s + 200, width_l, 110*num_l);  
   p.setOpacity(1.0);
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawRoundedRect(left_panel, 20, 20);
@@ -440,7 +440,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   int num_r = 1;
   if (s->scene.batt_less) {num_r = num_r + 1;} else {num_r = num_r + 2;}
   if (s->scene.gpsAccuracyUblox != 0.00) {num_r = num_r + 2;}
-  QRect right_panel(rect().right() - bdr_s - width_r, bdr_s + 200, width_r, 120*num_r);  
+  QRect right_panel(rect().right() - bdr_s - width_r, bdr_s + 200, width_r, 110*num_r);  
   p.setOpacity(1.0);
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawRoundedRect(right_panel, 20, 20);
