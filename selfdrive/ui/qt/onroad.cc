@@ -357,7 +357,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     }
   }
 
-  int j_num = 90;
+  int j_num = 100;
   // opkr debug info(left panel)
   int width_l = 180;
   int sp_xl = rect().left() + bdr_s + width_l / 2 - 10;
@@ -402,7 +402,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   debugText(p, sp_xl, sp_yl + 35, QString("STER ANG"), 150, 27);
   p.translate(sp_xl + 90, sp_yl + 20);
   p.rotate(-90);
-  p.drawText(0, 0, "°");
+  p.drawText(0, 0, "    °");
   p.resetMatrix();
   // steer ratio
   sp_yl = sp_yl + j_num;
@@ -410,7 +410,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   debugText(p, sp_xl, sp_yl + 35, QString("SteerRatio"), 150, 27);
   p.translate(sp_xl + 90, sp_yl + 20);
   p.rotate(-90);
-  p.drawText(0, 0, "°");
+  p.drawText(0, 0, "    °");
   p.resetMatrix();
   // cruise gap for long
   if (s->scene.longitudinal_control) {
@@ -469,7 +469,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     debugText(p, sp_xr, sp_yr + 35, QString("BAT TEMP"), 150, 27);
     p.translate(sp_xr + 90, sp_yr + 20);
     p.rotate(-90);
-    p.drawText(0, 0, QString::number(s->scene.fanSpeed/1000, 'f', 0));
+    p.drawText(0, 0, "  " + QString::number(s->scene.fanSpeed/1000, 'f', 0));
     p.resetMatrix();
     // bat lvl
     sp_yr = sp_yr + j_num;
@@ -477,7 +477,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     debugText(p, sp_xr, sp_yr + 35, QString("BAT LVL"), 150, 27);
     p.translate(sp_xr + 90, sp_yr + 20);
     p.rotate(-90);
-    p.drawText(0, 0, s->scene.deviceState.getBatteryStatus() == "Charging" ? "+++" : "---");
+    p.drawText(0, 0, s->scene.deviceState.getBatteryStatus() == "Charging" ? "  +++" : "  ---");
     p.resetMatrix();
   }
   // Ublox GPS accuracy
