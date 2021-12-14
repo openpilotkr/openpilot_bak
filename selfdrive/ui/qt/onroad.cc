@@ -528,17 +528,17 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   if ((maxv - minv) > 3) {
     p.setBrush(QColor(255, 0, 0, 150));
   }
-  debugText(p, tpms_sp_xr, tpms_sp_yr+10, "TPMS", 150, 33);
+  debugText(p, tpms_sp_xr, tpms_sp_yr+15, "TPMS", 150, 33);
   if (s->scene.tpmsUnit != 0) {
-    debugText(p, tpms_sp_xr-48, tpms_sp_yr+40, QString::number(s->scene.tpmsPressureFl, 'f', 1), 150, 39);
-    debugText(p, tpms_sp_xr+48, tpms_sp_yr+40, QString::number(s->scene.tpmsPressureFr, 'f', 1), 150, 39);
-    debugText(p, tpms_sp_xr-48, tpms_sp_yr+80, QString::number(s->scene.tpmsPressureRl, 'f', 1), 150, 39);
-    debugText(p, tpms_sp_xr+48, tpms_sp_yr+80, QString::number(s->scene.tpmsPressureRr, 'f', 1), 150, 39);
+    debugText(p, tpms_sp_xr-48, tpms_sp_yr+50, QString::number(s->scene.tpmsPressureFl, 'f', 1), 150, 39);
+    debugText(p, tpms_sp_xr+48, tpms_sp_yr+50, QString::number(s->scene.tpmsPressureFr, 'f', 1), 150, 39);
+    debugText(p, tpms_sp_xr-48, tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRl, 'f', 1), 150, 39);
+    debugText(p, tpms_sp_xr+48, tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRr, 'f', 1), 150, 39);
   } else {
-    debugText(p, tpms_sp_xr-50, tpms_sp_yr+40, QString::number(s->scene.tpmsPressureFl, 'f', 0), 150, 45);
-    debugText(p, tpms_sp_xr+50, tpms_sp_yr+40, QString::number(s->scene.tpmsPressureFr, 'f', 0), 150, 45);
-    debugText(p, tpms_sp_xr-50, tpms_sp_yr+80, QString::number(s->scene.tpmsPressureRl, 'f', 0), 150, 45);
-    debugText(p, tpms_sp_xr+50, tpms_sp_yr+80, QString::number(s->scene.tpmsPressureRr, 'f', 0), 150, 45);
+    debugText(p, tpms_sp_xr-50, tpms_sp_yr+50, QString::number(s->scene.tpmsPressureFl, 'f', 0), 150, 45);
+    debugText(p, tpms_sp_xr+50, tpms_sp_yr+50, QString::number(s->scene.tpmsPressureFr, 'f', 0), 150, 45);
+    debugText(p, tpms_sp_xr-50, tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRl, 'f', 0), 150, 45);
+    debugText(p, tpms_sp_xr+50, tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRr, 'f', 0), 150, 45);
   }
 }
 
