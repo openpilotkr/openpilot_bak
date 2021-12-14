@@ -317,9 +317,9 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   int ui_viz_rx_center = s->fb_w/2;
   // debug
   if (s->scene.nDebugUi1 && !comma_stock_ui) {
-    configFont(p, "Open Sans", s->scene.mapbox_running?26:32, "Semibold");
-    uiText(p, 0, 1025-bdr_s+(s->scene.mapbox_running?15:0), s->scene.alertTextMsg1.c_str());
-    uiText(p, 0, 1060-bdr_s+(s->scene.mapbox_running?5:0), s->scene.alertTextMsg2.c_str());
+    configFont(p, "Open Sans", s->scene.mapbox_running?20:25, "Semibold");
+    uiText(p, 190, 1025-bdr_s+(s->scene.mapbox_running?15:0), s->scene.alertTextMsg1.c_str());
+    uiText(p, 190, 1060-bdr_s+(s->scene.mapbox_running?5:0), s->scene.alertTextMsg2.c_str());
   }
   if (s->scene.nDebugUi2 && !comma_stock_ui) {
     configFont(p, "Open Sans", s->scene.mapbox_running?26:35, "Semibold");
