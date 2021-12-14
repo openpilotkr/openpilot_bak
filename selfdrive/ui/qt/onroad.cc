@@ -298,7 +298,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // engage-ability icon
   //if (engageable) {
   if (true) {
-    drawIcon(p, rect().right() - radius / 2 - bdr_s, radius / 2 + bdr_s / 2,
+    drawIcon(p, rect().right() - radius / 2 - bdr_s, radius / 2 + bdr_s,
              engage_img, bg_colors[status], 1.0, false, s->scene.angleSteers);
   }
 
@@ -317,12 +317,12 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   int ui_viz_rx_center = s->fb_w/2;
   // debug
   if (s->scene.nDebugUi1 && !comma_stock_ui) {
-    configFont(p, "Open Sans", s->scene.mapbox_running?25:35, "Semibold");
-    uiText(p, 0, 1010-bdr_s+(s->scene.mapbox_running?15:0), s->scene.alertTextMsg1.c_str(), 150);
-    uiText(p, 0, 1050-bdr_s+(s->scene.mapbox_running?3:0), s->scene.alertTextMsg2.c_str(), 150);
+    configFont(p, "Open Sans", s->scene.mapbox_running?26:33, "Semibold");
+    uiText(p, 0, 1020-bdr_s+(s->scene.mapbox_running?15:0), s->scene.alertTextMsg1.c_str(), 150);
+    uiText(p, 0, 1055-bdr_s+(s->scene.mapbox_running?3:0), s->scene.alertTextMsg2.c_str(), 150);
   }
   if (s->scene.nDebugUi2 && !comma_stock_ui) {
-    configFont(p, "Open Sans", s->scene.mapbox_running?25:35, "Semibold");
+    configFont(p, "Open Sans", s->scene.mapbox_running?26:35, "Semibold");
     uiText(p, ui_viz_rx, ui_viz_ry+240, "SR:" + QString::number(s->scene.liveParams.steerRatio, 'f', 2));
     uiText(p, ui_viz_rx, ui_viz_ry+280, "AA:" + QString::number(s->scene.liveParams.angleOffsetAverage, 'f', 2));
     uiText(p, ui_viz_rx, ui_viz_ry+320, "SF:" + QString::number(s->scene.liveParams.stiffnessFactor, 'f', 2));
@@ -361,19 +361,73 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   int width = 180;
   int sp_x = rect().right() - bdr_s - width / 2 - 10;
   int sp_y = bdr_s + 260;
-  int num = 5;
+  int num = 1;
+  if (s->scene.batt_less) {num = num + 1;} else {num = num + 2;}
+  if (s->scene.gpsAccuracyUblox != 0.00) {num = num + 2;}
   QRect right_panel(rect().right() - bdr_s - width, bdr_s + 200, width, 120*num);  
   p.setOpacity(1.0);
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawRoundedRect(right_panel, 20, 20);
   p.setPen(QColor(255, 255, 255, 200));
   p.setRenderHint(QPainter::TextAntialiasing);
+  // cpu temp
   debugText(p, sp_x, sp_y, QString::number(s->scene.cpuTemp, 'f', 0) + "°C", 150, 59);
   debugText(p, sp_x, sp_y + 35, QString("CPU TEMP"), 150, 27);
   p.translate(sp_x + 90, sp_y + 20);
   p.rotate(-90);
   p.drawText(0, 0, QString::number(s->scene.cpuPerc, 'f', 0) + "%");
   p.resetMatrix();
+  if (s->scene.batt_less) {
+    // sys temp
+    sp_y = sp_y + 70;
+    debugText(p, sp_x, sp_y, QString::number(s->scene.ambientTemp, 'f', 0) + "°C", 150, 59);
+    debugText(p, sp_x, sp_y + 35, QString("SYS TEMP"), 150, 27);
+    p.translate(sp_x + 90, sp_y + 20);
+    p.rotate(-90);
+    p.drawText(0, 0, QString::number(s->scene.fanSpeed/1000, 'f', 0) + "%");
+    p.resetMatrix();
+  } else {
+    // bat temp
+    sp_y = sp_y + 70;
+    debugText(p, sp_x, sp_y, QString::number(s->scene.batTemp, 'f', 0) + "°C", 150, 59);
+    debugText(p, sp_x, sp_y + 35, QString("BAT TEMP"), 150, 27);
+    p.translate(sp_x + 90, sp_y + 20);
+    p.rotate(-90);
+    p.drawText(0, 0, QString::number(s->scene.fanSpeed/1000, 'f', 0));
+    p.resetMatrix();
+    // bat lvl
+    sp_y = sp_y + 70;
+    debugText(p, sp_x, sp_y, QString::number(s->scene.batPercent, 'f', 0) + "%", 150, 59);
+    debugText(p, sp_x, sp_y + 35, QString("BAT LVL"), 150, 27);
+    p.translate(sp_x + 90, sp_y + 20);
+    p.rotate(-90);
+    p.drawText(0, 0, s->scene.deviceState.getBatteryStatus() == "Charging" ? "+++" : "---");
+    p.resetMatrix();
+  }
+  // Ublox GPS accuracy
+  if (s->scene.gpsAccuracyUblox != 0.00) {
+    sp_y = sp_y + 70;
+    if (s->scene.gpsAccuracyUblox > 99 || s->scene.gpsAccuracyUblox == 0) {
+       debugText(p, sp_x, sp_y, "None", 150, 59);
+    } else if (scene.gpsAccuracyUblox > 9.99) {
+      debugText(p, sp_x, sp_y, QString::number(s->scene.gpsAccuracyUblox, 'f', 1), 150, 59);
+    } else {
+      debugText(p, sp_x, sp_y, QString::number(s->scene.gpsAccuracyUblox, 'f', 2), 150, 59);
+    }
+    debugText(p, sp_x, sp_y + 35, QString("GPS PREC"), 150, 27);
+    p.translate(sp_x + 90, sp_y + 20);
+    p.rotate(-90);
+    p.drawText(0, 0, QString::number(s->scene.satelliteCount, 'f', 0));
+    p.resetMatrix();
+    // altitude
+    sp_y = sp_y + 70;
+    debugText(p, sp_x, sp_y, QString::number(s->scene.altitudeUblox, 'f', 0) + "%", 150, 59);
+    debugText(p, sp_x, sp_y + 35, QString("ALTITUDE"), 150, 27);
+    p.translate(sp_x + 90, sp_y + 20);
+    p.rotate(-90);
+    p.drawText(0, 0, "m");
+    p.resetMatrix();
+  }
 }
 
 void OnroadHud::drawText(QPainter &p, int x, int y, const QString &text, int alpha) {
