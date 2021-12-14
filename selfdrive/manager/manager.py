@@ -176,6 +176,7 @@ def manager_init():
     ("SpeedLimitDecelOff", "0"),
     ("CurvDecelOption", "1"),
     ("FCA11Message", "0"),
+    ("StandstillResumeAlt", "0"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))

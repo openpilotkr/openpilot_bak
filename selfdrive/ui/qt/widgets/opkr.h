@@ -566,10 +566,22 @@ class FCA11MessageToggle : public ToggleControl {
   Q_OBJECT
 
 public:
-  FCA11MessageToggle() : ToggleControl("Enable FCA11 Message", "Turn this on, if you get an error with forward collision error.(reboot required)", "../assets/offroad/icon_shell.png", Params().getBool("FCA11Message")) {
+  FCA11MessageToggle() : ToggleControl("Enable FCA11 Message", "Turn this on, if you get an error with forward collision warning.(reboot required)", "../assets/offroad/icon_shell.png", Params().getBool("FCA11Message")) {
     QObject::connect(this, &FCA11MessageToggle::toggleFlipped, [=](int state) {
       bool status = state ? true : false;
       Params().putBool("FCA11Message", status);
+    });
+  }
+};
+
+class StandstillResumeAltToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+  StandstillResumeAltToggle() : ToggleControl("Standstill Resume Alternative", "Turn this on, if auto resume doesn't work at standstill. some cars only(ex. GENESIS). before enable, try to adjust RES message counts above.(reboot required)", "../assets/offroad/icon_shell.png", Params().getBool("StandstillResumeAlt")) {
+    QObject::connect(this, &StandstillResumeAltToggle::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("StandstillResumeAlt", status);
     });
   }
 };

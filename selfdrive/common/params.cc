@@ -327,6 +327,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"SpeedLimitDecelOff", CLEAR_ON_MANAGER_START},
     {"CurvDecelOption", PERSISTENT},
     {"FCA11Message", PERSISTENT},
+    {"StandstillResumeAlt", PERSISTENT},
 };
 
 } // namespace

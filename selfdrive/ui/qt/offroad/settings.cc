@@ -549,6 +549,7 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new AutoResCondition());
   layout->addWidget(new AutoResLimitTime());
   layout->addWidget(new RESCountatStandstill());
+  layout->addWidget(new StandstillResumeAltToggle());
   layout->addWidget(new SteerWindDownToggle());
   layout->addWidget(new MadModeEnabledToggle());
 
