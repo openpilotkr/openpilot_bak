@@ -634,9 +634,9 @@ void OnroadHud::drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, flo
     p.setOpacity(opacity);
     //p.translate(x, y);
     QTransform transform;
-    QTransform trans = transform.scale(sqrt(img->size().width()), sqrt(img->size().height()));
+    QTransform trans = transform.scale(sqrt(img.size().width()), sqrt(img.size().height()));
     trans = transform.rotate(angle);
-    QPixmap(img->transformed(trans));
+    QPixmap(img.transformed(trans));
     // p.save();
     // p.rotate(angle);
     // p.drawPixmap(x - img_size / 2, y - img_size / 2, img);
