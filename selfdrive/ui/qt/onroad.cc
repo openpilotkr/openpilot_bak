@@ -506,8 +506,8 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // opkr tpms
   int tpms_width = 180;
   int tpms_sp_xr = rect().right() - bdr_s - tpms_width / 2;
-  int tpms_sp_yr = rect().bottom() - bdr_s - 270;
-  QRect tpms_panel(rect().right() - bdr_s - tpms_width, tpms_sp_yr - 10, tpms_width, 130);  
+  int tpms_sp_yr = rect().bottom() - bdr_s - 260;
+  QRect tpms_panel(rect().right() - bdr_s - tpms_width, tpms_sp_yr - 20, tpms_width, 130);  
   p.setOpacity(1.0);
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawRoundedRect(tpms_panel, 20, 20);
