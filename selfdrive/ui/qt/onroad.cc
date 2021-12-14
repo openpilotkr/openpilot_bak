@@ -627,6 +627,7 @@ void OnroadHud::uiText(QPainter &p, int x, int y, const QString &text, int alpha
 }
 
 void OnroadHud::drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity, bool rotation, float angle) {
+  // opkr
   if (rotation) {
     p.setPen(Qt::NoPen);
     p.setBrush(bg);
