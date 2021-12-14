@@ -317,9 +317,9 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   int ui_viz_rx_center = s->fb_w/2;
   // debug
   if (s->scene.nDebugUi1 && !comma_stock_ui) {
-    configFont(p, "Open Sans", s->scene.mapbox_running?26:33, "Semibold");
-    uiText(p, 0, 1020-bdr_s+(s->scene.mapbox_running?15:0), s->scene.alertTextMsg1.c_str(), 150);
-    uiText(p, 0, 1055-bdr_s+(s->scene.mapbox_running?3:0), s->scene.alertTextMsg2.c_str(), 150);
+    configFont(p, "Open Sans", s->scene.mapbox_running?26:32, "Semibold");
+    uiText(p, 0, 1025-bdr_s+(s->scene.mapbox_running?15:0), s->scene.alertTextMsg1.c_str());
+    uiText(p, 0, 1060-bdr_s+(s->scene.mapbox_running?5:0), s->scene.alertTextMsg2.c_str());
   }
   if (s->scene.nDebugUi2 && !comma_stock_ui) {
     configFont(p, "Open Sans", s->scene.mapbox_running?26:35, "Semibold");
@@ -366,7 +366,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     int num_l = 4;
     auto lead_one = (*s->sm)["radarState"].getRadarState().getLeadOne();
     if (s->scene.longitudinal_control) {num_l = num_l + 1;}
-    QRect left_panel(rect().left() + bdr_s, bdr_s + 220, width_l, 105*num_l);  
+    QRect left_panel(rect().left() + bdr_s, bdr_s + 220, width_l, 104*num_l);  
     p.setOpacity(1.0);
     p.setPen(QPen(QColor(255, 255, 255, 80), 6));
     p.drawRoundedRect(left_panel, 20, 20);
@@ -375,9 +375,9 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     // lead drel
     if (lead_one.getStatus()) {
       if(lead_one.getDRel() < 10) {
-        debugText(p, sp_xl, sp_yl, QString::number(lead_one.getDRel(), 'f', 1) + "°C", 150, 59);
+        debugText(p, sp_xl, sp_yl, QString::number(lead_one.getDRel(), 'f', 1), 150, 58);
       } else {
-        debugText(p, sp_xl, sp_yl, QString::number(lead_one.getDRel(), 'f', 0) + "°C", 150, 59);
+        debugText(p, sp_xl, sp_yl, QString::number(lead_one.getDRel(), 'f', 0), 150, 58);
       }
     }
     debugText(p, sp_xl, sp_yl + 35, QString("REL DIST"), 150, 27);
@@ -388,9 +388,9 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     // lead spd
     sp_yl = sp_yl + j_num;
     if (lead_one.getStatus()) {
-      debugText(p, sp_xl, sp_yl, QString::number(lead_one.getVRel() * (s->scene.is_metric ? 3.6 : 2.2369363), 'f', 0) + "°C", 150, 59);
+      debugText(p, sp_xl, sp_yl, QString::number(lead_one.getVRel() * (s->scene.is_metric ? 3.6 : 2.2369363), 'f', 0), 150, 58);
     } else {
-      debugText(p, sp_xl, sp_yl, "-", 150, 59);
+      debugText(p, sp_xl, sp_yl, "-", 150, 58);
     }
     debugText(p, sp_xl, sp_yl + 35, QString("REL SPED"), 150, 27);
     p.translate(sp_xl + 90, sp_yl + 20);
@@ -399,7 +399,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.resetMatrix();
     // steer angle
     sp_yl = sp_yl + j_num;
-    debugText(p, sp_xl, sp_yl, QString::number(s->scene.angleSteers, 'f', 0), 150, 59);
+    debugText(p, sp_xl, sp_yl, QString::number(s->scene.angleSteers, 'f', 0), 150, 58);
     debugText(p, sp_xl, sp_yl + 35, QString("STER ANG"), 150, 27);
     p.translate(sp_xl + 90, sp_yl + 20);
     p.rotate(-90);
@@ -407,23 +407,19 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.resetMatrix();
     // steer ratio
     sp_yl = sp_yl + j_num;
-    debugText(p, sp_xl, sp_yl, QString::number(s->scene.steerRatio, 'f', 2), 150, 59);
+    debugText(p, sp_xl, sp_yl, QString::number(s->scene.steerRatio, 'f', 2), 150, 58);
     debugText(p, sp_xl, sp_yl + 35, QString("SteerRatio"), 150, 27);
-    p.translate(sp_xl + 90, sp_yl + 20);
-    p.rotate(-90);
-    p.drawText(0, 0, "       °");
-    p.resetMatrix();
     // cruise gap for long
     if (s->scene.longitudinal_control) {
       sp_yl = sp_yl + j_num;
       if (s->scene.controls_state.getEnabled()) {
         if (s->scene.cruise_gap == s->scene.dynamic_tr_mode) {
-          debugText(p, sp_xl, sp_yl, "AUT", 150, 59);
+          debugText(p, sp_xl, sp_yl, "AUT", 150, 58);
         } else {
-          debugText(p, sp_xl, sp_yl, QString::number(s->scene.cruise_gap, 'f', 0), 150, 59);
+          debugText(p, sp_xl, sp_yl, QString::number(s->scene.cruise_gap, 'f', 0), 150, 58);
         }
       } else {
-        debugText(p, sp_xl, sp_yl, "-", 150, 59);
+        debugText(p, sp_xl, sp_yl, "-", 150, 58);
       }
       debugText(p, sp_xl, sp_yl + 35, QString("CruiseGap"), 150, 27);
       if (s->scene.cruise_gap == s->scene.dynamic_tr_mode) {
@@ -441,14 +437,14 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     int num_r = 1;
     if (s->scene.batt_less) {num_r = num_r + 1;} else {num_r = num_r + 2;}
     if (s->scene.gpsAccuracyUblox != 0.00) {num_r = num_r + 2;}
-    QRect right_panel(rect().right() - bdr_s - width_r, bdr_s + 200, width_r, 105*num_r);  
+    QRect right_panel(rect().right() - bdr_s - width_r, bdr_s + 200, width_r, 104*num_r);  
     p.setOpacity(1.0);
     p.setPen(QPen(QColor(255, 255, 255, 80), 6));
     p.drawRoundedRect(right_panel, 20, 20);
     p.setPen(QColor(255, 255, 255, 200));
     p.setRenderHint(QPainter::TextAntialiasing);
     // cpu temp
-    debugText(p, sp_xr, sp_yr, QString::number(s->scene.cpuTemp, 'f', 0) + "°C", 150, 59);
+    debugText(p, sp_xr, sp_yr, QString::number(s->scene.cpuTemp, 'f', 0) + "°C", 150, 58);
     debugText(p, sp_xr, sp_yr + 35, QString("CPU TEMP"), 150, 27);
     p.translate(sp_xr + 90, sp_yr + 20);
     p.rotate(-90);
@@ -457,7 +453,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     if (s->scene.batt_less) {
       // sys temp
       sp_yr = sp_yr + j_num;
-      debugText(p, sp_xr, sp_yr, QString::number(s->scene.ambientTemp, 'f', 0) + "°C", 150, 59);
+      debugText(p, sp_xr, sp_yr, QString::number(s->scene.ambientTemp, 'f', 0) + "°C", 150, 58);
       debugText(p, sp_xr, sp_yr + 35, QString("SYS TEMP"), 150, 27);
       p.translate(sp_xr + 90, sp_yr + 20);
       p.rotate(-90);
@@ -466,7 +462,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     } else {
       // bat temp
       sp_yr = sp_yr + j_num;
-      debugText(p, sp_xr, sp_yr, QString::number(s->scene.batTemp, 'f', 0) + "°C", 150, 59);
+      debugText(p, sp_xr, sp_yr, QString::number(s->scene.batTemp, 'f', 0) + "°C", 150, 58);
       debugText(p, sp_xr, sp_yr + 35, QString("BAT TEMP"), 150, 27);
       p.translate(sp_xr + 90, sp_yr + 20);
       p.rotate(-90);
@@ -474,22 +470,22 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.resetMatrix();
       // bat lvl
       sp_yr = sp_yr + j_num;
-      debugText(p, sp_xr, sp_yr, QString::number(s->scene.batPercent, 'f', 0) + "%", 150, 59);
+      debugText(p, sp_xr, sp_yr, QString::number(s->scene.batPercent, 'f', 0) + "%", 150, 58);
       debugText(p, sp_xr, sp_yr + 35, QString("BAT LVL"), 150, 27);
       p.translate(sp_xr + 90, sp_yr + 20);
       p.rotate(-90);
-      p.drawText(0, 0, s->scene.deviceState.getBatteryStatus() == "Charging" ? "  +++" : "  ---");
+      p.drawText(0, 0, s->scene.deviceState.getBatteryStatus() == "Charging" ? "   ++" : "   --");
       p.resetMatrix();
     }
     // Ublox GPS accuracy
     if (s->scene.gpsAccuracyUblox != 0.00) {
       sp_yr = sp_yr + j_num;
       if (s->scene.gpsAccuracyUblox > 99 || s->scene.gpsAccuracyUblox == 0) {
-        debugText(p, sp_xr, sp_yr, "None", 150, 59);
+        debugText(p, sp_xr, sp_yr, "None", 150, 58);
       } else if (s->scene.gpsAccuracyUblox > 9.99) {
-        debugText(p, sp_xr, sp_yr, QString::number(s->scene.gpsAccuracyUblox, 'f', 1), 150, 59);
+        debugText(p, sp_xr, sp_yr, QString::number(s->scene.gpsAccuracyUblox, 'f', 1), 150, 58);
       } else {
-        debugText(p, sp_xr, sp_yr, QString::number(s->scene.gpsAccuracyUblox, 'f', 2), 150, 59);
+        debugText(p, sp_xr, sp_yr, QString::number(s->scene.gpsAccuracyUblox, 'f', 2), 150, 58);
       }
       debugText(p, sp_xr, sp_yr + 35, QString("GPS PREC"), 150, 27);
       p.translate(sp_xr + 90, sp_yr + 20);
@@ -498,7 +494,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.resetMatrix();
       // altitude
       sp_yr = sp_yr + j_num;
-      debugText(p, sp_xr, sp_yr, QString::number(s->scene.altitudeUblox, 'f', 0) + "%", 150, 59);
+      debugText(p, sp_xr, sp_yr, QString::number(s->scene.altitudeUblox, 'f', 0) + "%", 150, 58);
       debugText(p, sp_xr, sp_yr + 35, QString("ALTITUDE"), 150, 27);
       p.translate(sp_xr + 90, sp_yr + 20);
       p.rotate(-90);
@@ -510,8 +506,8 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // opkr tpms
   int tpms_width = 180;
   int tpms_sp_xr = rect().right() - bdr_s - tpms_width / 2;
-  int tpms_sp_yr = rect().bottom() - bdr_s - 260;
-  QRect tpms_panel(rect().right() - bdr_s - tpms_width, tpms_sp_yr - 10, tpms_width, 140);  
+  int tpms_sp_yr = rect().bottom() - bdr_s - 270;
+  QRect tpms_panel(rect().right() - bdr_s - tpms_width, tpms_sp_yr - 10, tpms_width, 130);  
   p.setOpacity(1.0);
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawRoundedRect(tpms_panel, 20, 20);
@@ -532,17 +528,17 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   if ((maxv - minv) > 3) {
     p.setBrush(QColor(255, 0, 0, 150));
   }
-  debugText(p, tpms_sp_xr, tpms_sp_yr+10, "TPMS", 150, 35);
+  debugText(p, tpms_sp_xr, tpms_sp_yr+10, "TPMS", 150, 33);
   if (s->scene.tpmsUnit != 0) {
-    debugText(p, tpms_sp_xr-50, tpms_sp_yr+30, QString::number(s->scene.tpmsPressureFl, 'f', 1), 150, 40);
-    debugText(p, tpms_sp_xr+50, tpms_sp_yr+30, QString::number(s->scene.tpmsPressureFr, 'f', 1), 150, 40);
-    debugText(p, tpms_sp_xr-50, tpms_sp_yr+90, QString::number(s->scene.tpmsPressureRl, 'f', 1), 150, 40);
-    debugText(p, tpms_sp_xr+50, tpms_sp_yr+90, QString::number(s->scene.tpmsPressureRr, 'f', 1), 150, 40);
+    debugText(p, tpms_sp_xr-48, tpms_sp_yr+40, QString::number(s->scene.tpmsPressureFl, 'f', 1), 150, 39);
+    debugText(p, tpms_sp_xr+48, tpms_sp_yr+40, QString::number(s->scene.tpmsPressureFr, 'f', 1), 150, 39);
+    debugText(p, tpms_sp_xr-48, tpms_sp_yr+80, QString::number(s->scene.tpmsPressureRl, 'f', 1), 150, 39);
+    debugText(p, tpms_sp_xr+48, tpms_sp_yr+80, QString::number(s->scene.tpmsPressureRr, 'f', 1), 150, 39);
   } else {
-    debugText(p, tpms_sp_xr-50, tpms_sp_yr+30, QString::number(s->scene.tpmsPressureFl, 'f', 0), 150, 45);
-    debugText(p, tpms_sp_xr+50, tpms_sp_yr+30, QString::number(s->scene.tpmsPressureFr, 'f', 0), 150, 45);
-    debugText(p, tpms_sp_xr-50, tpms_sp_yr+90, QString::number(s->scene.tpmsPressureRl, 'f', 0), 150, 45);
-    debugText(p, tpms_sp_xr+50, tpms_sp_yr+90, QString::number(s->scene.tpmsPressureRr, 'f', 0), 150, 45);
+    debugText(p, tpms_sp_xr-50, tpms_sp_yr+40, QString::number(s->scene.tpmsPressureFl, 'f', 0), 150, 45);
+    debugText(p, tpms_sp_xr+50, tpms_sp_yr+40, QString::number(s->scene.tpmsPressureFr, 'f', 0), 150, 45);
+    debugText(p, tpms_sp_xr-50, tpms_sp_yr+80, QString::number(s->scene.tpmsPressureRl, 'f', 0), 150, 45);
+    debugText(p, tpms_sp_xr+50, tpms_sp_yr+80, QString::number(s->scene.tpmsPressureRr, 'f', 0), 150, 45);
   }
 }
 
