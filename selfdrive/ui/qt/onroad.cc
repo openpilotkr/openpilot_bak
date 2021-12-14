@@ -230,6 +230,11 @@ void OnroadHud::updateState(const UIState &s) {
   QString cruisespeed_str = QString::number(std::nearbyint(cruisespeed));
   float cur_speed = std::max(0.0, sm["carState"].getCarState().getVEgo() * (s.scene.is_metric ? MS_TO_KPH : MS_TO_MPH));
 
+  auto lead_one = (*s->sm)["radarState"].getRadarState().getLeadOne();
+  float drel = lead_one.getDRel();
+  float vrel = lead_one.getVRel();
+  bool leadstat = lead_one.getStatus();
+
   setProperty("is_cruise_set", cruise_set);
   setProperty("speed", QString::number(std::nearbyint(cur_speed)));
   setProperty("maxSpeed", maxspeed_str);
@@ -239,6 +244,10 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("status", s.status);
   setProperty("is_over_sl", over_sl);
   setProperty("comma_stock_ui", comma_ui);
+  setProperty("lead_stat", leadstat);
+  setProperty("dist_rel", drel);
+  setProperty("vel_rel", vrel);
+  setProperty("ang_str", s->scene.angleSteers);
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
@@ -364,7 +373,6 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     int sp_xl = rect().left() + bdr_s + width_l / 2 - 10;
     int sp_yl = bdr_s + 260;
     int num_l = 4;
-    auto lead_one = (*s->sm)["radarState"].getRadarState().getLeadOne();
     if (s->scene.longitudinal_control) {num_l = num_l + 1;}
     QRect left_panel(rect().left() + bdr_s, bdr_s + 200, width_l, 104*num_l);  
     p.setOpacity(1.0);
@@ -373,16 +381,16 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.setPen(QColor(255, 255, 255, 200));
     p.setRenderHint(QPainter::TextAntialiasing);
     // lead drel
-    if (lead_one.getStatus()) {
-      if (int(lead_one.getDRel()) < 15) {
+    if (lead_stat) {
+      if (int(dist_rel) < 15) {
         p.setPen(QColor(255, 175, 3, 200));
-      } else if (lead_one.getDRel() < 5) {
+      } else if (dist_rel < 5) {
         p.setPen(QColor(201, 34, 49, 200));
       }
-      if(lead_one.getDRel() < 10) {
-        debugText(p, sp_xl, sp_yl, QString::number(lead_one.getDRel(), 'f', 1), 150, 58);
+      if(dist_rel < 10) {
+        debugText(p, sp_xl, sp_yl, QString::number(dist_rel, 'f', 1), 150, 58);
       } else {
-        debugText(p, sp_xl, sp_yl, QString::number(lead_one.getDRel(), 'f', 0), 150, 58);
+        debugText(p, sp_xl, sp_yl, QString::number(dist_rel, 'f', 0), 150, 58);
       }
     }
     p.setPen(QColor(255, 255, 255, 200));
@@ -393,13 +401,13 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.resetMatrix();
     // lead spd
     sp_yl = sp_yl + j_num;
-    if (int(lead_one.getVRel()) < 0) {
-      p.setPen(QColor(255, 188, 3, 200));
-    } else if (int(lead_one.getVRel()) < -5) {
+    if (int(vel_rel) < -5) {
       p.setPen(QColor(255, 0, 0, 200));
+    } else if (int(vel_rel) < 0) {
+      p.setPen(QColor(255, 188, 3, 200));
     }
-    if (lead_one.getStatus()) {
-      debugText(p, sp_xl, sp_yl, QString::number(lead_one.getVRel() * (s->scene.is_metric ? 3.6 : 2.2369363), 'f', 0), 150, 58);
+    if (lead_stat) {
+      debugText(p, sp_xl, sp_yl, QString::number(vel_rel * (s->scene.is_metric ? 3.6 : 2.2369363), 'f', 0), 150, 58);
     } else {
       debugText(p, sp_xl, sp_yl, "-", 150, 58);
     }
@@ -412,12 +420,12 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     // steer angle
     sp_yl = sp_yl + j_num;
     p.setPen(QColor(0, 255, 0, 200));
-    if ((int(s->scene.angleSteers) < -30) || (int(s->scene.angleSteers) > 30)) {
-      p.setPen(QColor(255, 175, 3, 200));
-    } else if ((int(s->scene.angleSteers) < -50) || (int(s->scene.angleSteers) > 50)) {
+    if ((int(ang_str) < -50) || (int(ang_str) > 50)) {
       p.setPen(QColor(201, 34, 49, 200));
+    } else if ((int(ang_str) < -30) || (int(ang_str) > 30)) {
+      p.setPen(QColor(255, 175, 3, 200));
     }
-    debugText(p, sp_xl, sp_yl, QString::number(s->scene.angleSteers, 'f', 0), 150, 58);
+    debugText(p, sp_xl, sp_yl, QString::number(ang_str, 'f', 0), 150, 58);
     p.setPen(QColor(255, 255, 255, 200));
     debugText(p, sp_xl, sp_yl + 35, QString("STER ANG"), 150, 27);
     p.translate(sp_xl + 90, sp_yl + 20);

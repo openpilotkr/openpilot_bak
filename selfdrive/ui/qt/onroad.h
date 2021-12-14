@@ -22,6 +22,10 @@ class OnroadHud : public QWidget {
   Q_PROPERTY(int status MEMBER status NOTIFY valueChanged);
   Q_PROPERTY(bool is_over_sl MEMBER is_over_sl NOTIFY valueChanged);
   Q_PROPERTY(bool comma_stock_ui MEMBER comma_stock_ui NOTIFY valueChanged);
+  Q_PROPERTY(bool lead_stat MEMBER lead_stat NOTIFY valueChanged);
+  Q_PROPERTY(float dist_rel MEMBER dist_rel NOTIFY valueChanged);
+  Q_PROPERTY(float vel_rel MEMBER vel_rel NOTIFY valueChanged);
+  Q_PROPERTY(float ang_str MEMBER ang_str NOTIFY valueChanged);
 
 public:
   explicit OnroadHud(QWidget *parent);
@@ -49,6 +53,10 @@ private:
   int status = STATUS_DISENGAGED;
   bool is_over_sl = false;
   bool comma_stock_ui = false;
+  bool lead_stat = false;
+  float dist_rel = 0;
+  float vel_rel = 0;
+  float ang_str = 0;
 
 signals:
   void valueChanged();
