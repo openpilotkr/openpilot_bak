@@ -510,8 +510,8 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // opkr tpms
   int tpms_width = 180;
   int tpms_sp_xr = rect().right() - bdr_s - tpms_width / 2;
-  int tpms_sp_yr = rect().bottom() - bdr_s - 250;
-  QRect tpms_panel(rect().right() - bdr_s - tpms_width, tpms_sp_yr - 10, tpms_width, 110);  
+  int tpms_sp_yr = rect().bottom() - bdr_s - 260;
+  QRect tpms_panel(rect().right() - bdr_s - tpms_width, tpms_sp_yr - 10, tpms_width, 140);  
   p.setOpacity(1.0);
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawRoundedRect(tpms_panel, 20, 20);
@@ -532,17 +532,17 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   if ((maxv - minv) > 3) {
     p.setBrush(QColor(255, 0, 0, 150));
   }
-  debugText(p, tpms_sp_xr, tpms_sp_yr+10, "TPMS", 150, 50);
+  debugText(p, tpms_sp_xr, tpms_sp_yr+10, "TPMS", 150, 35);
   if (s->scene.tpmsUnit != 0) {
-    debugText(p, tpms_sp_xr-50, tpms_sp_yr+10, QString::number(s->scene.tpmsPressureFl, 'f', 1), 150, 35);
-    debugText(p, tpms_sp_xr+50, tpms_sp_yr+10, QString::number(s->scene.tpmsPressureFr, 'f', 1), 150, 35);
-    debugText(p, tpms_sp_xr-50, tpms_sp_yr+60, QString::number(s->scene.tpmsPressureRl, 'f', 1), 150, 35);
-    debugText(p, tpms_sp_xr+50, tpms_sp_yr+60, QString::number(s->scene.tpmsPressureRr, 'f', 1), 150, 35);
+    debugText(p, tpms_sp_xr-50, tpms_sp_yr+30, QString::number(s->scene.tpmsPressureFl, 'f', 1), 150, 40);
+    debugText(p, tpms_sp_xr+50, tpms_sp_yr+30, QString::number(s->scene.tpmsPressureFr, 'f', 1), 150, 40);
+    debugText(p, tpms_sp_xr-50, tpms_sp_yr+90, QString::number(s->scene.tpmsPressureRl, 'f', 1), 150, 40);
+    debugText(p, tpms_sp_xr+50, tpms_sp_yr+90, QString::number(s->scene.tpmsPressureRr, 'f', 1), 150, 40);
   } else {
-    debugText(p, tpms_sp_xr-50, tpms_sp_yr+10, QString::number(s->scene.tpmsPressureFl, 'f', 0), 150, 40);
-    debugText(p, tpms_sp_xr+50, tpms_sp_yr+10, QString::number(s->scene.tpmsPressureFr, 'f', 0), 150, 40);
-    debugText(p, tpms_sp_xr-50, tpms_sp_yr+60, QString::number(s->scene.tpmsPressureRl, 'f', 0), 150, 40);
-    debugText(p, tpms_sp_xr+50, tpms_sp_yr+60, QString::number(s->scene.tpmsPressureRr, 'f', 0), 150, 40);
+    debugText(p, tpms_sp_xr-50, tpms_sp_yr+30, QString::number(s->scene.tpmsPressureFl, 'f', 0), 150, 45);
+    debugText(p, tpms_sp_xr+50, tpms_sp_yr+30, QString::number(s->scene.tpmsPressureFr, 'f', 0), 150, 45);
+    debugText(p, tpms_sp_xr-50, tpms_sp_yr+90, QString::number(s->scene.tpmsPressureRl, 'f', 0), 150, 45);
+    debugText(p, tpms_sp_xr+50, tpms_sp_yr+90, QString::number(s->scene.tpmsPressureRr, 'f', 0), 150, 45);
   }
 }
 
