@@ -259,7 +259,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   p.fillRect(0, 0, width(), header_h, bg);
 
   // max speed
-  QRect rc(bdr_s, bdr_s, 184, 202);
+  QRect rc(bdr_s, rect().bottom() - bdr_s - 202, 184, 202);
   p.setPen(QPen(QColor(0xff, 0xff, 0xff, 100), 10));
   if (is_over_sl) {
     p.setBrush(QColor(218, 111, 37, 150));
@@ -304,7 +304,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
 
   // dm icon
   if (!hideDM) {
-    drawIcon(p, radius / 2 + bdr_s, rect().bottom() - footer_h / 2 - bdr_s*2,
+    drawIcon(p, radius / 2 + bdr_s, radius / 2 + bdr_s,
              dm_img, s->scene.monitoring_mode ? QColor(10, 120, 20, 70) : QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
   }
 
