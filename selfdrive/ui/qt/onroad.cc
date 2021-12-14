@@ -633,12 +633,12 @@ void OnroadHud::drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, flo
     p.drawEllipse(x - radius / 2, y - radius / 2, radius, radius);
     p.setOpacity(opacity);
 
-    p.setRenderHint(QPainter::Antialiasing);
-    p.translate(width()/2, height()/2);
     p.save();
+    p.setRenderHint(QPainter::Antialiasing);
+    p.translate(img.width()/2, img.height()/2);
     p.rotate(angle);
     QRect r = img.rect();
-    r.moveCenter(QPoint(0,0));
+    //r.moveCenter(QPoint(0,0));
     p.drawPixmap(r, img);
     p.restore();
     //p.translate(x, y);
