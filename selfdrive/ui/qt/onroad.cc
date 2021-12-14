@@ -361,11 +361,11 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // opkr debug info(left panel)
   int width_l = 180;
   int sp_xl = rect().left() + bdr_s + width_l / 2 - 10;
-  int sp_yl = bdr_s + 260;
+  int sp_yl = bdr_s + 280;
   int num_l = 4;
   auto lead_one = (*s->sm)["radarState"].getRadarState().getLeadOne();
   if (s->scene.longitudinal_control) {num_l = num_l + 1;}
-  QRect left_panel(rect().left() + bdr_s, bdr_s + 210, width_l, 105*num_l);  
+  QRect left_panel(rect().left() + bdr_s, bdr_s + 220, width_l, 105*num_l);  
   p.setOpacity(1.0);
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawRoundedRect(left_panel, 20, 20);
