@@ -79,6 +79,17 @@ private:
   QFileSystemWatcher *fs_watch;
 };
 
+class C2NetworkPanel: public QWidget {
+  Q_OBJECT
+public:
+  explicit C2NetworkPanel(QWidget* parent = nullptr);
+
+private:
+  void showEvent(QShowEvent *event) override;
+  QString getIPAddress();
+  LabelControl *ipaddress;
+};
+
 class UserPanel : public QFrame {
   Q_OBJECT
 
