@@ -268,34 +268,36 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   p.fillRect(0, 0, width(), header_h, bg);
 
   // max speed
-  QRect rc(bdr_s, rect().bottom() - bdr_s - 202, 184, 202);
-  p.setPen(QPen(QColor(0xff, 0xff, 0xff, 100), 10));
-  if (is_over_sl) {
-    p.setBrush(QColor(218, 111, 37, 150));
-  } else if (s->scene.limitSpeedCamera > 19 && !is_over_sl) {
-    p.setBrush(QColor(0, 120, 0, 150));
-  } else if (s->scene.cruiseAccStatus) {
-    p.setBrush(QColor(0, 100, 200, 150));
-  } else if (s->scene.controls_state.getEnabled()) {
-    p.setBrush(QColor(255, 255, 255, 75));
-  } else {
-    p.setBrush(QColor(0, 0, 0, 100));
-  }
-  p.drawRoundedRect(rc, 20, 20);
-  p.setPen(Qt::NoPen);
-  if (cruiseSpeed >= 20 && s->scene.controls_state.getEnabled()) {
-    configFont(p, "Open Sans", 70, "Bold");
-    drawText(p, rc.center().x(), 90, maxSpeed, 255);
-  } else {
-    configFont(p, "Open Sans", 70, "SemiBold");
-    drawText(p, rc.center().x(), 90, "-", is_cruise_set ? 200 : 100);
-  }
-  if (is_cruise_set) {
-    configFont(p, "Open Sans", 90, "Bold");
-    drawText(p, rc.center().x(), 185, cruiseSpeed, 255);
-  } else {
-    configFont(p, "Open Sans", 90, "SemiBold");
-    drawText(p, rc.center().x(), 185, "-", 100);
+  if (!hideDM) {
+    QRect rc(bdr_s, rect().bottom() - bdr_s - 202, 184, 202);
+    p.setPen(QPen(QColor(0xff, 0xff, 0xff, 100), 10));
+    if (is_over_sl) {
+      p.setBrush(QColor(218, 111, 37, 150));
+    } else if (s->scene.limitSpeedCamera > 19 && !is_over_sl) {
+      p.setBrush(QColor(0, 120, 0, 150));
+    } else if (s->scene.cruiseAccStatus) {
+      p.setBrush(QColor(0, 100, 200, 150));
+    } else if (s->scene.controls_state.getEnabled()) {
+      p.setBrush(QColor(255, 255, 255, 75));
+    } else {
+      p.setBrush(QColor(0, 0, 0, 100));
+    }
+    p.drawRoundedRect(rc, 20, 20);
+    p.setPen(Qt::NoPen);
+    if (cruiseSpeed >= 20 && s->scene.controls_state.getEnabled()) {
+      configFont(p, "Open Sans", 70, "Bold");
+      drawText(p, rc.center().x(), rect().bottom() - bdr_s - 127, maxSpeed, 255);
+    } else {
+      configFont(p, "Open Sans", 70, "SemiBold");
+      drawText(p, rc.center().x(), rect().bottom() - bdr_s - 127, "-", is_cruise_set ? 200 : 100);
+    }
+    if (is_cruise_set) {
+      configFont(p, "Open Sans", 90, "Bold");
+      drawText(p, rc.center().x(), rect().bottom() - bdr_s - 32, cruiseSpeed, 255);
+    } else {
+      configFont(p, "Open Sans", 90, "SemiBold");
+      drawText(p, rc.center().x(), rect().bottom() - bdr_s - 32, "-", 100);
+    }
   }
 
   // current speed
@@ -312,7 +314,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   }
 
   // dm icon
-  if (!hideDM) {
+  if (true) {
     drawIcon(p, radius / 2 + bdr_s, radius / 2 + bdr_s,
              dm_img, s->scene.monitoring_mode ? QColor(10, 120, 20, 70) : QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
   }
