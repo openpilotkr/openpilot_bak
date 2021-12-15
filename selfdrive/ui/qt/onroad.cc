@@ -181,7 +181,7 @@ void OnroadAlerts::paintEvent(QPaintEvent *event) {
   // text
   const QPoint c = r.center();
   p.setPen(QColor(0xff, 0xff, 0xff));
-  p.setRenderHint(QPainter::TextAntialiasing);
+  //p.setRenderHint(QPainter::TextAntialiasing);
   if (alert.size == cereal::ControlsState::AlertSize::SMALL) {
     configFont(p, "Open Sans", 74, "SemiBold");
     p.drawText(r, Qt::AlignCenter, alert.text1);
@@ -259,7 +259,7 @@ void OnroadHud::updateState(const UIState &s) {
 void OnroadHud::paintEvent(QPaintEvent *event) {
   UIState *s = &QUIState::ui_state;
   QPainter p(this);
-  p.setRenderHint(QPainter::Antialiasing);
+  //p.setRenderHint(QPainter::Antialiasing);
 
   // Header gradient
   QLinearGradient bg(0, header_h - (header_h / 2.5), 0, header_h);
@@ -319,7 +319,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
 
   p.setBrush(QColor(0, 0, 0, 0));
   p.setPen(QColor(255, 255, 255, 150));
-  p.setRenderHint(QPainter::TextAntialiasing);
+  //p.setRenderHint(QPainter::TextAntialiasing);
   p.setOpacity(0.7);
   int ui_viz_rx = bdr_s + 190;
   int ui_viz_ry = bdr_s + 100;
@@ -327,8 +327,8 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // debug
   if (s->scene.nDebugUi1 && !comma_stock_ui) {
     configFont(p, "Open Sans", s->scene.mapbox_running?20:25, "Semibold");
-    uiText(p, 190, 1025-bdr_s+(s->scene.mapbox_running?15:0), s->scene.alertTextMsg1.c_str());
-    uiText(p, 190, 1060-bdr_s+(s->scene.mapbox_running?5:0), s->scene.alertTextMsg2.c_str());
+    uiText(p, 205, 1030-bdr_s+(s->scene.mapbox_running?15:0), s->scene.alertTextMsg1.c_str());
+    uiText(p, 205, 1060-bdr_s+(s->scene.mapbox_running?5:0), s->scene.alertTextMsg2.c_str());
   }
   if (s->scene.nDebugUi2 && !comma_stock_ui) {
     configFont(p, "Open Sans", s->scene.mapbox_running?26:35, "Semibold");
@@ -379,15 +379,15 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.setPen(QPen(QColor(255, 255, 255, 80), 6));
     p.drawRoundedRect(left_panel, 20, 20);
     p.setPen(QColor(255, 255, 255, 200));
-    p.setRenderHint(QPainter::TextAntialiasing);
+    //p.setRenderHint(QPainter::TextAntialiasing);
     // lead drel
     if (lead_stat) {
-      if (int(dist_rel) < 15) {
-        p.setPen(QColor(255, 175, 3, 200));
-      } else if (dist_rel < 5) {
+      if (dist_rel < 5) {
         p.setPen(QColor(201, 34, 49, 200));
+      } else if (int(dist_rel) < 15) {
+        p.setPen(QColor(255, 175, 3, 200));
       }
-      if(dist_rel < 10) {
+      if (dist_rel < 10) {
         debugText(p, sp_xl, sp_yl, QString::number(dist_rel, 'f', 1), 150, 58);
       } else {
         debugText(p, sp_xl, sp_yl, QString::number(dist_rel, 'f', 0), 150, 58);
@@ -402,7 +402,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     // lead spd
     sp_yl = sp_yl + j_num;
     if (int(vel_rel) < -5) {
-      p.setPen(QColor(255, 0, 0, 200));
+      p.setPen(QColor(201, 34, 49, 200));
     } else if (int(vel_rel) < 0) {
       p.setPen(QColor(255, 188, 3, 200));
     }
@@ -469,7 +469,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.setPen(QPen(QColor(255, 255, 255, 80), 6));
     p.drawRoundedRect(right_panel, 20, 20);
     p.setPen(QColor(255, 255, 255, 200));
-    p.setRenderHint(QPainter::TextAntialiasing);
+    //p.setRenderHint(QPainter::TextAntialiasing);
     // cpu temp
     if (s->scene.cpuTemp > 85) {
       p.setPen(QColor(255, 0, 0, 200));
@@ -496,7 +496,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       debugText(p, sp_xr, sp_yr + 35, QString("SYS TEMP"), 150, 27);
       p.translate(sp_xr + 90, sp_yr + 20);
       p.rotate(-90);
-      p.drawText(0, 0, QString::number(s->scene.fanSpeed/1000, 'f', 0) + "%");
+      p.drawText(0, 0, QString::number(s->scene.fanSpeed/1000, 'f', 0));
       p.resetMatrix();
     } else {
       // bat temp
@@ -545,7 +545,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.resetMatrix();
       // altitude
       sp_yr = sp_yr + j_num;
-      debugText(p, sp_xr, sp_yr, QString::number(s->scene.altitudeUblox, 'f', 0) + "%", 150, 58);
+      debugText(p, sp_xr, sp_yr, QString::number(s->scene.altitudeUblox, 'f', 0), 150, 58);
       debugText(p, sp_xr, sp_yr + 35, QString("ALTITUDE"), 150, 27);
       p.translate(sp_xr + 90, sp_yr + 20);
       p.rotate(-90);
@@ -564,7 +564,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.setPen(QPen(QColor(255, 255, 255, 80), 6));
     p.drawRoundedRect(tpms_panel, 20, 20);
     p.setPen(QColor(255, 255, 255, 200));
-    p.setRenderHint(QPainter::TextAntialiasing);
+    //p.setRenderHint(QPainter::TextAntialiasing);
     float maxv = 0;
     float minv = 300;
 
@@ -582,15 +582,15 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     }
     debugText(p, tpms_sp_xr, tpms_sp_yr+15, "TPMS", 150, 33);
     if (s->scene.tpmsUnit != 0) {
-      debugText(p, tpms_sp_xr-48, tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFl, 'f', 1), 150, 39);
-      debugText(p, tpms_sp_xr+48, tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFr, 'f', 1), 150, 39);
-      debugText(p, tpms_sp_xr-48, tpms_sp_yr+100, QString::number(s->scene.tpmsPressureRl, 'f', 1), 150, 39);
-      debugText(p, tpms_sp_xr+48, tpms_sp_yr+100, QString::number(s->scene.tpmsPressureRr, 'f', 1), 150, 39);
+      debugText(p, tpms_sp_xr-46, tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFl, 'f', 1), 150, 39);
+      debugText(p, tpms_sp_xr+46, tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFr, 'f', 1), 150, 39);
+      debugText(p, tpms_sp_xr-46, tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRl, 'f', 1), 150, 39);
+      debugText(p, tpms_sp_xr+46, tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRr, 'f', 1), 150, 39);
     } else {
       debugText(p, tpms_sp_xr-50, tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFl, 'f', 0), 150, 45);
       debugText(p, tpms_sp_xr+50, tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFr, 'f', 0), 150, 45);
-      debugText(p, tpms_sp_xr-50, tpms_sp_yr+100, QString::number(s->scene.tpmsPressureRl, 'f', 0), 150, 45);
-      debugText(p, tpms_sp_xr+50, tpms_sp_yr+100, QString::number(s->scene.tpmsPressureRr, 'f', 0), 150, 45);
+      debugText(p, tpms_sp_xr-50, tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRl, 'f', 0), 150, 45);
+      debugText(p, tpms_sp_xr+50, tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRr, 'f', 0), 150, 45);
     }
   }
 }
@@ -634,9 +634,8 @@ void OnroadHud::drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, flo
     p.drawEllipse(x - radius / 2, y - radius / 2, radius, radius);
     p.setOpacity(opacity);
     p.save();
-    p.setRenderHint(QPainter::Antialiasing);
     p.translate(x, y);
-    p.rotate(angle);
+    p.rotate(-angle);
     QRect r = img.rect();
     r.moveCenter(QPoint(0,0));
     p.drawPixmap(r, img);
@@ -772,9 +771,9 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::RadarState::LeadData::
     painter.setBrush(redColor(fillAlpha));
     painter.drawPolygon(chevron, std::size(chevron));
     painter.setPen(QColor(0xff, 0xff, 0xff));
-    painter.setRenderHint(QPainter::TextAntialiasing);
+    //painter.setRenderHint(QPainter::TextAntialiasing);
     configFont(painter, "Open Sans", 35, "SemiBold");
-    painter.drawText(QRect(x - (sz * 1.25), y, 2 * (sz * 1.25), sz), Qt::AlignCenter, QString("R")); // opkr
+    painter.drawText(QRect(x - (sz * 1.25), y, 2 * (sz * 1.25), sz * 1.25), Qt::AlignCenter, QString("R")); // opkr
   } else {
     QPointF glow[] = {{x + (sz * 1.35) + g_xo, y + sz + g_yo}, {x, y - g_xo}, {x - (sz * 1.35) - g_xo, y + sz + g_yo}};
     painter.setBrush(QColor(0, 255, 0, 255));
@@ -784,10 +783,10 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::RadarState::LeadData::
     QPointF chevron[] = {{x + (sz * 1.25), y + sz}, {x, y}, {x - (sz * 1.25), y + sz}};
     painter.setBrush(greenColor(fillAlpha));
     painter.drawPolygon(chevron, std::size(chevron));
-    painter.setPen(QColor(0xff, 0xff, 0xff));
-    painter.setRenderHint(QPainter::TextAntialiasing);
+    painter.setPen(QColor(0x0, 0x0, 0x0));
+    //painter.setRenderHint(QPainter::TextAntialiasing);
     configFont(painter, "Open Sans", 35, "SemiBold");
-    painter.drawText(QRect(x - (sz * 1.25), y, 2 * (sz * 1.25), sz), Qt::AlignCenter, QString("V")); // opkr
+    painter.drawText(QRect(x - (sz * 1.25), y, 2 * (sz * 1.25), sz * 1.25), Qt::AlignCenter, QString("V")); // opkr
   }
 }
 
@@ -797,7 +796,7 @@ void NvgWindow::paintGL() {
   UIState *s = &QUIState::ui_state;
   if (s->scene.world_objects_visible) {
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+    //painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::NoPen);
 
     drawLaneLines(painter, s->scene);
