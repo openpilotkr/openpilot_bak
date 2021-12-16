@@ -77,7 +77,7 @@ OpkrMonitorNormalEyesThreshold:45
 OpkrMonitorBlinkThreshold:35
 CruiseGap1:10
 CruiseGap2:12
-CruiseGap3:14
+CruiseGap3:145
 CruiseGap4:16
 DynamicTR:2
 LCTimingFactorUD:1
