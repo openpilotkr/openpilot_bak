@@ -177,6 +177,7 @@ def manager_init():
     ("CurvDecelOption", "1"),
     ("FCA11Message", "0"),
     ("StandstillResumeAlt", "0"),
+    ("MapboxEnabled", "0"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))
@@ -252,6 +253,9 @@ def manager_init():
                    device=HARDWARE.get_device_type())
 
   os.system("/data/openpilot/selfdrive/assets/addon/script/gitcommit.sh")
+
+  if params.get_bool("MapboxEnabled"):
+    os.environ["MAPBOX"] = "1"
 
 def manager_prepare():
   for p in managed_processes.values():
