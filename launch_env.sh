@@ -19,3 +19,10 @@ if [ -z "$PASSIVE" ]; then
 fi
 
 export STAGING_ROOT="/data/safe_staging"
+
+if [ -f "/data/params/d/MapboxEnabled" ]; then
+    GET_MAPBOX_STAT=$(cat /data/params/d/MapboxEnabled)
+    if [ "$GET_MAPBOX_STAT" == "1" ]; then
+        export MAPBOX="1"
+    fi
+fi
