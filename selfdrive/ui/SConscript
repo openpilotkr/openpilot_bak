@@ -1,5 +1,4 @@
 import os
-map_box = Environment(ENV = {'MAPBOX' : os.environ['MAPBOX']})
 Import('qt_env', 'arch', 'common', 'messaging', 'gpucommon', 'visionipc',
        'cereal', 'transformations')
 
@@ -29,8 +28,7 @@ if arch != 'aarch64':
   widgets_src += ["qt/offroad/networking.cc", "qt/offroad/wifiManager.cc"]
 
 qt_env['CPPDEFINES'] = []
-
-if map_box:
+if arch == 'aarch64':
   base_libs += ['qmapboxgl']
   widgets_src += ["qt/maps/map_helpers.cc", "qt/maps/map_settings.cc", "qt/maps/map.cc"]
   qt_env['CPPDEFINES'] += ["ENABLE_MAPS"]

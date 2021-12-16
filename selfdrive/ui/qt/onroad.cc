@@ -94,7 +94,7 @@ void OnroadWindow::offroadTransition(bool offroad) {
 #ifdef ENABLE_MAPS
   if (!offroad) {
     QString token = QString::fromStdString(Params().get("dp_mapbox_token_sk"));
-    if (map == nullptr && !token.isEmpty()) {
+    if (map == nullptr && !token.isEmpty() && Params().getBool("MapboxEnabled")) {
       QMapboxGLSettings settings;
 
       // // Valid for 4 weeks since we can't swap tokens on the fly
