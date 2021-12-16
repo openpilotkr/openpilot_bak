@@ -7,6 +7,14 @@ GET_PROP_ATZ=$(getprop persist.sys.timezone)
 if [ -f "/data/params/d/OPKRTimeZone" ]; then
     GET_PROP_STZ=$(cat /data/params/d/OPKRTimeZone)
 fi
+if [ -f "/data/params/d/MapboxEnabled" ]; then
+    GET_MAPBOX_STAT=$(cat /data/params/d/MapboxEnabled)
+    if [ "$GET_MAPBOX_STAT" == "1" ]; then
+        touch /data/mapbox_enabled
+    else
+        rm -f /data/mapbox_enabled
+    fi
+fi
 
 if [ "$ALIAS_CHECK" == "" ]; then
     sleep 3
