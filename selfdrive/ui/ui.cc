@@ -425,7 +425,7 @@ static void update_status(UIState *s) {
     s->scene.limitSCOffsetOption = params.getBool("OpkrSpeedLimitOffsetOption");
     s->scene.speedlimit_signtype = params.getBool("OpkrSpeedLimitSignType");
     s->scene.sl_decel_off = params.getBool("SpeedLimitDecelOff");
-    s->scene.osm_enabled = params.getBool("OSMSpeedLimitEnable") || std::stoi(params.get("CurvDecelOption") == 1 || std::stoi(params.get("CurvDecelOption") == 3;
+    s->scene.osm_enabled = params.getBool("OSMSpeedLimitEnable") || std::stoi(params.get("CurvDecelOption")) == 1 || std::stoi(params.get("CurvDecelOption")) == 3;
 
     if (s->scene.autoScreenOff > 0) {
       s->scene.nTime = s->scene.autoScreenOff * 60 * UI_FREQ;
