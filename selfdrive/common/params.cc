@@ -307,6 +307,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"VCurvSpeedUD", PERSISTENT},
     {"OCurvOffset", PERSISTENT},
     {"StockNaviSpeedEnabled", PERSISTENT},
+    {"MapboxEnabled", PERSISTENT},
     {"GoogleMapEnabled", PERSISTENT},
     {"dp_mapbox_gmap_key", PERSISTENT},
     {"dp_mapbox_token_pk", PERSISTENT},

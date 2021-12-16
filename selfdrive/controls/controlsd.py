@@ -221,7 +221,6 @@ class Controls:
     self.lane_change_delay = int(Params().get("OpkrAutoLaneChangeDelay", encoding="utf8"))
     self.auto_enable_speed = max(1, int(Params().get("AutoEnableSpeed", encoding="utf8")))
     self.e2e_long_alert_prev = True
-    self.osm_spdlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
     self.stock_navi_info_enabled = Params().get_bool("StockNaviSpeedEnabled")
     self.ignore_can_error_on_isg = Params().get_bool("IgnoreCANErroronISG")
     self.ready_timer = 0
@@ -831,7 +830,7 @@ class Controls:
     controlsState.alertTextMsg1 = self.log_alertTextMsg1
     controlsState.alertTextMsg2 = self.log_alertTextMsg2
     controlsState.osmOffSpdLimit = self.osm_off_spdlimit
-    if int(self.sm['liveMapData'].speedLimit) and self.osm_spdlimit_enabled:
+    if int(self.sm['liveMapData'].speedLimit) and self.osm_speedlimit_enabled:
       if self.stock_navi_info_enabled and int(CS.safetySign):
         controlsState.limitSpeedCamera = min(int(round(self.sm['liveMapData'].speedLimit)), int(CS.safetySign))
       else:
