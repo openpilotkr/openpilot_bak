@@ -495,7 +495,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
       "E2E Long Enabled",
       "Be careful, It may work unexpectedly.",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.warningSoft, 2.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.warning, 2.),
   },
 
   EventName.laneChangeManual: {
@@ -557,7 +557,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
       "Openpilot Stock",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.warningSoft, 1.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.warning, 1.),
   },
   
   EventName.modeChangeDistcurv: {
@@ -565,35 +565,35 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
       "Distance and Curve Mode",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.warningSoft, 1.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.warning, 1.),
   },
   EventName.modeChangeDistance: {
     ET.WARNING: Alert(
       "Distance Only Mode",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.warningSoft, 1.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.warning, 1.),
   },
   EventName.modeChangeCurv: {
     ET.WARNING: Alert(
       "Curve Only Mode",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.warningSoft, 1.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.warning, 1.),
   },
   EventName.modeChangeOneway: {
     ET.WARNING: Alert(
       "Oneway Mode",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.warningSoft, 1.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.warning, 1.),
   },
   EventName.modeChangeMaponly: {
     ET.WARNING: Alert(
       "SpeedLimit Only Mode",
       "",
       AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.warningSoft, 1.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.warning, 1.),
   },
   EventName.needBrake: {
     ET.WARNING: Alert(
