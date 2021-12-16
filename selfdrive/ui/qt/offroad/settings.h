@@ -77,6 +77,9 @@ private:
 
   Params params;
   QFileSystemWatcher *fs_watch;
+
+signals:
+  void closeSettings();
 };
 
 class C2NetworkPanel: public QWidget {
@@ -95,9 +98,6 @@ class UserPanel : public QFrame {
 
 public:
   explicit UserPanel(QWidget *parent = nullptr);
-
-signals:
-  void closeSettings();
 };
 
 class TuningPanel : public QFrame {

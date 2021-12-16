@@ -401,6 +401,28 @@ SoftwarePanel::SoftwarePanel(QWidget* parent) : ListWidget(parent) {
 
   addItem(pandaflashingtbtn);
   addItem(new SwitchOpenpilot()); // opkr
+
+  const char* open_settings = "am start -a android.intent.action.MAIN -n com.android.settings/.Settings";
+  auto open_settings_btn = new ButtonControl("Open Android Settings", "RUN");
+  QObject::connect(open_settings_btn, &ButtonControl::clicked, [=]() {
+    emit closeSettings();
+    std::system(open_settings);
+  });
+  addItem(open_settings_btn);
+  const char* softkey = "am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity";
+  auto softkey_btn = new ButtonControl("SoftKey RUN/SET", "RUN");
+  QObject::connect(softkey_btn, &ButtonControl::clicked, [=]() {
+    emit closeSettings();
+    std::system(softkey);
+  });
+  addItem(softkey_btn);
+  auto mixplorer_btn = new ButtonControl("RUN Mixplorer", "RUN");
+  QObject::connect(mixplorer_btn, &ButtonControl::clicked, [=]() {
+	  emit closeSettings();
+    std::system("/data/openpilot/selfdrive/assets/addon/script/run_mixplorer.sh");
+  });
+  addItem(mixplorer_btn, 0);
+
   addItem(uninstallBtn);
   fs_watch = new QFileSystemWatcher(this);
   QObject::connect(fs_watch, &QFileSystemWatcher::fileChanged, [=](const QString path) {
@@ -606,26 +628,7 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
     }
   });
   layout->addWidget(calokbtn);
-  const char* open_settings = "am start -a android.intent.action.MAIN -n com.android.settings/.Settings";
-  auto open_settings_btn = new ButtonControl("Open Android Settings", "RUN");
-  QObject::connect(open_settings_btn, &ButtonControl::clicked, [=]() {
-    emit closeSettings();
-    std::system(open_settings);
-  });
-  layout->addWidget(open_settings_btn);
-  const char* softkey = "am start com.gmd.hidesoftkeys/com.gmd.hidesoftkeys.MainActivity";
-  auto softkey_btn = new ButtonControl("SoftKey RUN/SET", "RUN");
-  QObject::connect(softkey_btn, &ButtonControl::clicked, [=]() {
-    emit closeSettings();
-    std::system(softkey);
-  });
-  layout->addWidget(softkey_btn);
-  auto mixplorer_btn = new ButtonControl("RUN Mixplorer", "RUN");
-  QObject::connect(mixplorer_btn, &ButtonControl::clicked, [=]() {
-	  emit closeSettings();
-    std::system("/data/openpilot/selfdrive/assets/addon/script/run_mixplorer.sh");
-  });
-  layout->addWidget(mixplorer_btn, 0);
+
   layout->addWidget(horizontal_line());
   layout->addWidget(new CarSelectCombo());
 
@@ -746,17 +749,17 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
 
   // setup panels
   DevicePanel *device = new DevicePanel(this);
-  UserPanel *user = new UserPanel(this);
+  SoftwarePanel *software = new SoftwarePanel(this);
   QObject::connect(device, &DevicePanel::reviewTrainingGuide, this, &SettingsWindow::reviewTrainingGuide);
   QObject::connect(device, &DevicePanel::showDriverView, this, &SettingsWindow::showDriverView);
-  QObject::connect(user, &UserPanel::closeSettings, this, &SettingsWindow::closeSettings);
+  QObject::connect(software, &SoftwarePanel::closeSettings, this, &SettingsWindow::closeSettings);
 
   QList<QPair<QString, QWidget *>> panels = {
     {"Device", device},
     {"Network", network_panel(this)},
     {"Toggles", new TogglesPanel(this)},
-    {"Software", new SoftwarePanel(this)},
-    {"UserMenu", user},
+    {"Software", software},
+    {"UserMenu", new UserPanel(this)},
     {"Tuning", new TuningPanel(this)},
   };
 
