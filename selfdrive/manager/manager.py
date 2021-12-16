@@ -135,7 +135,7 @@ def manager_init():
     ("OpkrRunNaviOnBoot", "0"),
     ("CruiseGap1", "10"),
     ("CruiseGap2", "12"),
-    ("CruiseGap3", "145"),
+    ("CruiseGap3", "14"),
     ("CruiseGap4", "16"),
     ("DynamicTR", "2"),
     ("OpkrBattLess", "0"),
