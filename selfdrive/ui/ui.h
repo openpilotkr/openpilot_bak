@@ -240,6 +240,7 @@ typedef struct UIScene {
   bool sl_decel_off;
   bool osm_off_spdlimit;
   float a_req_value;
+  bool osm_enabled;
 
   cereal::DeviceState::Reader deviceState;
   cereal::CarState::Reader car_state;
