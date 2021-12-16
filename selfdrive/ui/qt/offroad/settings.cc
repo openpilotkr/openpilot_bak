@@ -753,7 +753,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     }
   )");
   close_btn->setFixedSize(220, 130);
-  sidebar_layout->addSpacing(40);
+  sidebar_layout->addSpacing(25);
   sidebar_layout->addWidget(close_btn, 0, Qt::AlignCenter);
   QObject::connect(close_btn, &QPushButton::clicked, this, &SettingsWindow::closeSettings);
 
@@ -775,7 +775,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     {"Tuning", new TuningPanel(this)},
   };
 
-  sidebar_layout->addSpacing(15);
+  sidebar_layout->addSpacing(25);
 
 #ifdef ENABLE_MAPS
   auto map_panel = new MapPanel(this);
@@ -783,7 +783,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
   QObject::connect(map_panel, &MapPanel::closeSettings, this, &SettingsWindow::closeSettings);
 #endif
 
-  const int padding = panels.size() > 3 ? 5 : 15;
+  const int padding = panels.size() > 3 ? 3 : 15;
 
   nav_btns = new QButtonGroup(this);
   for (auto &[name, panel] : panels) {
