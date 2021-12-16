@@ -4,7 +4,15 @@ ALIAS_CHECK=$(/usr/bin/grep gitpull /system/comma/home/.bash_profile)
 # GET_PROP1=$(getprop persist.sys.locale)
 # GET_PROP2=$(getprop persist.sys.local)
 GET_PROP_ATZ=$(getprop persist.sys.timezone)
-GET_PROP_STZ=$(cat /data/params/d/OPKRTimeZone)
+if [ -f "/data/params/d/OPKRTimeZone" ]; then
+    GET_PROP_STZ=$(cat /data/params/d/OPKRTimeZone)
+fi
+if [ -f "/data/params/d/MapboxEnabled" ]; then
+    GET_MAPBOX_STAT=$(cat /data/params/d/MapboxEnabled)
+    if [ "$GET_MAPBOX_STAT" == "1" ]; then
+        export MAPBOX="1"
+    fi
+fi
 
 if [ "$ALIAS_CHECK" == "" ]; then
     sleep 3

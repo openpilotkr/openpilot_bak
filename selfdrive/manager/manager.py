@@ -254,9 +254,6 @@ def manager_init():
 
   os.system("/data/openpilot/selfdrive/assets/addon/script/gitcommit.sh")
 
-  if params.get_bool("MapboxEnabled"):
-    os.environ["MAPBOX"] = "1"
-
 def manager_prepare():
   for p in managed_processes.values():
     p.prepare()
