@@ -93,11 +93,25 @@ private:
   LabelControl *ipaddress;
 };
 
-class UserPanel : public QFrame {
+class UIPanel : public QFrame {
   Q_OBJECT
 
 public:
-  explicit UserPanel(QWidget *parent = nullptr);
+  explicit UIPanel(QWidget *parent = nullptr);
+};
+
+class DrivingPanel : public QFrame {
+  Q_OBJECT
+
+public:
+  explicit DrivingPanel(QWidget *parent = nullptr);
+};
+
+class DeveloperPanel : public QFrame {
+  Q_OBJECT
+
+public:
+  explicit DeveloperPanel(QWidget *parent = nullptr);
 };
 
 class TuningPanel : public QFrame {

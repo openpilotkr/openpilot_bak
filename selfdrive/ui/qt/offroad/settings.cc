@@ -421,8 +421,7 @@ SoftwarePanel::SoftwarePanel(QWidget* parent) : ListWidget(parent) {
 	  emit closeSettings();
     std::system("/data/openpilot/selfdrive/assets/addon/script/run_mixplorer.sh");
   });
-  addItem(mixplorer_btn, 0);
-
+  addItem(mixplorer_btn);
   addItem(uninstallBtn);
   fs_watch = new QFileSystemWatcher(this);
   QObject::connect(fs_watch, &QFileSystemWatcher::fileChanged, [=](const QString path) {
@@ -514,14 +513,13 @@ QWidget *network_panel(QWidget *parent) {
 #endif
 }
 
-UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
+UIPanel::UIPanel(QWidget *parent) : QFrame(parent) {
   QVBoxLayout *layout = new QVBoxLayout(this);
 
   layout->setContentsMargins(50, 0, 50, 0);
   layout->setSpacing(30);
 
   // OPKR
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 U I Menu 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new AutoShutdown());
   layout->addWidget(new ForceShutdown());
   layout->addWidget(new VolumeControl());
@@ -563,9 +561,15 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new OPKRServerAPI());
   layout->addWidget(new MapboxEnabledToggle());
   layout->addWidget(new OPKRMapboxStyle());
+}
 
-  layout->addWidget(horizontal_line());
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 DRIVING 】〓〓〓〓〓〓〓〓", ""));
+DrivingPanel::DrivingPanel(QWidget *parent) : QFrame(parent) {
+  QVBoxLayout *layout = new QVBoxLayout(this);
+
+  layout->setContentsMargins(50, 0, 50, 0);
+  layout->setSpacing(30);
+
+  // OPKR
   layout->addWidget(new AutoResumeToggle());
   layout->addWidget(new VariableCruiseToggle());
   layout->addWidget(new CruisemodeSelInit());
@@ -600,9 +604,16 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new StandstillResumeAltToggle());
   layout->addWidget(new SteerWindDownToggle());
   layout->addWidget(new MadModeEnabledToggle());
+  layout->addWidget(new StockLKASEnabledatDisenagedStatusToggle());
+}
 
-  layout->addWidget(horizontal_line());
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 DEVELOPER 】〓〓〓〓〓〓〓〓", ""));
+DeveloperPanel::DeveloperPanel(QWidget *parent) : QFrame(parent) {
+  QVBoxLayout *layout = new QVBoxLayout(this);
+
+  layout->setContentsMargins(50, 0, 50, 0);
+  layout->setSpacing(30);
+
+  // OPKR
   layout->addWidget(new DebugUiOneToggle());
   layout->addWidget(new DebugUiTwoToggle());
   layout->addWidget(new ShowErrorToggle());
@@ -617,7 +628,6 @@ UserPanel::UserPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new IgnoreCanErroronISGToggle());
   layout->addWidget(new BattLessToggle());
   layout->addWidget(new GoogleMapEnabledToggle());
-  layout->addWidget(new StockLKASEnabledatDisenagedStatusToggle());
   layout->addWidget(new FCA11MessageToggle());
   layout->addWidget(new TimeZoneSelectCombo());
   const char* cal_ok = "cp -f /data/openpilot/selfdrive/assets/addon/param/CalibrationParams /data/params/d/";
@@ -759,11 +769,13 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     {"Network", network_panel(this)},
     {"Toggles", new TogglesPanel(this)},
     {"Software", software},
-    {"UserMenu", new UserPanel(this)},
+    {"UIMenu", new UIPanel(this)},
+    {"Driving", new DrivingPanel(this)},
+    {"Developer", new DeveloperPanel(this)},
     {"Tuning", new TuningPanel(this)},
   };
 
-  sidebar_layout->addSpacing(35);
+  sidebar_layout->addSpacing(20);
 
 #ifdef ENABLE_MAPS
   auto map_panel = new MapPanel(this);
@@ -771,7 +783,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
   QObject::connect(map_panel, &MapPanel::closeSettings, this, &SettingsWindow::closeSettings);
 #endif
 
-  const int padding = panels.size() > 3 ? 8 : 18;
+  const int padding = panels.size() > 3 ? 5 : 15;
 
   nav_btns = new QButtonGroup(this);
   for (auto &[name, panel] : panels) {
@@ -783,7 +795,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
         color: grey;
         border: none;
         background: none;
-        font-size: 60px;
+        font-size: 50px;
         font-weight: 500;
         padding-top: %1px;
         padding-bottom: %1px;
