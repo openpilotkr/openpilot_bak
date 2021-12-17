@@ -10,6 +10,8 @@
 #include "selfdrive/ui/qt/util.h"
 #include "selfdrive/ui/qt/api.h"
 #include "selfdrive/ui/qt/widgets/input.h"
+#include "selfdrive/ui/dashcam.h"
+
 #ifdef ENABLE_MAPS
 #include "selfdrive/ui/qt/maps/map.h"
 #endif
