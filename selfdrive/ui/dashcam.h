@@ -192,13 +192,6 @@ static void screen_draw_button(UIState *s) {
 //  if (s->vision_connected && s->plus_state == 0) {
 
   if (captureState == CAPTURE_STATE_CAPTURING) {
-    s->scene.rec_stat = true;
-  }
-  else {
-    s->scene.rec_stat = false;
-  }
-
-  if (captureState == CAPTURE_STATE_CAPTURING) {
     //draw_date_time(s);
 
     elapsed_time = get_time() - start_time;
@@ -211,11 +204,13 @@ static void screen_draw_button(UIState *s) {
 
 void screen_toggle_record_state(UIState *s) {
   if (captureState == CAPTURE_STATE_CAPTURING) {
+    s->scene.rec_stat = false;
     stop_capture();
     lock_current_video = false;
   }
   else {
     //captureState = CAPTURE_STATE_CAPTURING;
+    s->scene.rec_stat = true;
     start_capture(s);
   }
 }
