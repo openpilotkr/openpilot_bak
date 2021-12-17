@@ -221,7 +221,7 @@ class LongitudinalMpc():
     self.solver = AcadosOcpSolverFast('long', N, EXPORT_DIR)
     self.v_solution = [0.0 for i in range(N+1)]
     self.a_solution = [0.0 for i in range(N+1)]
-    self.prev_a = self.a_solution
+    self.prev_a = np.array(self.a_solution)
     self.j_solution = [0.0 for i in range(N)]
     self.yref = np.zeros((N+1, COST_DIM))
     for i in range(N):
@@ -251,7 +251,7 @@ class LongitudinalMpc():
     # 1.1 TR fails at 3+ m/s/s test
     # 1.2-1.8 TR succeeds at all tests with no FCW
 
-    TRs = [1.2, 1.8, 2.7]
+    # TRs = [1.2, 1.8, 2.7]
     x_ego_obstacle_cost_multiplier = 1 #interp(self.desired_TR, TRs, [3., 1.0, 0.1])
     j_ego_cost_multiplier = 1 #interp(self.desired_TR, TRs, [0.5, 1.0, 1.0])
     d_zone_cost_multiplier = 1 #interp(self.desired_TR, TRs, [4., 1.0, 1.0])
@@ -347,7 +347,7 @@ class LongitudinalMpc():
     lead_xv_1 = self.process_lead(radarstate.leadTwo)
 
     cruise_gap = int(clip(carstate.cruiseGapSet, 1., 4.))
-    self.dynamic_TR = interp(self.v_ego*3.6, [0, 20, 40, 60, 110], [0.9, 1.2, 1.3, 1.4, 1.5] )
+    self.dynamic_TR = interp(self.v_ego*3.6, [0, 20, 40, 60, 110], [0.9, 1.2, 1.4, 1.5, 1.6] )
     self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
     if self.dynamic_TR_mode == 1:
       self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.dynamic_TR, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
@@ -427,7 +427,7 @@ class LongitudinalMpc():
     self.a_solution = self.x_sol[:,2]
     self.j_solution = self.u_sol[:,0]
 
-    self.prev_a = interp(T_IDXS + 0.05, T_IDXS, self.a_solution)
+    self.prev_a = np.interp(T_IDXS + 0.05, T_IDXS, self.a_solution)
 
     t = sec_since_boot()
     if self.solution_status != 0:

@@ -49,6 +49,7 @@ class NaviControl():
     self.osm_speedlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
     self.speedlimit_decel_off = Params().get_bool("SpeedLimitDecelOff")
     self.curv_decel_option = int(Params().get("CurvDecelOption", encoding="utf8"))
+    self.cut_in = False
 
     self.na_timer = 0
     self.t_interval = 7
@@ -259,6 +260,7 @@ class NaviControl():
     min_control_speed = 20 if CS.is_set_speed_in_mph else 30
     self.lead_0 = self.sm['radarState'].leadOne
     self.lead_1 = self.sm['radarState'].leadTwo
+    self.cut_in = True if self.lead_1.status and (self.lead_0.dRel - self.lead_1.dRel) > 3.0 else False
 
     if CS.driverAcc_time:
       self.t_interval = 10 if CS.is_set_speed_in_mph else 7
@@ -278,7 +280,7 @@ class NaviControl():
         if vRel >= (-2 if CS.is_set_speed_in_mph else -4):
           var_speed = min(CS.CP.vFuture + max(0, dRel*0.2+vRel), navi_speed)
           ttime = 100 if CS.is_set_speed_in_mph else 70
-          self.t_interval = int(interp(dRel, [15, 50], [7, ttime])) if not (self.onSpeedControl or self.curvSpeedControl) else 10 if CS.is_set_speed_in_mph else 7
+          self.t_interval = int(interp(dRel, [15, 50], [7, ttime])) if not (self.onSpeedControl or self.curvSpeedControl or self.cut_in) else 10 if CS.is_set_speed_in_mph else 7
         else:
           var_speed = min(CS.CP.vFuture, navi_speed)
           self.t_interval = 10 if CS.is_set_speed_in_mph else 7
@@ -288,11 +290,11 @@ class NaviControl():
       else:
         var_speed = navi_speed
         ttime = 70 if CS.is_set_speed_in_mph else 50
-        self.t_interval = ttime if not (self.onSpeedControl or self.curvSpeedControl) else 10 if CS.is_set_speed_in_mph else 7
+        self.t_interval = ttime if not (self.onSpeedControl or self.curvSpeedControl or self.cut_in) else 10 if CS.is_set_speed_in_mph else 7
     else:
       var_speed = navi_speed
       ttime = 70 if CS.is_set_speed_in_mph else 50
-      self.t_interval = ttime if not ((self.onSpeedControl or self.curvSpeedControl) and self.sm['controlsState'].osmOffSpdLimit) else 10 if CS.is_set_speed_in_mph else 7
+      self.t_interval = ttime if not ((self.onSpeedControl or self.curvSpeedControl or self.cut_in) and self.sm['controlsState'].osmOffSpdLimit) else 10 if CS.is_set_speed_in_mph else 7
 
     if CS.cruise_set_mode in [1,3,4] and self.curv_decel_option in [1,2]:
       if CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and path_plan.laneChangeState == LaneChangeState.off and \

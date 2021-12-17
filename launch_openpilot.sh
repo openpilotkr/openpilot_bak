@@ -5,7 +5,7 @@ ALIAS_CHECK=$(/usr/bin/grep gitpull /system/comma/home/.bash_profile)
 # GET_PROP2=$(getprop persist.sys.local)
 GET_PROP_ATZ=$(getprop persist.sys.timezone)
 if [ -f "/data/params/d/OPKRTimeZone" ]; then
-	GET_PROP_STZ=$(cat /data/params/d/OPKRTimeZone)
+    GET_PROP_STZ=$(cat /data/params/d/OPKRTimeZone)
 fi
 
 if [ "$ALIAS_CHECK" == "" ]; then

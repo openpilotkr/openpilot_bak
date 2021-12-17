@@ -586,6 +586,18 @@ public:
   }
 };
 
+class MapboxEnabledToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+  MapboxEnabledToggle() : ToggleControl("Enable Mapbox", "If you want to use Mapbox, turn on and then connect to device using web browser http://<device ip>:8082  Mapbox setting will show up and type mapbox pk and sk token(you can created this on mapbox.com website). If you want to search destinations with googlemap, first, you should create google api key and enable Enable GoogleMap for Mapbox", "../assets/offroad/icon_shell.png", Params().getBool("MapboxEnabled")) {
+    QObject::connect(this, &MapboxEnabledToggle::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("MapboxEnabled", status);
+    });
+  }
+};
+
 // openpilot preview
 class OpenpilotView : public AbstractControl {
   Q_OBJECT

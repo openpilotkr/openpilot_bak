@@ -77,16 +77,41 @@ private:
 
   Params params;
   QFileSystemWatcher *fs_watch;
-};
-
-class UserPanel : public QFrame {
-  Q_OBJECT
-
-public:
-  explicit UserPanel(QWidget *parent = nullptr);
 
 signals:
   void closeSettings();
+};
+
+class C2NetworkPanel: public QWidget {
+  Q_OBJECT
+public:
+  explicit C2NetworkPanel(QWidget* parent = nullptr);
+
+private:
+  void showEvent(QShowEvent *event) override;
+  QString getIPAddress();
+  LabelControl *ipaddress;
+};
+
+class UIPanel : public QFrame {
+  Q_OBJECT
+
+public:
+  explicit UIPanel(QWidget *parent = nullptr);
+};
+
+class DrivingPanel : public QFrame {
+  Q_OBJECT
+
+public:
+  explicit DrivingPanel(QWidget *parent = nullptr);
+};
+
+class DeveloperPanel : public QFrame {
+  Q_OBJECT
+
+public:
+  explicit DeveloperPanel(QWidget *parent = nullptr);
 };
 
 class TuningPanel : public QFrame {

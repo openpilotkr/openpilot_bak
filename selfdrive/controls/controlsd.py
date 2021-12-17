@@ -32,6 +32,7 @@ from decimal import Decimal
 
 import common.log as trace1
 
+SOFT_DISABLE_TIME = 3  # seconds
 LDW_MIN_SPEED = 50 * CV.KPH_TO_MS if Params().get_bool("IsMetric") else 31 * CV.MPH_TO_MS
 LANE_DEPARTURE_THRESHOLD = 0.1
 STEER_ANGLE_SATURATION_TIMEOUT = 1.0 / DT_CTRL
@@ -220,7 +221,6 @@ class Controls:
     self.lane_change_delay = int(Params().get("OpkrAutoLaneChangeDelay", encoding="utf8"))
     self.auto_enable_speed = max(1, int(Params().get("AutoEnableSpeed", encoding="utf8")))
     self.e2e_long_alert_prev = True
-    self.osm_spdlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
     self.stock_navi_info_enabled = Params().get_bool("StockNaviSpeedEnabled")
     self.ignore_can_error_on_isg = Params().get_bool("IgnoreCANErroronISG")
     self.ready_timer = 0
@@ -367,7 +367,7 @@ class Controls:
       # Check for mismatch between openpilot and car's PCM
       cruise_mismatch = CS.cruiseState.enabled and (not self.enabled or not self.CP.pcmCruise)
       self.cruise_mismatch_counter = self.cruise_mismatch_counter + 1 if cruise_mismatch else 0
-      if self.cruise_mismatch_counter > int(1. / DT_CTRL):
+      if self.cruise_mismatch_counter > int(3. / DT_CTRL):
         self.events.add(EventName.cruiseMismatch)
 
     # Check for FCW
@@ -421,7 +421,7 @@ class Controls:
     #  v_future = speeds[-1]
     #else:
     #  v_future = 100.0
-    #if CS.brakePressed and v_future >= STARTING_TARGET_SPEED \
+    #if CS.brakePressed and v_future >= self.CP.vEgoStarting \
     #  and self.CP.openpilotLongitudinalControl and CS.vEgo < 0.3:
     #  self.events.add(EventName.noTarget)
 
@@ -538,7 +538,7 @@ class Controls:
         if self.state == State.enabled:
           if self.events.any(ET.SOFT_DISABLE):
             self.state = State.softDisabling
-            self.soft_disable_timer = int(3 / DT_CTRL)
+            self.soft_disable_timer = int(SOFT_DISABLE_TIME / DT_CTRL)
             self.current_alert_types.append(ET.SOFT_DISABLE)
 
         # SOFT DISABLING
@@ -733,7 +733,7 @@ class Controls:
 
     speeds = self.sm['longitudinalPlan'].speeds
     if len(speeds) > 1:
-      v_future = speeds[0]
+      v_future = speeds[-1]
     else:
       v_future = 100.0
     v_future_speed= float((v_future * CV.MS_TO_MPH + 10.0) if CS.isMph else (v_future * CV.MS_TO_KPH))
@@ -763,8 +763,8 @@ class Controls:
       self.events.add(EventName.ldw)
 
     clear_event = ET.WARNING if ET.WARNING not in self.current_alert_types else None
-    alerts = self.events.create_alerts(self.current_alert_types, [self.CP, self.sm, self.is_metric])
-    self.AM.add_many(self.sm.frame, alerts, self.enabled)
+    alerts = self.events.create_alerts(self.current_alert_types, [self.CP, self.sm, self.is_metric, self.soft_disable_timer])
+    self.AM.add_many(self.sm.frame, alerts)
     self.AM.process_alerts(self.sm.frame, clear_event)
     CC.hudControl.visualAlert = self.AM.visual_alert
 
@@ -830,7 +830,7 @@ class Controls:
     controlsState.alertTextMsg1 = self.log_alertTextMsg1
     controlsState.alertTextMsg2 = self.log_alertTextMsg2
     controlsState.osmOffSpdLimit = self.osm_off_spdlimit
-    if int(self.sm['liveMapData'].speedLimit) and self.osm_spdlimit_enabled:
+    if int(self.sm['liveMapData'].speedLimit) and self.osm_speedlimit_enabled:
       if self.stock_navi_info_enabled and int(CS.safetySign):
         controlsState.limitSpeedCamera = min(int(round(self.sm['liveMapData'].speedLimit)), int(CS.safetySign))
       else:
