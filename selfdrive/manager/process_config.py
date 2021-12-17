@@ -8,7 +8,7 @@ WEBCAM = os.getenv("USE_WEBCAM") is not None
 
 EnableLogger = Params().get_bool('OpkrEnableLogger')
 EnableUploader = Params().get_bool('OpkrEnableUploader')
-EnableOSM = Params().get_bool('OSMSpeedLimitEnable') or int(Params().get("CurvDecelOption", encoding="utf8")) in [1, 3]
+EnableOSM = Params().get_bool('OSMSpeedLimitEnable') or Params().get("CurvDecelOption", encoding="utf8") == "1" or Params().get("CurvDecelOption", encoding="utf8") == "3"
 EnableMapbox = Params().get_bool('MapboxEnabled')
 
 procs = [

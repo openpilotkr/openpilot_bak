@@ -210,23 +210,34 @@ function launch {
 
   cat /data/openpilot/selfdrive/car/hyundai/values.py | grep ' = "' | awk -F'"' '{print $2}' > /data/params/d/CarList
 
-  # start manager
+  # start manager  
   cd selfdrive/manager
+  if [ -f "/data/params/d/OSMSpeedLimitEnable" ]; then
+    OSM_ENABLE=$(cat /data/params/d/OSMSpeedLimitEnable)
+  fi
+  if [ -f "/data/params/d/CurvDecelOption" ]; then
+    OSM_CURV_ENABLE=$(cat /data/params/d/CurvDecelOption)
+  fi
   if [ -f /EON ]; then
-    if [ ! -f "/system/comma/usr/lib/libgfortran.so.5.0.0" ]; then
-      mount -o remount,rw /system
-      tar -zxvf /data/openpilot/selfdrive/mapd/assets/libgfortran.tar.gz -C /system/comma/usr/lib/
-      mount -o remount,r /system
-    fi
-    if [ ! -d "/system/comma/usr/lib/python3.8/site-packages/opspline" ]; then
-      mount -o remount,rw /system
-      tar -zxvf /data/openpilot/selfdrive/mapd/assets/opspline.tar.gz -C /system/comma/usr/lib/python3.8/site-packages/
-      mount -o remount,r /system
+    if [ "$OSM_ENABLE" == "1" ] || [ "$OSM_CURV_ENABLE" == "1" ] || [ "$OSM_CURV_ENABLE" == "3" ]; then
+      if [ ! -f "/system/comma/usr/lib/libgfortran.so.5.0.0" ]; then
+        sleep 3
+        mount -o remount,rw /system
+        tar -zxvf /data/openpilot/selfdrive/mapd/assets/libgfortran.tar.gz -C /system/comma/usr/lib/
+        mount -o remount,r /system
+      fi
+      if [ ! -d "/system/comma/usr/lib/python3.8/site-packages/opspline" ]; then
+        sleep 3
+        mount -o remount,rw /system
+        tar -zxvf /data/openpilot/selfdrive/mapd/assets/opspline.tar.gz -C /system/comma/usr/lib/python3.8/site-packages/
+        mount -o remount,r /system
+      fi
     fi
     ./build.py && ./manager.py
   else
     ./custom_dep.py && ./build.py && ./manager.py
   fi
+  ./build.py && ./manager.py
   # if broken, keep on screen error
   while true; do sleep 1; done
 }
