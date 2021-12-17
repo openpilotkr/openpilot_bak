@@ -605,6 +605,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   p.drawEllipse(rec);
   p.setPen(QColor(255, 255, 255, 200));
   p.drawText(rec, Qt::AlignCenter, QString("REC"));
+  dashcam(s);
 
 }
 
