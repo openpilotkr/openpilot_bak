@@ -5608,8 +5608,8 @@ RESCountatStandstill::RESCountatStandstill() : AbstractControl("RES Count at Sta
     auto str = QString::fromStdString(params.get("RESCountatStandstill"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 25 ) {
-      value = 25;
+    if (value >= 50 ) {
+      value = 50;
     }
     QString values = QString::number(value);
     params.put("RESCountatStandstill", values.toStdString());
