@@ -183,19 +183,6 @@ void draw_date_time(UIState *s) {
   char now[50];
   struct tm tm = get_time_struct();
   snprintf(now,sizeof(now),"%04d-%02d-%02d  %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-
-  nvgBeginPath(s->vg);
-  nvgRoundedRect(s->vg, rect_x, rect_y, rect_w, rect_h, 0);
-  nvgFillColor(s->vg, nvgRGBA(0, 0, 0, 0));
-  nvgFill(s->vg);
-  nvgStrokeColor(s->vg, nvgRGBA(255,255,255,0));
-  nvgStrokeWidth(s->vg, 0);
-  nvgStroke(s->vg);
-
-  nvgFontSize(s->vg, 34);
-  nvgFontFace(s->vg, "sans-bold");
-  nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
-  nvgText(s->vg,rect_x+229,rect_y+57,now,NULL);
 }
 
 static void rotate_video(UIState *s) {
@@ -209,32 +196,12 @@ static void rotate_video(UIState *s) {
 static void screen_draw_button(UIState *s) {
   // Set button to bottom left of screen
 //  if (s->vision_connected && s->plus_state == 0) {
-  int btn_w = 140;
-  int btn_h = 140;
-  int btn_x = s->fb_w - btn_w - 35;
-  int btn_y = 1080 - btn_h - 35;
-  int btn_xc = btn_x + (btn_w/2);
-  int btn_yc = btn_y + (btn_h/2);
-  nvgBeginPath(s->vg);
-  nvgRoundedRect(s->vg, btn_x, btn_y, btn_w, btn_h, 100);
-  nvgStrokeColor(s->vg, nvgRGBA(255,255,255,80));
-  nvgStrokeWidth(s->vg, 6);
-  nvgStroke(s->vg);
 
   if (captureState == CAPTURE_STATE_CAPTURING) {
-    NVGcolor fillColor = nvgRGBA(255,0,0,80);
-    nvgFillColor(s->vg, fillColor);
-    nvgFill(s->vg);
-    nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
+    s->scene.rec_stat = true;
   }
   else {
-    nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
-  }
-  if (s->scene.gpsAccuracyUblox > 99 || s->scene.gpsAccuracyUblox == 0 || s->scene.gpsAccuracyUblox < 0) {
-    nvgFontSize(s->vg, 57);
-    nvgFontFace(s->vg, "sans-bold");
-    nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-    nvgText(s->vg, btn_xc, btn_yc, "REC", NULL);
+    s->scene.rec_stat = false;
   }
 
   if (captureState == CAPTURE_STATE_CAPTURING) {

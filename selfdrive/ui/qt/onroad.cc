@@ -595,6 +595,15 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       debugText(p, tpms_sp_xr+50, tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRr, 'f', 0), 150, 45);
     }
   }
+
+  QRect rec = {1745, 905, 140, 140};
+  p.setBrush(Qt::NoBrush);
+  if (s->scene.rec_stat) p.setBrush(Qt::red);
+  p.setPen(QPen(QColor(255, 255, 255, 80), 6));
+  p.drawEllipse(rec);
+  p.setPen(QColor(255, 255, 255, 200));
+  p.drawText(rec, Qt::AlignCenter, QString("REC"));
+
 }
 
 void OnroadHud::drawText(QPainter &p, int x, int y, const QString &text, int alpha) {
