@@ -292,7 +292,7 @@ class CarState(CarStateBase):
       self.safety_sign = 40. if not self.is_set_speed_in_mph else 45.
       self.safety_sign_last = self.safety_sign
     elif self.safety_sign_check in [8., 9., 10.] and 19 < round(vCruiseMax) <= (89 if not self.is_set_speed_in_mph else 69):
-      self.safety_sign = 50. if not self.is_set_speed_in_mph else 55.
+      self.safety_sign = 50. if not self.is_set_speed_in_mph else 50.
       self.safety_sign_last = self.safety_sign
     elif self.safety_sign_check in [16., 17., 18.] and 19 < round(vCruiseMax) <= (99 if not self.is_set_speed_in_mph else 74):
       self.safety_sign = 60. if not self.is_set_speed_in_mph else 55.
