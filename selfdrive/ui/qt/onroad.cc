@@ -599,13 +599,14 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     }
   }
 
-  QRect rec_btn(rect().right() - bdr_s - 140 - 20, 905, 140, 140);
+  // opkr rec
+  QRect recbtn_draw(rect().right() - bdr_s - 140 - 20, 905, 140, 140);
   p.setBrush(Qt::NoBrush);
   if (rec_stat) p.setBrush(QColor(255, 0, 0, 150));
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
-  p.drawEllipse(rec_btn);
+  p.drawEllipse(recbtn_draw);
   p.setPen(QColor(255, 255, 255, 200));
-  p.drawText(rec_btn, Qt::AlignCenter, QString("REC"));
+  p.drawText(recbtn_draw, Qt::AlignCenter, QString("REC"));
   dashcam(s);
 
 }
