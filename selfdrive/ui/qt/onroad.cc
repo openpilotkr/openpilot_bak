@@ -253,6 +253,8 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("rec_stat", s.scene.rec_stat);
   setProperty("lane_stat", s.scene.laneless_mode);
   setProperty("laneless_stat", s.scene.lateralPlan.lanelessModeStatus);
+  setProperty("map_stat", s.scene.map_is_running);
+  setProperty("mapbox_stat", s.scene.mapbox_running);
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
@@ -660,13 +662,30 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   p.drawEllipse(lanebtn_draw);
   p.setPen(QColor(255, 255, 255, 200));
   if (lane_stat == 0) {
+    configFont(p, "Open Sans", 40, "SemiBold");
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150, 880, 140, 140), Qt::AlignCenter, QString("LANE"));
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150, 930, 140, 140), Qt::AlignCenter, QString("LINE"));
   } else if (lane_stat == 1) {
+    configFont(p, "Open Sans", 40, "SemiBold");
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150, 880, 140, 140), Qt::AlignCenter, QString("LANE"));
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150, 930, 140, 140), Qt::AlignCenter, QString("LESS"));
   } else if (lane_stat == 2) {
     p.drawText(lanebtn_draw, Qt::AlignCenter, QString("AUTO"));
+  }
+
+  // navi button
+  QRect navibtn_draw(rect().right() - bdr_s - 140 - 20 - 150 - 150, 905, 140, 140);
+  p.setBrush(Qt::NoBrush);
+  if (map_stat) p.setBrush(blueColor(150));
+  p.setPen(QPen(QColor(255, 255, 255, 80), 6));
+  p.drawEllipse(navibtn_draw);
+  p.setPen(QColor(255, 255, 255, 200));
+  if (mapbox_stat) {
+    configFont(p, "Open Sans", 40, "SemiBold");
+    p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150 - 150, 885, 140, 140), Qt::AlignCenter, QString("MAP"));
+    p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150 - 150, 925, 140, 140), Qt::AlignCenter, QString("Search"));
+  } else {
+    p.drawText(navibtn_draw, Qt::AlignCenter, QString("NAVI"));
   }
 }
 

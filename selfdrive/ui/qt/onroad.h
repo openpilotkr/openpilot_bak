@@ -29,6 +29,8 @@ class OnroadHud : public QWidget {
   Q_PROPERTY(bool rec_stat MEMBER rec_stat NOTIFY valueChanged);
   Q_PROPERTY(int lane_stat MEMBER lane_stat NOTIFY valueChanged);
   Q_PROPERTY(bool laneless_stat MEMBER laneless_stat NOTIFY valueChanged);
+  Q_PROPERTY(bool map_stat MEMBER map_stat NOTIFY valueChanged);
+  Q_PROPERTY(bool mapbox_stat MEMBER mapbox_stat NOTIFY valueChanged);
 
 public:
   explicit OnroadHud(QWidget *parent);
@@ -74,6 +76,8 @@ private:
   bool rec_stat = false;
   int lane_stat = 0;
   bool laneless_stat = false;
+  bool map_stat = false;
+  bool mapbox_stat = false;
 
 signals:
   void valueChanged();
