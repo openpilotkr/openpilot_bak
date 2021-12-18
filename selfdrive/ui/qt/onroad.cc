@@ -432,7 +432,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     if ((int(ang_str) < -50) || (int(ang_str) > 50)) {
       p.setPen(redColor(200));
     } else if ((int(ang_str) < -30) || (int(ang_str) > 30)) {
-      p.setPen(orangeQColor(200));
+      p.setPen(orangeColor(200));
     }
     debugText(p, sp_xl, sp_yl, QString::number(ang_str, 'f', 0), 150, 58);
     p.setPen(whiteColor(200));
