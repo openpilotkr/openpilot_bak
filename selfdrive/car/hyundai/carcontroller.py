@@ -315,20 +315,20 @@ class CarController():
         elif 10 < self.standstill_fault_reduce_timer and CS.lead_distance != self.last_lead_distance:
           self.acc_standstill_timer = 0
           self.acc_standstill = False
-          if (frame - self.last_resume_frame) * DT_CTRL > 0.1:
+          if self.standstill_resume_alt: # for D.Fyffe, code from neokii
             self.standstill_res_button = True
-            if self.standstill_resume_alt:
-              can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)) if not self.longcontrol \
-               else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus))
-              self.resume_cnt += 1
-              if self.resume_cnt > 5:
-                self.resume_cnt = 0
-                self.switch_timer = randint(10, 15)
-            else:
+            can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus))
+            self.resume_cnt += 1
+            if self.resume_cnt >= randint(6, 8):
+              self.resume_cnt = 0
+              self.switch_timer = randint(30, 36)
+          else:
+            if (frame - self.last_resume_frame) * DT_CTRL > 0.1:
+              self.standstill_res_button = True
               # send 25 messages at a time to increases the likelihood of resume being accepted, value 25 is not acceptable at some cars.
               can_sends.extend([create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)] * self.standstill_res_count) if not self.longcontrol \
               else can_sends.extend([create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus)] * self.standstill_res_count)
-            self.last_resume_frame = frame
+              self.last_resume_frame = frame
           self.standstill_fault_reduce_timer += 1
         # gap save after 1sec
         elif 100 < self.standstill_fault_reduce_timer and self.cruise_gap_prev == 0 and CS.cruiseGapSet != 1.0 and self.opkr_autoresume and self.opkr_cruisegap_auto_adj: 

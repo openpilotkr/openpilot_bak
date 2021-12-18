@@ -107,4 +107,4 @@ OSMSpeedLimitEnable:0
 OPKRMapboxStyleSelect:0
 RESCountatStandstill:20
 OpkrSpeedLimitOffsetOption:0
-CurvDecelOption:1
+CurvDecelOption:2
