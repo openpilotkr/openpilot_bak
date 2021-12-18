@@ -174,7 +174,7 @@ def manager_init():
     ("OpkrSpeedLimitSignType", "0"),
     ("StockLKASEnabled", "1"),
     ("SpeedLimitDecelOff", "0"),
-    ("CurvDecelOption", "1"),
+    ("CurvDecelOption", "2"),
     ("FCA11Message", "0"),
     ("StandstillResumeAlt", "0"),
     ("MapboxEnabled", "0"),
