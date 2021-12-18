@@ -327,7 +327,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   }
 
   p.setBrush(QColor(0, 0, 0, 0));
-  p.setPen(QColor(255, 255, 255, 150));
+  p.setPen(whiteColor(150));
   //p.setRenderHint(QPainter::TextAntialiasing);
   p.setOpacity(0.7);
   int ui_viz_rx = bdr_s + 190;
@@ -387,14 +387,14 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.setOpacity(1.0);
     p.setPen(QPen(QColor(255, 255, 255, 80), 6));
     p.drawRoundedRect(left_panel, 20, 20);
-    p.setPen(QColor(255, 255, 255, 200));
+    p.setPen(whiteColor(200));
     //p.setRenderHint(QPainter::TextAntialiasing);
     // lead drel
     if (lead_stat) {
       if (dist_rel < 5) {
-        p.setPen(QColor(201, 34, 49, 200));
+        p.setPen(redColor(200));
       } else if (int(dist_rel) < 15) {
-        p.setPen(QColor(255, 175, 3, 200));
+        p.setPen(orangeColor(200));
       }
       if (dist_rel < 10) {
         debugText(p, sp_xl, sp_yl, QString::number(dist_rel, 'f', 1), 150, 58);
@@ -402,7 +402,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
         debugText(p, sp_xl, sp_yl, QString::number(dist_rel, 'f', 0), 150, 58);
       }
     }
-    p.setPen(QColor(255, 255, 255, 200));
+    p.setPen(whiteColor(200));
     debugText(p, sp_xl, sp_yl + 35, QString("REL DIST"), 150, 27);
     p.translate(sp_xl + 90, sp_yl + 20);
     p.rotate(-90);
@@ -411,16 +411,16 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     // lead spd
     sp_yl = sp_yl + j_num;
     if (int(vel_rel) < -5) {
-      p.setPen(QColor(201, 34, 49, 200));
+      p.setPen(redColor(200));
     } else if (int(vel_rel) < 0) {
-      p.setPen(QColor(255, 188, 3, 200));
+      p.setPen(orangeColor(200));
     }
     if (lead_stat) {
       debugText(p, sp_xl, sp_yl, QString::number(vel_rel * (s->scene.is_metric ? 3.6 : 2.2369363), 'f', 0), 150, 58);
     } else {
       debugText(p, sp_xl, sp_yl, "-", 150, 58);
     }
-    p.setPen(QColor(255, 255, 255, 200));
+    p.setPen(whiteColor(200));
     debugText(p, sp_xl, sp_yl + 35, QString("REL SPED"), 150, 27);
     p.translate(sp_xl + 90, sp_yl + 20);
     p.rotate(-90);
@@ -428,14 +428,14 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.resetMatrix();
     // steer angle
     sp_yl = sp_yl + j_num;
-    p.setPen(QColor(0, 255, 0, 200));
+    p.setPen(greenColor(200));
     if ((int(ang_str) < -50) || (int(ang_str) > 50)) {
-      p.setPen(QColor(201, 34, 49, 200));
+      p.setPen(redColor(200));
     } else if ((int(ang_str) < -30) || (int(ang_str) > 30)) {
-      p.setPen(QColor(255, 175, 3, 200));
+      p.setPen(orangeQColor(200));
     }
     debugText(p, sp_xl, sp_yl, QString::number(ang_str, 'f', 0), 150, 58);
-    p.setPen(QColor(255, 255, 255, 200));
+    p.setPen(whiteColor(200));
     debugText(p, sp_xl, sp_yl + 35, QString("STER ANG"), 150, 27);
     p.translate(sp_xl + 90, sp_yl + 20);
     p.rotate(-90);
@@ -477,16 +477,16 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.setOpacity(1.0);
     p.setPen(QPen(QColor(255, 255, 255, 80), 6));
     p.drawRoundedRect(right_panel, 20, 20);
-    p.setPen(QColor(255, 255, 255, 200));
+    p.setPen(whiteColor(200));
     //p.setRenderHint(QPainter::TextAntialiasing);
     // cpu temp
     if (s->scene.cpuTemp > 85) {
-      p.setPen(QColor(255, 0, 0, 200));
+      p.setPen(redColor(200));
     } else if (s->scene.cpuTemp > 75) {
-      p.setPen(QColor(255, 188, 3, 200));
+      p.setPen(orangeColor(200));
     }
     debugText(p, sp_xr, sp_yr, QString::number(s->scene.cpuTemp, 'f', 0) + "°C", 150, 58);
-    p.setPen(QColor(255, 255, 255, 200));
+    p.setPen(whiteColor(200));
     debugText(p, sp_xr, sp_yr + 35, QString("CPU TEMP"), 150, 27);
     p.translate(sp_xr + 90, sp_yr + 20);
     p.rotate(-90);
@@ -496,12 +496,12 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       // sys temp
       sp_yr = sp_yr + j_num;
       if (s->scene.ambientTemp > 50) {
-        p.setPen(QColor(255, 0, 0, 200));
+        p.setPen(redColor(200));
       } else if (s->scene.ambientTemp > 45) {
-        p.setPen(QColor(255, 188, 3, 200));
+        p.setPen(orangeColor(200));
       } 
       debugText(p, sp_xr, sp_yr, QString::number(s->scene.ambientTemp, 'f', 0) + "°C", 150, 58);
-      p.setPen(QColor(255, 255, 255, 200));
+      p.setPen(whiteColor(200));
       debugText(p, sp_xr, sp_yr + 35, QString("SYS TEMP"), 150, 27);
       p.translate(sp_xr + 90, sp_yr + 20);
       p.rotate(-90);
@@ -511,12 +511,12 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       // bat temp
       sp_yr = sp_yr + j_num;
       if (s->scene.batTemp > 50) {
-        p.setPen(QColor(255, 0, 0, 200));
+        p.setPen(redColor(200));
       } else if (s->scene.batTemp > 40) {
-        p.setPen(QColor(255, 188, 3, 200));
+        p.setPen(orangeColor(200));
       }
       debugText(p, sp_xr, sp_yr, QString::number(s->scene.batTemp, 'f', 0) + "°C", 150, 58);
-      p.setPen(QColor(255, 255, 255, 200));
+      p.setPen(whiteColor(200));
       debugText(p, sp_xr, sp_yr + 35, QString("BAT TEMP"), 150, 27);
       p.translate(sp_xr + 90, sp_yr + 20);
       p.rotate(-90);
@@ -535,9 +535,9 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     if (s->scene.gpsAccuracyUblox != 0.00) {
       sp_yr = sp_yr + j_num;
       if (s->scene.gpsAccuracyUblox > 1.3) {
-        p.setPen(QColor(201, 34, 49, 200));
+        p.setPen(redColor(200));
       } else if (s->scene.gpsAccuracyUblox > 0.85) {
-        p.setPen(QColor(255, 175, 3, 200));
+        p.setPen(orangeColor(200));
       }
       if (s->scene.gpsAccuracyUblox > 99 || s->scene.gpsAccuracyUblox == 0) {
         debugText(p, sp_xr, sp_yr, "None", 150, 58);
@@ -546,7 +546,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       } else {
         debugText(p, sp_xr, sp_yr, QString::number(s->scene.gpsAccuracyUblox, 'f', 2), 150, 58);
       }
-      p.setPen(QColor(255, 255, 255, 200));
+      p.setPen(whiteColor(200));
       debugText(p, sp_xr, sp_yr + 35, QString("GPS PREC"), 150, 27);
       p.translate(sp_xr + 90, sp_yr + 20);
       p.rotate(-90);
@@ -650,7 +650,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   if (rec_stat) p.setBrush(redColor(150));
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawEllipse(recbtn_draw);
-  p.setPen(QColor(255, 255, 255, 200));
+  p.setPen(whiteColor(200));
   p.drawText(recbtn_draw, Qt::AlignCenter, QString("REC"));
   dashcam(s);
 
@@ -660,7 +660,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   if (laneless_stat) p.setBrush(greenColor(150));
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawEllipse(lanebtn_draw);
-  p.setPen(QColor(255, 255, 255, 200));
+  p.setPen(whiteColor(200));
   if (lane_stat == 0) {
     configFont(p, "Open Sans", 40, "SemiBold");
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150, 880, 140, 140), Qt::AlignCenter, QString("LANE"));
@@ -679,7 +679,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   if (map_stat) p.setBrush(blueColor(150));
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawEllipse(navibtn_draw);
-  p.setPen(QColor(255, 255, 255, 200));
+  p.setPen(whiteColor(200));
   if (mapbox_stat) {
     configFont(p, "Open Sans", 40, "SemiBold");
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150 - 150, 885, 140, 140), Qt::AlignCenter, QString("MAP"));
