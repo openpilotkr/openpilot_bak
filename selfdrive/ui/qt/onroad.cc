@@ -645,6 +645,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   }
 
   // opkr rec
+  dashcam(s);
   QRect recbtn_draw(rect().right() - bdr_s - 140 - 20, 905, 140, 140);
   p.setBrush(Qt::NoBrush);
   if (rec_stat) p.setBrush(redColor(150));
@@ -652,7 +653,6 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   p.drawEllipse(recbtn_draw);
   p.setPen(whiteColor(200));
   p.drawText(recbtn_draw, Qt::AlignCenter, QString("REC"));
-  dashcam(s);
 
   // lane selector
   QRect lanebtn_draw(rect().right() - bdr_s - 140 - 20 - 160, 905, 140, 140);
