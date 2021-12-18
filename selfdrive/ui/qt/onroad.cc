@@ -660,9 +660,11 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   p.drawEllipse(lanebtn_draw);
   p.setPen(QColor(255, 255, 255, 200));
   if (lane_stat == 0) {
-    p.drawText(lanebtn_draw, Qt::AlignCenter, QString("LANE\nLINE"));
+    p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150, 880, 140, 140), Qt::AlignCenter, QString("LANE"));
+    p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150, 930, 140, 140), Qt::AlignCenter, QString("LINE"));
   } else if (lane_stat == 1) {
-    p.drawText(lanebtn_draw, Qt::AlignCenter, QString("LANE\nLESS"));
+    p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150, 880, 140, 140), Qt::AlignCenter, QString("LANE"));
+    p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 150, 930, 140, 140), Qt::AlignCenter, QString("LESS"));
   } else if (lane_stat == 2) {
     p.drawText(lanebtn_draw, Qt::AlignCenter, QString("AUTO"));
   }
