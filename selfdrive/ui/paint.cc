@@ -433,6 +433,7 @@ static void ui_draw_gear( UIState *s ) {
     case 2 : strcpy( str_msg, "D" ); nColor = COLOR_GREEN; break;
     case 3 : strcpy( str_msg, "N" ); nColor = COLOR_WHITE; break;
     case 4 : strcpy( str_msg, "R" ); nColor = COLOR_RED; break;
+    case 5 : strcpy( str_msg, "M" ); nColor = COLOR_GREEN; break;
     case 7 : strcpy( str_msg, "B" ); break;
     default: sprintf( str_msg, "%d", ngetGearShifter ); break;
   }
