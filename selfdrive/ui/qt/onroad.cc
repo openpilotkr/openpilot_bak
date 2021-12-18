@@ -705,8 +705,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   }
 
   // autohold
-  //if (auto_hold && !comma_stock_ui) {
-  if (true) {
+  if (auto_hold && !comma_stock_ui) {
     int y_pos = 0;
     if (s->scene.steer_warning && (s->scene.car_state.getVEgo() < 0.1 || standstill) && !s->scene.steer_wind_down && s->scene.car_state.getSteeringAngleDeg() < 90) {
       y_pos = 500;
