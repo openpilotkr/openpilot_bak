@@ -250,7 +250,7 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("dist_rel", drel);
   setProperty("vel_rel", vrel);
   setProperty("ang_str", s.scene.angleSteers);
-  setProperty("rec_stat", s.scene.rec_stat);
+  setProperty("record_stat", s.scene.rec_stat);
   setProperty("lane_stat", s.scene.laneless_mode);
   setProperty("laneless_stat", s.scene.lateralPlan.lanelessModeStatus);
   setProperty("map_stat", s.scene.map_is_running);
@@ -648,7 +648,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   dashcam(s);
   QRect recbtn_draw(rect().right() - bdr_s - 140 - 20, 905, 140, 140);
   p.setBrush(Qt::NoBrush);
-  if (rec_stat) p.setBrush(redColor(150));
+  if (record_stat || s->scene.rec_stat || recording_on) p.setBrush(redColor(150));
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawEllipse(recbtn_draw);
   p.setPen(whiteColor(200));
@@ -662,11 +662,11 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   p.drawEllipse(lanebtn_draw);
   p.setPen(whiteColor(200));
   if (lane_stat == 0) {
-    configFont(p, "Open Sans", 38, "SemiBold");
+    configFont(p, "Open Sans", 39, "SemiBold");
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160, 890, 140, 140), Qt::AlignCenter, QString("LANE"));
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160, 920, 140, 140), Qt::AlignCenter, QString("LINE"));
   } else if (lane_stat == 1) {
-    configFont(p, "Open Sans", 38, "SemiBold");
+    configFont(p, "Open Sans", 39, "SemiBold");
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160, 890, 140, 140), Qt::AlignCenter, QString("LANE"));
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160, 920, 140, 140), Qt::AlignCenter, QString("LESS"));
   } else if (lane_stat == 2) {
@@ -685,7 +685,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160 - 160, 890, 140, 140), Qt::AlignCenter, QString("MAP"));
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160 - 160, 920, 140, 140), Qt::AlignCenter, QString("Search"));
   } else {
-    configFont(p, "Open Sans", 40, "SemiBold");
+    configFont(p, "Open Sans", 45, "SemiBold");
     p.drawText(navibtn_draw, Qt::AlignCenter, QString("NAVI"));
   }
 }

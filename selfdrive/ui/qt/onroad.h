@@ -26,7 +26,7 @@ class OnroadHud : public QWidget {
   Q_PROPERTY(float dist_rel MEMBER dist_rel NOTIFY valueChanged);
   Q_PROPERTY(float vel_rel MEMBER vel_rel NOTIFY valueChanged);
   Q_PROPERTY(float ang_str MEMBER ang_str NOTIFY valueChanged);
-  Q_PROPERTY(bool rec_stat MEMBER rec_stat NOTIFY valueChanged);
+  Q_PROPERTY(bool record_stat MEMBER record_stat NOTIFY valueChanged);
   Q_PROPERTY(int lane_stat MEMBER lane_stat NOTIFY valueChanged);
   Q_PROPERTY(bool laneless_stat MEMBER laneless_stat NOTIFY valueChanged);
   Q_PROPERTY(bool map_stat MEMBER map_stat NOTIFY valueChanged);
@@ -73,7 +73,7 @@ private:
   float dist_rel = 0;
   float vel_rel = 0;
   float ang_str = 0;
-  bool rec_stat = false;
+  bool record_stat = false;
   int lane_stat = 0;
   bool laneless_stat = false;
   bool map_stat = false;

@@ -29,6 +29,7 @@ char filenames[RECORD_FILES][50]; // Track the filenames so they can be deleted 
 bool lock_current_video = false; // If true save the current video before rotating
 bool locked_files[RECORD_FILES]; // Track which files are locked
 int files_created = 0;
+bool recording_on = false;
 
 int get_time() {
   // Get current time (in seconds)
@@ -81,7 +82,9 @@ void save_file(char *videos_dir, char *filename) {
   system(cmd);
 }
 
-void stop_capture() {
+void stop_capture(UIState *s) {
+  recording_on = false;
+  s->scene.rec_stat = false;
   char videos_dir[50] = "/storage/emulated/0/videos";
 
   if (captureState == CAPTURE_STATE_CAPTURING) {
@@ -102,6 +105,8 @@ void stop_capture() {
 }
 
 void start_capture(UIState *s) {
+  recording_on = true;
+  s->scene.rec_stat = true;
   captureState = CAPTURE_STATE_CAPTURING;
   char cmd[128] = "";
   char purge[128] = "";
@@ -182,7 +187,7 @@ void draw_date_time(UIState *s) {
 static void rotate_video(UIState *s) {
   // Overwrite the existing video (if needed)
   elapsed_time = 0;
-  stop_capture();
+  stop_capture(s);
   captureState = CAPTURE_STATE_CAPTURING;
   start_capture(s);
 }
@@ -204,13 +209,10 @@ static void screen_draw_button(UIState *s) {
 
 void screen_toggle_record_state(UIState *s) {
   if (captureState == CAPTURE_STATE_CAPTURING) {
-    s->scene.rec_stat = false;
-    stop_capture();
+    stop_capture(s);
     lock_current_video = false;
-  }
-  else {
+  } else {
     //captureState = CAPTURE_STATE_CAPTURING;
-    s->scene.rec_stat = true;
     start_capture(s);
   }
 }
@@ -240,14 +242,14 @@ void dashcam(UIState *s) {
 
   if (!s->scene.ignition && captureState == CAPTURE_STATE_CAPTURING && !s->is_OpenpilotViewEnabled) {
     // Assume car is not in drive so stop recording
-    stop_capture();
+    stop_capture(s);
   }
 
   if (s->scene.driving_record) {
     if ((*s->sm)["carState"].getCarState().getVEgo() > 1 && captureState == CAPTURE_STATE_NOT_CAPTURING) {
       start_capture(s);
     } else if (s->scene.standStill && captureState == CAPTURE_STATE_CAPTURING) {
-      stop_capture();
+      stop_capture(s);
     }
   }
 }
