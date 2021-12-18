@@ -697,10 +697,10 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     int second = 0;
     minute = int(ss_elapsed / 60);
     second = int(ss_elapsed) - (minute * 60);
-    p.setPen(ochreColor(240));
-    debugText(p, mapbox_stat?(rect().right()-bdr_s-295):(rect().right()-bdr_s-545), bdr_s+410, "STOP", 240, mapbox_stat?105:150);
-    p.setPen(whiteColor(240));
-    debugText(p, mapbox_stat?(rect().right()-bdr_s-295):(rect().right()-bdr_s-545), mapbox_stat?bdr_s+510:bdr_s+560, QString::number(minute).rightJustified(2,'0') + ":" + QString::number(second).rightJustified(2,'0'), 240, mapbox_stat?125:175);
+    p.setPen(ochreColor(220));
+    debugText(p, mapbox_stat?(rect().right()-bdr_s-295):(rect().right()-bdr_s-545), bdr_s+410, "STOP", 220, mapbox_stat?85:130);
+    p.setPen(whiteColor(220));
+    debugText(p, mapbox_stat?(rect().right()-bdr_s-295):(rect().right()-bdr_s-545), mapbox_stat?bdr_s+510:bdr_s+560, QString::number(minute).rightJustified(2,'0') + ":" + QString::number(second).rightJustified(2,'0'), 220, mapbox_stat?90:135);
   }
 
 }
