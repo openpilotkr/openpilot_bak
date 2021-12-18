@@ -662,11 +662,11 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   p.drawEllipse(lanebtn_draw);
   p.setPen(whiteColor(200));
   if (lane_stat == 0) {
-    configFont(p, "Open Sans", 35, "SemiBold");
+    configFont(p, "Open Sans", 38, "SemiBold");
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160, 890, 140, 140), Qt::AlignCenter, QString("LANE"));
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160, 920, 140, 140), Qt::AlignCenter, QString("LINE"));
   } else if (lane_stat == 1) {
-    configFont(p, "Open Sans", 35, "SemiBold");
+    configFont(p, "Open Sans", 38, "SemiBold");
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160, 890, 140, 140), Qt::AlignCenter, QString("LANE"));
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160, 920, 140, 140), Qt::AlignCenter, QString("LESS"));
   } else if (lane_stat == 2) {
@@ -681,10 +681,11 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   p.drawEllipse(navibtn_draw);
   p.setPen(whiteColor(200));
   if (mapbox_stat) {
-    configFont(p, "Open Sans", 35, "SemiBold");
+    configFont(p, "Open Sans", 38, "SemiBold");
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160 - 160, 890, 140, 140), Qt::AlignCenter, QString("MAP"));
     p.drawText(QRect(rect().right() - bdr_s - 140 - 20 - 160 - 160, 920, 140, 140), Qt::AlignCenter, QString("Search"));
   } else {
+    configFont(p, "Open Sans", 40, "SemiBold");
     p.drawText(navibtn_draw, Qt::AlignCenter, QString("NAVI"));
   }
 }
