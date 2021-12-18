@@ -721,7 +721,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.setPen(QPen(QColor(255, 255, 255, 50), 10));
     p.drawRoundedRect(ah_rect, 20, 20);
     p.setPen(greenColor(150));
-    debugText(p, a_center, y_pos + 105, "AUTO HOLD", 150, 79, true);
+    debugText(p, a_center, y_pos + 97, "AUTO HOLD", 150, 79, true);
   }
 }
 
