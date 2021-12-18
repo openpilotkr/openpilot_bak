@@ -257,6 +257,7 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("dm_mode", s.scene.monitoring_mode);
   setProperty("ss_elapsed", s.scene.lateralPlan.standstillElapsedTime);
   setProperty("standstill", s.scene.standStill);
+  setProperty("auto_hold", s.scene.brakeHold);
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
@@ -691,6 +692,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.drawText(navibtn_draw, Qt::AlignCenter, QString("NAVI"));
     }
   }
+  // standstill
   if (standstill && !comma_stock_ui) {
     int minute = 0;
     int second = 0;
@@ -702,6 +704,24 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     debugText(p, mapbox_stat?(rect().right()-bdr_s-295):(rect().right()-bdr_s-545), mapbox_stat?bdr_s+500:bdr_s+550, QString::number(minute).rightJustified(2,'0') + ":" + QString::number(second).rightJustified(2,'0'), 220, mapbox_stat?95:140);
   }
 
+  // autohold
+  //if (auto_hold && !comma_stock_ui) {
+  if (true) {
+    int y_pos = 0;
+    if (s->scene.steer_warning && (s->scene.car_state.getVEgo() < 0.1 || standstill) && !s->scene.steer_wind_down && s->scene.car_state.getSteeringAngleDeg() < 90) {
+      y_pos = 500;
+    } else {
+      y_pos = 740;
+    }
+    const int width = 500;
+    QRect ah_rect(s->fb_w/2 - width/2, y_pos, width, 145);
+    p.setBrush(Qt::NoBrush);
+    p.setBrush(blackColor(80));
+    p.setPen(QPen(QColor(255, 255, 255, 50), 10));
+    p.drawRoundedRect(ah_rect, 20, 20);
+    p.setPen(greenColor(150));
+    p.debugText(ah_rect, Qt::AlignCenter, "AUTO HOLD", 150, 80);
+  }
 }
 
 void OnroadHud::drawText(QPainter &p, int x, int y, const QString &text, int alpha) {
