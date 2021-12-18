@@ -236,6 +236,7 @@ void OnroadHud::updateState(const UIState &s) {
   float drel = lead_one.getDRel();
   float vrel = lead_one.getVRel();
   bool leadstat = lead_one.getStatus();
+  dashcam(s);
 
   setProperty("is_cruise_set", cruise_set);
   setProperty("speed", QString::number(std::nearbyint(cur_speed)));
@@ -645,10 +646,9 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   }
 
   // opkr rec
-  dashcam(s);
   QRect recbtn_draw(rect().right() - bdr_s - 140 - 20, 905, 140, 140);
   p.setBrush(Qt::NoBrush);
-  if (record_stat || s->scene.rec_stat || recording_on) p.setBrush(redColor(150));
+  if (record_stat) p.setBrush(redColor(150));
   p.setPen(QPen(QColor(255, 255, 255, 80), 6));
   p.drawEllipse(recbtn_draw);
   p.setPen(whiteColor(200));

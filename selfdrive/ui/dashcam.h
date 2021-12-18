@@ -29,7 +29,6 @@ char filenames[RECORD_FILES][50]; // Track the filenames so they can be deleted 
 bool lock_current_video = false; // If true save the current video before rotating
 bool locked_files[RECORD_FILES]; // Track which files are locked
 int files_created = 0;
-bool recording_on = false;
 
 int get_time() {
   // Get current time (in seconds)
@@ -83,7 +82,6 @@ void save_file(char *videos_dir, char *filename) {
 }
 
 void stop_capture(UIState *s) {
-  recording_on = false;
   s->scene.rec_stat = false;
   char videos_dir[50] = "/storage/emulated/0/videos";
 
@@ -105,7 +103,6 @@ void stop_capture(UIState *s) {
 }
 
 void start_capture(UIState *s) {
-  recording_on = true;
   s->scene.rec_stat = true;
   captureState = CAPTURE_STATE_CAPTURING;
   char cmd[128] = "";
