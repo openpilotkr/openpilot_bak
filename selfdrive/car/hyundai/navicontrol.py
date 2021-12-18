@@ -278,7 +278,7 @@ class NaviControl():
         dRel = int(self.lead_0.dRel)
         vRel = int(self.lead_0.vRel * (CV.MS_TO_MPH if CS.is_set_speed_in_mph else CV.MS_TO_KPH))
         if vRel >= (-2 if CS.is_set_speed_in_mph else -4):
-          var_speed = min(CS.CP.vFuture + max(0, dRel*0.2+vRel), navi_speed)
+          var_speed = min(CS.CP.vFuture + max(0, int(dRel*(0.1 if CS.is_set_speed_in_mph else 0.15)+vRel)), navi_speed)
           ttime = 100 if CS.is_set_speed_in_mph else 70
           self.t_interval = int(interp(dRel, [15, 50], [7, ttime])) if not (self.onSpeedControl or self.curvSpeedControl or self.cut_in) else 10 if CS.is_set_speed_in_mph else 7
         else:
