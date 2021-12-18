@@ -254,6 +254,7 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("laneless_stat", s.scene.lateralPlan.lanelessModeStatus);
   setProperty("map_stat", s.scene.map_is_running);
   setProperty("mapbox_stat", s.scene.mapbox_running);
+  setProperty("dm_mode", s.scene.monitoring_mode);
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
@@ -322,7 +323,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   // dm icon
   if (true) {
     drawIcon(p, radius / 2 + bdr_s, radius / 2 + bdr_s,
-             dm_img, s->scene.monitoring_mode ? QColor(10, 120, 20, 70) : QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
+             dm_img, dm_mode ? QColor(10, 120, 20, 70) : QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
   }
 
   p.setBrush(QColor(0, 0, 0, 0));
