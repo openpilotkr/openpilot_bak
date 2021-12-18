@@ -236,7 +236,6 @@ void OnroadHud::updateState(const UIState &s) {
   float drel = lead_one.getDRel();
   float vrel = lead_one.getVRel();
   bool leadstat = lead_one.getStatus();
-  dashcam(s);
 
   setProperty("is_cruise_set", cruise_set);
   setProperty("speed", QString::number(std::nearbyint(cur_speed)));
@@ -883,6 +882,7 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::RadarState::LeadData::
     configFont(painter, "Open Sans", 35, "SemiBold");
     painter.drawText(QRect(x - (sz * 1.25), y, 2 * (sz * 1.25), sz * 1.25), Qt::AlignCenter, QString("V")); // opkr
   }
+  dashcam(s);
 }
 
 void NvgWindow::paintGL() {
