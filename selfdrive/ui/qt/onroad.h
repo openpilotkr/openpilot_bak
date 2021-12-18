@@ -32,6 +32,8 @@ class OnroadHud : public QWidget {
   Q_PROPERTY(bool map_stat MEMBER map_stat NOTIFY valueChanged);
   Q_PROPERTY(bool mapbox_stat MEMBER mapbox_stat NOTIFY valueChanged);
   Q_PROPERTY(bool dm_mode MEMBER dm_mode NOTIFY valueChanged);
+  Q_PROPERTY(int ss_elapsed MEMBER ss_elapsed NOTIFY valueChanged);
+  Q_PROPERTY(bool standstill MEMBER standstill NOTIFY valueChanged);
 
 public:
   explicit OnroadHud(QWidget *parent);
@@ -80,6 +82,8 @@ private:
   bool map_stat = false;
   bool mapbox_stat = false;
   bool dm_mode = false;
+  int ss_elapsed = 0;
+  bool standstill = false;
 
 signals:
   void valueChanged();

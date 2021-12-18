@@ -255,6 +255,8 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("map_stat", s.scene.map_is_running);
   setProperty("mapbox_stat", s.scene.mapbox_running);
   setProperty("dm_mode", s.scene.monitoring_mode);
+  setProperty("ss_elapsed", s.scene.lateralPlan.standstillElapsedTime);
+  setProperty("standstill", s.scene.standStill);
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
@@ -689,6 +691,20 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.drawText(navibtn_draw, Qt::AlignCenter, QString("NAVI"));
     }
   }
+  //if (standstill) {
+  if (true) {
+    int minute = 0;
+    int second = 0;
+    minute = int(ss_elapsed / 60);
+    second = int(ss_elapsed) - (minute * 60);
+    p.setPen(ochreColor(240));
+    configFont(p, "Open Sans", mapbox_stat?125:170, "Bold");
+    drawText(p, mapbox_stat?1610:1360, bdr_s+410, "STOP");
+    p.setPen(whiteColor(240));
+    configFont(p, "Open Sans", mapbox_stat?150:200, "Bold");
+    drawText(p, mapbox_stat?1610:1360, mapbox_stat?bdr_s+510:bdr_s+560, QString::number(minute).rightJustified(2,'0') + ":" + QString::number(second).rightJustified(2,'0'));
+  }
+
 }
 
 void OnroadHud::drawText(QPainter &p, int x, int y, const QString &text, int alpha) {
