@@ -721,7 +721,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.setPen(QPen(QColor(255, 255, 255, 50), 10));
     p.drawRoundedRect(ah_rect, 20, 20);
     p.setPen(greenColor(150));
-    debugText(p, a_center, y_pos, "AUTO HOLD", 150, 80);
+    debugText(p, a_center, y_pos + 145 / 2, "AUTO HOLD", 150, 79, true);
   }
 }
 
@@ -735,8 +735,12 @@ void OnroadHud::drawText(QPainter &p, int x, int y, const QString &text, int alp
   p.drawText(real_rect.x(), real_rect.bottom(), text);
 }
 
-void OnroadHud::debugText(QPainter &p, int x, int y, const QString &text, int alpha, int fontsize) {
-  configFont(p, "Open Sans", fontsize, "SemiBold");
+void OnroadHud::debugText(QPainter &p, int x, int y, const QString &text, int alpha, int fontsize, bool bold) {
+  if (bold) {
+    configFont(p, "Open Sans", fontsize, "Bold");
+  } else {
+    configFont(p, "Open Sans", fontsize, "SemiBold");
+  }
   QFontMetrics fm(p.font());
   QRect init_rect = fm.boundingRect(text);
   QRect real_rect = fm.boundingRect(init_rect, 0, text);
