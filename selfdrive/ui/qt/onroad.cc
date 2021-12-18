@@ -698,11 +698,11 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     minute = int(ss_elapsed / 60);
     second = int(ss_elapsed) - (minute * 60);
     p.setPen(ochreColor(240));
-    configFont(p, "Open Sans", mapbox_stat?125:170, "Bold");
-    drawText(p, mapbox_stat?1610:1360, bdr_s+410, "STOP");
+    configFont(p, "Open Sans", mapbox_stat?105:150, "Bold");
+    drawText(p, mapbox_stat?(rect().right()-bdr_s-295):(rect().right()-bdr_s-545), bdr_s+410, "STOP");
     p.setPen(whiteColor(240));
-    configFont(p, "Open Sans", mapbox_stat?150:200, "Bold");
-    drawText(p, mapbox_stat?1610:1360, mapbox_stat?bdr_s+510:bdr_s+560, QString::number(minute).rightJustified(2,'0') + ":" + QString::number(second).rightJustified(2,'0'));
+    configFont(p, "Open Sans", mapbox_stat?125:175, "Bold");
+    drawText(p, mapbox_stat?(rect().right()-bdr_s-295):(rect().right()-bdr_s-545), mapbox_stat?bdr_s+510:bdr_s+560, QString::number(minute).rightJustified(2,'0') + ":" + QString::number(second).rightJustified(2,'0'));
   }
 
 }
