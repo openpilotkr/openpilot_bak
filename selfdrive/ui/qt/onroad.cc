@@ -737,25 +737,25 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     bx = s->fb_w/2 - bw/2;
     bh = 400;
     QPointF leftbsign1[] = {{bx, bh/4}, {bx-bw/4, bh/4}, {bx-bw/2, bh/2}, {bx-bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx-bw/4, bh/2}};
-    bx -= 125
+    bx -= 125;
     QPointF leftbsign2[] = {{bx, bh/4}, {bx-bw/4, bh/4}, {bx-bw/2, bh/2}, {bx-bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx-bw/4, bh/2}};
-    bx -= 125
+    bx -= 125;
     QPointF leftbsign3[] = {{bx, bh/4}, {bx-bw/4, bh/4}, {bx-bw/2, bh/2}, {bx-bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx-bw/4, bh/2}};
 
     if (true) {
     //if (blinker_rate<=120 && blinker_rate>=60) {
-      painter.setBrush(yellowColor(70));
-      painter.drawPolygon(leftbsign1, std::size(leftbsign1));
+      p.setBrush(yellowColor(70));
+      p.drawPolygon(leftbsign1, std::size(leftbsign1));
     }
     if (true) {
     //if (blinker_rate<=100 && blinker_rate>=60) {
-      painter.setBrush(yellowColor(140));
-      painter.drawPolygon(leftbsign2, std::size(leftbsign2));
+      p.setBrush(yellowColor(140));
+      p.drawPolygon(leftbsign2, std::size(leftbsign2));
     }
     if (true) {
     //if (blinker_rate<=80 && blinker_rate>=60) {
-      painter.setBrush(yellowColor(210));
-      painter.drawPolygon(leftbsign3, std::size(leftbsign3));
+      p.setBrush(yellowColor(210));
+      p.drawPolygon(leftbsign3, std::size(leftbsign3));
     }
   }
   if (true) {
@@ -764,25 +764,25 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     bx = s->fb_w/2 - bw/2 + bw;
     bh = 400;
     QPointF rightbsign1[] = {{bx, bh/4}, {bx+bw/4, bh/4}, {bx+bw/2, bh/2}, {bx+bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx+bw/4, bh/2}};
-    bx += 125
+    bx += 125;
     QPointF rightbsign2[] = {{bx, bh/4}, {bx+bw/4, bh/4}, {bx+bw/2, bh/2}, {bx+bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx+bw/4, bh/2}};
-    bx += 125
+    bx += 125;
     QPointF rightbsign3[] = {{bx, bh/4}, {bx+bw/4, bh/4}, {bx+bw/2, bh/2}, {bx+bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx+bw/4, bh/2}};
 
     if (true) {
     //if (blinker_rate<=120 && blinker_rate>=60) {
-      painter.setBrush(yellowColor(70));
-      painter.drawPolygon(rightbsign1, std::size(rightbsign1));
+      p.setBrush(yellowColor(70));
+      p.drawPolygon(rightbsign1, std::size(rightbsign1));
     }
     if (true) {
     //if (blinker_rate<=100 && blinker_rate>=60) {
-      painter.setBrush(yellowColor(140));
-      painter.drawPolygon(rightbsign2, std::size(rightbsign2));
+      p.setBrush(yellowColor(140));
+      p.drawPolygon(rightbsign2, std::size(rightbsign2));
     }
     if (true) {
     //if (blinker_rate<=80 && blinker_rate>=60) {
-      painter.setBrush(yellowColor(210));
-      painter.drawPolygon(rightbsign3, std::size(rightbsign3));
+      p.setBrush(yellowColor(210));
+      p.drawPolygon(rightbsign3, std::size(rightbsign3));
     }
   }
 }
