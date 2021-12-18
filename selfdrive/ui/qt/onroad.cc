@@ -10,7 +10,6 @@
 #include "selfdrive/ui/qt/util.h"
 #include "selfdrive/ui/qt/api.h"
 #include "selfdrive/ui/qt/widgets/input.h"
-#include "selfdrive/ui/dashcam.h"
 
 #ifdef ENABLE_MAPS
 #include "selfdrive/ui/qt/maps/map.h"
@@ -645,7 +644,6 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   }
 
   // opkr rec
-  dashcam(s);
   QRect recbtn_draw(rect().right() - bdr_s - 140 - 20, 905, 140, 140);
   p.setBrush(Qt::NoBrush);
   if (record_stat) p.setBrush(redColor(150));
