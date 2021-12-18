@@ -728,9 +728,9 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   }
 
   // opkr blinker
-  int bw = 0;
-  int bx = 0;
-  int bh = 0;
+  float bw = 0;
+  float bx = 0;
+  float bh = 0;
   // if (left_blinker) {
   if (true) {
     bw = 250;
