@@ -258,6 +258,10 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("ss_elapsed", s.scene.lateralPlan.standstillElapsedTime);
   setProperty("standstill", s.scene.standStill);
   setProperty("auto_hold", s.scene.brakeHold);
+  setProperty("left_blinker", s.scene.leftBlinker);
+  setProperty("right_blinker", s.scene.rightBlinker);
+  setProperty("blinker_rate", s.scene.blinker_blinkingrate);
+  
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
@@ -657,7 +661,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.setPen(whiteColor(200));
     p.drawText(recbtn_draw, Qt::AlignCenter, QString("REC"));
 
-    // lane selector
+    // opkr lane selector
     QRect lanebtn_draw(rect().right() - bdr_s - 140 - 20 - 160, 905, 140, 140);
     p.setBrush(Qt::NoBrush);
     if (laneless_stat) p.setBrush(greenColor(150));
@@ -676,7 +680,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.drawText(lanebtn_draw, Qt::AlignCenter, QString("AUTO"));
     }
 
-    // navi button
+    // opkr navi button
     QRect navibtn_draw(rect().right() - bdr_s - 140 - 20 - 160 - 160, 905, 140, 140);
     p.setBrush(Qt::NoBrush);
     if (map_stat) p.setBrush(blueColor(150));
@@ -692,7 +696,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.drawText(navibtn_draw, Qt::AlignCenter, QString("NAVI"));
     }
   }
-  // standstill
+  // opkr standstill
   if (standstill && !comma_stock_ui) {
     int minute = 0;
     int second = 0;
@@ -704,7 +708,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     debugText(p, mapbox_stat?(rect().right()-bdr_s-295):(rect().right()-bdr_s-545), mapbox_stat?bdr_s+500:bdr_s+550, QString::number(minute).rightJustified(2,'0') + ":" + QString::number(second).rightJustified(2,'0'), 220, mapbox_stat?95:140);
   }
 
-  // autohold
+  // opkr autohold
   if (auto_hold && !comma_stock_ui) {
     int y_pos = 0;
     if (s->scene.steer_warning && (s->scene.car_state.getVEgo() < 0.1 || standstill) && !s->scene.steer_wind_down && s->scene.car_state.getSteeringAngleDeg() < 90) {
@@ -721,6 +725,65 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.drawRoundedRect(ah_rect, 20, 20);
     p.setPen(greenColor(150));
     debugText(p, a_center, y_pos + 99, "AUTO HOLD", 150, 79, true);
+  }
+
+  // opkr blinker
+  int bw = 0;
+  int bx = 0;
+  int bh = 0;
+  // if (left_blinker) {
+  if (true) {
+    bw = 250;
+    bx = s->fb_w/2 - bw/2;
+    bh = 400;
+    QPointF leftbsign1[] = {{bx, bh/4}, {bx-bw/4, bh/4}, {bx-bw/2, bh/2}, {bx-bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx-bw/4, bh/2}};
+    bx -= 125
+    QPointF leftbsign2[] = {{bx, bh/4}, {bx-bw/4, bh/4}, {bx-bw/2, bh/2}, {bx-bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx-bw/4, bh/2}};
+    bx -= 125
+    QPointF leftbsign3[] = {{bx, bh/4}, {bx-bw/4, bh/4}, {bx-bw/2, bh/2}, {bx-bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx-bw/4, bh/2}};
+
+    if (true) {
+    //if (blinker_rate<=120 && blinker_rate>=60) {
+      painter.setBrush(yellowColor(70));
+      painter.drawPolygon(leftbsign1, std::size(leftbsign1));
+    }
+    if (true) {
+    //if (blinker_rate<=100 && blinker_rate>=60) {
+      painter.setBrush(yellowColor(140));
+      painter.drawPolygon(leftbsign2, std::size(leftbsign2));
+    }
+    if (true) {
+    //if (blinker_rate<=80 && blinker_rate>=60) {
+      painter.setBrush(yellowColor(210));
+      painter.drawPolygon(leftbsign3, std::size(leftbsign3));
+    }
+  }
+  if (true) {
+  // if (right_blinker) {
+    bw = 250;
+    bx = s->fb_w/2 - bw/2 + bw;
+    bh = 400;
+    QPointF rightbsign1[] = {{bx, bh/4}, {bx+bw/4, bh/4}, {bx+bw/2, bh/2}, {bx+bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx+bw/4, bh/2}};
+    bx += 125
+    QPointF rightbsign2[] = {{bx, bh/4}, {bx+bw/4, bh/4}, {bx+bw/2, bh/2}, {bx+bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx+bw/4, bh/2}};
+    bx += 125
+    QPointF rightbsign3[] = {{bx, bh/4}, {bx+bw/4, bh/4}, {bx+bw/2, bh/2}, {bx+bw/4, bh/4+bh/2}, {bx, bh/4+bh/2}, {bx+bw/4, bh/2}};
+
+    if (true) {
+    //if (blinker_rate<=120 && blinker_rate>=60) {
+      painter.setBrush(yellowColor(70));
+      painter.drawPolygon(rightbsign1, std::size(rightbsign1));
+    }
+    if (true) {
+    //if (blinker_rate<=100 && blinker_rate>=60) {
+      painter.setBrush(yellowColor(140));
+      painter.drawPolygon(rightbsign2, std::size(rightbsign2));
+    }
+    if (true) {
+    //if (blinker_rate<=80 && blinker_rate>=60) {
+      painter.setBrush(yellowColor(210));
+      painter.drawPolygon(rightbsign3, std::size(rightbsign3));
+    }
   }
 }
 

@@ -35,6 +35,9 @@ class OnroadHud : public QWidget {
   Q_PROPERTY(int ss_elapsed MEMBER ss_elapsed NOTIFY valueChanged);
   Q_PROPERTY(bool standstill MEMBER standstill NOTIFY valueChanged);
   Q_PROPERTY(bool auto_hold MEMBER auto_hold NOTIFY valueChanged);
+  Q_PROPERTY(bool left_blinker MEMBER left_blinker NOTIFY valueChanged);
+  Q_PROPERTY(bool right_blinker MEMBER right_blinker NOTIFY valueChanged);
+  Q_PROPERTY(int blinker_rate MEMBER blinker_rate NOTIFY valueChanged);
 
 public:
   explicit OnroadHud(QWidget *parent);
@@ -86,6 +89,9 @@ private:
   int ss_elapsed = 0;
   bool standstill = false;
   bool auto_hold = false;
+  bool left_blinker = false;
+  bool right_blinker = false;
+  int blinker_rate = 120;
 
 signals:
   void valueChanged();
