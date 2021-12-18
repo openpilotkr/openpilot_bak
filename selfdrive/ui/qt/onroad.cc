@@ -713,14 +713,15 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     } else {
       y_pos = 740;
     }
-    const int width = 500;
-    QRect ah_rect(s->fb_w/2 - width/2, y_pos, width, 145);
+    int width = 500;
+    int a_center = s->fb_w/2;
+    QRect ah_rect(a_center - width/2, y_pos, width, 145);
     p.setBrush(Qt::NoBrush);
     p.setBrush(blackColor(80));
     p.setPen(QPen(QColor(255, 255, 255, 50), 10));
     p.drawRoundedRect(ah_rect, 20, 20);
     p.setPen(greenColor(150));
-    debugText(int(s->fb_w/2), y_pos, "AUTO HOLD", 150, 80);
+    debugText(p, a_center, y_pos, "AUTO HOLD", 150, 80);
   }
 }
 
