@@ -645,6 +645,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   }
 
   // opkr rec
+  dashcam(s);
   QRect recbtn_draw(rect().right() - bdr_s - 140 - 20, 905, 140, 140);
   p.setBrush(Qt::NoBrush);
   if (record_stat) p.setBrush(redColor(150));
@@ -882,7 +883,6 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::RadarState::LeadData::
     configFont(painter, "Open Sans", 35, "SemiBold");
     painter.drawText(QRect(x - (sz * 1.25), y, 2 * (sz * 1.25), sz * 1.25), Qt::AlignCenter, QString("V")); // opkr
   }
-  dashcam(s);
 }
 
 void NvgWindow::paintGL() {
