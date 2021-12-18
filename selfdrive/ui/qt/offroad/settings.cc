@@ -573,6 +573,7 @@ DrivingPanel::DrivingPanel(QWidget *parent) : QFrame(parent) {
   // OPKR
   layout->addWidget(new AutoResumeToggle());
   layout->addWidget(new RESCountatStandstill());
+  layout->addWidget(new CruiseGapAdjustToggle());
   layout->addWidget(new StandstillResumeAltToggle());
   layout->addWidget(new VariableCruiseToggle());
   layout->addWidget(new CruisemodeSelInit());
@@ -592,7 +593,6 @@ DrivingPanel::DrivingPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new SpeedLimitOffset());
   layout->addWidget(new SpeedLimitSignType());
   layout->addWidget(new CamDecelDistAdd());
-  layout->addWidget(new CruiseGapAdjustToggle());
   layout->addWidget(new CurvDecelSelect());
   layout->addWidget(new VCurvSpeedUD());
   layout->addWidget(new VCurvSpeed());
