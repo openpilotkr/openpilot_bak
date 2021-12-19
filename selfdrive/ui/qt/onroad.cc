@@ -830,7 +830,6 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   QRect rect_d = QRect(d_center_x - d_width/2, d_center_y - d_height/2, d_width, d_height);
   int safety_speed = s->scene.limitSpeedCamera;
   float safety_dist = s->scene.limitSpeedCameraDist;
-  float maxspeed = cruiseSpeed;
   int sl_opacity = 0;
   if (s->scene.sl_decel_off) {
     sl_opacity = 3;
@@ -840,7 +839,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     sl_opacity = 1;
   }
 
-  if (maxspeed != 255.0) {
+  if (maxSpeed != 255.0) {
     if (s->scene.is_metric) {
       if (safety_dist >= 1000) {
         p.drawText(rect_s, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "km");
