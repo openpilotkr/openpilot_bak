@@ -323,11 +323,10 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   configFont(p, "Open Sans", 176, "Bold");
   float gas_opacity = a_req_v*255>255?255:a_req_v*255;
   float brake_opacity = abs(a_req_v*175)>255?255:abs(a_req_v*175);
-
   if (brake_pressed && !comma_stock_ui) {
   	p.setPen(QColor(255, 0, 0, 255));
   } else if (brake_light && speed == "0" && !comma_stock_ui) {
-    p.setPen(redColor(201, 34, 49, 100));
+    p.setPen(redColor(100));
   } else if (gas_pressed && !comma_stock_ui) {
     p.setPen(QColor(0, 240, 0, 255));
   } else if (a_req_v < 0 && !comma_stock_ui) {
