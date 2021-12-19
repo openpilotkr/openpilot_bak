@@ -828,7 +828,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   QRect rect_si = QRect(s_center_x - diameter2/2, s_center_y - diameter2/2, diameter2, diameter2);
   QRect rect_so = QRect(s_center_x - diameter3/2, s_center_y - diameter3/2, diameter3, diameter3);
   QRect rect_d = QRect(d_center_x - d_width/2, d_center_y - d_height/2, d_width, d_height);
-  int safety_speed = s->scene.limitSpeedCamera;
+  //int safety_speed = s->scene.limitSpeedCamera;
   float safety_dist = s->scene.limitSpeedCameraDist;
   int sl_opacity = 0;
   if (s->scene.sl_decel_off) {
