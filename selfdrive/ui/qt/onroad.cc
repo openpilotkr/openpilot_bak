@@ -839,7 +839,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     sl_opacity = 1;
   }
 
-  if (maxSpeed != 255.0) {
+  if (maxSpeed != "255") {
     if (s->scene.is_metric) {
       if (safety_dist >= 1000) {
         p.drawText(rect_s, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "km");
