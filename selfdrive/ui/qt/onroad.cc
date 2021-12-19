@@ -828,7 +828,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   QRect rect_si = QRect(s_center_x - diameter2/2, s_center_y - diameter2/2, diameter2, diameter2);
   QRect rect_so = QRect(s_center_x - diameter3/2, s_center_y - diameter3/2, diameter3, diameter3);
   QRect rect_d = QRect(d_center_x - d_width/2, d_center_y - d_height/2, d_width, d_height);
-  //int safety_speed = s->scene.limitSpeedCamera;
+  int safety_speed = s->scene.limitSpeedCamera;
   float safety_dist = s->scene.limitSpeedCameraDist;
   int sl_opacity = 0;
   if (s->scene.sl_decel_off) {
@@ -839,43 +839,50 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     sl_opacity = 1;
   }
 
-  if (maxSpeed != "255") {
+  //if (maxSpeed != "255") {
+  if (true) {
+    opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
+    p.setBrush(redColor(opacity/sl_opacity));
+    p.drawRoundedRect(rect_d, 8, 20);
+    configFont(p, "Open Sans", 40, "Bold");
     if (s->scene.is_metric) {
       if (safety_dist >= 1000) {
-        p.drawText(rect_s, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "km");
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "km");
       } else {
-        p.drawText(rect_s, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "m");
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "m");
       }
-      opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
     } else {
       if (safety_dist >= 1000) {
-        p.drawText(rect_s, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "mi");
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "mi");
       } else {
-        p.drawText(rect_s, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "yd");
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "yd");
       }
-      opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
     }
   }
 
   //if (safety_speed > 19 && !comma_stock_ui) {
   if (true) {
     if (s->scene.speedlimit_signtype) {
-      p.setBrush(whiteColor(200/sl_opacity));
+      p.setBrush(whiteColor(255/sl_opacity));
       p.setBrush(Qt::NoBrush);
-      p.setPen(QPen(whiteColor(200/sl_opacity), 16));
+      p.setPen(QPen(whiteColor(255/sl_opacity), 16));
       p.drawRect(rect_si);
-      p.setPen(QPen(blackColor(200/sl_opacity), 17));
+      p.setPen(QPen(blackColor(255/sl_opacity), 17));
       p.drawRect(rect_s);
-      p.setPen(QPen(whiteColor(200/sl_opacity), 20));
+      p.setPen(QPen(whiteColor(255/sl_opacity), 20));
       p.drawRect(rect_so);
-      debugText(p, rect_so.center().x(), rect_so.center().y()-45, "SPEED", 200/sl_opacity, 40, true);
-      debugText(p, rect_so.center().x(), rect_so.center().y()-10, "LIMIT", 200/sl_opacity, 40, true);
+      p.setPen(blackColor(255/sl_opacity));
+      debugText(p, rect_so.center().x(), rect_so.center().y()-45, "SPEED", 200/sl_opacity, 35, true);
+      debugText(p, rect_so.center().x(), rect_so.center().y()-10, "LIMIT", 200/sl_opacity, 35, true);
+      debugText(p, rect_so.center().x(), rect_so.center().y()+20, QString::number(safety_speed), 255/sl_opacity, safety_speed<100?70:60, true);
     } else {
-      p.setBrush(whiteColor(200/sl_opacity));
-      p.drawEllipse(rect_s);
+      p.setBrush(whiteColor(255/sl_opacity));
+      p.drawEllipse(rect_si);
       p.setBrush(Qt::NoBrush);
-      p.setPen(QPen(whiteColor(200/sl_opacity), 20));
-      p.drawEllipse(rect_so);
+      p.setPen(QPen(redColor(255/sl_opacity), 20));
+      p.drawEllipse(rect_s);
+      p.setPen(blackColor(255/sl_opacity));
+      debugText(p, rect_si.center().x(), rect_si.center().y(), QString::number(safety_speed), 255/sl_opacity, safety_speed<100?70:60, true);
     }
   }
 }
