@@ -846,17 +846,18 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     p.setPen(QPen(QColor(255, 255, 255, 100), 7));
     p.drawRoundedRect(rect_d, 20, 8);
     configFont(p, "Open Sans", 55, "Bold");
+    p.setPen(whiteColor(255));
     if (s->scene.is_metric) {
       if (safety_dist >= 1000) {
-        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "km", 255);
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "km");
       } else {
-        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "m", 255);
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "m");
       }
     } else {
       if (safety_dist >= 1000) {
-        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "mi", 255);
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "mi");
       } else {
-        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "yd", 255);
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "yd");
       }
     }
   }
