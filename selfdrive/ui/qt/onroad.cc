@@ -629,55 +629,55 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     debugText(p, tpms_sp_xr, tpms_sp_yr+15, "TPMS", 150, 33);
     if (s->scene.tpmsPressureFl < 32) {
       p.setPen(yellowColor(200));
-      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFl, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFl, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     } else if (s->scene.tpmsPressureFl > 50) {
       p.setPen(whiteColor(200));
-      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, "N/A", 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, "N/A", 200, (s->scene.tpmsUnit != 0?39:45));
     } else if (s->scene.tpmsPressureFl > 45) {
       p.setPen(redColor(200));
-      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFl, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFl, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     } else {
       p.setPen(greenColor(200));
-      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFl, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFl, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     }
     if (s->scene.tpmsPressureFr < 32) {
       p.setPen(yellowColor(200));
-      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFr, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFr, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     } else if (s->scene.tpmsPressureFr > 50) {
       p.setPen(whiteColor(200));
-      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, "N/A", 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, "N/A", 200, (s->scene.tpmsUnit != 0?39:45));
     } else if (s->scene.tpmsPressureFr > 45) {
       p.setPen(redColor(200));
-      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFr, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFr, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     } else {
       p.setPen(greenColor(200));
-      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFr, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+55, QString::number(s->scene.tpmsPressureFr, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     }
     if (s->scene.tpmsPressureRl < 32) {
       p.setPen(yellowColor(200));
-      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRl, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRl, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     } else if (s->scene.tpmsPressureRl > 50) {
       p.setPen(whiteColor(200));
-      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, "N/A", 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, "N/A", 200, (s->scene.tpmsUnit != 0?39:45));
     } else if (s->scene.tpmsPressureRl > 45) {
       p.setPen(redColor(200));
-      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRl, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRl, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     } else {
       p.setPen(greenColor(200));
-      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRl, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr-(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRl, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     }
     if (s->scene.tpmsPressureRr < 32) {
       p.setPen(yellowColor(200));
-      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRr, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRr, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     } else if (s->scene.tpmsPressureRr > 50) {
       p.setPen(whiteColor(200));
-      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, "N/A", 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, "N/A", 200, (s->scene.tpmsUnit != 0?39:45));
     } else if (s->scene.tpmsPressureRr > 45) {
       p.setPen(redColor(200));
-      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRr, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRr, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     } else {
       p.setPen(greenColor(200));
-      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRr, 'f', (s->scene.tpmsUnit != 0?1:0)), 150, (s->scene.tpmsUnit != 0?39:45));
+      debugText(p, tpms_sp_xr+(s->scene.tpmsUnit != 0?46:50), tpms_sp_yr+95, QString::number(s->scene.tpmsPressureRr, 'f', (s->scene.tpmsUnit != 0?1:0)), 200, (s->scene.tpmsUnit != 0?39:45));
     }
   }
 
