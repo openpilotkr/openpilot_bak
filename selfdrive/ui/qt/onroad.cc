@@ -325,7 +325,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   if (engageable) {
     drawIcon(p, rect().right() - radius / 2 - bdr_s, radius / 2 + bdr_s,
              engage_img, bg_colors[status], 1.0, true, ang_str);
-  } else {
+  } else if (!comma_stock_ui) {
     QString gear_text = "";
     switch(gear_shifter) {
       case 1 : gear_text = "P"; p.setPen(QColor(200, 200, 255, 255)); break;
@@ -336,7 +336,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       case 7 : gear_text = "B"; p.setPen(whiteColor(255)); break;
       default: gear_text = QString::number(gear_shifter, 'f', 0); p.setPen(whiteColor(255)); break;
     }
-    debugText(p, rect().right() - radius / 2 - bdr_s, radius / 2 + bdr_s + 30, gear_text, 255, 190, true);
+    debugText(p, rect().right() - radius / 2 - bdr_s, radius / 2 + bdr_s + 80, gear_text, 255, 190, true);
   }
 
   // dm icon
