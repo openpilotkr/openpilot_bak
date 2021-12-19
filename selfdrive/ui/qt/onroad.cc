@@ -844,7 +844,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
     p.setBrush(redColor(opacity/sl_opacity));
     p.setPen(QPen(QColor(255, 255, 255, 100), 7));
-    p.drawRoundedRect(rect_d, 20, 8);
+    p.drawRoundedRect(rect_d, 8, 8);
     configFont(p, "Open Sans", 55, "Bold");
     p.setPen(whiteColor(255));
     if (s->scene.is_metric) {
@@ -867,17 +867,16 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     //if (s->scene.speedlimit_signtype) {
     if (true) {
       p.setBrush(whiteColor(255/sl_opacity));
-      p.setBrush(Qt::NoBrush);
-      p.setPen(QPen(whiteColor(255/sl_opacity), 16));
-      p.drawRect(rect_si);
-      p.setPen(QPen(blackColor(255/sl_opacity), 17));
-      p.drawRect(rect_s);
-      p.setPen(QPen(whiteColor(255/sl_opacity), 20));
-      p.drawRect(rect_so);
+      p.setPen(QPen(QColor(255,255,255, 255/sl_opacity), 10));
+      p.drawRoundedRect(rect_si, 8, 8);
+      p.setPen(QPen(QColor(0, 0, 0, 255/sl_opacity), 10));
+      p.drawRoundedRect(rect_s, 8, 8);
+      p.setPen(QPen(QColor(255, 255, 255, 255/sl_opacity), 10));
+      p.drawRoundedRect(rect_so, 8, 8);
       p.setPen(blackColor(255/sl_opacity));
-      debugText(p, rect_so.center().x(), rect_so.center().y()-45, "SPEED", 200/sl_opacity, 35, true);
-      debugText(p, rect_so.center().x(), rect_so.center().y()-10, "LIMIT", 200/sl_opacity, 35, true);
-      debugText(p, rect_so.center().x(), rect_so.center().y()+20, QString::number(safety_speed), 255/sl_opacity, safety_speed<100?110:90, true);
+      debugText(p, rect_so.center().x(), rect_so.center().y()-45, "SPEED", 255/sl_opacity, 36, true);
+      debugText(p, rect_so.center().x(), rect_so.center().y()-10, "LIMIT", 255/sl_opacity, 36, true);
+      debugText(p, rect_so.center().x(), rect_so.center().y()+bdr_s+(safety_speed<100?35:25), QString::number(safety_speed), 255/sl_opacity, safety_speed<100?110:90, true);
     } else {
       p.setBrush(whiteColor(255/sl_opacity));
       p.drawEllipse(rect_si);
