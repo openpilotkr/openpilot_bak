@@ -43,6 +43,9 @@ class OnroadHud : public QWidget {
   Q_PROPERTY(bool brake_pressed MEMBER brake_pressed NOTIFY valueChanged);
   Q_PROPERTY(bool brake_light MEMBER brake_light NOTIFY valueChanged);
   Q_PROPERTY(bool gas_pressed MEMBER gas_pressed NOTIFY valueChanged);
+  Q_PROPERTY(int safety_speed MEMBER safety_speed NOTIFY valueChanged);
+  Q_PROPERTY(float safety_dist MEMBER safety_dist NOTIFY valueChanged);
+  Q_PROPERTY(int decel_off MEMBER decel_off NOTIFY valueChanged);
 
 public:
   explicit OnroadHud(QWidget *parent);
@@ -102,6 +105,9 @@ private:
   bool brake_pressed = false;
   bool brake_light = false;
   bool gas_pressed = false;
+  int safety_speed = 0;
+  float safety_dist = 0;
+  int decel_off = 0;
 
 signals:
   void valueChanged();

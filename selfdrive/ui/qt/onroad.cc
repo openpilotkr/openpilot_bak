@@ -266,7 +266,9 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("brake_pressed", s.scene.brakePress);
   setProperty("brake_light", s.scene.brakeLights);
   setProperty("gas_pressed", s.scene.gasPress);
-  
+  setProperty("safety_speed", s.scene.limitSpeedCamera);
+  setProperty("safety_dist", s.scene.limitSpeedCameraDist);
+  setProperty("decel_off", s.scene.sl_decel_off);
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
@@ -828,10 +830,8 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     QRect rect_si = QRect(s_center_x - diameter2/2, s_center_y - diameter2/2, diameter2, diameter2);
     QRect rect_so = QRect(s_center_x - diameter3/2, s_center_y - diameter3/2, diameter3, diameter3);
     QRect rect_d = QRect(d_center_x - d_width/2, d_center_y - d_height/2, d_width, d_height);
-    int safety_speed = s->scene.limitSpeedCamera;
-    float safety_dist = s->scene.limitSpeedCameraDist;
     int sl_opacity = 0;
-    if (s->scene.sl_decel_off) {
+    if (decel_off) {
       sl_opacity = 3;
     } else if (s->scene.osm_off_spdlimit) {
       sl_opacity = 2;
