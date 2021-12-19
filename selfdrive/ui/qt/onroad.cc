@@ -261,7 +261,7 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("left_blinker", s.scene.leftBlinker);
   setProperty("right_blinker", s.scene.rightBlinker);
   setProperty("blinker_rate", s.scene.blinker_blinkingrate);
-  setProperty("gear_shifter", s.scene.getGearShifter);
+  setProperty("gear_shifter", int(s.scene.getGearShifter));
   
 
   // update engageability and DM icons at 2Hz
