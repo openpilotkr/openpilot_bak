@@ -843,20 +843,20 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   if (true) {
     opacity = safety_dist>600 ? 0 : (600 - safety_dist) * 0.425;
     p.setBrush(redColor(opacity/sl_opacity));
-    p.setPen(QPen(QColor(255, 255, 255, 80), 7));
+    p.setPen(QPen(QColor(255, 255, 255, 100), 7));
     p.drawRoundedRect(rect_d, 20, 8);
     configFont(p, "Open Sans", 55, "Bold");
     if (s->scene.is_metric) {
       if (safety_dist >= 1000) {
-        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "km");
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "km", 255);
       } else {
-        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "m");
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "m", 255);
       }
     } else {
       if (safety_dist >= 1000) {
-        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "mi");
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist/1000, 'f', 2) + "mi", 255);
       } else {
-        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "yd");
+        p.drawText(rect_d, Qt::AlignCenter, QString::number(safety_dist, 'f', 0) + "yd", 255);
       }
     }
   }
@@ -875,7 +875,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.setPen(blackColor(255/sl_opacity));
       debugText(p, rect_so.center().x(), rect_so.center().y()-45, "SPEED", 200/sl_opacity, 35, true);
       debugText(p, rect_so.center().x(), rect_so.center().y()-10, "LIMIT", 200/sl_opacity, 35, true);
-      debugText(p, rect_so.center().x(), rect_so.center().y()+20, QString::number(safety_speed), 255/sl_opacity, safety_speed<100?100:80, true);
+      debugText(p, rect_so.center().x(), rect_so.center().y()+20, QString::number(safety_speed), 255/sl_opacity, safety_speed<100?110:90, true);
     } else {
       p.setBrush(whiteColor(255/sl_opacity));
       p.drawEllipse(rect_si);
@@ -883,7 +883,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.setPen(QPen(redColor(255/sl_opacity), 20));
       p.drawEllipse(rect_s);
       p.setPen(blackColor(255/sl_opacity));
-      debugText(p, rect_si.center().x(), rect_si.center().y(), "60", 255/sl_opacity, safety_speed<100?100:80, true);
+      debugText(p, rect_si.center().x(), rect_si.center().y()+bdr_s+30, "60", 255/sl_opacity, safety_speed<100?110:90, true);
       //QString::number(safety_speed)
     }
   }
