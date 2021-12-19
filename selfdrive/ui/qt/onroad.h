@@ -39,6 +39,10 @@ class OnroadHud : public QWidget {
   Q_PROPERTY(bool right_blinker MEMBER right_blinker NOTIFY valueChanged);
   Q_PROPERTY(int blinker_rate MEMBER blinker_rate NOTIFY valueChanged);
   Q_PROPERTY(int gear_shifter MEMBER gear_shifter NOTIFY valueChanged);
+  Q_PROPERTY(float a_req_v MEMBER a_req_v NOTIFY valueChanged);
+  Q_PROPERTY(bool brake_pressed MEMBER brake_pressed NOTIFY valueChanged);
+  Q_PROPERTY(bool brake_light MEMBER brake_light NOTIFY valueChanged);
+  Q_PROPERTY(bool gas_pressed MEMBER gas_pressed NOTIFY valueChanged);
 
 public:
   explicit OnroadHud(QWidget *parent);
@@ -94,6 +98,10 @@ private:
   bool right_blinker = false;
   int blinker_rate = 120;
   int gear_shifter = 0;
+  float a_req_v = 0;
+  bool brake_pressed = false;
+  bool brake_light = false;
+  bool gas_pressed = false;
 
 signals:
   void valueChanged();

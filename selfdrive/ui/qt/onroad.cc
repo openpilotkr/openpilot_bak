@@ -262,6 +262,10 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("right_blinker", s.scene.rightBlinker);
   setProperty("blinker_rate", s.scene.blinker_blinkingrate);
   setProperty("gear_shifter", int(s.scene.getGearShifter));
+  setProperty("a_req_v", s.scene.a_req_value);
+  setProperty("brake_pressed", s.scene.brakePress);
+  setProperty("brake_light", s.scene.brakeLights);
+  setProperty("gas_pressed", s.scene.gasPress);
   
 
   // update engageability and DM icons at 2Hz
@@ -317,8 +321,23 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
 
   // current speed
   configFont(p, "Open Sans", 176, "Bold");
+  float gas_opacity = a_req_v*255>255?255:a_req_v*255;
+  float brake_opacity = abs(a_req_v*175)>255?255:abs(a_req_v*175);
+
+  if (brake_pressed && !comma_stock_ui) {
+  	p.setPen(QColor(255, 0, 0, 255));
+  } else if (brake_light && speed == "0" && !comma_stock_ui) {
+    p.setPen(redColor(201, 34, 49, 100));
+  } else if (gas_pressed && !comma_stock_ui) {
+    p.setPen(QColor(0, 240, 0, 255));
+  } else if (a_req_v < 0 && !comma_stock_ui) {
+    p.setPen(QColor((255-int(abs(a_req_v*8))), (255-int(brake_opacity)), (255-int(brake_opacity)), 255));
+  } else if (a_req_v > 0 && !comma_stock_ui) {
+    p.setPen(QColor((255-int(gas_opacity)), (255-int((a_req_v*10))), (255-int(gas_opacity)), 255));
+  }
   drawText(p, rect().center().x(), 210, speed);
   configFont(p, "Open Sans", 66, "Regular");
+  p.setPen(brake_light?redColor(100):whiteColor(200));
   drawText(p, rect().center().x(), 290, speedUnit, 200);
 
   // engage-ability icon
