@@ -884,8 +884,8 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.setPen(QPen(redColor(255/sl_opacity), 20));
       p.drawEllipse(rect_s);
       p.setPen(blackColor(255/sl_opacity));
-      debugText(p, rect_si.center().x(), rect_si.center().y()+bdr_s+30, "60", 255/sl_opacity, safety_speed<100?110:90, true);
-      //QString::number(safety_speed)
+      debugText(p, rect_si.center().x(), rect_si.center().y()+bdr_s+25, "100", 255/sl_opacity, 90, true);
+      //QString::number(safety_speed), safety_speed<100?110:90
     }
   }
 }
