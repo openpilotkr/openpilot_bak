@@ -830,7 +830,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   QRect rect_d = QRect(d_center_x - d_width/2, d_center_y - d_height/2, d_width, d_height);
   int safety_speed = s->scene.limitSpeedCamera;
   float safety_dist = s->scene.limitSpeedCameraDist;
-  float maxspeed = round(cruiseSpeed);
+  float maxspeed = cruiseSpeed;
   int sl_opacity = 0;
   if (s->scene.sl_decel_off) {
     sl_opacity = 3;
@@ -864,11 +864,11 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.setBrush(whiteColor(200/sl_opacity));
       p.setBrush(Qt::NoBrush);
       p.setPen(QPen(whiteColor(200/sl_opacity), 16));
-      p.drawRect(rect_si)
+      p.drawRect(rect_si);
       p.setPen(QPen(blackColor(200/sl_opacity), 17));
-      p.drawRect(rect_s)
+      p.drawRect(rect_s);
       p.setPen(QPen(whiteColor(200/sl_opacity), 20));
-      p.drawRect(rect_so)
+      p.drawRect(rect_so);
       debugText(p, rect_so.center().x(), rect_so.center().y()-45, "SPEED", 200/sl_opacity, 40, true);
       debugText(p, rect_so.center().x(), rect_so.center().y()-10, "LIMIT", 200/sl_opacity, 40, true);
     } else {
