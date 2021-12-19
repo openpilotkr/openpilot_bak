@@ -94,7 +94,7 @@ class LatControlINDI():
 
     return self.sat_count > self.sat_limit
 
-  def update(self, active, CS, CP, VM, params, curvature, curvature_rate):
+  def update(self, active, CS, CP, VM, params, last_actuators, curvature, curvature_rate):
     self.speed = CS.vEgo
 
     self.RC = interp(self.speed, self._RC[0], self._RC[1])
@@ -118,11 +118,11 @@ class LatControlINDI():
     indi_log.steeringRateDeg = math.degrees(self.x[1])
     indi_log.steeringAccelDeg = math.degrees(self.x[2])
 
-    steers_des = VM.get_steer_from_curvature(-curvature, CS.vEgo)
+    steers_des = VM.get_steer_from_curvature(-curvature, CS.vEgo, params.roll)
     steers_des += math.radians(params.angleOffsetDeg)
     indi_log.steeringAngleDesiredDeg = math.degrees(steers_des)
 
-    rate_des = VM.get_steer_from_curvature(-curvature_rate, CS.vEgo)
+    rate_des = VM.get_steer_from_curvature(-curvature_rate, CS.vEgo, 0)
     indi_log.steeringRateDesiredDeg = math.degrees(rate_des)
 
     if CS.vEgo < 0.3 or not active:

@@ -275,6 +275,7 @@ def manager_cleanup():
 
 
 def manager_thread():
+  cloudlog.bind(daemon="manager")
   cloudlog.info("manager start")
   cloudlog.info({"environ": os.environ})
 

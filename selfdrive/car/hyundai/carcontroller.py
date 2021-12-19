@@ -62,7 +62,10 @@ class CarController():
     self.resume_cnt = 0
     self.last_lead_distance = 0
     self.resume_wait_timer = 0
+
     self.last_resume_frame = 0
+    self.accel = 0
+
     self.lanechange_manual_timer = 0
     self.emergency_manual_timer = 0
     self.driver_steering_torque_above = False
@@ -546,6 +549,7 @@ class CarController():
            CS.out.stockAeb, self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, CS.scc12))
         can_sends.append(create_scc14(self.packer, enabled, CS.scc14, CS.out.stockAeb, lead_visible, self.dRel, 
          CS.out.vEgo, self.acc_standstill, self.car_fingerprint))
+        self.accel = accel
       if frame % 20 == 0:
         can_sends.append(create_scc13(self.packer, CS.scc13))
       if frame % 50 == 0:
@@ -595,4 +599,8 @@ class CarController():
     elif frame % 5 == 0 and self.car_fingerprint in FEATURES["send_hda_mfa"]:
       can_sends.append(create_hda_mfc(self.packer, CS, enabled, left_lane, right_lane ))
 
-    return can_sends
+    new_actuators = actuators.copy()
+    new_actuators.steer = apply_steer / self.p.STEER_MAX
+    new_actuators.accel = self.accel
+
+    return new_actuators, can_sends

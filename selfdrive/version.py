@@ -98,15 +98,6 @@ def is_dirty() -> bool:
 
       dirty = (subprocess.call(["git", "diff-index", "--quiet", branch, "--"]) != 0)
 
-      # Log dirty files
-      if dirty and is_comma_remote():
-        try:
-          dirty_files = run_cmd(["git", "diff-index", branch, "--"])
-          cloudlog.event("dirty comma branch", version=get_version(), dirty=dirty, origin=origin, branch=branch,
-                         dirty_files=dirty_files, commit=get_commit(), origin_commit=get_commit(branch))
-        except subprocess.CalledProcessError:
-          pass
-
     dirty = dirty or (not is_comma_remote())
     dirty = dirty or ('master' in branch)
 
@@ -124,9 +115,9 @@ if __name__ == "__main__":
   params.put("TermsVersion", terms_version)
   params.put("TrainingVersion", training_version)
 
-  print("Dirty: %s" % is_dirty())
-  print("Version: %s" % get_version())
-  print("Origin: %s" % get_origin())
-  print("Branch: %s" % get_branch())
-  print("Short branch: %s" % get_short_branch())
-  print("Prebuilt: %s" % is_prebuilt())
+  print(f"Dirty: {is_dirty()}")
+  print(f"Version: {get_version()}")
+  print(f"Origin: {get_origin()}")
+  print(f"Branch: {get_branch()}")
+  print(f"Short branch: {get_short_branch()}")
+  print(f"Prebuilt: {is_prebuilt()}")
