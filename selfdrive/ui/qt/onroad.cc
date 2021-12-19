@@ -869,13 +869,13 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.setBrush(whiteColor(255/sl_opacity));
       p.drawRoundedRect(rect_si, 8, 8);
       p.setBrush(Qt::NoBrush);
-      p.setPen(QPen(QColor(0, 0, 0, 255/sl_opacity), 10));
+      p.setPen(QPen(QColor(0, 0, 0, 255/sl_opacity), 12));
       p.drawRoundedRect(rect_s, 8, 8);
-      p.setPen(QPen(QColor(255, 255, 255, 255/sl_opacity), 12));
+      p.setPen(QPen(QColor(255, 255, 255, 255/sl_opacity), 10));
       p.drawRoundedRect(rect_so, 8, 8);
       p.setPen(blackColor(255/sl_opacity));
       debugText(p, rect_so.center().x(), rect_so.center().y()-45, "SPEED", 255/sl_opacity, 36, true);
-      debugText(p, rect_so.center().x(), rect_so.center().y()-10, "LIMIT", 255/sl_opacity, 36, true);
+      debugText(p, rect_so.center().x(), rect_so.center().y()-12, "LIMIT", 255/sl_opacity, 36, true);
       debugText(p, rect_so.center().x(), rect_so.center().y()+bdr_s+(safety_speed<100?60:50), QString::number(safety_speed), 255/sl_opacity, safety_speed<100?110:90, true);
     } else {
       p.setBrush(whiteColor(255/sl_opacity));
