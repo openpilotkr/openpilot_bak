@@ -329,12 +329,12 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
     QString gear_text = "";
     switch(gear_shifter) {
       case 1 : gear_text = "P"; p.setPen(QColor(200, 200, 255, 255)); break;
-      case 2 : gear_text = "D"; p.setPen(colorGreen(255)); break;
-      case 3 : gear_text = "N"; p.setPen(whiteGreen(255)); break;
-      case 4 : gear_text = "R"; p.setPen(colorRed(255)); break;
-      case 5 : gear_text = "M"; p.setPen(colorGreen(255)); break;
-      case 7 : gear_text = "B"; p.setPen(whiteGreen(255)); break;
-      default: gear_text = QString::number(gear_shifter, 'f', 0); p.setPen(whiteGreen(255)); break;
+      case 2 : gear_text = "D"; p.setPen(greenColor(255)); break;
+      case 3 : gear_text = "N"; p.setPen(whiteColor(255)); break;
+      case 4 : gear_text = "R"; p.setPen(redColor(255)); break;
+      case 5 : gear_text = "M"; p.setPen(greenColor(255)); break;
+      case 7 : gear_text = "B"; p.setPen(whiteColor(255)); break;
+      default: gear_text = QString::number(gear_shifter, 'f', 0); p.setPen(whiteColor(255)); break;
     }
     debugText(p, s->fb_w - 90 + bdr_s, bdr_s + 140, gear_text, 255, 200, true);
   }
