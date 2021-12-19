@@ -261,11 +261,12 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("left_blinker", s.scene.leftBlinker);
   setProperty("right_blinker", s.scene.rightBlinker);
   setProperty("blinker_rate", s.scene.blinker_blinkingrate);
+  setProperty("gear_shifter", s.scene.getGearShifter);
   
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
-    setProperty("engageable", cs.getEngageable() || cs.getEnabled());
+    setProperty("engageable", cs.getEnabled());
     setProperty("dmActive", sm["driverMonitoringState"].getDriverMonitoringState().getIsActiveMode());
   }
 }
@@ -321,10 +322,21 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   drawText(p, rect().center().x(), 290, speedUnit, 200);
 
   // engage-ability icon
-  //if (engageable) {
-  if (true) {
+  if (engageable) {
     drawIcon(p, rect().right() - radius / 2 - bdr_s, radius / 2 + bdr_s,
              engage_img, bg_colors[status], 1.0, true, ang_str);
+  } else {
+    QString gear_text = "";
+    switch(gear_shifter) {
+      case 1 : gear_text = "P"; p.setPen(QColor(200, 200, 255, 255)); break;
+      case 2 : gear_text = "D"; p.setPen(colorGreen(255)); break;
+      case 3 : gear_text = "N"; p.setPen(whiteGreen(255)); break;
+      case 4 : gear_text = "R"; p.setPen(colorRed(255)); break;
+      case 5 : gear_text = "M"; p.setPen(colorGreen(255)); break;
+      case 7 : gear_text = "B"; p.setPen(whiteGreen(255)); break;
+      default: gear_text = QString::number(gear_shifter, 'f', 0); p.setPen(whiteGreen(255)); break;
+    }
+    debugText(p, s->fb_w - 90 + bdr_s, bdr_s + 140, gear_text, 255, 200, true);
   }
 
   // dm icon
