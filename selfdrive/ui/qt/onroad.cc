@@ -336,7 +336,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       case 7 : gear_text = "B"; p.setPen(whiteColor(255)); break;
       default: gear_text = QString::number(gear_shifter, 'f', 0); p.setPen(whiteColor(255)); break;
     }
-    debugText(p, s->fb_w - 90 + bdr_s, bdr_s + 140, gear_text, 255, 200, true);
+    debugText(p, rect().right() - radius / 2 - bdr_s - 30, radius / 2 + bdr_s + 100, gear_text, 255, 180, true);
   }
 
   // dm icon
