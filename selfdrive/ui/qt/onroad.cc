@@ -864,7 +864,8 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
 
   //if (safety_speed > 19 && !comma_stock_ui) {
   if (true) {
-    if (s->scene.speedlimit_signtype) {
+    //if (s->scene.speedlimit_signtype) {
+    if (true) {
       p.setBrush(whiteColor(255/sl_opacity));
       p.setBrush(Qt::NoBrush);
       p.setPen(QPen(whiteColor(255/sl_opacity), 16));
@@ -884,8 +885,7 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       p.setPen(QPen(redColor(255/sl_opacity), 20));
       p.drawEllipse(rect_s);
       p.setPen(blackColor(255/sl_opacity));
-      debugText(p, rect_si.center().x(), rect_si.center().y()+bdr_s+25, "100", 255/sl_opacity, 90, true);
-      //QString::number(safety_speed), safety_speed<100?110:90
+      debugText(p, rect_si.center().x(), rect_si.center().y()+bdr_s+(safety_speed<100?25:15), QString::number(safety_speed), 255/sl_opacity, safety_speed<100?110:90, true);
     }
   }
 }
