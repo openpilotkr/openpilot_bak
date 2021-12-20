@@ -603,6 +603,7 @@ DrivingPanel::DrivingPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new RESChoice());
   layout->addWidget(new AutoResCondition());
   layout->addWidget(new AutoResLimitTime());
+  layout->addWidget(new AutoRESDelay());
 }
 
 DeveloperPanel::DeveloperPanel(QWidget *parent) : QFrame(parent) {

@@ -100,6 +100,8 @@ class CarController():
     self.radar_helper_option = int(self.params.get("RadarLongHelper", encoding="utf8"))
     self.stopping_dist_adj_enabled = self.params.get_bool("StoppingDistAdj")
     self.standstill_resume_alt = self.params.get_bool("StandstillResumeAlt")
+    self.auto_res_delay = int(self.params.get("AutoRESDelay", encoding="utf8")) * 100
+    self.auto_res_delay_timer = 0
 
     self.longcontrol = CP.openpilotLongitudinalControl
     #self.scc_live is true because CP.radarOffCan is False
@@ -400,6 +402,7 @@ class CarController():
       self.cruise_init = True
       self.cancel_counter = 0
       self.auto_res_limit_timer = 0
+      self.auto_res_delay_timer = 0
       if self.res_speed_timer > 0:
         self.res_speed_timer -= 1
         self.auto_res_starting = False
@@ -407,6 +410,11 @@ class CarController():
         self.auto_res_starting = False
         self.v_cruise_kph_auto_res = 0
         self.res_speed = 0
+    else:
+      if self.auto_res_limit_timer < self.auto_res_limit_sec:
+        self.auto_res_limit_timer += 1
+      if self.auto_res_delay_timer < self.auto_res_delay:
+        self.auto_res_delay_timer += 1
     if CS.brakeHold and not self.autohold_popup_switch:
       self.autohold_popup_timer = 100
       self.autohold_popup_switch = True
@@ -423,7 +431,8 @@ class CarController():
       self.auto_res_timer -= 1
     elif self.model_speed > 95 and self.cancel_counter == 0 and not CS.cruise_active and not CS.out.brakeLights and int(CS.VSetDis) >= t_speed and \
      (1 < CS.lead_distance < 149 or int(CS.clu_Vanz) > t_speed) and int(CS.clu_Vanz) >= 3 and self.cruise_init and \
-     self.opkr_cruise_auto_res and opkr_cruise_auto_res_condition and (self.auto_res_limit_sec == 0 or self.auto_res_limit_timer < self.auto_res_limit_sec):
+     self.opkr_cruise_auto_res and opkr_cruise_auto_res_condition and (self.auto_res_limit_sec == 0 or self.auto_res_limit_timer < self.auto_res_limit_sec) and \
+     (self.auto_res_delay == 0 or self.auto_res_delay_timer >= self.auto_res_delay):
       if self.opkr_cruise_auto_res_option == 0:
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL)) if not self.longcontrol \
          else can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL, clu11_speed, CS.CP.sccBus))  # auto res
@@ -458,8 +467,6 @@ class CarController():
         if self.resume_cnt > 5:
           self.resume_cnt = 0
           self.auto_res_timer = randint(10, 15)
-    elif self.auto_res_limit_timer < self.auto_res_limit_sec:
-      self.auto_res_limit_timer += 1
 
     if CS.out.brakeLights and CS.out.vEgo == 0 and not CS.cruise_active:
       self.standstill_status_timer += 1

@@ -178,6 +178,7 @@ def manager_init():
     ("FCA11Message", "0"),
     ("StandstillResumeAlt", "0"),
     ("MapboxEnabled", "0"),
+    ("AutoRESDelay", "0"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))

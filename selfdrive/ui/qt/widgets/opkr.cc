@@ -5821,3 +5821,67 @@ void CurvDecelSelect::refresh() {
   btnminus.setText("◀");
   btnplus.setText("▶");
 }
+
+AutoRESDelay::AutoRESDelay() : AbstractControl("AutoRES Delay(sec)", "Give delay time to trigger for AutoRES while driving.", "../assets/offroad/icon_shell.png") {
+
+  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
+  label.setStyleSheet("color: #e0e879");
+  hlayout->addWidget(&label);
+
+  btnminus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnplus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnminus.setFixedSize(150, 100);
+  btnplus.setFixedSize(150, 100);
+  hlayout->addWidget(&btnminus);
+  hlayout->addWidget(&btnplus);
+
+  QObject::connect(&btnminus, &QPushButton::clicked, [=]() {
+    auto str = QString::fromStdString(params.get("AutoRESDelay"));
+    int value = str.toInt();
+    value = value - 1;
+    if (value <= 0 ) {
+      value = 0;
+    }
+    QString values = QString::number(value);
+    params.put("AutoRESDelay", values.toStdString());
+    refresh();
+  });
+  
+  QObject::connect(&btnplus, &QPushButton::clicked, [=]() {
+    auto str = QString::fromStdString(params.get("AutoRESDelay"));
+    int value = str.toInt();
+    value = value + 1;
+    if (value >= 10 ) {
+      value = 10;
+    }
+    QString values = QString::number(value);
+    params.put("AutoRESDelay", values.toStdString());
+    refresh();
+  });
+  refresh();
+}
+
+void AutoRESDelay::refresh() {
+  QString option = QString::fromStdString(params.get("AutoRESDelay"));
+  if (option == "0") {
+    label.setText(QString::fromStdString("No Delay"));
+  } else {
+    label.setText(QString::fromStdString(params.get("AutoRESDelay")));
+  }
+  btnminus.setText("-");
+  btnplus.setText("+");
+}
