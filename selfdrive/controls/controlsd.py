@@ -509,7 +509,10 @@ class Controls:
         osm_speedlimit_ = int(self.sm['liveMapData'].speedLimit)
         osm_speedlimit = osm_speedlimit_ + round(osm_speedlimit_*0.01*self.osm_spdlimit_offset) if self.osm_spdlimit_offset_option == 0 else \
          osm_speedlimit_ + self.osm_spdlimit_offset
-        if self.osm_speedlimit == osm_speedlimit_:
+        if CS.cruiseButtons == Buttons.GAP_DIST:
+          self.osm_speedlimit = 255
+          self.osm_off_spdlimit = False    
+        elif self.osm_speedlimit == osm_speedlimit_:
           self.osm_off_spdlimit = True
         elif int(self.sm['liveMapData'].speedLimit) > 19 and osm_speedlimit != self.v_cruise_kph:
           self.osm_speedlimit = 255
