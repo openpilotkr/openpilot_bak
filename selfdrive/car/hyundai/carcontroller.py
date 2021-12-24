@@ -411,10 +411,14 @@ class CarController():
         self.v_cruise_kph_auto_res = 0
         self.res_speed = 0
     else:
-      if self.auto_res_limit_timer < self.auto_res_limit_sec:
-        self.auto_res_limit_timer += 1
-      if self.auto_res_delay_timer < self.auto_res_delay:
-        self.auto_res_delay_timer += 1
+      if CS.out.brakeLights:
+        self.auto_res_limit_timer = 0
+        self.auto_res_delay_timer = 0
+      else:
+        if self.auto_res_limit_timer < self.auto_res_limit_sec:
+          self.auto_res_limit_timer += 1
+        if self.auto_res_delay_timer < self.auto_res_delay:
+          self.auto_res_delay_timer += 1
     if CS.brakeHold and not self.autohold_popup_switch:
       self.autohold_popup_timer = 100
       self.autohold_popup_switch = True
