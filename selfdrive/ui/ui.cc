@@ -242,6 +242,7 @@ static void update_state(UIState *s) {
     scene.longitudinal_control = sm["carParams"].getCarParams().getOpenpilotLongitudinalControl();
     scene.steerMax_V = sm["carParams"].getCarParams().getSteerMaxV()[0];
     scene.steer_actuator_delay = sm["carParams"].getCarParams().getSteerActuatorDelay();
+    scene.op_accel = sm["carParams"].getCarParams().getAqValue();
   }
   if (sm.updated("lateralPlan")) {
     scene.lateral_plan = sm["lateralPlan"].getLateralPlan();

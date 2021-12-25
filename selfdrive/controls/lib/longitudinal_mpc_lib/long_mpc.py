@@ -386,7 +386,7 @@ class LongitudinalMpc():
       self.params[:,3] = np.copy(self.prev_a)
     else:
       self.params[:,3] = a_ego
-    self.params[:,4] = self.desired_TR
+    self.params[:,4] = self.desired_TR  # shane
 
     self.run()
     if (np.any(lead_xv_0[:,0] - self.x_sol[:,0] < CRASH_DISTANCE) and
@@ -408,7 +408,7 @@ class LongitudinalMpc():
     desired_TR = T_FOLLOW*np.ones((N+1))
     self.params = np.concatenate([self.accel_limit_arr,
                              x_obstacle[:,None],
-                             self.prev_a, desired_TR[:,None]], axis=1)
+                             self.prev_a[:,None], desired_TR[:,None]], axis=1)
     self.run()
 
 

@@ -61,14 +61,14 @@ class CarInterface(CarInterfaceBase):
     tire_stiffness_factor = 1.
 
     ret.longitudinalTuning.kpBP = [0., 4., 9., 17., 23., 31.]
-    ret.longitudinalTuning.kpV = [1.2, 1.1, 1.0, 0.9, 0.75, 0.65]
+    ret.longitudinalTuning.kpV = [1.3, 1.2, 1.1, 0.9, 0.75, 0.65]
     ret.longitudinalTuning.kiBP = [0., 4., 9., 17., 23., 31.]
-    ret.longitudinalTuning.kiV = [0.27, 0.24, 0.23, 0.2, 0.17, 0.15]
+    ret.longitudinalTuning.kiV = [0.28, 0.25, 0.24, 0.2, 0.17, 0.15]
 
     ret.longitudinalTuning.deadzoneBP = [0., 4.]
     ret.longitudinalTuning.deadzoneV = [0., 0.1]
     ret.longitudinalTuning.kdBP = [0., 4., 9., 17., 23., 31.]
-    ret.longitudinalTuning.kdV = [0.9, 1.0, 0.85, 0.7, 0.5, 0.4]
+    ret.longitudinalTuning.kdV = [1.2, 1.1, 0.9, 0.7, 0.5, 0.4]
     ret.longitudinalTuning.kfBP = [0., 4., 9., 17., 23., 31.]
     ret.longitudinalTuning.kfV = [1., 1., 1., 1., 1., 1.]
 
@@ -76,8 +76,8 @@ class CarInterface(CarInterfaceBase):
     ret.vEgoStopping = 1.0  # 1.0, 0.5
     ret.vEgoStarting = 0.5
     ret.startAccel = 0.0 # 0.0, -0.2
-    ret.stopAccel = 0.0 # 0.0, -0.5
-    ret.stoppingDecelRate = 0.8 # 0.8, 0.2
+    ret.stopAccel = -0.5 # 0.0, -0.5
+    ret.stoppingDecelRate = 1.6 # 0.8, 0.2
     ret.startingAccelRate = 3.2 # 3.2, 0.8
 
     ret.vCruisekph = 0
