@@ -566,6 +566,8 @@ class CarController():
               accel = self.accel - (1.0 * DT_CTRL)
             elif self.dRel <= 4 and accel < 0:
               accel = self.accel - (1.0 * DT_CTRL)
+            else:
+              accel = aReqValue
             self.stp_adj_start = False
         elif 0 < CS.lead_distance <= 4.0: # use radar by force to stop anyway below 4.0m if lead car is detected.
           stock_weight = interp(CS.lead_distance, [2.5, 4.0], [1., 0.])
