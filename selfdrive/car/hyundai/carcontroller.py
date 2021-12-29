@@ -546,13 +546,13 @@ class CarController():
         elif self.radar_helper_option == 2:
           if 0 < CS.lead_distance <= 149:
             if self.stopping_dist_adj_enabled:
-              if CS.clu_Vanz < 2 and 3.5 < CS.lead_distance < 5.5 and aReqValue < 0 and -5 < lead_objspd:
-                accel = self.accel + (0.5 * DT_CTRL)
+              if CS.clu_Vanz < 2.5 and 3.5 < CS.lead_distance < 6.5 and aReqValue < 0 and -5 < lead_objspd:
+                accel = self.accel + (1.5 * DT_CTRL)
                 self.stp_adj_start = True
-              elif CS.clu_Vanz >= 2 and 3.5 < CS.lead_distance < 5.5 and aReqValue < 0 and -5 < lead_objspd and self.stp_adj_start:
-                accel = self.accel - (0.5 * DT_CTRL)
+              elif CS.clu_Vanz >= 2.5 and 3.5 < CS.lead_distance < 6.5 and aReqValue < 0 and -5 < lead_objspd and self.stp_adj_start:
+                accel = self.accel - (1.5 * DT_CTRL)
               elif CS.lead_distance <= 3.5 and aReqValue < 0 and -5 < lead_objspd and self.accel > aReqValue and self.stp_adj_start:
-                accel = self.accel - (0.5 * DT_CTRL)
+                accel = self.accel - (5.0 * DT_CTRL)
               else:
                 accel = aReqValue
                 self.stp_adj_start = False
@@ -560,14 +560,7 @@ class CarController():
               accel = aReqValue
               self.stp_adj_start = False
           else:
-            if CS.clu_Vanz < 3 and 4 < self.dRel < 9 and accel < 0:
-              accel = self.accel + (1.0 * DT_CTRL)
-            elif CS.clu_Vanz >= 3 and 4 < self.dRel < 9 and accel < 0:
-              accel = self.accel - (1.0 * DT_CTRL)
-            elif self.dRel <= 4 and accel < 0:
-              accel = self.accel - (1.0 * DT_CTRL)
-            else:
-              accel = aReqValue
+            accel = aReqValue
             self.stp_adj_start = False
         elif 0 < CS.lead_distance <= 4.0: # use radar by force to stop anyway below 4.0m if lead car is detected.
           stock_weight = interp(CS.lead_distance, [2.5, 4.0], [1., 0.])

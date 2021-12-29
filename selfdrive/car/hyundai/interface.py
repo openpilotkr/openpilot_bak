@@ -73,7 +73,7 @@ class CarInterface(CarInterfaceBase):
     ret.longitudinalTuning.kfV = [1., 1., 1., 1., 1., 1.]
 
     ret.stoppingControl = False
-    ret.vEgoStopping = 1.0  # 1.0, 0.5
+    ret.vEgoStopping = 0.3  # 1.0, 0.5
     ret.vEgoStarting = 0.5
     ret.startAccel = 0.0 # 0.0, -0.2
     ret.stopAccel = -0.5 # 0.0, -0.5
