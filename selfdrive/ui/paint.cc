@@ -637,7 +637,7 @@ static void ui_draw_vision_speed(UIState *s) {
   float act_accel = 0;
   float gas_opacity = 0;
   float brake_opacity = 0;
-  if (scene.longitudinal_control) {
+  if (scene.longitudinal_control && scene.radar_long_helper != 2) {
     act_accel = scene.op_accel;
   } else {
     act_accel = scene.a_req_value;
