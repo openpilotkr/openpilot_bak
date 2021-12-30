@@ -385,6 +385,8 @@ static void ui_draw_debug(UIState *s) {
       ui_print(s, ui_viz_rx, ui_viz_ry+560, "SL:%.0f", (*s->sm)["carState"].getCarState().getSafetySign());
       ui_print(s, ui_viz_rx, ui_viz_ry+600, "DS:%.0f", (*s->sm)["carState"].getCarState().getSafetyDist());
     }
+    ui_print(s, ui_viz_rx, ui_viz_ry+640, "OA:%.2f", scene.op_accel);
+    
     if (scene.osm_enabled) {
       ui_print(s, ui_viz_rx+(scene.mapbox_running ? 150:200), ui_viz_ry+240, "SL:%.0f", scene.liveMapData.ospeedLimit);
       ui_print(s, ui_viz_rx+(scene.mapbox_running ? 150:200), ui_viz_ry+280, "SLA:%.0f", scene.liveMapData.ospeedLimitAhead);
@@ -631,9 +633,17 @@ static void ui_draw_vision_speed(UIState *s) {
   }
 
   NVGcolor val_color = COLOR_WHITE;
-  float act_accel = scene.longitudinal_control?scene.op_accel:scene.a_req_value;
-  float gas_opacity = act_accel*255>255?255:act_accel*255;
-  float brake_opacity = abs(act_accel*175)>255?255:abs(act_accel*175);
+
+  float act_accel = 0;
+  float gas_opacity = 0;
+  float brake_opacity = 0;
+  if (scene.longitudinal_control) {
+    act_accel = scene.op_accel;
+  } else {
+    act_accel = scene.a_req_value;
+  }
+  gas_opacity = act_accel*255>255?255:act_accel*255;
+  brake_opacity = abs(act_accel*175)>255?255:abs(act_accel*175);
 
   if (scene.brakePress && !scene.comma_stock_ui) {
   	val_color = COLOR_RED;
