@@ -5022,7 +5022,7 @@ void VCurvSpeed::refresh4() {
   btn4.setText("↕");
 }
 
-VCurvSpeedUD::VCurvSpeedUD() : AbstractControl("VisionCurvDecel(ModelSpeed: CarSpeed)", "Adjust the curve deceleration speed according to the model speed. (interpolation value)", "../assets/offroad/icon_shell.png") {
+VCurvSpeedUD::VCurvSpeedUD() : AbstractControl("VisionCurvDecel(CV: TargetSpeed)", "Adjust the curve deceleration speed according to the model speed(curvature). (interpolation value)", "../assets/offroad/icon_shell.png") {
 
   btn.setStyleSheet(R"(
     padding: 0;
