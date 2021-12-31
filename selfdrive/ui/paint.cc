@@ -983,7 +983,7 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
   }
 
   //cruise gap
-  if (scene.longitudinal_control) {
+  if (scene.longitudinal_control && scene.radar_long_helper != 2) {
     char val_str[16];
     char uom_str[6];
     NVGcolor val_color = COLOR_WHITE_ALPHA(200);

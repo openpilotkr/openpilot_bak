@@ -550,9 +550,9 @@ class CarController():
               if CS.clu_Vanz < 6 and 3.7 < CS.lead_distance < 8.0 and aReqValue < 0 and -5 < lead_objspd and self.accel < 0 and not self.adjacent_accel_enabled:
                 self.adjacent_accel = self.accel
                 self.adjacent_accel_enabled = True
-              if CS.clu_Vanz < 6 and 3.7 < CS.lead_distance < 8.0 and aReqValue < 0 and -5 < lead_objspd and self.accel < self.adjacent_accel:
+              if CS.clu_Vanz < 6 and 3.7 < CS.lead_distance < 8.0 and aReqValue < 0 and -5 < lead_objspd and self.accel < self.adjacent_accel*0.85:
                 accel = self.accel + (3.0 * DT_CTRL)
-              elif CS.clu_Vanz < 6 and 3.7 < CS.lead_distance < 8.0 and aReqValue < 0 and -5 < lead_objspd and self.accel >= self.adjacent_accel:
+              elif CS.clu_Vanz < 6 and 3.7 < CS.lead_distance < 8.0 and aReqValue < 0 and -5 < lead_objspd and self.accel >= self.adjacent_accel*0.85:
                 accel = self.accel
               elif CS.lead_distance <= 3.7 and aReqValue < 0 and -5 < lead_objspd and self.accel > aReqValue:
                 accel = self.accel - (3.0 * DT_CTRL)
