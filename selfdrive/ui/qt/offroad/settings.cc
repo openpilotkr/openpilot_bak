@@ -596,7 +596,8 @@ DrivingPanel::DrivingPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new CurvDecelSelect());
   layout->addWidget(new VCurvSpeedUD());
   layout->addWidget(new VCurvSpeed());
-  layout->addWidget(new OCurvOffset());
+  layout->addWidget(new OCurvSpeedUD());
+  layout->addWidget(new OCurvSpeed());
   layout->addWidget(new AutoEnabledToggle());
   layout->addWidget(new AutoEnableSpeed());
   layout->addWidget(new CruiseAutoResToggle());

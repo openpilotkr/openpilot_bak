@@ -43,7 +43,8 @@ class NaviControl():
     self.ctrl_speed = 0
     self.vision_curv_speed = [int(Params().get("VCurvSpeed30", encoding="utf8")), int(Params().get("VCurvSpeed50", encoding="utf8")),
      int(Params().get("VCurvSpeed70", encoding="utf8")), int(Params().get("VCurvSpeed90", encoding="utf8"))]
-    self.osm_curv_speed_offset = int(Params().get("OCurvOffset", encoding="utf8"))
+    self.osm_curv_speed = [int(Params().get("OCurvSpeed30", encoding="utf8")), int(Params().get("OCurvSpeed40", encoding="utf8")),
+     int(Params().get("OCurvSpeed50", encoding="utf8")), int(Params().get("OCurvSpeed60", encoding="utf8")), int(Params().get("OCurvSpeed70", encoding="utf8"))]
     self.osm_wait_timer = 0
     self.stock_navi_info_enabled = Params().get_bool("StockNaviSpeedEnabled")
     self.osm_speedlimit_enabled = Params().get_bool("OSMSpeedLimitEnable")
@@ -311,7 +312,7 @@ class NaviControl():
 
     if CS.cruise_set_mode in [1,3,4] and self.curv_decel_option in [1,3]:
       if self.sm['liveMapData'].turnSpeedLimitEndDistance > 30:
-        o_curv_speed = self.sm['liveMapData'].turnSpeedLimit * (1 + (self.osm_curv_speed_offset*0.01))
+        o_curv_speed = int(interp(self.sm['liveMapData'].turnSpeedLimit, [30, 40, 50, 60, 70], self.osm_curv_speed))
         self.osm_wait_timer += 1 if modelSpeed > 90 else 0
         if self.osm_wait_timer > 100:
           o_curv_speed = 255
