@@ -545,9 +545,9 @@ class CarController():
         elif self.radar_helper_option == 2:
           if 0 < CS.lead_distance <= 149:
             if self.stopping_dist_adj_enabled:
-              if CS.clu_Vanz < 6 and 3.7 < CS.lead_distance < 8.0 and aReqValue < 0 and -5 < lead_objspd and self.accel < -0.1:
+              if CS.clu_Vanz < 6 and 3.7 < CS.lead_distance < 8.0 and aReqValue < 0 and -5 < lead_objspd and self.accel < -0.3:
                 accel = self.accel + (3.0 * DT_CTRL)
-              elif CS.clu_Vanz < 6 and 3.7 < CS.lead_distance < 8.0 and aReqValue < 0 and -5 < lead_objspd and self.accel >= -0.1:
+              elif CS.clu_Vanz < 6 and 3.7 < CS.lead_distance < 8.0 and aReqValue < 0 and -5 < lead_objspd and self.accel >= -0.3:
                     accel = self.accel
               elif CS.lead_distance <= 3.7 and aReqValue < 0 and -5 < lead_objspd and self.accel > aReqValue:
                 accel = self.accel - (3.0 * DT_CTRL)
