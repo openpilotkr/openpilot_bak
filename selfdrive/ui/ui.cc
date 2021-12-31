@@ -243,7 +243,6 @@ static void update_state(UIState *s) {
     scene.longitudinal_control = cp_data.getOpenpilotLongitudinalControl();
     scene.steerMax_V = cp_data.getSteerMaxV()[0];
     scene.steer_actuator_delay = cp_data.getSteerActuatorDelay();
-    scene.op_accel = cp_data.getAqValue();
   }
   if (sm.updated("lateralPlan")) {
     scene.lateral_plan = sm["lateralPlan"].getLateralPlan();
@@ -419,7 +418,6 @@ static void update_status(UIState *s) {
     s->scene.lqrKi = std::stoi(params.get("LqrKi"));
     s->scene.lqrDcGain = std::stoi(params.get("DcGain"));
     s->scene.navi_select = std::stoi(params.get("OPKRNaviSelect"));
-    s->scene.radar_long_helper = std::stoi(params.get("RadarLongHelper"));
     s->scene.live_tune_panel_enable = params.getBool("OpkrLiveTunePanelEnable");
     s->scene.kr_date_show = params.getBool("KRDateShow");
     s->scene.kr_time_show = params.getBool("KRTimeShow");
