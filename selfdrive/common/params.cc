@@ -306,7 +306,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"VCurvSpeed90", PERSISTENT},
     {"VCurvSpeedUD", PERSISTENT},
     {"OCurvSpeed30", PERSISTENT},
-    {"OCurvSpeed45", PERSISTENT},
+    {"OCurvSpeed40", PERSISTENT},
     {"OCurvSpeed50", PERSISTENT},
     {"OCurvSpeed60", PERSISTENT},
     {"OCurvSpeed70", PERSISTENT},
