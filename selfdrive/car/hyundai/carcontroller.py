@@ -558,8 +558,8 @@ class CarController():
                 accel = self.accel - (3.0 * DT_CTRL)
                 self.adjacent_accel = 0
                 self.adjacent_accel_enabled = False
-              elif self.NC.cut_in and CS.clu_Vanz > 40:
-                accel = self.accel
+              elif self.NC.cut_in and CS.clu_Vanz > 40 and -1.5 < accel < 0:
+                pass
               else:
                 accel = aReqValue
                 self.adjacent_accel = 0
