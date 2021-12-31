@@ -633,7 +633,7 @@ static void ui_draw_vision_speed(UIState *s) {
 
   NVGcolor val_color = COLOR_WHITE;
 
-  float act_accel = !scene.longitudinal_control?scene.a_req_value:0;
+  float act_accel = (!scene.longitudinal_control && scene.radar_long_helper == 2)?scene.a_req_value:0;
   float gas_opacity = act_accel*255>255?255:act_accel*255;
   float brake_opacity = abs(act_accel*175)>255?255:abs(act_accel*175);
 
