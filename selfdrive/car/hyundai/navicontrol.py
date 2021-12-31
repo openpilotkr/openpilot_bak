@@ -299,7 +299,10 @@ class NaviControl():
     if CS.cruise_set_mode in [1,3,4] and self.curv_decel_option in [1,2]:
       if CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and path_plan.laneChangeState == LaneChangeState.off and \
        not (CS.out.leftBlinker or CS.out.rightBlinker) and not abs(CS.out.steeringTorque) > 170:
-        v_curv_speed = int(interp(modelSpeed, [30, 50, 70, 90], self.vision_curv_speed)/5)*5
+        if CS.is_set_speed_in_mph:
+          v_curv_speed = int(interp(modelSpeed, [30, 50, 70, 90], self.vision_curv_speed)/3)*3
+        else:
+          v_curv_speed = int(interp(modelSpeed, [30, 50, 70, 90], self.vision_curv_speed)/5)*5
         v_curv_speed = min(var_speed, v_curv_speed) # curve speed ratio
       else:
         v_curv_speed = 255
