@@ -75,10 +75,10 @@ class CarInterface(CarInterfaceBase):
     ret.stoppingControl = False
     ret.vEgoStopping = 1.0  # 1.0, 0.5
     ret.vEgoStarting = 0.5
-    ret.startAccel = 0.0 # 0.0, -0.2
-    ret.stopAccel = 0.0 # 0.0, -0.5
-    ret.stoppingDecelRate = 0.8 # 0.8, 0.2
-    ret.startingAccelRate = 3.2 # 3.2, 0.8
+    ret.startAccel = 0.0 # 0.0, -0.2   
+    ret.stopAccel = 0.0 # 0.0, -0.5    
+    ret.stoppingDecelRate = 0.8 # 0.8, 0.2  # brake_travel/s while trying to stop
+    ret.startingAccelRate = 3.2 # 3.2, 0.8  # brake_travel/s while releasing on restart
 
     ret.vCruisekph = 0
     ret.resSpeed = 0
