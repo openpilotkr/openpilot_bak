@@ -206,7 +206,7 @@ class LongitudinalMpc():
     self.accel_limit_arr[:,1] = 1.2
     self.source = SOURCES[2]
 
-    self.TR = 0
+    self.TR = 1.45
     self.dynamic_TR = 0
     self.cruise_gap1 = float(Decimal(Params().get("CruiseGap1", encoding="utf8")) * Decimal('0.1'))
     self.cruise_gap2 = float(Decimal(Params().get("CruiseGap2", encoding="utf8")) * Decimal('0.1'))
@@ -214,6 +214,8 @@ class LongitudinalMpc():
     self.cruise_gap4 = float(Decimal(Params().get("CruiseGap4", encoding="utf8")) * Decimal('0.1'))
 
     self.dynamic_TR_mode = int(Params().get("DynamicTR", encoding="utf8"))
+
+    self.radar_helper = int(Params().get("RadarLongHelper", encoding="utf8"))
 
     self.lo_timer = 0 
 
@@ -346,17 +348,18 @@ class LongitudinalMpc():
     lead_xv_0 = self.process_lead(radarstate.leadOne)
     lead_xv_1 = self.process_lead(radarstate.leadTwo)
 
-    cruise_gap = int(clip(carstate.cruiseGapSet, 1., 4.))
-    self.dynamic_TR = interp(self.v_ego*3.6, [0, 20, 40, 60, 110], [0.9, 1.2, 1.4, 1.5, 1.6] )
-    self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
-    if self.dynamic_TR_mode == 1:
-      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.dynamic_TR, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
-    elif self.dynamic_TR_mode == 2:
-      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.dynamic_TR, self.cruise_gap3, self.cruise_gap4])
-    elif self.dynamic_TR_mode == 3:
-      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.dynamic_TR, self.cruise_gap4])
-    elif self.dynamic_TR_mode == 4:
-      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.dynamic_TR])
+    if self.radar_helper != 2:
+      cruise_gap = int(clip(carstate.cruiseGapSet, 1., 4.))
+      self.dynamic_TR = interp(self.v_ego*3.6, [0, 20, 40, 60, 110], [0.9, 1.2, 1.4, 1.5, 1.6] )
+      self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
+      if self.dynamic_TR_mode == 1:
+        self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.dynamic_TR, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
+      elif self.dynamic_TR_mode == 2:
+        self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.dynamic_TR, self.cruise_gap3, self.cruise_gap4])
+      elif self.dynamic_TR_mode == 3:
+        self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.dynamic_TR, self.cruise_gap4])
+      elif self.dynamic_TR_mode == 4:
+        self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.dynamic_TR])
 
     self.set_desired_TR(self.TR)
 
@@ -386,7 +389,7 @@ class LongitudinalMpc():
       self.params[:,3] = np.copy(self.prev_a)
     else:
       self.params[:,3] = a_ego
-    self.params[:,4] = self.desired_TR
+    self.params[:,4] = self.desired_TR  # shane
 
     self.run()
     if (np.any(lead_xv_0[:,0] - self.x_sol[:,0] < CRASH_DISTANCE) and
@@ -408,7 +411,7 @@ class LongitudinalMpc():
     desired_TR = T_FOLLOW*np.ones((N+1))
     self.params = np.concatenate([self.accel_limit_arr,
                              x_obstacle[:,None],
-                             self.prev_a, desired_TR[:,None]], axis=1)
+                             self.prev_a[:,None], desired_TR[:,None]], axis=1)
     self.run()
 
 

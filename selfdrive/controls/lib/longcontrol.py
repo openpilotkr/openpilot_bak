@@ -123,7 +123,7 @@ class LongControl():
       if 1 < CS.radarDistance <= 149:
         stop = True if (dRel <= 3.5 and radarState.leadOne.status) else False
       else:
-        stop = True if (dRel < 4.5 and radarState.leadOne.status) else False
+        stop = True if (dRel < 5.5 and radarState.leadOne.status) else False
     else:
       stop = False
     self.long_control_state = long_control_state_trans(CP, active, self.long_control_state, CS.vEgo,
@@ -169,8 +169,8 @@ class LongControl():
       # Keep applying brakes until the car is stopped
       if not CS.standstill or output_accel > CP.stopAccel:
         output_accel -= CP.stoppingDecelRate * DT_CTRL
-      elif CS.cruiseState.standstill and output_accel < -0.5: # loosen brake at standstill, to mitigate load of brake
-        output_accel += CP.stoppingDecelRate * DT_CTRL
+      # elif CS.cruiseState.standstill and output_accel < -0.5: # loosen brake at standstill, to mitigate load of brake
+      #   output_accel += CP.stoppingDecelRate * DT_CTRL
       output_accel = clip(output_accel, accel_limits[0], accel_limits[1])
       self.reset(CS.vEgo)
 
