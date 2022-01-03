@@ -548,7 +548,7 @@ class CarController():
           if 0 < CS.lead_distance <= 149:
             if self.stopping_dist_adj_enabled:
               if CS.clu_Vanz < 6 and 3.7 < CS.lead_distance < 8.0 and aReqValue < 0 and -5 < lead_objspd and self.accel < 0 and not self.adjacent_accel_enabled:
-                self.adjacent_accel = self.accel*0.7
+                self.adjacent_accel = self.accel*0.6
                 self.adjacent_accel_enabled = True
               if CS.clu_Vanz < 6 and 3.7 < CS.lead_distance < 8.0 and aReqValue < 0 and -5 < lead_objspd and self.accel < self.adjacent_accel:
                 accel = self.accel + (3.0 * DT_CTRL)
@@ -561,7 +561,7 @@ class CarController():
               elif self.NC.cut_in and CS.clu_Vanz > 40 and -1.5 < accel < 0:
                 pass
               elif CS.lead_distance >= 8.0 and aReqValue < 0 and lead_objspd < 0: # adjusting deceleration
-                accel = aReqValue * interp(abs(lead_objspd), [0, 10, 20, 30, 40], [1.0, 0.9, 0.9, 1.5, 1.0]) * interp(CS.lead_distance, [0, 10, 20, 30, 40], [1.0, 1.1, 1.1, 1.0, 1.0])
+                accel = aReqValue * interp(abs(lead_objspd), [0, 10, 20, 30, 40], [1.0, 0.9, 0.9, 1.6, 1.0]) * interp(CS.lead_distance, [0, 10, 20, 30, 40], [1.0, 1.2, 1.2, 1.0, 1.0])
               else:
                 accel = aReqValue
                 self.adjacent_accel = 0
