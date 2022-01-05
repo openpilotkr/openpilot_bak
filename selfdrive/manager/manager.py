@@ -167,7 +167,7 @@ def manager_init():
     ("OCurvSpeed70", "80"),
     ("OCurvSpeedUD", "1"),
     ("StockNaviSpeedEnabled", "0"),
-    ("OPKRNaviSelect", "0"),
+    ("OPKRNaviSelect", "2"),
     ("dp_atl", "1"),
     ("E2ELong", "0"),
     ("GoogleMapEnabled", "0"),

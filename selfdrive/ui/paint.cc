@@ -1245,7 +1245,9 @@ static void ui_draw_vision_header(UIState *s) {
       draw_safetysign(s);
     }
     draw_compass(s);
-    draw_navi_button(s);
+    if (s->scene.navi_select == 0 || s->scene.navi_select == 1 || s->scene.mapbox_running) {
+      draw_navi_button(s);
+    }
     if (s->scene.end_to_end) {
       draw_laneless_button(s);
     }
