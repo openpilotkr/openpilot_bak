@@ -153,7 +153,7 @@ PrimeUserWidget::PrimeUserWidget(QWidget* parent) : QWidget(parent) {
 
   // set up API requests
   if (auto dongleId = getDongleId()) {
-    QString url = TARGET_SERVER + "/v1/devices/" + dongleId + "/owner";
+    QString url = TARGET_SERVER + "/v1/devices/" + *dongleId + "/owner";
     RequestRepeater *repeater = new RequestRepeater(this, url, "ApiCache_Owner", 6);
     QObject::connect(repeater, &RequestRepeater::requestDone, this, &PrimeUserWidget::replyFinished);
   }
@@ -294,11 +294,6 @@ void SetupWidget::replyFinished(const QString &response, bool success) {
     popup->reject();
 
     bool prime = json["prime"].toBool();
-
-    if (uiState()->has_prime != prime) {
-      uiState()->has_prime = prime;
-      Params().putBool("HasPrime", prime);
-    }
 
     if (prime) {
       mainLayout->setCurrentWidget(primeUser);
