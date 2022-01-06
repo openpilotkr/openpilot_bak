@@ -5,6 +5,7 @@ import signal
 import subprocess
 import sys
 import traceback
+from typing import List, Tuple, Union
 
 import cereal.messaging as messaging
 import selfdrive.crash as crash
@@ -26,17 +27,17 @@ from selfdrive.version import is_dirty, get_commit, get_version, get_origin, get
 sys.path.append(os.path.join(BASEDIR, "pyextra"))
 
 
-def manager_init():
+def manager_init() -> None:
   # update system time from panda
   set_time(cloudlog)
 
-  # # save boot log
+  # save boot log
   # subprocess.call("./bootlog", cwd=os.path.join(BASEDIR, "selfdrive/loggerd"))
 
   params = Params()
   params.clear_all(ParamKeyType.CLEAR_ON_MANAGER_START)
 
-  default_params = [
+  default_params: List[Tuple[str, Union[str, bytes]]] = [
     ("CompletedTrainingVersion", "0"),
     ("HasAcceptedTerms", "0"),
     ("OpenpilotEnabledToggle", "1"),
@@ -201,7 +202,7 @@ def manager_init():
 
   # is this dashcam?
   if os.getenv("PASSIVE") is not None:
-    params.put_bool("Passive", bool(int(os.getenv("PASSIVE"))))
+    params.put_bool("Passive", bool(int(os.getenv("PASSIVE", "0"))))
 
   if params.get("Passive") is None:
     raise Exception("Passive must be set to continue")
@@ -260,12 +261,12 @@ def manager_init():
 
   os.system("/data/openpilot/selfdrive/assets/addon/script/gitcommit.sh")
 
-def manager_prepare():
+def manager_prepare() -> None:
   for p in managed_processes.values():
     p.prepare()
 
 
-def manager_cleanup():
+def manager_cleanup() -> None:
   if EON:
     pm_apply_packages('disable')
 
@@ -280,7 +281,7 @@ def manager_cleanup():
   cloudlog.info("everything is dead")
 
 
-def manager_thread():
+def manager_thread() -> None:
   cloudlog.bind(daemon="manager")
   cloudlog.info("manager start")
   cloudlog.info({"environ": os.environ})
@@ -292,8 +293,7 @@ def manager_thread():
     ignore += ["manage_athenad", "uploader"]
   if os.getenv("NOBOARD") is not None:
     ignore.append("pandad")
-  if os.getenv("BLOCK") is not None:
-    ignore += os.getenv("BLOCK").split(",")
+  ignore += [x for x in os.getenv("BLOCK", "").split(",") if len(x) > 0]
 
   if EON:
     pm_apply_packages('enable')
@@ -343,7 +343,7 @@ def manager_thread():
       break
 
 
-def main():
+def main() -> None:
   prepare_only = os.getenv("PREPAREONLY") is not None
 
   manager_init()

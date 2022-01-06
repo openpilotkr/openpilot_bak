@@ -311,33 +311,35 @@ class LateralPlanner:
     plan_solution_valid = self.solution_invalid_cnt < 2
     plan_send = messaging.new_message('lateralPlan')
     plan_send.valid = sm.all_alive_and_valid(service_list=['carState', 'controlsState', 'modelV2'])
-    plan_send.lateralPlan.laneWidth = float(self.LP.lane_width)
-    plan_send.lateralPlan.dPathPoints = [float(x) for x in self.y_pts]
-    plan_send.lateralPlan.psis = [float(x) for x in self.lat_mpc.x_sol[0:CONTROL_N, 2]]
-    plan_send.lateralPlan.curvatures = [float(x) for x in self.lat_mpc.x_sol[0:CONTROL_N, 3]]
-    plan_send.lateralPlan.curvatureRates = [float(x) for x in self.lat_mpc.u_sol[0:CONTROL_N - 1]] + [0.0]
-    plan_send.lateralPlan.lProb = float(self.LP.lll_prob)
-    plan_send.lateralPlan.rProb = float(self.LP.rll_prob)
-    plan_send.lateralPlan.dProb = float(self.LP.d_prob)
 
-    plan_send.lateralPlan.mpcSolutionValid = bool(plan_solution_valid)
+    lateralPlan = plan_send.lateralPlan
+    lateralPlan.laneWidth = float(self.LP.lane_width)
+    lateralPlan.dPathPoints = [float(x) for x in self.y_pts]
+    lateralPlan.psis = [float(x) for x in self.lat_mpc.x_sol[0:CONTROL_N, 2]]
+    lateralPlan.curvatures = [float(x) for x in self.lat_mpc.x_sol[0:CONTROL_N, 3]]
+    lateralPlan.curvatureRates = [float(x) for x in self.lat_mpc.u_sol[0:CONTROL_N - 1]] + [0.0]
+    lateralPlan.lProb = float(self.LP.lll_prob)
+    lateralPlan.rProb = float(self.LP.rll_prob)
+    lateralPlan.dProb = float(self.LP.d_prob)
 
-    plan_send.lateralPlan.desire = self.desire
-    plan_send.lateralPlan.useLaneLines = self.use_lanelines
-    plan_send.lateralPlan.laneChangeState = self.lane_change_state
-    plan_send.lateralPlan.laneChangeDirection = self.lane_change_direction
-    plan_send.lateralPlan.modelSpeed = float(self.model_speed)
+    lateralPlan.mpcSolutionValid = bool(plan_solution_valid)
 
-    plan_send.lateralPlan.steerRateCost = float(self.steer_rate_cost)
-    plan_send.lateralPlan.outputScale = float(self.output_scale)
-    plan_send.lateralPlan.vCruiseSet = float(self.v_cruise_kph)
-    plan_send.lateralPlan.vCurvature = float(sm['controlsState'].curvature)
-    plan_send.lateralPlan.lanelessMode = bool(self.laneless_mode_status)
+    lateralPlan.desire = self.desire
+    lateralPlan.useLaneLines = self.use_lanelines
+    lateralPlan.laneChangeState = self.lane_change_state
+    lateralPlan.laneChangeDirection = self.lane_change_direction
+
+    lateralPlan.modelSpeed = float(self.model_speed)
+    lateralPlan.steerRateCost = float(self.steer_rate_cost)
+    lateralPlan.outputScale = float(self.output_scale)
+    lateralPlan.vCruiseSet = float(self.v_cruise_kph)
+    lateralPlan.vCurvature = float(sm['controlsState'].curvature)
+    lateralPlan.lanelessMode = bool(self.laneless_mode_status)
 
     if self.stand_still:
       self.standstill_elapsed_time += DT_MDL
     else:
       self.standstill_elapsed_time = 0.0
-    plan_send.lateralPlan.standstillElapsedTime = int(self.standstill_elapsed_time)
+    lateralPlan.standstillElapsedTime = int(self.standstill_elapsed_time)
 
     pm.send('lateralPlan', plan_send)

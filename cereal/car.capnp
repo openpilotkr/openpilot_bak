@@ -105,6 +105,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     localizerMalfunction @103;
     highCpuUsage @105;
     cruiseMismatch @106;
+    lkasDisabled @107;
 
     driverMonitorLowAccDEPRECATED @68;
     radarCanErrorDEPRECATED @15;
@@ -127,24 +128,24 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     modelLagWarningDEPRECATED @93;
     startupOneplusDEPRECATED @82;
     startupFuzzyFingerprintDEPRECATED @97;
-    laneChangeManual @107;
-    emgButtonManual @108;
-    driverSteering @109;
-    modeChangeOpenpilot @110;
-    modeChangeDistcurv @111;
-    modeChangeDistance @112;
-    modeChangeCurv @113;
-    modeChangeOneway @114;
-    modeChangeMaponly @115;
-    needBrake @116;
-    standStill @117;
-    e2eLongAlert @118;
-    isgActive @119;
-    camSpeedDown @120;
-    gapAdjusting @121;
-    resCruise @122;
-    curvSpeedDown @123;
-    standstillResButton @124;
+    laneChangeManual @108;
+    emgButtonManual @109;
+    driverSteering @110;
+    modeChangeOpenpilot @111;
+    modeChangeDistcurv @112;
+    modeChangeDistance @113;
+    modeChangeCurv @114;
+    modeChangeOneway @115;
+    modeChangeMaponly @116;
+    needBrake @117;
+    standStill @118;
+    e2eLongAlert @119;
+    isgActive @120;
+    camSpeedDown @121;
+    gapAdjusting @122;
+    resCruise @123;
+    curvSpeedDown @124;
+    standstillResButton @125;
   }
 }
 
@@ -371,7 +372,8 @@ struct CarControl {
       off @0;
       pid @1;
       stopping @2;
-      starting @3;
+
+      startingDEPRECATED @3;
     }
 
   }
@@ -486,13 +488,11 @@ struct CarParams {
   vEgoStarting @59 :Float32; # Speed at which the car goes into starting state
   directAccelControl @30 :Bool; # Does the car have direct accel control or just gas/brake
   stoppingControl @31 :Bool; # Does the car allows full control even at lows speeds when stopping
-  startAccel @32 :Float32; # Required acceleraton to overcome creep braking
   stopAccel @60 :Float32; # Required acceleraton to keep vehicle stationary
   steerRateCost @33 :Float32; # Lateral MPC cost on steering rate
   steerControlType @34 :SteerControlType;
   radarOffCan @35 :Bool; # True when radar objects aren't visible on CAN
   stoppingDecelRate @52 :Float32; # m/s^2/s while trying to stop
-  startingAccelRate @53 :Float32; # m/s^2/s while trying to start
 
   steerActuatorDelay @36 :Float32; # Steering wheel actuator delay in seconds
   longitudinalActuatorDelayLowerBound @61 :Float32; # Gas/Brake actuator delay in seconds, lower bound
@@ -671,4 +671,6 @@ struct CarParams {
   isPandaBlackDEPRECATED @39: Bool;
   hasStockCameraDEPRECATED @57 :Bool;
   minSpeedCanDEPRECATED @51 :Float32;
+  startAccelDEPRECATED @32 :Float32;
+  startingAccelRateDEPRECATED @53 :Float32;
 }
