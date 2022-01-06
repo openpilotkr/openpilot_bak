@@ -187,7 +187,7 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   finishRegistationLayout->setSpacing(0);
 
   QLabel* opkr = new QLabel("OPKR");
-  opkr->setStyleSheet("font-size: 90px;"); // TODO: fit width
+  opkr->setStyleSheet("font-size: 85px;"); // TODO: fit width
   finishRegistationLayout->addWidget(opkr, 0, Qt::AlignCenter);
   finishRegistationLayout->addSpacing(35);
   QPixmap hkgpix("../assets/addon/img/hkg.png");
@@ -197,7 +197,7 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   finishRegistationLayout->addWidget(hkg, 0, Qt::AlignCenter);
 
   QPushButton* finishButton = new QPushButton("Show QR Code");
-  finishButton->setFixedHeight(110);
+  finishButton->setFixedHeight(100);
   finishButton->setStyleSheet(R"(
     border-radius: 30px;
     font-size: 45px;
