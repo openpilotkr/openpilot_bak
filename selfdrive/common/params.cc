@@ -336,6 +336,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"FCA11Message", PERSISTENT},
     {"StandstillResumeAlt", PERSISTENT},
     {"AutoRESDelay", PERSISTENT},
+    {"UseRadarTrack", PERSISTENT},
 };
 
 } // namespace

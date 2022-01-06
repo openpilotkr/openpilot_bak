@@ -185,6 +185,7 @@ def manager_init() -> None:
     ("StandstillResumeAlt", "0"),
     ("MapboxEnabled", "0"),
     ("AutoRESDelay", "0"),
+    ("UseRadarTrack", "0"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))

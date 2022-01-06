@@ -598,6 +598,18 @@ public:
   }
 };
 
+class UseRadarTrackToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+  UseRadarTrackToggle() : ToggleControl("Use Radar Track", "Some cars have known radar tracks(from comma) for long control. This uses radar track directly instead of scc can message.(Reboot required)", "../assets/offroad/icon_shell.png", Params().getBool("UseRadarTrack")) {
+    QObject::connect(this, &UseRadarTrackToggle::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("UseRadarTrack", status);
+    });
+  }
+};
+
 // openpilot preview
 class OpenpilotView : public AbstractControl {
   Q_OBJECT

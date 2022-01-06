@@ -580,7 +580,7 @@ FEATURES = {
 HYBRID_CAR = {CAR.K5_HEV, CAR.IONIQ_HEV, CAR.SONATA_HEV, CAR.SONATA_LF_HEV, CAR.K7_HEV, CAR.GRANDEUR_IG_HEV, CAR.GRANDEUR_IG_FL_HEV, CAR.NIRO_HEV, CAR.KONA_HEV}
 EV_CAR = {CAR.IONIQ_EV, CAR.KONA_EV, CAR.NIRO_EV, CAR.NEXO, CAR.SOUL_EV}
 
-if False:
+if Params().get_bool("UseRadarTrack"):
   DBC = {
     # genesis
     CAR.GENESIS: dbc_dict('hyundai_kia_generic', 'hyundai_kia_mando_front_radar'),

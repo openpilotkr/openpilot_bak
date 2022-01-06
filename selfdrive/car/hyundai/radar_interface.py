@@ -5,13 +5,15 @@ from cereal import car
 from opendbc.can.parser import CANParser
 from selfdrive.car.interfaces import RadarInterfaceBase
 from selfdrive.car.hyundai.values import DBC
+from common.params import Params
 
 RADAR_START_ADDR = 0x500
 RADAR_MSG_COUNT = 32
 
+USE_RADAR_TRACK = Params().get_bool("UseRadarTrack")
 
 def get_radar_can_parser(CP):
-  if False:
+  if USE_RADAR_TRACK:
     if DBC[CP.carFingerprint]['radar'] is None:
       return None
 
@@ -49,7 +51,7 @@ class RadarInterface(RadarInterfaceBase):
   def __init__(self, CP):
     super().__init__(CP)
     
-    if False:
+    if USE_RADAR_TRACK:
       self.updated_messages = set()
       self.trigger_msg = RADAR_START_ADDR + RADAR_MSG_COUNT - 1
       self.track_id = 0
@@ -64,7 +66,7 @@ class RadarInterface(RadarInterfaceBase):
       self.radar_off_can = CP.radarOffCan
 
   def update(self, can_strings):
-    if False:
+    if USE_RADAR_TRACK:
       if self.radar_off_can or (self.rcp is None):
         return super().update(None)
     else:
@@ -85,7 +87,7 @@ class RadarInterface(RadarInterfaceBase):
   def _update(self, updated_messages):
     ret = car.RadarData.new_message()
 
-    if False:
+    if USE_RADAR_TRACK:
       if self.rcp is None:
         return ret
 

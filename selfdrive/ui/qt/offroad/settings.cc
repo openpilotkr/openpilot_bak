@@ -719,6 +719,7 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new RadarLongHelperOption());
   layout->addWidget(new StoppingDistAdjToggle());
   layout->addWidget(new E2ELongToggle());
+  layout->addWidget(new UseRadarTrackToggle());
 }
 
 void SettingsWindow::showEvent(QShowEvent *event) {

@@ -114,3 +114,4 @@ RESCountatStandstill:20
 OpkrSpeedLimitOffsetOption:0
 CurvDecelOption:2
 AutoRESDelay:0
+UseRadarTrack:0
