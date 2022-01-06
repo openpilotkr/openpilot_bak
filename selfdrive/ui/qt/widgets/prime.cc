@@ -292,6 +292,8 @@ void SetupWidget::replyFinished(const QString &response, bool success) {
   QJsonObject json = doc.object();
   if (!json["is_paired"].toBool() && !showQr) {
     mainLayout->setCurrentIndex(0);
+  } else if (!json["is_paired"].toBool() && showQr) {
+    mainLayout->setCurrentIndex(1);
   } else {
     bool prime = json["prime"].toBool();
 
