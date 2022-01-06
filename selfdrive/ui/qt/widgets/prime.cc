@@ -183,13 +183,13 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
 
   QWidget* finishRegistration = new QWidget;
   QVBoxLayout* finishRegistationLayout = new QVBoxLayout(finishRegistration);
-  finishRegistationLayout->setMargin(30);
+  finishRegistationLayout->setMargin(20);
   finishRegistationLayout->setSpacing(10);
 
   QLabel* opkr = new QLabel("OPKR");
-  opkr->setStyleSheet("font-size: 70px;"); // TODO: fit width
+  opkr->setStyleSheet("font-size: 90px;"); // TODO: fit width
   finishRegistationLayout->addWidget(opkr, 0, Qt::AlignCenter);
-  finishRegistationLayout->addSpacing(15);
+  finishRegistationLayout->addSpacing(45);
   QPixmap hkgpix("../assets/addon/img/hkg.png");
   QLabel *hkg = new QLabel();
   hkg->setPixmap(hkgpix.scaledToWidth(450, Qt::SmoothTransformation));
@@ -197,10 +197,10 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   finishRegistationLayout->addWidget(hkg, 0, Qt::AlignCenter);
 
   QPushButton* finishButton = new QPushButton("Show QR Code");
-  finishButton->setFixedHeight(125);
+  finishButton->setFixedHeight(100);
   finishButton->setStyleSheet(R"(
     border-radius: 30px;
-    font-size: 45px;
+    font-size: 40px;
     font-weight: 500;
     background: #585858;
   )");
