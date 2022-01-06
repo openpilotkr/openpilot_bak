@@ -580,8 +580,8 @@ FEATURES = {
 HYBRID_CAR = {CAR.K5_HEV, CAR.IONIQ_HEV, CAR.SONATA_HEV, CAR.SONATA_LF_HEV, CAR.K7_HEV, CAR.GRANDEUR_IG_HEV, CAR.GRANDEUR_IG_FL_HEV, CAR.NIRO_HEV, CAR.KONA_HEV}
 EV_CAR = {CAR.IONIQ_EV, CAR.KONA_EV, CAR.NIRO_EV, CAR.NEXO, CAR.SOUL_EV}
 
-DBC = {
-  if False:
+if False:
+  DBC = {
     # genesis
     CAR.GENESIS: dbc_dict('hyundai_kia_generic', 'hyundai_kia_mando_front_radar'),
     CAR.GENESIS_G70: dbc_dict('hyundai_kia_generic', 'hyundai_kia_mando_front_radar'),
@@ -622,7 +622,9 @@ DBC = {
     CAR.SELTOS: dbc_dict('hyundai_kia_generic', 'hyundai_kia_mando_front_radar'),
     CAR.SOUL_EV: dbc_dict('hyundai_kia_generic', 'hyundai_kia_mando_front_radar'),
     CAR.MOHAVE: dbc_dict('hyundai_kia_generic', 'hyundai_kia_mando_front_radar'),
-  else:
+  }
+else:
+  DBC = {
     # genesis
     CAR.GENESIS: dbc_dict('hyundai_kia_generic', None),
     CAR.GENESIS_G70: dbc_dict('hyundai_kia_generic', None),
@@ -663,6 +665,6 @@ DBC = {
     CAR.SELTOS: dbc_dict('hyundai_kia_generic', None),
     CAR.SOUL_EV: dbc_dict('hyundai_kia_generic', None),
     CAR.MOHAVE: dbc_dict('hyundai_kia_generic', None),
-}
+  }
 
 STEER_THRESHOLD = int(Params().get("SteerThreshold", encoding="utf8"))
