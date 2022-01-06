@@ -211,7 +211,7 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   QVBoxLayout* qrLayout = new QVBoxLayout(q);
 
   qrLayout->addSpacing(40);
-  QLabel* qrLabel = new QLabel("Scan Device!");
+  QLabel* qrLabel = new QLabel("Scan Device using QR Code Scanner and paste the token to API server");
   qrLabel->setWordWrap(true);
   qrLabel->setAlignment(Qt::AlignHCenter);
   qrLabel->setStyleSheet(R"(
@@ -290,7 +290,7 @@ void SetupWidget::replyFinished(const QString &response, bool success) {
   }
 
   QJsonObject json = doc.object();
-  if (!json["is_paired"].toBool()) {
+  if (!json["is_paired"].toBool() && showQr) {
     mainLayout->setCurrentIndex(0);
   } else {
     bool prime = json["prime"].toBool();
