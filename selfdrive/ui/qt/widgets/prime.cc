@@ -189,7 +189,7 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   QLabel* opkr = new QLabel("OPKR");
   opkr->setStyleSheet("font-size: 90px;"); // TODO: fit width
   finishRegistationLayout->addWidget(opkr, 0, Qt::AlignCenter);
-  finishRegistationLayout->setMargin(10);
+  finishRegistationLayout->setMargin(30);
   //finishRegistationLayout->addSpacing(10);
   QPixmap hkgpix("../assets/addon/img/hkg.png");
   QLabel *hkg = new QLabel();
