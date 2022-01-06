@@ -197,10 +197,10 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   finishRegistationLayout->addWidget(hkg, 0, Qt::AlignCenter);
 
   QPushButton* finishButton = new QPushButton("Show QR Code");
-  finishButton->setFixedHeight(125);
+  finishButton->setFixedHeight(110);
   finishButton->setStyleSheet(R"(
     border-radius: 30px;
-    font-size: 50px;
+    font-size: 45px;
     font-weight: 500;
     background: #585858;
   )");
