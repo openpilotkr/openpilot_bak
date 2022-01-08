@@ -274,13 +274,13 @@ void CANParser::UpdateValid(uint64_t sec) {
       if (state.seen > 0) {
         DEBUG("0x%X TIMEOUT\n", state.address);
         if(access("/data/log/can_timeout.txt", F_OK) == -1) {
-          sprintf(chk_cmd, "echo 0x%X > /data/log/can_timeout.txt", state.address);
+          sprintf(chk_cmd, "echo -n 0x%X > /data/log/can_timeout.txt", state.address);
           system(chk_cmd);
         }
       } else {
         DEBUG("0x%X MISSING\n", state.address);
         if(access("/data/log/can_timeout.txt", F_OK) == -1) {
-          sprintf(chk_cmd, "echo 0x%X > /data/log/can_missing.txt", state.address);
+          sprintf(chk_cmd, "echo -n 0x%X > /data/log/can_missing.txt", state.address);
           system(chk_cmd);
         }
       }

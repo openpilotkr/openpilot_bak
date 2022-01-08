@@ -266,18 +266,20 @@ def can_error_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, so
   if os.path.isfile('/data/log/can_missing.txt'):
     f = open('/data/log/can_missing.txt', 'r')
     add = f.readline()
+    add_int = int(add)
     f.close()
     return Alert(
-      "CAN Error: %s is missing" % add,
+      "CAN Error: %s is missing\n Decimal Value : %d" % (add, add_int)
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
   elif os.path.isfile('/data/log/can_timeout.txt'):
     f = open('/data/log/can_timeout.txt', 'r')
     add = f.readline()
+    add_int = int(add)
     f.close()
     return Alert(
-      "CAN Error: %s is timeout" % add,
+      "CAN Error: %s is timeout\n Decimal Value : %d" % (add, add_int)
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
