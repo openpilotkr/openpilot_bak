@@ -246,6 +246,10 @@ def manager_init() -> None:
   # opkr
   if os.path.isfile('/data/log/error.txt'):
     os.remove('/data/log/error.txt')
+  if os.path.isfile('/data/log/can_missing.txt'):
+    os.remove('/data/log/can_missing.txt')
+  if os.path.isfile('/data/log/can_timeout.txt'):
+    os.remove('/data/log/can_timeout.txt')
   if is_comma_remote() and not (os.getenv("NOLOG") or os.getenv("NOCRASH") or PC):
     crash.init()
 
