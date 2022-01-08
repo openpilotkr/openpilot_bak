@@ -606,7 +606,7 @@ class CarState(CarStateBase):
         ("LVR12", 100)
       ]
 
-    return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 0)
+    return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 0, enforce_checks=False)
 
   @staticmethod
   def get_can2_parser(CP):
@@ -637,7 +637,7 @@ class CarState(CarStateBase):
       checks += [
         ("SAS11", 100)
       ]
-    return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 1)
+    return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 1, enforce_checks=False)
 
   @staticmethod
   def get_cam_can_parser(CP):
@@ -754,4 +754,4 @@ class CarState(CarStateBase):
         ]
         checks += [("LFAHDA_MFC", 20)]
 
-    return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 2)
+    return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 2, enforce_checks=False)
