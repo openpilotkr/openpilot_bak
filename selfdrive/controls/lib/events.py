@@ -261,6 +261,7 @@ def joystick_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, sof
   vals = f"Gas: {round(gb * 100.)}%, Steer: {round(steer * 100.)}%"
   return NormalPermanentAlert("Joystick Mode", vals)
 
+# opkr
 def can_error_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, soft_disable_time: int) -> Alert:
   err_add = os.environ.get("CAN_MISSING_ADD")
   return Alert(
