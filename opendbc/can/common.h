@@ -12,8 +12,6 @@
 #include "cereal/gen/cpp/log.capnp.h"
 #endif
 
-#include <stdlib.h>
-
 #define MAX_BAD_COUNTER 5
 
 // Helper functions
@@ -72,7 +70,6 @@ public:
   void UpdateCans(uint64_t sec, const capnp::DynamicStruct::Reader& cans);
   void UpdateValid(uint64_t sec);
   std::vector<SignalValue> query_latest();
-  int setenv(const char *envname, const char *envval, int overwrite);
 };
 
 class CANPacker {
