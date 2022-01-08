@@ -269,7 +269,7 @@ def can_error_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, so
     add_int = int(add)
     f.close()
     return Alert(
-      "CAN Error: %s is missing\n Decimal Value : %d" % (add, add_int)
+      "CAN Error: %s is missing\n Decimal Value : %d" % (add, add_int),
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
@@ -279,7 +279,7 @@ def can_error_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, so
     add_int = int(add)
     f.close()
     return Alert(
-      "CAN Error: %s is timeout\n Decimal Value : %d" % (add, add_int)
+      "CAN Error: %s is timeout\n Decimal Value : %d" % (add, add_int),
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
