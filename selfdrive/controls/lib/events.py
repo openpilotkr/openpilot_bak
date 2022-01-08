@@ -265,19 +265,21 @@ def joystick_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, sof
 def can_error_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, soft_disable_time: int) -> Alert:
   if os.path.isfile('/data/log/can_missing.txt'):
     f = open('/data/log/can_missing.txt', 'r')
-    add_str = f.read()
+    add = f.readline()
+    add_int = int(add, 0)
     f.close()
     return Alert(
-      "CAN Error: %s" % add_str,
+      "CAN Error: %s" % add,
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
   elif os.path.isfile('/data/log/can_timeout.txt'):
     f = open('/data/log/can_timeout.txt', 'r')
-    add_str = f.read()
+    add = f.readline()
+    add_int = int(add, 0)
     f.close()
     return Alert(
-      "CAN Error: %s" % add_str,
+      "CAN Error: %s" % add,
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
