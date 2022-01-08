@@ -280,7 +280,7 @@ void CANParser::UpdateValid(uint64_t sec) {
         }
       } else {
         DEBUG("0x%X MISSING\n", state.address);
-        printf("%lu", sec);
+        printf("%lu\n", sec);
         if(access("/data/log/can_missing.txt", F_OK) == -1) {
           sprintf(chk_cmd, "echo -n 0x%X > /data/log/can_missing.txt", state.address);
           system(chk_cmd);
