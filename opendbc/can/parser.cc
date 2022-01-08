@@ -269,10 +269,10 @@ void CANParser::UpdateValid(uint64_t sec) {
   can_valid = true;
   for (const auto& kv : message_states) {
     const auto& state = kv.second;
-    if (state.check_threshold > 0 && (sec - state.seen) > state.check_threshold) {
+    if (state.check_threshold > 0 && (sec - state.seen) > state.check_threshold && sec > 10) {
       // opkr
       char chk_cmd[100];
-      if (state.seen > 0) {
+      if (state.seen > 0 ) {
         DEBUG("0x%X TIMEOUT\n", state.address);
         if(access("/data/log/can_timeout.txt", F_OK) == -1) {
           sprintf(chk_cmd, "echo -n 0x%X > /data/log/can_timeout.txt", state.address);
