@@ -268,7 +268,7 @@ def can_error_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, so
     "CAN Error: %s is missing" % err_add,
     "",
     AlertStatus.normal, AlertSize.small,
-    Priority.LOW, VisualAlert.none, AudibleAlert.none, 1., creation_delay=1.),
+    Priority.LOW, VisualAlert.none, AudibleAlert.none, 1.),
 
 
 EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
