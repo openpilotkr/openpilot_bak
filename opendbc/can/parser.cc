@@ -276,6 +276,9 @@ void CANParser::UpdateValid(uint64_t sec) {
         //sprintf(chk_cmd, "export CAN_TIMEOUT_ADD=0x%X", state.address);
         //system(chk_cmd);
       } else {
+        if(access("/data/can_missing.txt", F_OK) == -1) {
+          system("touch /data/can_missing.txt");
+        }
         printf("0x%X MISSING\n", state.address);
         //sprintf(chk_cmd, "export CAN_MISSING_ADD=0x%X", state.address);
         //system(chk_cmd);
