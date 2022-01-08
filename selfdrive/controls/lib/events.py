@@ -268,7 +268,7 @@ def can_error_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, so
     "CAN Error: %s is missing" % err_add,
     "",
     AlertStatus.normal, AlertSize.small,
-    Priority.LOW, VisualAlert.none, AudibleAlert.none, 1.),
+    Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
 
 
 EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
@@ -893,8 +893,8 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
   # - CAN data is received, but some message are not received at the right frequency
   # If you're not writing a new car port, this is usually cause by faulty wiring
   EventName.canError: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("CAN Error: Check Connections"),
     ET.PERMANENT: can_error_alert,
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("CAN Error: Check Connections"),
     # ET.PERMANENT: Alert(
     #   "CAN Error: Check Connections",
     #   "",
