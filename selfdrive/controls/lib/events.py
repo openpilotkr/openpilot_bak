@@ -263,13 +263,30 @@ def joystick_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, sof
 
 # opkr
 def can_error_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, soft_disable_time: int) -> Alert:
-  err_add = os.environ.get("CAN_MISSING_ADD")
-  return Alert(
-    "CAN Error: %s is missing" % err_add,
-    "",
-    AlertStatus.normal, AlertSize.small,
-    Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
-
+  if os.path.isfile("/data/log/can_missing.txt"):
+    f = open("/data/log/can_missing.txt", 'r')
+    add = f.readline()
+    f.close()
+    return Alert(
+      "CAN Error: %s is missing" % add,
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
+  else if os.path.isfile("/data/log/can_timeout.txt"):
+    f = open("/data/log/can_timeout.txt", 'r')
+    add = f.readline()
+    f.close()
+    return Alert(
+      "CAN Error: %s is timeout" % add,
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
+  else:
+    return Alert(
+      "CAN Error: Need more to check in parser.cc",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
 
 EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
   # ********** events with no alerts **********

@@ -270,18 +270,19 @@ void CANParser::UpdateValid(uint64_t sec) {
   for (const auto& kv : message_states) {
     const auto& state = kv.second;
     if (state.check_threshold > 0 && (sec - state.seen) > state.check_threshold) {
-      //char chk_cmd[100];
+      char chk_cmd[100];
       if (state.seen > 0) {
-        printf("0x%X TIMEOUT\n", state.address);
-        //sprintf(chk_cmd, "export CAN_TIMEOUT_ADD=0x%X", state.address);
-        //system(chk_cmd);
-      } else {
-        if(access("/data/can_missing.txt", F_OK) == -1) {
-          system("touch /data/can_missing.txt");
+        DEBUG("0x%X TIMEOUT\n", state.address);
+        if(access("/data/log/can_timeout.txt", F_OK) == -1) {
+          sprintf(chk_cmd, "echo 0x%X > /data/log/can_timeout.txt", state.address);
+          system(chk_cmd);
         }
-        printf("0x%X MISSING\n", state.address);
-        //sprintf(chk_cmd, "export CAN_MISSING_ADD=0x%X", state.address);
-        //system(chk_cmd);
+      } else {
+        DEBUG("0x%X MISSING\n", state.address);
+        if(access("/data/log/can_timeout.txt", F_OK) == -1) {
+          sprintf(chk_cmd, "echo 0x%X > /data/log/can_missing.txt", state.address);
+          system(chk_cmd);
+        }
       }
       can_valid = false;
     }
