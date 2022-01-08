@@ -272,11 +272,11 @@ void CANParser::UpdateValid(uint64_t sec) {
     if (state.check_threshold > 0 && (sec - state.seen) > state.check_threshold) {
       if (state.seen > 0) {
         DEBUG("0x%X TIMEOUT\n", state.address);
-        std::string can_add1 = std::to_string(state.address);
+        std::string can_add1 = std::to_string(state.address).c_str();;
         setenv("CAN_TIMEOUT_ADD", can_add1, true);
       } else {
         DEBUG("0x%X MISSING\n", state.address);
-        std::string can_add2 = std::to_string(state.address);
+        std::string can_add2 = std::to_string(state.address).c_str();;
         setenv("CAN_MISSING_ADD", can_add2, true);
       }
       can_valid = false;
