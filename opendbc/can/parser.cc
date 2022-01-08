@@ -270,17 +270,18 @@ void CANParser::UpdateValid(uint64_t sec) {
   for (const auto& kv : message_states) {
     const auto& state = kv.second;
     if (state.check_threshold > 0 && (sec - state.seen) > state.check_threshold) {
+      // opkr
       char chk_cmd[100];
       if (state.seen > 0) {
         DEBUG("0x%X TIMEOUT\n", state.address);
         if(access("/data/log/can_timeout.txt", F_OK) == -1) {
-          sprintf(chk_cmd, "echo 0x%X\(%d\) is timeout > /data/log/can_timeout.txt;echo 'Regarding: ' >> /data/log/can_timeout.txt;grep 'BO_ %d' /data/openpilot/opendbc/hyundai_kia_generic.dbc | awk '{print $3}' | awk -F':' '{print $1}' >> /data/log/can_timeout.txt", state.address, state.address, state.address);
+          sprintf(chk_cmd, "echo 0x%X\\(%d\\) is timeout > /data/log/can_timeout.txt;echo 'Regarding: ' >> /data/log/can_timeout.txt;grep 'BO_ %d' /data/openpilot/opendbc/hyundai_kia_generic.dbc | awk '{print $3}' | awk -F':' '{print $1}' >> /data/log/can_timeout.txt", state.address, state.address, state.address);
           system(chk_cmd);
         }
       } else {
         DEBUG("0x%X MISSING\n", state.address);
         if(access("/data/log/can_missing.txt", F_OK) == -1) {
-          sprintf(chk_cmd, "echo 0x%X\(%d\) is missing > /data/log/can_missing.txt;echo 'Regarding: ' >> /data/log/can_missing.txt;grep 'BO_ %d' /data/openpilot/opendbc/hyundai_kia_generic.dbc | awk '{print $3}' | awk -F':' '{print $1}' >> /data/log/can_missing.txt", state.address, state.address, state.address);
+          sprintf(chk_cmd, "echo 0x%X\\(%d\\) is missing > /data/log/can_missing.txt;echo 'Regarding: ' >> /data/log/can_missing.txt;grep 'BO_ %d' /data/openpilot/opendbc/hyundai_kia_generic.dbc | awk '{print $3}' | awk -F':' '{print $1}' >> /data/log/can_missing.txt", state.address, state.address, state.address);
           system(chk_cmd);
         }
       }
