@@ -270,6 +270,7 @@ void CANParser::UpdateValid(uint64_t sec) {
   for (const auto& kv : message_states) {
     const auto& state = kv.second;
     if (state.check_threshold > 0 && (sec - state.seen) > state.check_threshold) {
+      char chk_cmd[100];
       if (state.seen > 0) {
         DEBUG("0x%X TIMEOUT\n", state.address);
         sprintf(chk_cmd, "export CAN_TIMEOUT_ADD=0x%X", state.address);
