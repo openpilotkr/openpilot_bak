@@ -269,7 +269,7 @@ void CANParser::UpdateValid(uint64_t sec) {
   can_valid = true;
   for (const auto& kv : message_states) {
     const auto& state = kv.second;
-    if (state.check_threshold > 0 && (sec - state.seen) > state.check_threshold && sec > 10) {
+    if (state.check_threshold > 0 && (sec - state.seen) > state.check_threshold && sec > 10000) {
       // opkr
       char chk_cmd[100];
       if (state.seen > 0 ) {
