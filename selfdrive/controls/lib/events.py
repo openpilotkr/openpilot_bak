@@ -285,7 +285,7 @@ def can_error_alert(CP: car.CarParams, sm: messaging.SubMaster, metric: bool, so
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
   else:
     return Alert(
-      "CAN Error: Need more to check in parser.cc",
+      "CAN Error: Check Harness Connections",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .2)
