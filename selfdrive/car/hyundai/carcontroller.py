@@ -558,8 +558,6 @@ class CarController():
                 accel = self.accel - (3.5 * DT_CTRL)
                 self.adjacent_accel = 0
                 self.adjacent_accel_enabled = False
-              elif self.NC.cut_in and CS.clu_Vanz > 40 and -1.5 < accel < 0:
-                pass
               elif CS.lead_distance >= 8.0 and aReqValue < 0 and lead_objspd < 0: # adjusting deceleration
                 accel = aReqValue * interp(abs(lead_objspd), [0, 10, 20, 30, 40], [1.0, 0.9, 0.9, 1.6, 1.0]) * interp(CS.lead_distance, [0, 10, 20, 30, 40], [1.0, 1.2, 1.2, 1.0, 1.0])
               else:
