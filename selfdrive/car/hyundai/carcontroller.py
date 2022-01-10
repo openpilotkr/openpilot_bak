@@ -531,7 +531,6 @@ class CarController():
         lead_objspd = CS.lead_objspd  # vRel (km/h)
         aReqValue = CS.scc12["aReqValue"]
         accel = actuators.accel if enabled else 0
-        #accel = clip(accel, CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX)
         if 0 < CS.lead_distance <= 149 and self.radar_helper_option == 1:
           # neokii's logic, opkr mod
           stock_weight = 0.
@@ -575,6 +574,7 @@ class CarController():
           accel = accel * (1. - stock_weight) + aReqValue * stock_weight
         else:
           stock_weight = 0.
+        accel = clip(accel, CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX)
         self.aq_value = accel
         can_sends.append(create_scc11(self.packer, frame, set_speed, lead_visible, self.scc_live, self.dRel, self.vRel, self.yRel, 
          self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, self.acc_standstill, CS.scc11))
