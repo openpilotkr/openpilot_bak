@@ -274,7 +274,7 @@ class NaviControl():
       self.t_interval = 10 if CS.is_set_speed_in_mph else 7
       res_speed = max(min_control_speed, CS.CP.resSpeed)
       return min(res_speed, navi_speed)
-    elif CS.cruise_set_mode in [1,2,4]:
+    elif CS.cruise_set_mode in (1,2,4):
       if self.lead_0.status and CS.CP.vFuture >= (min_control_speed-(4 if CS.is_set_speed_in_mph else 7)):
         dRel = int(self.lead_0.dRel)
         vRel = int(self.lead_0.vRel * (CV.MS_TO_MPH if CS.is_set_speed_in_mph else CV.MS_TO_KPH))
@@ -297,7 +297,7 @@ class NaviControl():
       ttime = 70 if CS.is_set_speed_in_mph else 50
       self.t_interval = ttime if not ((self.onSpeedControl or self.curvSpeedControl or self.cut_in) and self.sm['controlsState'].osmOffSpdLimit) else 10 if CS.is_set_speed_in_mph else 7
 
-    if CS.cruise_set_mode in [1,3,4] and self.curv_decel_option in [1,2]:
+    if CS.cruise_set_mode in (1,3,4) and self.curv_decel_option in (1,2):
       if CS.out.vEgo * CV.MS_TO_KPH > 40 and modelSpeed < 90 and path_plan.laneChangeState == LaneChangeState.off and \
        not (CS.out.leftBlinker or CS.out.rightBlinker) and not abs(CS.out.steeringTorque) > 170:
         if CS.is_set_speed_in_mph:
@@ -310,7 +310,7 @@ class NaviControl():
     else:
       v_curv_speed = 255
 
-    if CS.cruise_set_mode in [1,3,4] and self.curv_decel_option in [1,3]:
+    if CS.cruise_set_mode in (1,3,4) and self.curv_decel_option in (1,3):
       if self.sm['liveMapData'].turnSpeedLimitEndDistance > 30:
         o_curv_speed = int(interp(self.sm['liveMapData'].turnSpeedLimit, [30, 40, 50, 60, 70], self.osm_curv_speed))
         self.osm_wait_timer += 1 if modelSpeed > 90 else 0

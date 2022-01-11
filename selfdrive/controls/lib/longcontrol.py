@@ -33,8 +33,7 @@ def long_control_state_trans(CP, active, long_control_state, v_ego, v_target_fut
 
   else:
     if long_control_state == LongCtrlState.off:
-      if active:
-        long_control_state = LongCtrlState.pid
+      long_control_state = LongCtrlState.pid
 
     elif long_control_state == LongCtrlState.pid:
       if stopping_condition:
@@ -127,7 +126,7 @@ class LongControl():
                                                        v_target_future, CS.brakePressed,
                                                        CS.cruiseState.standstill, stop, CS.gasPressed)
 
-    if (self.long_control_state == LongCtrlState.off or (CS.brakePressed or CS.gasPressed)) and self.candidate not in [CAR.NIRO_EV]:
+    if (self.long_control_state == LongCtrlState.off or (CS.brakePressed or CS.gasPressed)) and self.candidate != CAR.NIRO_EV:
       self.pid.reset()
       output_accel = 0.
     elif self.long_control_state == LongCtrlState.off or CS.gasPressed:

@@ -10,13 +10,15 @@ from decimal import Decimal
 
 TRAJECTORY_SIZE = 33
 # camera offset is meters from center car to camera
+# model path is in the frame of EON's camera. TICI is 0.1 m away,
+# however the average measured path difference is 0.04 m
 if EON:
-  CAMERA_OFFSET = float(Decimal(Params().get("CameraOffsetAdj", encoding="utf8")) * Decimal('0.001'))  # m from center car to camera
+  CAMERA_OFFSET = -(float(Decimal(Params().get("CameraOffsetAdj", encoding="utf8")) * Decimal('0.001')))  # m from center car to camera
   CAMERA_OFFSET_A = CAMERA_OFFSET - 0.2
-  PATH_OFFSET = float(Decimal(Params().get("PathOffsetAdj", encoding="utf8")) * Decimal('0.001'))  # default 0.0
+  PATH_OFFSET = -(float(Decimal(Params().get("PathOffsetAdj", encoding="utf8")) * Decimal('0.001')))  # default 0.0
 elif TICI:
-  CAMERA_OFFSET = -0.04
-  PATH_OFFSET = -0.04
+  CAMERA_OFFSET = 0.04
+  PATH_OFFSET = 0.04
 else:
   CAMERA_OFFSET = 0.0
   PATH_OFFSET = 0.0
@@ -87,16 +89,15 @@ class LanePlanner:
     if self.lp_timer > 1.0:
       self.lp_timer = 0.0
       if Params().get_bool("OpkrLiveTunePanelEnable"):
-        self.camera_offset = float(Decimal(Params().get("CameraOffsetAdj", encoding="utf8")) * Decimal('0.001'))
+        self.camera_offset = -(float(Decimal(Params().get("CameraOffsetAdj", encoding="utf8")) * Decimal('0.001')))
 
     lane_lines = md.laneLines
     if len(lane_lines) == 4 and len(lane_lines[0].t) == TRAJECTORY_SIZE:
       self.ll_t = (np.array(lane_lines[1].t) + np.array(lane_lines[2].t))/2
       # left and right ll x is the same
       self.ll_x = lane_lines[1].x
-      # only offset left and right lane lines; offsetting path does not make sense
-      self.lll_y = np.array(lane_lines[1].y) - self.camera_offset + lean_offset
-      self.rll_y = np.array(lane_lines[2].y) - self.camera_offset + lean_offset
+      self.lll_y = np.array(lane_lines[1].y) + self.camera_offset + lean_offset
+      self.rll_y = np.array(lane_lines[2].y) + self.camera_offset + lean_offset
       self.lll_prob = md.laneLineProbs[1]
       self.rll_prob = md.laneLineProbs[2]
       self.lll_std = md.laneLineStds[1]
@@ -112,14 +113,14 @@ class LanePlanner:
     if self.lp_timer2 > 1.0:
       self.lp_timer2 = 0.0
       if Params().get_bool("OpkrLiveTunePanelEnable"):
-        self.path_offset = float(Decimal(Params().get("PathOffsetAdj", encoding="utf8")) * Decimal('0.001'))
+        self.path_offset = -(float(Decimal(Params().get("PathOffsetAdj", encoding="utf8")) * Decimal('0.001')))
     # Reduce reliance on lanelines that are too far apart or
     # will be in a few seconds
-    path_xyz[:, 1] -= self.path_offset
+    path_xyz[:, 1] += self.path_offset
     l_prob, r_prob = self.lll_prob, self.rll_prob
     width_pts = self.rll_y - self.lll_y
     prob_mods = []
-    for t_check in [0.0, 1.5, 3.0]:
+    for t_check in (0.0, 1.5, 3.0):
       width_at_t = interp(t_check * (v_ego + 7), self.ll_x, width_pts)
       prob_mods.append(interp(width_at_t, [4.0, 5.0], [1.0, 0.0]))
     mod = min(prob_mods)

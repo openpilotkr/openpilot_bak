@@ -175,7 +175,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate == CAR.SANTA_FE:
       ret.mass = 1694 + STD_CARGO_KG
       ret.wheelbase = 2.765
-    elif candidate in [CAR.SONATA, CAR.SONATA_HEV]:
+    elif candidate in (CAR.SONATA, CAR.SONATA_HEV):
       ret.mass = 1513. + STD_CARGO_KG
       ret.wheelbase = 2.84
     elif candidate == CAR.SONATA_LF:
@@ -199,16 +199,16 @@ class CarInterface(CarInterfaceBase):
     elif candidate == CAR.KONA:
       ret.mass = 1275. + STD_CARGO_KG
       ret.wheelbase = 2.7
-    elif candidate in [CAR.KONA_HEV, CAR.KONA_EV]:
+    elif candidate in (CAR.KONA_HEV, CAR.KONA_EV):
       ret.mass = 1425. + STD_CARGO_KG
       ret.wheelbase = 2.6
-    elif candidate in [CAR.IONIQ_HEV, CAR.IONIQ_EV]:
+    elif candidate in (CAR.IONIQ_HEV, CAR.IONIQ_EV):
       ret.mass = 1490. + STD_CARGO_KG   #weight per hyundai site https://www.hyundaiusa.com/ioniq-electric/specifications.aspx
       ret.wheelbase = 2.7
-    elif candidate in [CAR.GRANDEUR_IG, CAR.GRANDEUR_IG_HEV]:
+    elif candidate in (CAR.GRANDEUR_IG, CAR.GRANDEUR_IG_HEV):
       ret.mass = 1675. + STD_CARGO_KG
       ret.wheelbase = 2.845
-    elif candidate in [CAR.GRANDEUR_IG_FL, CAR.GRANDEUR_IG_FL_HEV]:
+    elif candidate in (CAR.GRANDEUR_IG_FL, CAR.GRANDEUR_IG_FL_HEV):
       ret.mass = 1675. + STD_CARGO_KG
       ret.wheelbase = 2.885
     elif candidate == CAR.VELOSTER:
@@ -221,7 +221,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate == CAR.SORENTO:
       ret.mass = 1985. + STD_CARGO_KG
       ret.wheelbase = 2.78
-    elif candidate in [CAR.K5, CAR.K5_HEV]:
+    elif candidate in (CAR.K5, CAR.K5_HEV):
       ret.wheelbase = 2.805
       ret.mass = 1600. + STD_CARGO_KG
     elif candidate == CAR.STINGER:
@@ -233,10 +233,10 @@ class CarInterface(CarInterfaceBase):
     elif candidate == CAR.SPORTAGE:
       ret.mass = 1985. + STD_CARGO_KG
       ret.wheelbase = 2.78
-    elif candidate in [CAR.NIRO_HEV, CAR.NIRO_EV]:
+    elif candidate in (CAR.NIRO_HEV, CAR.NIRO_EV):
       ret.mass = 1737. + STD_CARGO_KG
       ret.wheelbase = 2.7
-    elif candidate in [CAR.K7, CAR.K7_HEV]:
+    elif candidate in (CAR.K7, CAR.K7_HEV):
       ret.mass = 1680. + STD_CARGO_KG
       ret.wheelbase = 2.855
     elif candidate == CAR.SELTOS:
@@ -402,7 +402,7 @@ class CarInterface(CarInterfaceBase):
         events.add(EventName.buttonCancel)
       if self.CC.longcontrol and not self.CC.scc_live:
         # do enable on both accel and decel buttons
-        if b.type in [ButtonType.accelCruise, ButtonType.decelCruise] and not b.pressed:
+        if b.type in (ButtonType.accelCruise, ButtonType.decelCruise) and not b.pressed:
           events.add(EventName.buttonEnable)
         if EventName.wrongCarMode in events.events:
           events.events.remove(EventName.wrongCarMode)

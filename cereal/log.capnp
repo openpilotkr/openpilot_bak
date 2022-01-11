@@ -1532,6 +1532,7 @@ struct Event {
     clocks @35 :Clocks;
     deviceState @6 :DeviceState;
     logMessage @18 :Text;
+    errorLogMessage @85 :Text;
 
     # OPKR Navi
     liveNaviData @80 :LiveNaviData;

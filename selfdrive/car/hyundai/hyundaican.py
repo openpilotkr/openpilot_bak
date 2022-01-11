@@ -20,7 +20,7 @@ def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
   values["CF_Lkas_ToiFlt"] = steer_wind_down if steerwinddown_enabled else 0
   values["CF_Lkas_MsgCount"] = frame % 0x10
 
-  if car_fingerprint in [CAR.GRANDEUR_IG_HEV]:
+  if car_fingerprint == CAR.GRANDEUR_IG_HEV:
     nSysWarnVal = 9
     if steer_req:
       nSysWarnVal = 4
@@ -48,7 +48,7 @@ def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
     # Note: the warning is hidden while the blinkers are on
     values["CF_Lkas_SysWarning"] = 4 if sys_warning else 0
 
-  elif car_fingerprint in [CAR.GENESIS]:
+  elif car_fingerprint == CAR.GENESIS:
     values["CF_Lkas_LdwsActivemode"] = 2
 
   if ldws:
@@ -133,7 +133,7 @@ def create_scc11(packer, frame, set_speed, lead_visible, scc_live, lead_dist, le
 def create_scc12(packer, apply_accel, enabled, scc_live, gaspressed, brakepressed, aebcmdact, car_fingerprint, speed, scc12):
   values = scc12
   if not aebcmdact:
-    if enabled and car_fingerprint in [CAR.NIRO_EV]:
+    if enabled and car_fingerprint == CAR.NIRO_EV:
       values["ACCMode"] = 2 if gaspressed and (apply_accel > -0.2) else 1
       values["aReqRaw"] = apply_accel
       values["aReqValue"] = apply_accel
@@ -159,7 +159,7 @@ def create_scc13(packer, scc13):
 
 def create_scc14(packer, enabled, scc14, aebcmdact, lead_visible, lead_dist, v_ego, standstill, car_fingerprint):
   values = scc14
-  if enabled and not aebcmdact and car_fingerprint in [CAR.NIRO_EV]:
+  if enabled and not aebcmdact and car_fingerprint == CAR.NIRO_EV:
     if standstill:
       values["JerkUpperLimit"] = 0.5
       values["JerkLowerLimit"] = 10.
