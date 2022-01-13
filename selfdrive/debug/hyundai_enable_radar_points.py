@@ -53,7 +53,7 @@ SUPPORTED_FW_VERSIONS = {
     default_config=b"\x00\x00\x00\x01\x00\x00",
     tracks_enabled=b"\x00\x00\x00\x01\x00\x01"),
   # 2016 K5 HYBRID(JF)
-  b"JFhe SCC F-CUP      1.00 1.00 96400-A8000 \x01#\x15#    ": ConfigValues(
+  b'JFhe SCC FNCUP      1.00 1.00 96400-A8000         F907 5.420 2G': ConfigValues(
     default_config=b"\x00\x00\x00\x01\x00\x00",
     tracks_enabled=b"\x00\x00\x00\x01\x00\x01"),
 }
