@@ -77,8 +77,8 @@ class CarInterface(CarInterfaceBase):
     ret.stopAccel = 0.0 # 0.0, -0.5    
     ret.stoppingDecelRate = 0.8 # 0.8, 0.2  # brake_travel/s while trying to stop
     
-    ret.longitudinalActuatorDelayLowerBound = 0.1
-    ret.longitudinalActuatorDelayUpperBound = 0.1
+    ret.longitudinalActuatorDelayLowerBound = 0.
+    ret.longitudinalActuatorDelayUpperBound = 0.
 
     ret.vCruisekph = 0
     ret.resSpeed = 0
