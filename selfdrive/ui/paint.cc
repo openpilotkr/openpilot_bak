@@ -1244,11 +1244,11 @@ static void draw_laneless_button(UIState *s) {
     nvgText(s->vg,btn_xc1,btn_yc-17,"LANE",NULL);
     nvgText(s->vg,btn_xc1,btn_yc+17,"LESS",NULL);
   } else if (s->scene.laneless_mode == 2) {
-    nvgFontSize(s->vg, 50);
+    nvgFontSize(s->vg, 46);
     nvgText(s->vg,btn_xc1,btn_yc-42,"A",NULL);
-    nvgText(s->vg,btn_xc1,btn_yc-16,"U",NULL);
-    nvgText(s->vg,btn_xc1,btn_yc+16,"T",NULL);
-    nvgText(s->vg,btn_xc1,btn_yc+42,"O",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc-13,"U",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc+13,"T",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc+41,"O",NULL);
   }
 }
 
