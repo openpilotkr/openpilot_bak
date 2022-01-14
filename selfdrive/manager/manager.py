@@ -111,7 +111,7 @@ def manager_init() -> None:
     ("OpkrSSHLegacy", "1"),
     ("CruiseOverMaxSpeed", "0"),
     ("JustDoGearD", "0"),
-    ("LanelessMode", "0"),
+    ("LanelessMode", "2"),
     ("ComIssueGone", "1"),
     ("MaxSteer", "408"),
     ("MaxRTDelta", "112"),
