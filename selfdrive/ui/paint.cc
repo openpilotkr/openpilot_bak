@@ -1235,7 +1235,7 @@ static void draw_laneless_button(UIState *s) {
   }
   nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
   if (s->scene.laneless_mode == 0) {
-    nvgFillColor(s->vg, nvgRGBA(0,255,0,150));
+    nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
     nvgFontSize(s->vg, 46);
     nvgText(s->vg,btn_xc1,btn_yc-42,"L",NULL);
     nvgText(s->vg,btn_xc1,btn_yc-14,"A",NULL);
