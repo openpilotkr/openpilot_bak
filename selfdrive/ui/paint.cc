@@ -185,7 +185,7 @@ static void ui_draw_vision_lane_lines(UIState *s) {
           nvgRGBA(red_lvl, green_lvl, 0, 150), nvgRGBA((int)(0.7*red_lvl), (int)(0.7*green_lvl), 0, 20));
       } else {
         track_bg = nvgLinearGradient(s->vg, s->fb_w, s->fb_h, s->fb_w, s->fb_h*.4,
-          nvgRGBA(red_lvl, 0, green_lvl, 150), nvgRGBA((int)(0.7*red_lvl), 0, (int)(0.7*green_lvl), 20));
+          nvgRGBA(red_lvl, 150, green_lvl, 150), nvgRGBA((int)(0.7*red_lvl), 150, (int)(0.7*green_lvl), 20));
       }
     }
   } else {
@@ -1254,7 +1254,7 @@ static void draw_laneless_button(UIState *s) {
     if (!s->scene.lateralPlan.lanelessModeStatus) {
       nvgFillColor(s->vg, nvgRGBA(0,255,0,150));
     } else {
-      nvgFillColor(s->vg, nvgRGBA(0,0,255,150));
+      nvgFillColor(s->vg, nvgRGBA(0,150,255,150));
     }
     nvgFontSize(s->vg, 46);
     nvgText(s->vg,btn_xc1,btn_yc-42,"A",NULL);
