@@ -199,4 +199,4 @@ class LongControl():
       str_log3 = 'LS={:s}  LP={:s}  AQ/FA={:+04.2f}/{:+04.2f}  GS={}  ED/RD={:04.1f}/{:04.1f}  TG={:04.2f}/{:04.2f}/{:+04.2f}'.format(self.long_stat, self.long_plan_source, CP.aqValue, final_accel, int(CS.gasPressed), dRel, CS.radarDistance, v_target, v_target_future, a_target)
       trace1.printf2('{}'.format(str_log3))
 
-    return final_accel
+    return final_accel, a_target
