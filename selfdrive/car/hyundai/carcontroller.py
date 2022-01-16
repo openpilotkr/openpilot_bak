@@ -569,6 +569,8 @@ class CarController():
               accel = aReqValue
               self.adjacent_accel = 0
               self.adjacent_accel_enabled = False
+          elif 1.0 < self.dRel <= 5.0 and self.vRel < 0:
+            accel = self.accel - (3.0 * DT_CTRL)
           elif 1. < self.dRel:
             pass
           else:
@@ -576,8 +578,8 @@ class CarController():
         elif 0 < CS.lead_distance <= 4.0: # use radar by force to stop anyway below 4.0m if lead car is detected.
           stock_weight = interp(CS.lead_distance, [2.5, 4.0], [1., 0.])
           accel = accel * (1. - stock_weight) + aReqValue * stock_weight
-        elif 1.0 < self.dRel <= 4.0 and self.vRel < 0:
-            accel = self.accel - (2.0 * DT_CTRL)
+        elif 1.0 < self.dRel <= 5.0 and self.vRel < 0:
+          accel = self.accel - (3.0 * DT_CTRL)
         else:
           stock_weight = 0.
         accel = clip(accel, CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX)
