@@ -156,6 +156,8 @@ class CarController():
     self.cruise_init = False
     self.adjacent_accel = 0
     self.adjacent_accel_enabled = False
+    self.keep_decel_on = False
+    self.change_accel_fast = False
 
     if CP.lateralTuning.which() == 'pid':
       self.str_log2 = 'T={:0.2f}/{:0.3f}/{:0.2f}/{:0.5f}'.format(CP.lateralTuning.pid.kpV[1], CP.lateralTuning.pid.kiV[1], CP.lateralTuning.pid.kdV[0], CP.lateralTuning.pid.kf)
@@ -557,18 +559,36 @@ class CarController():
                 accel = self.accel - (3.5 * DT_CTRL)
                 self.adjacent_accel = 0
                 self.adjacent_accel_enabled = False
-              elif self.NC.cut_in and accel < 0:
-                pass
+              elif accel < 0 and self.keep_decel_on:
+                if aReqValue <= accel:
+                  self.keep_decel_on = False
+                else:
+                  pass
+              elif accel < 0 and (self.NC.cut_in or abs(accel) - abs(aReqValue) > 0.3):
+                self.keep_decel_on = True
+              elif accel > 0 and self.change_accel_fast:
+                if aReqValue >= accel:
+                  self.change_accel_fast = False
+                else:
+                  pass
+              elif aReqValue < 0 and accel > 0 and accel - aReqValue > 0.3:
+                self.change_accel_fast = True
               elif CS.lead_distance >= 8.0 and aReqValue < 0 and lead_objspd < 0: # adjusting deceleration
                 accel = aReqValue * interp(abs(lead_objspd), [0, 10, 20, 30, 40], [1.0, 0.9, 0.9, 1.6, 1.0]) * interp(CS.lead_distance, [0, 10, 20, 30, 40], [1.0, 1.2, 1.2, 1.0, 1.0])
+                self.keep_decel_on = False
+                self.change_accel_fast = False
               else:
                 accel = aReqValue
                 self.adjacent_accel = 0
                 self.adjacent_accel_enabled = False
+                self.keep_decel_on = False
+                self.change_accel_fast = False
             else:
               accel = aReqValue
               self.adjacent_accel = 0
               self.adjacent_accel_enabled = False
+              self.keep_decel_on = False
+              self.change_accel_fast = False
           elif 1.0 < self.dRel <= 5.0 and self.vRel < 0:
             accel = self.accel - (3.0 * DT_CTRL)
           elif 1. < self.dRel:
