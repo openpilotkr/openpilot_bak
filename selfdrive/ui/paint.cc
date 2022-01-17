@@ -1206,10 +1206,10 @@ static void draw_laneless_button(UIState *s) {
   nvgFontSize(s->vg, 55);
   if (!s->scene.lateralPlan.lanelessModeStatus) {
     nvgBeginPath(s->vg);
-    nvgMoveTo(s->vg, btn_xc1-20, btn_yc-57);
-    nvgLineTo(s->vg, btn_xc1-30, btn_yc-57);
-    nvgLineTo(s->vg, btn_xc1-35, btn_yc-9);
-    nvgLineTo(s->vg, btn_xc1-25, btn_yc-9);
+    nvgMoveTo(s->vg, btn_xc1-21, btn_yc-57);
+    nvgLineTo(s->vg, btn_xc1-31, btn_yc-57);
+    nvgLineTo(s->vg, btn_xc1-36, btn_yc-9);
+    nvgLineTo(s->vg, btn_xc1-26, btn_yc-9);
     nvgClosePath(s->vg);
     nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
     nvgFill(s->vg);
@@ -1222,10 +1222,10 @@ static void draw_laneless_button(UIState *s) {
     nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
     nvgFill(s->vg);
     nvgBeginPath(s->vg);
-    nvgMoveTo(s->vg, btn_xc1+20, btn_yc-57);
-    nvgLineTo(s->vg, btn_xc1+30, btn_yc-57);
-    nvgLineTo(s->vg, btn_xc1+35, btn_yc-9);
-    nvgLineTo(s->vg, btn_xc1+25, btn_yc-9);
+    nvgMoveTo(s->vg, btn_xc1+21, btn_yc-57);
+    nvgLineTo(s->vg, btn_xc1+31, btn_yc-57);
+    nvgLineTo(s->vg, btn_xc1+36, btn_yc-9);
+    nvgLineTo(s->vg, btn_xc1+26, btn_yc-9);
     nvgClosePath(s->vg);
     nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
     nvgFill(s->vg);

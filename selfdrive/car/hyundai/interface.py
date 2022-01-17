@@ -73,8 +73,9 @@ class CarInterface(CarInterfaceBase):
     ret.longitudinalTuning.kfV = [1., 1., 1., 1., 1., 1.]
 
     ret.stoppingControl = False
-    ret.vEgoStopping = 1.0  # 1.0, 0.5
-    ret.stopAccel = -0.7 # 0.0, -0.5    
+    ret.vEgoStopping = 0.3  # 1.0, 0.5
+    ret.vEgoStarting = 0.3  # needs to be >= vEgoStopping to avoid state transition oscillation
+    ret.stopAccel = -0.5 # 0.0, -0.5    
     ret.stoppingDecelRate = 0.8 # 0.8, 0.2  # brake_travel/s while trying to stop
     
     ret.longitudinalActuatorDelayLowerBound = 1.0
