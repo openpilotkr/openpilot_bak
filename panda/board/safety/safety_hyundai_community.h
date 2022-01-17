@@ -6,6 +6,8 @@ int car_SCC_live = 0;
 int OP_EMS_live = 0;
 int HKG_mdps_bus = -1;
 int HKG_scc_bus = -1;
+
+bool hyundai_community_long = false;
 const CanMsg HYUNDAI_COMMUNITY_TX_MSGS[] = {
   {832, 0, 8}, {832, 1, 8}, // LKAS11 Bus 0, 1
   {1265, 0, 4}, {1265, 1, 4}, {1265, 2, 4}, // CLU11 Bus 0, 1, 2
@@ -19,6 +21,22 @@ const CanMsg HYUNDAI_COMMUNITY_TX_MSGS[] = {
   {790, 1, 8}, // EMS11, Bus 1
 };
 
+const CanMsg HYUNDAI_COMMUNITY_LONG_TX_MSGS[] = {
+  {832, 0, 8}, {832, 1, 8}, // LKAS11 Bus 0, 1
+  {1265, 0, 4}, {1265, 1, 4}, {1265, 2, 4}, // CLU11 Bus 0, 1, 2
+  {1157, 0, 4}, // LFAHDA_MFC Bus 0
+  {593, 2, 8},  // MDPS12, Bus 2
+  {1056, 0, 8}, //   SCC11,  Bus 0
+  {1057, 0, 8}, //   SCC12,  Bus 0
+  {1290, 0, 8}, //   SCC13,  Bus 0
+  {905, 0, 8},  //   SCC14,  Bus 0
+  {1186, 0, 8},  //   4a2SCC, Bus 0
+  {790, 1, 8}, // EMS11, Bus 1
+  {1155, 0, 8}, //   FCA12,  Bus 0
+  {909, 0, 8},  //   FCA11,  Bus 0
+  {2000, 0, 8},  // SCC_DIAG, Bus 0
+};
+
 // older hyundai models have less checks due to missing counters and checksums
 AddrCheckStruct hyundai_community_rx_checks[] = {
   {.msg = {{608, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U},
@@ -27,6 +45,13 @@ AddrCheckStruct hyundai_community_rx_checks[] = {
   // {.msg = {{916, 0, 8, .expected_timestep = 20000U}}}, some Santa Fe does not have this msg, need to find alternative
 };
 const int HYUNDAI_COMMUNITY_RX_CHECK_LEN = sizeof(hyundai_community_rx_checks) / sizeof(hyundai_community_rx_checks[0]);
+
+AddrCheckStruct hyundai_community_long_rx_checks[] = {
+  {.msg = {{902, 0, 8, .expected_timestep = 10000U}}},
+  {.msg = {{916, 0, 8, .expected_timestep = 10000U}}},
+};
+
+const int HYUNDAI_COMMUNITY_LONG_RX_CHECK_LEN = sizeof(hyundai_community_long_rx_checks) / sizeof(hyundai_community_long_rx_checks[0]);
 
 static int hyundai_community_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
 
@@ -112,6 +137,20 @@ static int hyundai_community_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
       cruise_engaged_prev = cruise_engaged;
     }
 
+    // engage for radar disabled car
+    if ((addr == 1265) && hyundai_community_long) {
+      // first byte
+      int cruise_engaged = (GET_BYTES_04(to_push) & 0x7);
+      // enable on res+ or set- buttons press
+      if (!controls_allowed && (cruise_engaged == 1 || cruise_engaged == 2)) {
+        controls_allowed = 1;
+      }
+      // disable on cancel press
+      if (cruise_engaged == 4) {
+        controls_allowed = 0;
+      }
+    }
+
     // sample wheel speed, averaging opposite corners
     if (addr == 902 && bus == 0) {
       int hyundai_speed = GET_BYTES_04(to_push) & 0x3FFF;  // FL
@@ -130,7 +169,11 @@ static int hyundai_community_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
   int addr = GET_ADDR(to_send);
   int bus = GET_BUS(to_send);
 
-  if (!msg_allowed(to_send, HYUNDAI_COMMUNITY_TX_MSGS, sizeof(HYUNDAI_COMMUNITY_TX_MSGS)/sizeof(HYUNDAI_COMMUNITY_TX_MSGS[0]))) {
+  if (hyundai_community_long) {
+    if (!msg_allowed(to_send, HYUNDAI_COMMUNITY_LONG_TX_MSGS, sizeof(HYUNDAI_COMMUNITY_LONG_TX_MSGS)/sizeof(HYUNDAI_COMMUNITY_LONG_TX_MSGS[0]))) {
+      tx = 0;
+    }
+  } else if (!msg_allowed(to_send, HYUNDAI_COMMUNITY_TX_MSGS, sizeof(HYUNDAI_COMMUNITY_TX_MSGS)/sizeof(HYUNDAI_COMMUNITY_TX_MSGS[0]))) {
     tx = 0;
     puts("  CAN TX not allowed: "); puth(addr); puts(", "); puth(bus); puts("\n");
   }
@@ -284,6 +327,19 @@ static void hyundai_community_init(int16_t param) {
   UNUSED(param);
   controls_allowed = false;
   relay_malfunction_reset();
+  hyundai_community_long = false;
+
+  if (current_board->has_obd && HKG_forward_obd) {
+    current_board->set_can_mode(CAN_MODE_OBD_CAN2);
+    puts("  MDPS or SCC on OBD2 CAN: setting can mode obd\n");
+  }
+}
+
+static void hyundai_community_long_init(int16_t param) {
+  UNUSED(param);
+  controls_allowed = false;
+  relay_malfunction_reset();
+  hyundai_community_long = true;
 
   if (current_board->has_obd && HKG_forward_obd) {
     current_board->set_can_mode(CAN_MODE_OBD_CAN2);
@@ -299,4 +355,14 @@ const safety_hooks hyundai_community_hooks = {
   .fwd = hyundai_community_fwd_hook,
   .addr_check = hyundai_community_rx_checks,
   .addr_check_len = sizeof(hyundai_community_rx_checks) / sizeof(hyundai_community_rx_checks[0]),
+};
+
+const safety_hooks hyundai_community_long_hooks = {
+  .init = hyundai_community_long_init,
+  .rx = hyundai_community_rx_hook,
+  .tx = hyundai_community_tx_hook,
+  .tx_lin = nooutput_tx_lin_hook,
+  .fwd = hyundai_community_fwd_hook,
+  .addr_check = hyundai_community_long_rx_checks,
+  .addr_check_len = sizeof(hyundai_community_long_rx_checks) / sizeof(hyundai_community_long_rx_checks[0]),
 };
