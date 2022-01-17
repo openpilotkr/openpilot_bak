@@ -5,7 +5,7 @@ from selfdrive.config import Conversions as CV
 from selfdrive.car import apply_std_steer_torque_limits
 from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, create_lfahda_mfc, create_hda_mfc, \
                                              create_scc11, create_scc12, create_scc13, create_scc14, \
-                                             create_scc42a, create_scc7d0, create_mdps12
+                                             create_scc42a, create_scc7d0, create_mdps12, create_fca11, create_fca12
 from selfdrive.car.hyundai.values import Buttons, CarControllerParams, CAR, FEATURES
 from opendbc.can.packer import CANPacker
 from selfdrive.controls.lib.longcontrol import LongCtrlState
@@ -158,6 +158,17 @@ class CarController():
     self.adjacent_accel_enabled = False
     self.keep_decel_on = False
     self.change_accel_fast = False
+
+    self.radar_disabled_conf = self.params.get_bool("RadarDisable")
+    self.prev_cruiseButton = 0
+    self.gapsettingdance = 4
+    self.lead_visible = False
+    self.lead_debounce = 0
+    self.radarDisableOverlapTimer = 0
+    self.radarDisableActivated = False
+    self.objdiststat = 0
+    self.fca11supcnt = self.fca11inc = self.fca11alivecnt = self.fca11cnt13 = 0
+    self.fca11maxcnt = 0xD
 
     if CP.lateralTuning.which() == 'pid':
       self.str_log2 = 'T={:0.2f}/{:0.3f}/{:0.2f}/{:0.5f}'.format(CP.lateralTuning.pid.kpV[1], CP.lateralTuning.pid.kiV[1], CP.lateralTuning.pid.kdV[0], CP.lateralTuning.pid.kf)
@@ -524,8 +535,62 @@ class CarController():
     #   set_speed_in_units = hud_speed * (CV.MS_TO_MPH if CS.clu11["CF_Clu_SPEED_UNIT"] == 1 else CV.MS_TO_KPH)
     #   can_sends.extend(create_acc_commands(self.packer, enabled, accel, jerk, int(frame / 2), lead_visible, set_speed_in_units, stopping))
 
-    if CS.CP.sccBus != 0 and self.counter_init and self.longcontrol:
+    if self.radar_disabled_conf: #xps-genesis's way
+      if self.prev_cruiseButton != CS.cruise_buttons:  # gap change for RadarDisable
+        if CS.cruise_buttons == 3:
+          self.gapsettingdance -= 1
+        if self.gapsettingdance < 1:
+          self.gapsettingdance = 4
+        self.prev_cruiseButton = CS.cruise_buttons
+      if lead_visible:
+        self.lead_visible = True
+        self.lead_debounce = 50
+      elif self.lead_debounce > 0:
+        self.lead_debounce -= 1
+      else:
+        self.lead_visible = lead_visible
+      self.radarDisableOverlapTimer += 1
+      if self.radarDisableOverlapTimer >= 30:
+        self.radarDisableActivated = True
+        if 200 > self.radarDisableOverlapTimer > 36:
+          if frame % 41 == 0 or self.radarDisableOverlapTimer == 37:
+            can_sends.append(create_scc7d0(b'\x02\x10\x03\x00\x00\x00\x00\x00'))
+          elif frame % 43 == 0 or self.radarDisableOverlapTimer == 37:
+            can_sends.append(create_scc7d0(b'\x03\x28\x03\x01\x00\x00\x00\x00'))
+          elif frame % 19 == 0 or self.radarDisableOverlapTimer == 37:
+            can_sends.append(create_scc7d0(b'\x02\x10\x85\x00\x00\x00\x00\x00')) # off
+      else:
+        self.counter_init = False
+        can_sends.append(create_scc7d0(b'\x02\x10\x90\x00\x00\x00\x00\x00')) # on
+        can_sends.append(create_scc7d0(b'\x03\x29\x03\x01\x00\x00\x00\x00'))
+      if (frame % 50 == 0 or self.radarDisableOverlapTimer == 37) and self.radarDisableOverlapTimer >= 30:
+        can_sends.append(create_scc7d0(b'\x02\x3E\x00\x00\x00\x00\x00\x00'))
+      if self.radarDisableOverlapTimer > 200:
+        self.radarDisableOverlapTimer = 200
+      if self.lead_visible:
+        self.objdiststat = 1 if lead_dist < 25 else 2 if lead_dist < 40 else 3 if lead_dist < 60 else 4 if lead_dist < 80 else 5
+      else:
+        self.objdiststat = 0
+
+    if (CS.CP.sccBus != 0 or self.radarDisableActivated) and self.counter_init and self.longcontrol:
       if frame % 2 == 0:
+        if self.radar_disabled_conf:
+          self.fca11supcnt += 1
+          self.fca11supcnt %= 0xF
+          if self.fca11alivecnt == 1:
+            self.fca11inc = 0
+            if self.fca11cnt13 == 3:
+              self.fca11maxcnt = 0x9
+              self.fca11cnt13 = 0
+            else:
+              self.fca11maxcnt = 0xD
+              self.fca11cnt13 += 1
+          else:
+            self.fca11inc += 4
+          self.fca11alivecnt = self.fca11maxcnt - self.fca11inc
+          if CS.CP.fcaBus == -1:
+            can_sends.append(create_fca11(self.packer, CS.fca11, self.fca11alivecnt, self.fca11supcnt))
+
         self.scc12cnt += 1
         self.scc12cnt %= 0xF
         self.scc11cnt += 1
@@ -609,21 +674,27 @@ class CarController():
         accel = clip(accel, CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX)
         self.aq_value = accel
         can_sends.append(create_scc11(self.packer, frame, set_speed, lead_visible, self.scc_live, self.dRel, self.vRel, self.yRel, 
-         self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, self.acc_standstill, CS.scc11))
+         self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, self.acc_standstill, self.gapsettingdance, CS.scc11))
         if (CS.brake_check or CS.cancel_check) and self.car_fingerprint != CAR.NIRO_EV:
           can_sends.append(create_scc12(self.packer, accel, enabled, self.scc_live, CS.out.gasPressed, 1, 
-           CS.out.stockAeb, self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, stopping, CS.scc12))
+           CS.out.stockAeb, self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, stopping, self.acc_standstill, CS.scc12))
         else:
           can_sends.append(create_scc12(self.packer, accel, enabled, self.scc_live, CS.out.gasPressed, CS.out.brakePressed, 
-           CS.out.stockAeb, self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, stopping, CS.scc12))
+           CS.out.stockAeb, self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, stopping, self.acc_standstill, CS.scc12))
         can_sends.append(create_scc14(self.packer, enabled, CS.scc14, CS.out.stockAeb, lead_visible, self.dRel, 
          CS.out.vEgo, self.acc_standstill, self.car_fingerprint))
         self.accel = accel
       if frame % 20 == 0:
+        if self.radar_disabled_conf:
+          if CS.CP.fcaBus == -1:
+            can_sends.append(create_fca12(self.packer))
         can_sends.append(create_scc13(self.packer, CS.scc13))
       if frame % 50 == 0:
         can_sends.append(create_scc42a(self.packer))
-    elif CS.CP.sccBus == 2 and self.longcontrol:
+    elif CS.CP.sccBus != 0 and self.longcontrol:
+      if self.radar_disabled_conf:
+        self.fca11alivecnt = CS.fca11init["CR_FCA_Alive"]
+        self.fca11supcnt = CS.fca11init["Supplemental_Counter"]
       self.counter_init = True
       self.scc12cnt = CS.scc12init["CR_VSM_Alive"]
       self.scc11cnt = CS.scc11init["AliveCounterACC"]

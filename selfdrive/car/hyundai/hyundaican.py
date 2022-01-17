@@ -111,7 +111,7 @@ def create_hda_mfc(packer, CS, enabled, left_lane, right_lane ):
   # HDA_Icon_State 2 = HDA active
   return packer.make_can_msg("LFAHDA_MFC", 0, values)  
 
-def create_scc11(packer, frame, set_speed, lead_visible, scc_live, lead_dist, lead_vrel, lead_yrel, car_fingerprint, speed, standstill, scc11):
+def create_scc11(packer, frame, set_speed, lead_visible, scc_live, lead_dist, lead_vrel, lead_yrel, car_fingerprint, speed, standstill, gap_setting, scc11):
   values = scc11
   values["AliveCounterACC"] = frame // 2 % 0x10
   if not scc_live:
@@ -122,6 +122,7 @@ def create_scc11(packer, frame, set_speed, lead_visible, scc_live, lead_dist, le
     values["DriverAlertDisplay"] = 0
     values["MainMode_ACC"] = 1
     values["VSetDis"] = set_speed
+    values["TauGapSet"] = gap_setting
     values["ObjValid"] = lead_visible
     values["ACC_ObjStatus"] = lead_visible
     values["ACC_ObjRelSpd"] = clip(lead_vrel if lead_visible else 0, -20., 20.)
@@ -130,26 +131,27 @@ def create_scc11(packer, frame, set_speed, lead_visible, scc_live, lead_dist, le
 
   return packer.make_can_msg("SCC11", 0, values)
 
-def create_scc12(packer, apply_accel, enabled, scc_live, gaspressed, brakepressed, aebcmdact, car_fingerprint, speed, stopping, scc12):
+def create_scc12(packer, apply_accel, enabled, scc_live, gaspressed, brakepressed, aebcmdact, car_fingerprint, speed, stopping, standstill, scc12):
   values = scc12
   if not aebcmdact:
     if enabled and car_fingerprint == CAR.NIRO_EV:
       values["ACCMode"] = 2 if gaspressed and (apply_accel > -0.2) else 1
       values["aReqRaw"] = apply_accel
       values["aReqValue"] = apply_accel
-      #values["StopReq"] = 1 if stopping else 0
     elif enabled and not brakepressed:
       values["ACCMode"] = 2 if gaspressed and (apply_accel > -0.2) else 1
       values["aReqRaw"] = apply_accel
       values["aReqValue"] = apply_accel
-      #values["StopReq"] = 1 if stopping else 0
     else:
       values["ACCMode"] = 0
       values["aReqRaw"] = 0
       values["aReqValue"] = 0
-      #values["StopReq"] = 0
     values["CR_VSM_ChkSum"] = 0
   if not scc_live:
+    if apply_accel < 0.0 and standstill:
+      values["StopReq"] = 1
+    else:
+      values["StopReq"] = 0
     values["ACCMode"] = 1 if enabled else 0 # 2 if gas padel pressed
     dat = packer.make_can_msg("SCC12", 0, values)[2]
     values["CR_VSM_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
@@ -198,6 +200,22 @@ def create_scc42a(packer):
     "CF_FCA_Equip_Front_Radar": 1
   }
   return packer.make_can_msg("FRT_RADAR11", 0, values)
+
+def create_fca11(packer, fca11, fca11cnt, fca11supcnt):
+  values = fca11
+  values["CR_FCA_Alive"] = fca11cnt
+  values["Supplemental_Counter"] = fca11supcnt
+  values["CR_FCA_ChkSum"] = 0
+  dat = packer.make_can_msg("FCA11", 0, values)[2]
+  values["CR_FCA_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
+  return packer.make_can_msg("FCA11", 0, values)
+
+def create_fca12(packer):
+  values = {
+    "FCA_USM": 3,
+    "FCA_DrvSetState": 2,
+  }
+  return packer.make_can_msg("FCA12", 0, values)
 
 def create_mdps12(packer, frame, mdps12):
   values = mdps12

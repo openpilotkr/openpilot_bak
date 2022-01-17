@@ -34,8 +34,6 @@ class CarInterface(CarInterfaceBase):
 
     ret.carName = "hyundai"
     ret.safetyModel = car.CarParams.SafetyModel.hyundai
-    ret.radarOffCan = False
-    ret.standStill = False
 
     ret.mdpsBus = 1 if 593 in fingerprint[1] and 1296 not in fingerprint[1] else 0
     ret.sasBus = 1 if 688 in fingerprint[1] and 1296 not in fingerprint[1] else 0
@@ -48,7 +46,9 @@ class CarInterface(CarInterfaceBase):
     ret.evgearAvailable = True if 882 in fingerprint[0] else False
     ret.emsAvailable = True if 608 and 809 in fingerprint[0] else False
 
-    ret.openpilotLongitudinalControl = Params().get_bool("DisableRadar") or ret.sccBus == 2
+    ret.radarOffCan = ret.sccBus == -1
+    ret.standStill = False
+    ret.openpilotLongitudinalControl = Params().get_bool("RadarDisable") or ret.sccBus == 2
     ret.safetyParam = 0
 
     # Most Hyundai car ports are community features for now
