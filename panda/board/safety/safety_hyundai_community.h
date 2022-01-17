@@ -98,20 +98,19 @@ static int hyundai_community_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     }
 
     // cruise control for car without SCC
-    if (addr == 608 && bus == 0 && HKG_scc_bus == -1 && !OP_SCC_live) {
-      // bit 25
-      int cruise_engaged = (GET_BYTES_04(to_push) >> 25 & 0x1); // ACC main_on signal
-      if (cruise_engaged && !cruise_engaged_prev) {
+    if (addr == 1265 && bus == 0 && HKG_scc_bus == -1 && !OP_SCC_live) {
+      // first byte
+      int cruise_engaged = (GET_BYTES_04(to_push) & 0x7);
+      // enable on res+ or set- buttons press
+      if (!controls_allowed && (cruise_engaged == 1 || cruise_engaged == 2)) {
         controls_allowed = 1;
-        puts("  non-SCC w/ long control: controls allowed"); puts("\n");
       }
-      if (!cruise_engaged) {
-        if (controls_allowed) {puts("  non-SCC w/ long control: controls not allowed"); puts("\n");}
+      // disable on cancel press
+      if (cruise_engaged == 4) {
         controls_allowed = 0;
       }
-      cruise_engaged_prev = cruise_engaged;
     }
-
+  
     // sample wheel speed, averaging opposite corners
     if (addr == 902 && bus == 0) {
       int hyundai_speed = GET_BYTES_04(to_push) & 0x3FFF;  // FL
