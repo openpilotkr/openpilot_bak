@@ -566,7 +566,7 @@ class CarController():
                   self.keep_decel_on = False
                 else:
                   pass
-              elif accel < 0 and (self.NC.cut_in or abs(accel) - abs(aReqValue) > 0.3):
+              elif accel < 0 and (self.NC.cut_in or abs(accel) - abs(aReqValue) > 0.2):
                 self.keep_decel_on = True
               elif accel > 0 and self.change_accel_fast:
                 if aReqValue >= accel:
