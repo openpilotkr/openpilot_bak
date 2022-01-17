@@ -568,7 +568,7 @@ class CarController():
       if self.radarDisableOverlapTimer > 200:
         self.radarDisableOverlapTimer = 200
       if self.lead_visible:
-        self.objdiststat = 1 if lead_dist < 25 else 2 if lead_dist < 40 else 3 if lead_dist < 60 else 4 if lead_dist < 80 else 5
+        self.objdiststat = 1 if self.dRel < 25 else 2 if self.dRel < 40 else 3 if self.dRel < 60 else 4 if self.dRel < 80 else 5
       else:
         self.objdiststat = 0
 
