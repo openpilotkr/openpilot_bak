@@ -337,6 +337,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"StandstillResumeAlt", PERSISTENT},
     {"AutoRESDelay", PERSISTENT},
     {"UseRadarTrack", PERSISTENT},
+    {"RadarDisable", PERSISTENT},
 };
 
 } // namespace

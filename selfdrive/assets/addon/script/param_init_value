@@ -115,3 +115,4 @@ OpkrSpeedLimitOffsetOption:0
 CurvDecelOption:2
 AutoRESDelay:0
 UseRadarTrack:0
+RadarDisable:0

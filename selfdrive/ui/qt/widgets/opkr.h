@@ -602,10 +602,22 @@ class UseRadarTrackToggle : public ToggleControl {
   Q_OBJECT
 
 public:
-  UseRadarTrackToggle() : ToggleControl("Use Radar Track", "Some cars have known radar tracks(from comma) for long control. This uses radar track directly instead of scc can message.(Reboot required)", "../assets/offroad/icon_shell.png", Params().getBool("UseRadarTrack")) {
+  UseRadarTrackToggle() : ToggleControl("Use Radar Track", "Some cars have known radar tracks(from comma) for long control. This uses radar track directly instead of scc can message. Before you go, you must need to run hyundai_enable_radar_points.py in /data/openpilot/selfdrive/debug dir to enable your radar track. (Reboot required)", "../assets/offroad/icon_shell.png", Params().getBool("UseRadarTrack")) {
     QObject::connect(this, &UseRadarTrackToggle::toggleFlipped, [=](int state) {
       bool status = state ? true : false;
       Params().putBool("UseRadarTrack", status);
+    });
+  }
+};
+
+class RadarDisableToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+  RadarDisableToggle() : ToggleControl("Disable Radar", "This is pre-requisite for LongControl of HKG. It seems that this affects AEB. So do not use this if you have any concern.", "../assets/offroad/icon_shell.png", Params().getBool("RadarDisable")) {
+    QObject::connect(this, &RadarDisableToggle::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("RadarDisable", status);
     });
   }
 };
