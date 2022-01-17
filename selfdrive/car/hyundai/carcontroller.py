@@ -532,7 +532,9 @@ class CarController():
         self.scc11cnt %= 0x10
         lead_objspd = CS.lead_objspd  # vRel (km/h)
         aReqValue = CS.scc12["aReqValue"]
+        faccel = actuators.accel if enabled else 0
         accel = actuators.oaccel if enabled else 0
+        stopping = (actuators.longControlState == LongCtrlState.stopping)
         if 0 < CS.lead_distance <= 149 and self.radar_helper_option == 1:
           # neokii's logic, opkr mod
           stock_weight = 0.
@@ -589,9 +591,11 @@ class CarController():
               self.adjacent_accel_enabled = False
               self.keep_decel_on = False
               self.change_accel_fast = False
-          elif 1.0 < self.dRel <= 5.0 and self.vRel < 0:
+          elif 0.5 < self.dRel <= 5.0 and self.vRel < 0 and stopping:
             accel = self.accel - (3.0 * DT_CTRL)
-          elif 1. < self.dRel:
+          elif 0.5 < self.dRel <= 5.0 and stopping:
+            accel = faccel
+          elif 0.5 < self.dRel:
             pass
           else:
             accel = aReqValue
@@ -608,10 +612,10 @@ class CarController():
          self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, self.acc_standstill, CS.scc11))
         if (CS.brake_check or CS.cancel_check) and self.car_fingerprint != CAR.NIRO_EV:
           can_sends.append(create_scc12(self.packer, accel, enabled, self.scc_live, CS.out.gasPressed, 1, 
-           CS.out.stockAeb, self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, CS.scc12))
+           CS.out.stockAeb, self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, stopping, CS.scc12))
         else:
           can_sends.append(create_scc12(self.packer, accel, enabled, self.scc_live, CS.out.gasPressed, CS.out.brakePressed, 
-           CS.out.stockAeb, self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, CS.scc12))
+           CS.out.stockAeb, self.car_fingerprint, CS.out.vEgo * CV.MS_TO_KPH, stopping, CS.scc12))
         can_sends.append(create_scc14(self.packer, enabled, CS.scc14, CS.out.stockAeb, lead_visible, self.dRel, 
          CS.out.vEgo, self.acc_standstill, self.car_fingerprint))
         self.accel = accel

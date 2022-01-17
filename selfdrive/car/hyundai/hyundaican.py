@@ -130,21 +130,24 @@ def create_scc11(packer, frame, set_speed, lead_visible, scc_live, lead_dist, le
 
   return packer.make_can_msg("SCC11", 0, values)
 
-def create_scc12(packer, apply_accel, enabled, scc_live, gaspressed, brakepressed, aebcmdact, car_fingerprint, speed, scc12):
+def create_scc12(packer, apply_accel, enabled, scc_live, gaspressed, brakepressed, aebcmdact, car_fingerprint, speed, stopping, scc12):
   values = scc12
   if not aebcmdact:
     if enabled and car_fingerprint == CAR.NIRO_EV:
       values["ACCMode"] = 2 if gaspressed and (apply_accel > -0.2) else 1
       values["aReqRaw"] = apply_accel
       values["aReqValue"] = apply_accel
+      values["StopReq"] = 1 if stopping else 0
     elif enabled and not brakepressed:
       values["ACCMode"] = 2 if gaspressed and (apply_accel > -0.2) else 1
       values["aReqRaw"] = apply_accel
       values["aReqValue"] = apply_accel
+      values["StopReq"] = 1 if stopping else 0
     else:
       values["ACCMode"] = 0
       values["aReqRaw"] = 0
       values["aReqValue"] = 0
+      values["StopReq"] = 0
     values["CR_VSM_ChkSum"] = 0
   if not scc_live:
     values["ACCMode"] = 1 if enabled else 0 # 2 if gas padel pressed
