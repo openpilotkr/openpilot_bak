@@ -273,9 +273,7 @@ class CarInterface(CarInterfaceBase):
     #  ret.safetyParam |= Panda.FLAG_HYUNDAI_LONG
 
     # set safety_hyundai_community only for non-SCC, MDPS harrness or SCC harrness cars or cars that have unknown issue
-    if ret.radarOffCan:
-      ret.safetyModel = car.CarParams.SafetyModel.hyundaiCommunityLong
-    elif ret.radarOffCan or ret.mdpsBus == 1 or ret.openpilotLongitudinalControl or params.get_bool("MadModeEnabled"):
+    if ret.radarOffCan or ret.mdpsBus == 1 or ret.openpilotLongitudinalControl or params.get_bool("MadModeEnabled"):
       ret.safetyModel = car.CarParams.SafetyModel.hyundaiCommunity
     return ret
 
