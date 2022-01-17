@@ -1,3 +1,11 @@
+int OP_LKAS_live = 0;
+int OP_MDPS_live = 0;
+int OP_CLU_live = 0;
+int OP_SCC_live = 0;
+int car_SCC_live = 0;
+int OP_EMS_live = 0;
+int HKG_mdps_bus = -1;
+int HKG_scc_bus = -1;
 const CanMsg HYUNDAI_COMMUNITY_LONG_TX_MSGS[] = {
   {832, 0, 8}, {832, 1, 8}, // LKAS11 Bus 0, 1
   {1265, 0, 4}, {1265, 1, 4}, {1265, 2, 4}, // CLU11 Bus 0, 1, 2
