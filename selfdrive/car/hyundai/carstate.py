@@ -11,6 +11,7 @@ from common.params import Params
 
 GearShifter = car.CarState.GearShifter
 
+FCA_OPT = Params().get_bool('RadarDisable')
 
 class CarState(CarStateBase):
   def __init__(self, CP):
@@ -34,13 +35,19 @@ class CarState(CarStateBase):
     self.lfahda = None
 
     self.driverAcc_time = 0
+
+    self.prev_cruise_buttons = 0
+    self.prev_gap_button = 0
     
     self.steer_anglecorrection = float(int(Params().get("OpkrSteerAngleCorrection", encoding="utf8")) * 0.1)
     self.gear_correction = Params().get_bool("JustDoGearD")
     self.steer_wind_down = Params().get_bool("SteerWindDown")
     self.fca11_message = Params().get_bool("FCA11Message")
+    self.rd_conf = Params().get_bool("RadarDisable")
     self.brake_check = False
     self.cancel_check = False
+    
+    self.cruise_gap = 4
     self.safety_sign_check = 0
     self.safety_sign = 0
     self.safety_sign_prev = 0
@@ -233,6 +240,13 @@ class CarState(CarStateBase):
     self.cruise_buttons = cp.vl["CLU11"]["CF_Clu_CruiseSwState"]
     ret.cruiseButtons = self.cruise_buttons
 
+    if self.prev_gap_button != self.cruise_buttons:
+      if self.cruise_buttons == 3:
+        self.cruise_gap -= 1
+      if self.cruise_gap < 1:
+        self.cruise_gap = 4
+      self.prev_gap_button = self.cruise_buttons
+
     # TODO: Find brake pressure
     ret.brake = 0
     ret.brakePressed = cp.vl["TCS13"]["DriverBraking"] != 0
@@ -364,10 +378,14 @@ class CarState(CarStateBase):
     self.scc12 = copy.copy(cp_scc.vl["SCC12"])
     self.scc13 = copy.copy(cp_scc.vl["SCC13"])
     self.scc14 = copy.copy(cp_scc.vl["SCC14"])
+    if self.rd_conf:
+      self.fca11 = copy.copy(cp_fca.vl["FCA11"])
     self.mdps12 = copy.copy(cp_mdps.vl["MDPS12"])
 
     self.scc11init = copy.copy(cp.vl["SCC11"])
     self.scc12init = copy.copy(cp.vl["SCC12"])
+    if self.rd_conf:
+      self.fca11init = copy.copy(cp.vl["FCA11"])
 
     if self.CP.carFingerprint in FEATURES["send_hda_mfa"]:
       self.lfahda = copy.copy(cp_cam.vl["LFAHDA_MFC"])
@@ -666,7 +684,7 @@ class CarState(CarStateBase):
     checks = [
       ("LKAS11", 100)
     ]
-    if CP.sccBus == 2:
+    if CP.sccBus == 2 or CP.radarOffCan:
       signals += [
         ("MainMode_ACC", "SCC11", 1),
         ("SCCInfoDisplay", "SCC11", 0),
