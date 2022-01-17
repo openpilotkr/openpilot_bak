@@ -23,7 +23,6 @@ class CarInterface(CarInterfaceBase):
     self.blinker_status = 0
     self.blinker_timer = 0
     self.mad_mode_enabled = Params().get_bool('MadModeEnabled')
-    self.radar_d_conf = Params().get_bool('RadarDisable')
 
   @staticmethod
   def get_pid_accel_limits(CP, current_speed, cruise_speed):
@@ -274,7 +273,7 @@ class CarInterface(CarInterfaceBase):
     #  ret.safetyParam |= Panda.FLAG_HYUNDAI_LONG
 
     # set safety_hyundai_community only for non-SCC, MDPS harrness or SCC harrness cars or cars that have unknown issue
-    if self.radar_d_conf and ret.radarOffCan:
+    if ret.radarOffCan:
       ret.safetyModel = car.CarParams.SafetyModel.hyundaiCommunityLong
     elif ret.radarOffCan or ret.mdpsBus == 1 or ret.openpilotLongitudinalControl or params.get_bool("MadModeEnabled"):
       ret.safetyModel = car.CarParams.SafetyModel.hyundaiCommunity
