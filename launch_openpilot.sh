@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+if [ ! -f "/data/openpilot/models/supercombo.dlc" ]; then
+    unzip /data/openpilot/models/supercombo.zip -d /data/openpilot/models
+fi
+
 ALIAS_CHECK=$(/usr/bin/grep gitpull /system/comma/home/.bash_profile)
 # GET_PROP1=$(getprop persist.sys.locale)
 # GET_PROP2=$(getprop persist.sys.local)
