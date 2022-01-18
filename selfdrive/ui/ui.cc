@@ -336,7 +336,7 @@ static void update_status(UIState *s) {
     if (s->scene.started) {
       s->status = STATUS_DISENGAGED;
       s->scene.started_frame = s->sm->frame;
-      s->wide_camera = Hardware::TICI() ? Params().getBool("EnableWideCamera") : true;
+      s->wide_camera = Hardware::TICI() ? Params().getBool("EnableWideCamera") : false;
     }
     // Invisible until we receive a calibration message.
     s->scene.world_objects_visible = false;
@@ -454,7 +454,7 @@ QUIState::QUIState(QObject *parent) : QObject(parent) {
   });
 
   Params params;
-  ui_state.wide_camera = Hardware::TICI() ? params.getBool("EnableWideCamera") : true;
+  ui_state.wide_camera = Hardware::TICI() ? params.getBool("EnableWideCamera") : false;
   ui_state.has_prime = params.getBool("HasPrime");
   ui_state.sidebar_view = false;
   ui_state.is_OpenpilotViewEnabled = params.getBool("IsOpenpilotViewEnabled");
