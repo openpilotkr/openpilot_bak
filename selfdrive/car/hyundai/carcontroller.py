@@ -691,7 +691,7 @@ class CarController():
         can_sends.append(create_scc13(self.packer, CS.scc13))
       if frame % 50 == 0:
         can_sends.append(create_scc42a(self.packer))
-    elif CS.CP.sccBus != 0 and self.longcontrol:
+    elif (CS.CP.sccBus != 0 or self.radarDisableActivated) and self.longcontrol:
       if self.radar_disabled_conf:
         self.fca11alivecnt = CS.fca11init["CR_FCA_Alive"]
         self.fca11supcnt = CS.fca11init["Supplemental_Counter"]
