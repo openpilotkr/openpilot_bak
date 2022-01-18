@@ -340,9 +340,11 @@ class LongitudinalMpc:
 
     # opkr
     self.lo_timer += 1
-    if self.lo_timer > 100:
+    if self.lo_timer > 200:
       self.lo_timer = 0
       self.e2e = Params().get_bool("E2ELong")
+      self.dynamic_TR_mode = int(Params().get("DynamicTR", encoding="utf8"))
+      self.radar_helper = int(Params().get("RadarLongHelper", encoding="utf8"))
 
     self.status = radarstate.leadOne.status or radarstate.leadTwo.status
 
@@ -351,7 +353,7 @@ class LongitudinalMpc:
 
     if self.radar_helper != 2:
       cruise_gap = int(clip(carstate.cruiseGapSet, 1., 4.))
-      self.dynamic_TR = interp(self.v_ego*3.6, [0, 20, 40, 60, 110], [0.9, 1.2, 1.4, 1.5, 1.6] )
+      self.dynamic_TR = interp(self.v_ego*3.6, [0, 20, 40, 60, 110], [1.0, 1.2, 1.4, 1.5, 1.6] )
       self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.cruise_gap1, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
       if self.dynamic_TR_mode == 1:
         self.TR = interp(float(cruise_gap), [1., 2., 3., 4.], [self.dynamic_TR, self.cruise_gap2, self.cruise_gap3, self.cruise_gap4])
