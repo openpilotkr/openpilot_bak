@@ -77,7 +77,7 @@ class LateralPlanner:
     self.y_pts = np.zeros(TRAJECTORY_SIZE)
 
     self.lat_mpc = LateralMpc()
-    self.reset_mpc(np.zeros(6))
+    self.reset_mpc(np.zeros(4))
 
     self.lane_change_adjust = [float(Decimal(Params().get("LCTimingFactor30", encoding="utf8")) * Decimal('0.01')), float(Decimal(Params().get("LCTimingFactor60", encoding="utf8")) * Decimal('0.01')),
      float(Decimal(Params().get("LCTimingFactor80", encoding="utf8")) * Decimal('0.01')), float(Decimal(Params().get("LCTimingFactor110", encoding="utf8")) * Decimal('0.01'))]
@@ -113,7 +113,7 @@ class LateralPlanner:
       curve_speed = 255
     return min(255, curve_speed * CV.MS_TO_KPH)
 
-  def reset_mpc(self, x0=np.zeros(6)):
+  def reset_mpc(self, x0=np.zeros(4)):
     self.x0 = x0
     self.lat_mpc.reset(x0=self.x0)
     self.desired_curvature = 0.0
@@ -283,17 +283,17 @@ class LateralPlanner:
 
     assert len(y_pts) == LAT_MPC_N + 1
     assert len(heading_pts) == LAT_MPC_N + 1
-    self.x0[4] = v_ego
+    # self.x0[4] = v_ego
+    p = np.array([v_ego, CAR_ROTATION_RADIUS])
     self.lat_mpc.run(self.x0,
-                     v_ego,
-                     CAR_ROTATION_RADIUS,
+                     p,
                      y_pts,
                      heading_pts)
     # init state for next
     self.x0[3] = interp(DT_MDL, self.t_idxs[:LAT_MPC_N + 1], self.lat_mpc.x_sol[:, 3])
 
     #  Check for infeasible MPC solution
-    mpc_nans = any(math.isnan(x) for x in self.lat_mpc.x_sol[:, 3])
+    mpc_nans = np.isnan(self.lat_mpc.x_sol[:, 3]).any()
     t = sec_since_boot()
     if mpc_nans or self.lat_mpc.solution_status != 0:
       self.reset_mpc()
@@ -314,15 +314,16 @@ class LateralPlanner:
 
     lateralPlan = plan_send.lateralPlan
     lateralPlan.laneWidth = float(self.LP.lane_width)
-    lateralPlan.dPathPoints = [float(x) for x in self.y_pts]
-    lateralPlan.psis = [float(x) for x in self.lat_mpc.x_sol[0:CONTROL_N, 2]]
-    lateralPlan.curvatures = [float(x) for x in self.lat_mpc.x_sol[0:CONTROL_N, 3]]
+    lateralPlan.dPathPoints = self.y_pts.tolist()
+    lateralPlan.psis = self.lat_mpc.x_sol[0:CONTROL_N, 2].tolist()
+    lateralPlan.curvatures = self.lat_mpc.x_sol[0:CONTROL_N, 3].tolist()
     lateralPlan.curvatureRates = [float(x) for x in self.lat_mpc.u_sol[0:CONTROL_N - 1]] + [0.0]
     lateralPlan.lProb = float(self.LP.lll_prob)
     lateralPlan.rProb = float(self.LP.rll_prob)
     lateralPlan.dProb = float(self.LP.d_prob)
 
     lateralPlan.mpcSolutionValid = bool(plan_solution_valid)
+    lateralPlan.solverExecutionTime = self.lat_mpc.solve_time
 
     lateralPlan.desire = self.desire
     lateralPlan.useLaneLines = self.use_lanelines

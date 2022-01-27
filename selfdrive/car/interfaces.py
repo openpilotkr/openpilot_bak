@@ -117,7 +117,7 @@ class CarInterfaceBase(ABC):
   def apply(self, c: car.CarControl) -> Tuple[car.CarControl.Actuators, List[bytes]]:
     pass
 
-  def create_common_events(self, cs_out, extra_gears=None, gas_resume_speed=-1, pcm_enable=True):
+  def create_common_events(self, cs_out, extra_gears=None, pcm_enable=True):
     events = Events()
 
     if cs_out.doorOpen:

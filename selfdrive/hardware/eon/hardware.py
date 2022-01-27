@@ -10,6 +10,12 @@ from typing import List, Union
 from cereal import log
 from selfdrive.hardware.base import HardwareBase, ThermalConfig
 
+try:
+  from common.params import Params
+except Exception:
+  # openpilot is not built yet
+  Params = None
+
 NetworkType = log.DeviceState.NetworkType
 NetworkStrength = log.DeviceState.NetworkStrength
 

@@ -21,7 +21,6 @@ struct InitData {
   kernelVersion @15 :Text;
   osVersion @18 :Text;
 
-  gctx @1 :Text;
   dongleId @2 :Text;
 
   deviceType @3 :DeviceType;
@@ -55,6 +54,7 @@ struct InitData {
   }
 
   # ***** deprecated stuff *****
+  gctxDEPRECATED @1 :Text;
   androidBuildInfo @5 :AndroidBuildInfo;
   androidSensorsDEPRECATED @6 :List(AndroidSensor);
   chffrAndroidExtraDEPRECATED @7 :ChffrAndroidExtra;
@@ -834,9 +834,11 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
   speeds @33 :List(Float32);
   jerks @34 :List(Float32);
 
+  solverExecutionTime @35 :Float32;
+
   # opkr
-  dynamicTRMode @35 :UInt8;
-  dynamicTRValue @36 :Float32;
+  dynamicTRMode @36 :UInt8;
+  dynamicTRValue @37 :Float32;
 
   enum LongitudinalPlanSource {
     cruise @0;
@@ -899,14 +901,16 @@ struct LateralPlan @0xe1e9318e2ae8b51e {
   curvatures @27 :List(Float32);
   curvatureRates @28 :List(Float32);
 
+  solverExecutionTime @30 :Float32;
+
   # opkr
-  outputScale @30 :Float32;
-  steerRateCost @31 :Float32;
-  standstillElapsedTime @32 :Float32;
-  vCruiseSet @33 :Float32;
-  vCurvature @34 :Float32;
-  lanelessMode @35 :Bool;
-  modelSpeed @36 :Float32;
+  outputScale @31 :Float32;
+  steerRateCost @32 :Float32;
+  standstillElapsedTime @33 :Float32;
+  vCruiseSet @34 :Float32;
+  vCurvature @35 :Float32;
+  lanelessMode @36 :Bool;
+  modelSpeed @37 :Float32;
 
   enum Desire {
     none @0;

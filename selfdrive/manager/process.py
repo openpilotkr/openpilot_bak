@@ -48,7 +48,9 @@ def launcher(proc: str, name: str) -> None:
     raise
 
 
-def nativelauncher(pargs: List[str], cwd: str) -> None:
+def nativelauncher(pargs: List[str], cwd: str, name: str) -> None:
+  os.environ['MANAGER_DAEMON'] = name
+
   # exec the process
   os.chdir(cwd)
   os.execvp(pargs[0], pargs)

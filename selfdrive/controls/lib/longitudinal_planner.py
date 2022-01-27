@@ -116,13 +116,15 @@ class Planner:
     longitudinalPlan.modelMonoTime = sm.logMonoTime['modelV2']
     longitudinalPlan.processingDelay = (plan_send.logMonoTime / 1e9) - sm.logMonoTime['modelV2']
 
-    longitudinalPlan.speeds = [float(x) for x in self.v_desired_trajectory]
-    longitudinalPlan.accels = [float(x) for x in self.a_desired_trajectory]
-    longitudinalPlan.jerks = [float(x) for x in self.j_desired_trajectory]
+    longitudinalPlan.speeds = self.v_desired_trajectory.tolist()
+    longitudinalPlan.accels = self.a_desired_trajectory.tolist()
+    longitudinalPlan.jerks = self.j_desired_trajectory.tolist()
 
     longitudinalPlan.hasLead = sm['radarState'].leadOne.status
     longitudinalPlan.longitudinalPlanSource = self.mpc.source
     longitudinalPlan.fcw = self.fcw
+
+    longitudinalPlan.solverExecutionTime = self.mpc.solve_time
 
     longitudinalPlan.dynamicTRMode = int(self.mpc.dynamic_TR_mode)
     longitudinalPlan.dynamicTRValue = float(self.mpc.desired_TR)
