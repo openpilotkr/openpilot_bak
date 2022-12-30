@@ -103,13 +103,13 @@ class TorqueEstimator:
 
     params = Params()
 
-    TorqueLiveTuning = True # params.get_bool("TorqueLiveTuning")
-    if TorqueLiveTuning is None:
-      self.use_params = False
-    elif  TorqueLiveTuning:
-      self.use_params = True
-    else:
-      self.use_params = False
+    #TorqueLiveTuning = True # params.get_bool("TorqueLiveTuning")
+    #if TorqueLiveTuning is None:
+    #  self.use_params = False
+    #elif  TorqueLiveTuning:
+    self.use_params = True
+    #else:
+    #  self.use_params = False
 
 
     if CP.lateralTuning.which() == 'torque':

@@ -964,6 +964,7 @@ class CarController():
     # str_log3 = 'V/D/R/A/M/G={:.1f}/{:.1f}/{:.1f}/{:.2f}/{:.1f}/{:1.0f}'.format(CS.clu_Vanz, CS.lead_distance, CS.lead_objspd, CS.scc12["aReqValue"], self.stoppingdist, CS.cruiseGapSet)
     # trace1.printf3('{}'.format(str_log3))
 
+
     self.cc_timer += 1
     if self.cc_timer > 100:
       self.cc_timer = 0
@@ -995,6 +996,7 @@ class CarController():
            float(Decimal(self.params.get("TorqueFriction", encoding="utf8")) * Decimal('0.001')))
 
     trace1.printf1('{}  {}'.format(str_log1, self.str_log2))
+
 
     # 20 Hz LFA MFA message
     if frame % 5 == 0 and self.car_fingerprint in FEATURES["send_lfahda_mfa"]:

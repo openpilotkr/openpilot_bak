@@ -447,6 +447,7 @@ class Controls:
           if evt is not None:
             self.events.add(evt)
 
+
     # TODO: fix simulator
     if not SIMULATION:
       #if not NOSENSOR:
@@ -688,8 +689,8 @@ class Controls:
       torque_params = self.sm['liveTorqueParameters']
       if self.sm.all_checks(['liveTorqueParameters']) and torque_params.useParams:
         self.LaC.update_live_torque_params(torque_params.latAccelFactorFiltered, torque_params.latAccelOffsetFiltered, torque_params.frictionCoefficientFiltered)
-        #str_log1 = 'LV={:.0f} LAF={:.2f} FC={:.3f} LAO={:.3f} LAG={}'.format( torque_params.liveValid, torque_params.latAccelFactorFiltered, torque_params.frictionCoefficientFiltered, torque_params.latAccelOffsetFiltered, self.rk._debug_dt )
-
+        str_log1 = 'LV={:.0f} LAF={:.2f} LAO={:.3f} FC={:.3f}'.format( torque_params.liveValid, torque_params.latAccelFactorFiltered, torque_params.latAccelOffsetFiltered, torque_params.frictionCoefficientFiltered )
+        trace1.printf3( '{}'.format( str_log1 ) )   
 
     self.steerRatio_to_send = sr
 
